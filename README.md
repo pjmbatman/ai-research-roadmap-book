@@ -3,11 +3,11 @@
 > 문제 정의부터 재현 가능한 논문까지, 독립 연구자를 위한 훈련 체계
 
 연구실 신입 연구원이 **독립적으로 연구를 수행하는 연구자**로 성장하기 위한, 이론과 실습을 함께 배우는 웹 서비스의 원고·설계 저장소다.
-본문을 읽으며 위젯을 조작하고, 브라우저나 연구실 계산 서버에서 코드를 바로 실행하고, 퀴즈와 자동 채점 실습으로 진도를 확인한다.
+본문을 읽으며 위젯을 조작하고, 코드를 **학습자의 브라우저에서 바로 실행**하며(PyTorch 예제는 자기 컴퓨터의 Python 런타임에 연결), 퀴즈와 자동 채점 실습으로 진도를 확인한다. 로그인 없는 오픈소스 정적 사이트로 공개한다.
 
 - **전체 목차:** [OUTLINE.md](OUTLINE.md) — 6개 레이어 · 11개 트랙(+참고) · 28개 부 · 190개 장
 - **로드맵 설계 근거(트랙·레이어·평가):** [editorial/roadmap-design.md](editorial/roadmap-design.md)
-- **플랫폼 아키텍처(프론트·API·DB·계산 서버):** [editorial/platform-architecture.md](editorial/platform-architecture.md)
+- **플랫폼 아키텍처(정적 사이트 + 런타임 어댑터):** [editorial/platform-architecture.md](editorial/platform-architecture.md)
 - **UI/UX(상호작용·모션·실습 화면):** [editorial/ux-design.md](editorial/ux-design.md)
 
 ## 로드맵 구조
@@ -42,7 +42,7 @@ templates/         부·장 템플릿
 scripts/book.py    검증·목차 생성 도구 (Python 3.11+, 외부 의존성 없음)
 ```
 
-서비스 코드(`apps/web`, `services/api`, `services/runner`, `images`, `infra`)는 [구축 단계](editorial/platform-architecture.md#9-단계별-구축)에 맞춰 추가한다.
+웹 사이트(`apps/web`)는 [구축 단계](editorial/platform-architecture.md#8-단계별-구축)에 맞춰 추가한다. 백엔드·DB·계산 서버는 두지 않는다.
 자세한 규칙은 [editorial/conventions.md](editorial/conventions.md), 문체는 [editorial/style-guide.md](editorial/style-guide.md)를 따른다.
 
 ## 작업 방법
@@ -72,5 +72,6 @@ python3 scripts/book.py new-chapter 07-linear-algebra matrix-exponential "행렬
 - [x] 레이어·트랙 체계와 검증 규칙
 - [x] 퀴즈 형식과 예시 4개 장(17문항), 위젯 레지스트리(18개 계획)
 - [x] 플랫폼 아키텍처·UX 설계 초안
-- [ ] P1 정적 학습 사이트 (Astro + Pyodide + 퀴즈 + 위젯 3종)
+- [ ] P1 정적 학습 사이트 (Astro + Pyodide + 퀴즈 + 위젯 3종 + 브라우저 진도)
+- [ ] P2 연습문제·로컬 런타임 어댑터 (PyTorch 실습)
 - [ ] 1단계 학습 경로의 필수 장 초고

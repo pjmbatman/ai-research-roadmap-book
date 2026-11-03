@@ -140,13 +140,14 @@ YAML의 작은 부분집합만 쓴다: `key: 값`, `key: "따옴표 문자열"`,
   exercises/power-iteration/
   ├── problem.md        # 문제 설명 (웹에 표시)
   ├── starter.py        # 시작 코드 (웹 편집기에 로드)
-  ├── test_public.py    # 공개 테스트 (학습자에게 보임)
-  ├── test_hidden.py    # 비공개 테스트 (계산 서버에서만 실행, 웹 번들에 포함 금지)
-  ├── solution.py       # 참고 해답 (CI가 모든 테스트를 통과하는지 확인)
-  └── exercise.toml     # exec 계층(browser·cpu·gpu), 제한 시간, 연결된 학습 목표
+  ├── test_exercise.py  # 테스트 (학습자 런타임에서 실행해 즉시 채점)
+  ├── solution.py       # 참고 해답 (화면에서는 접혀 있음. CI가 모든 테스트 통과를 확인)
+  └── exercise.toml     # exec 요구 수준(browser·python·gpu), 제한 시간, 연결된 학습 목표
   ```
+
+  오픈소스이므로 테스트와 해답은 모두 공개된다. 연습문제는 시험이 아니라 학습 도구로 설계한다.
 - 노트북은 탐색용, 검증 대상 코드는 `.py`로. 데이터는 저장소에 넣지 않고 내려받기 스크립트를 둔다.
-- 실습 공통 환경은 `labs/pyproject.toml` + lockfile로 관리한다(첫 실습 작성 시 추가).
+- 실습 공통 환경은 `labs/pyproject.toml` + lockfile로 관리한다(첫 실습 작성 시 추가). 같은 환경이 웹의 **로컬 런타임**(`exec="python"` 셀 실행)과 노트북 실행에 쓰인다.
 
 ## 9. 퀴즈 (quiz.toml)
 
@@ -199,12 +200,14 @@ f(np.zeros(2))
 
 | 속성 | 값 | 의미 |
 |---|---|---|
-| `exec` | `browser` · `cpu` · `gpu` | 실행 계층. 없으면 실행 불가(보기 전용). [platform-architecture.md §3](platform-architecture.md) |
+| `exec` | `browser` · `python` · `gpu` | 필요한 실행 환경. `browser`=Pyodide로 충분, `python`=실습 환경 전체(PyTorch 등), `gpu`=CUDA. 없으면 보기 전용. [platform-architecture.md §2](platform-architecture.md) |
 | `session` | 이름 | 같은 이름의 셀끼리 변수 상태 공유. 생략 시 페이지 기본 세션 |
 | `hidden` | (값 없음) | 화면에 접힌 준비 코드(import, 데이터 로드) |
 | `readonly` | (값 없음) | 편집 불가 |
 
-- 브라우저 실행(`browser`)에서는 PyTorch를 쓸 수 없다. NumPy·SciPy·pandas·matplotlib·scikit-learn 범위에서 쓴다.
+- `browser` 셀에서는 PyTorch를 쓸 수 없다. NumPy·SciPy·pandas·matplotlib·scikit-learn 범위에서, **몇 초 안에 끝나는 크기**로 쓴다.
+- `python` 셀은 학습자가 로컬 런타임을 연결해야 실행된다. 연결하지 않은 독자도 읽을 수 있도록 빌드 시 기록된 출력이 함께 표시된다.
+- `gpu`는 GPU가 꼭 필요한 소수의 장(분산 학습·profiling)에만 쓴다.
 - 위젯 변수(`binds`)는 같은 세션의 코드 셀에 같은 이름으로 주입된다.
 - 새 위젯이 필요하면 `data/widgets.toml`에 `status = "planned"`로 먼저 등록한다. 본문 집필과 위젯 구현을 병행할 수 있다.
 

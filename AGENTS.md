@@ -24,8 +24,9 @@
 - 퀴즈(`quiz.toml`)의 모든 문항은 학습 목표 하나에 연결하고, `explanation`을 쓰고, 오답 선택지에는 `feedback`을 단다. 정답은 직접 검증한 것만 쓴다.
 - 오답 선택지는 실제로 흔한 오개념이어야 한다. 말장난·암기 문항을 쓰지 않는다.
 - 위젯은 `data/widgets.toml`에 등록된 것만 `::widget{name="..."}`로 쓴다. 새 위젯이 필요하면 `status = "planned"`로 등록한다.
-- 브라우저 실행 코드(`exec="browser"`)에는 PyTorch를 쓰지 않는다(Pyodide 범위: NumPy·SciPy·pandas·matplotlib·scikit-learn).
-- 비공개 테스트(`test_hidden.py`)와 해답(`solution.py`)의 내용을 본문이나 공개 파일에 옮기지 않는다.
+- 브라우저 실행 코드(`exec="browser"`)에는 PyTorch를 쓰지 않고, 몇 초 안에 끝나는 크기로 쓴다(Pyodide 범위: NumPy·SciPy·pandas·matplotlib·scikit-learn).
+- PyTorch가 필요한 코드는 `exec="python"`, CUDA가 꼭 필요한 코드만 `exec="gpu"`로 쓴다.
+- 서비스는 로그인 없는 오픈소스다. 테스트와 해답은 공개되므로, 연습문제는 학습 도구로 설계한다(정답 은닉에 의존하지 않는다).
 
 ## 집필할 때
 

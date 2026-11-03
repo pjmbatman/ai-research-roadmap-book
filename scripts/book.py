@@ -44,7 +44,7 @@ QUIZ_TYPES = ("single", "multiple", "numeric")
 WIDGETS = ROOT / "data" / "widgets.toml"
 LABS = ROOT / "labs"
 WIDGET_STATUSES = ("planned", "prototype", "implemented")
-EXEC_TIERS = ("browser", "cpu", "gpu")
+EXEC_TIERS = ("browser", "python", "gpu")
 DIRECTIVE = re.compile(r'^::(widget|quiz|exercise)\{(.*)\}\s*$', flags=re.M)
 DIRECTIVE_ATTR = re.compile(r'(\w+)="([^"]*)"')
 FENCE_EXEC = re.compile(r'^```\w+\s*\{[^}\n]*\bexec="([^"]*)"', flags=re.M)

@@ -88,8 +88,8 @@ L0 입문   │ ORI 오리엔테이션
 | 평가 방식 | 수단 | 채점 | 주로 쓰는 트랙 |
 |---|---|---|---|
 | `quiz` 개념 퀴즈 | 장의 `quiz.toml` — 단일 선택·복수 선택·수치 입력 | 자동 | ORI · MTH · PSI · RES (+ 모든 트랙 보조) |
-| `code` 코드 실습 | 브라우저 또는 계산 서버에서 실행, 공개·비공개 테스트 | 자동 | RSE · MTH · PSI · MLC · MLA · MLS · SCI |
-| `terminal` 터미널 실습 | 격리된 Linux 환경에서 명령 수행, 상태 검사 스크립트 | 자동 | INF · MLS |
+| `code` 코드 실습 | 학습자의 브라우저(Pyodide) 또는 로컬 Python 런타임에서 실행, 공개 테스트 | 자동 | RSE · MTH · PSI · MLC · MLA · MLS · SCI |
+| `terminal` 터미널 실습 | 학습자 자신의 터미널에서 수행, 검사 스크립트(로컬 런타임 연결 시 사이트에서 표시) | 자동 | INF · MLS |
 | `document` 문서 산출물 | 문제 정의서·실험 계획서·재현 보고서 템플릿 | 루브릭 + 리뷰 | ORI · RES · SCI · LAB |
 | `review` 동료·지도 리뷰 | 코드·실험·발표 리뷰 | 사람 | RSE · RES · LAB |
 
