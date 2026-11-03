@@ -1,0 +1,37 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+
+# Node / site build (UI 프레임워크 도입 후)
+node_modules/
+dist/
+build/
+.astro/
+.cache/
+_site/
+_freeze/
+
+# Labs outputs and data (데이터·결과는 커밋하지 않는다)
+labs/**/data/
+labs/**/outputs/
+labs/**/runs/
+*.ckpt
+*.pt
+*.pth
+
+# Secrets
+.env
+.env.*
+!.env.example

@@ -1,0 +1,63 @@
+# 책 전체의 메타데이터와 분류 체계.
+# scripts/book.py가 이 파일을 읽어 frontmatter를 검증하고 OUTLINE.md를 만든다.
+
+[book]
+title = "AI 연구자 로드맵"                       # 가제(working title)
+subtitle = "문제 정의부터 재현 가능한 논문까지, 독립 연구자를 위한 훈련 체계"
+language = "ko"
+repository = "https://github.com/pjmbatman/ai-research-roadmap-book"
+
+# 트랙: 부(Part)를 묶는 상위 분류. 웹 UI에서 색과 아이콘으로 구분한다.
+# key는 frontmatter의 `track` 값과 일치해야 한다.
+[[tracks]]
+key = "orientation"
+name = "시작하기"
+description = "책의 목표, 읽는 법, AI 연구의 전체 지도"
+
+[[tracks]]
+key = "workbench"
+name = "연구 작업대"
+description = "Linux·서버·환경·Git·에이전트·Python·연구 코드 엔지니어링"
+
+[[tracks]]
+key = "foundations"
+name = "수학적 기초"
+description = "선형대수·미적분·수치해석·확률·통계·베이지안·최적화·학습이론"
+
+[[tracks]]
+key = "modeling"
+name = "모델링"
+description = "데이터·고전 ML·딥러닝·아키텍처·생성모델·강화학습·신뢰성"
+
+[[tracks]]
+key = "practice"
+name = "연구 실천"
+description = "실험 운영·재현성·분산학습·연구 방법론·학술 소통"
+
+[[tracks]]
+key = "domain"
+name = "도메인"
+description = "Scientific ML과 배터리 AI"
+
+[[tracks]]
+key = "lab"
+name = "연구실"
+description = "연구실 표준화·리뷰 체계·종합 프로젝트"
+
+[[tracks]]
+key = "appendix"
+name = "부록"
+description = "표기법·용어집·공식·치트시트·템플릿"
+
+# 난이도 등급: 장(Chapter)의 `tier` 값.
+[tiers]
+core = "필수"         # 모든 연구원이 설명하고 직접 수행할 수 있어야 하는 내용
+advanced = "심화"     # 연구 주제에 따라 깊이 들어갈 내용
+reference = "참조"    # 필요할 때 문서를 읽고 적용할 수 있으면 되는 내용
+
+# 집필 상태: 부·장의 `status` 값. 이 순서대로 진행한다.
+[statuses]
+outline = "목차"      # 상세 목차(bullet)만 있음
+draft = "초고"        # 본문 초고 작성 완료
+review = "검토"       # 내용·코드 리뷰 진행 중
+done = "완료"         # 리뷰 통과, 공개 가능

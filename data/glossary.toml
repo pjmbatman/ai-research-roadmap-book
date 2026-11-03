@@ -1,0 +1,67 @@
+# 용어집: 책 전체에서 쓰는 용어의 단일 원천.
+# ko = 본문 표기, en = 영어, keep_en = true면 본문에서도 영어 그대로 쓴다.
+# 부록 B(용어집)와 웹 UI 용어 툴팁이 이 파일에서 생성된다.
+
+[[terms]]
+ko = "아핀 변환"
+en = "affine transformation"
+definition = "선형 변환 뒤에 평행이동을 더한 변환 x ↦ Ax + b."
+
+[[terms]]
+ko = "계수"
+en = "rank"
+keep_en = true
+definition = "행렬의 column space(또는 row space)의 차원."
+
+[[terms]]
+ko = "다양체"
+en = "manifold"
+definition = "각 점의 근방이 유클리드 공간과 닮은 공간."
+
+[[terms]]
+ko = "조건부분포"
+en = "conditional distribution"
+definition = "다른 변수의 값이 주어졌을 때 한 변수의 분포 p(y|x)."
+
+[[terms]]
+ko = "우도"
+en = "likelihood"
+definition = "관측 데이터가 고정되었을 때 파라미터의 함수로 본 p(D|θ)."
+
+[[terms]]
+ko = "사후분포"
+en = "posterior distribution"
+definition = "데이터를 관측한 뒤의 파라미터 분포 p(θ|D)."
+
+[[terms]]
+ko = "역전파"
+en = "backpropagation"
+definition = "계산 그래프에서 reverse-mode 자동미분으로 gradient를 계산하는 방법."
+
+[[terms]]
+ko = "데이터 누수"
+en = "data leakage"
+definition = "평가 시점에 쓸 수 없는 정보가 학습이나 모델 선택에 섞여 들어가 성능이 과대평가되는 현상."
+
+[[terms]]
+ko = "기준 모델"
+en = "baseline"
+keep_en = true
+definition = "제안 방법의 개선을 측정하기 위한 비교 기준 모델."
+
+[[terms]]
+ko = "체크포인트"
+en = "checkpoint"
+keep_en = true
+definition = "학습을 재개하거나 평가하기 위해 저장한 모델·optimizer·스케줄러·RNG 등의 상태."
+
+[[terms]]
+ko = "보정"
+en = "calibration"
+keep_en = true
+definition = "예측 확률·구간이 실제 빈도와 일치하는 정도."
+
+[[terms]]
+ko = "분포 이동"
+en = "distribution shift"
+definition = "학습 데이터와 적용 대상 데이터의 분포가 달라지는 현상."
