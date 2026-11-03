@@ -2,7 +2,7 @@
 id: reinforcement-learning
 title: "강화학습과 순차 의사결정"
 title_en: "Reinforcement Learning and Sequential Decision-Making"
-track: modeling
+track: ml-advanced
 status: outline
 summary: "MDP와 동적계획법, 가치·정책 기반 강화학습, 모델 기반 방법과 최적제어, 밴딧·오프라인 RL을 다룬다."
 ---

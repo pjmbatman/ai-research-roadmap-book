@@ -4,7 +4,7 @@ title: "다중 GPU와 분산 학습"
 title_en: "Multi-GPU and Distributed Training"
 tier: advanced
 status: outline
-prerequisites: [experiment-operations/memory-management]
+prerequisites: [experiment-operations/memory-management, linux-and-remote/shared-servers]
 ---
 
 # 다중 GPU와 분산 학습

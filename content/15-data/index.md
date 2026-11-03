@@ -2,7 +2,7 @@
 id: data
 title: "데이터 설계·처리·품질 관리"
 title_en: "Data Design, Processing, and Quality"
-track: modeling
+track: ml-core
 status: outline
 summary: "데이터의 의미와 저장 형식, 전처리와 탐색적 분석, 분할과 누수 방지, 버전·문서화, 합성·시뮬레이션 데이터를 다룬다."
 ---

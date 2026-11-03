@@ -1,0 +1,59 @@
+# 3.1 AI 소프트웨어 스택의 계층 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "nvidia-smi-cuda-version"
+type = "single"
+objective = 2
+prompt = "`nvidia-smi` 출력 오른쪽 위에 표시되는 `CUDA Version`이 의미하는 것은?"
+explanation = "이 값은 설치된 NVIDIA 드라이버가 지원하는 CUDA의 최대 버전이다. CUDA toolkit이 설치되어 있지 않아도 표시되며, 실제로 설치된 toolkit 버전은 `nvcc --version`으로, PyTorch가 빌드된 CUDA 버전은 `torch.version.cuda`로 따로 확인한다."
+
+[[questions.choices]]
+text = "현재 설치된 드라이버가 지원하는 CUDA의 최대 버전"
+correct = true
+
+[[questions.choices]]
+text = "시스템에 설치된 CUDA toolkit의 버전"
+feedback = "toolkit이 없어도 이 값은 표시된다. toolkit 버전은 nvcc로 확인한다."
+
+[[questions.choices]]
+text = "PyTorch가 사용하는 CUDA runtime의 버전"
+feedback = "그 값은 torch.version.cuda로 확인한다."
+
+[[questions]]
+id = "torch-wheel-needs-toolkit"
+type = "single"
+objective = 1
+prompt = "pip로 CUDA용 PyTorch wheel을 설치해 모델을 학습만 하려 한다(custom CUDA extension을 빌드하지 않음). 무엇이 시스템에 필요한가?"
+explanation = "CUDA용 PyTorch wheel은 필요한 CUDA runtime 라이브러리를 함께 가져온다. 시스템에는 그 버전을 지원하는 NVIDIA 드라이버가 필요하다. CUDA toolkit(nvcc 등 컴파일러)은 소스에서 CUDA 코드를 빌드할 때 필요하다."
+
+[[questions.choices]]
+text = "호환되는 NVIDIA 드라이버. CUDA toolkit은 일반적으로 필요 없다."
+correct = true
+
+[[questions.choices]]
+text = "PyTorch와 정확히 같은 버전의 CUDA toolkit과 드라이버"
+feedback = "toolkit은 컴파일할 때 필요하다. 학습만 할 때는 wheel에 포함된 runtime을 쓴다."
+
+[[questions.choices]]
+text = "CUDA toolkit만 있으면 되고 드라이버는 필요 없다."
+feedback = "GPU를 쓰려면 드라이버는 반드시 필요하다. 드라이버가 스택의 가장 아래층이다."
+
+[[questions]]
+id = "stack-order"
+type = "single"
+objective = 1
+prompt = "다음 중 아래(하드웨어 쪽)에서 위(사용자 코드 쪽)로의 순서로 옳은 것은?"
+explanation = "GPU 하드웨어 위에서 커널 모듈인 드라이버가 동작하고, CUDA runtime과 cuDNN 같은 라이브러리가 드라이버를 사용하며, PyTorch가 그 라이브러리들을 호출한다. 오류 메시지가 어느 층에서 나왔는지 구분하면 진단이 빨라진다."
+
+[[questions.choices]]
+text = "GPU → NVIDIA 드라이버 → CUDA runtime·cuDNN → PyTorch"
+correct = true
+
+[[questions.choices]]
+text = "GPU → CUDA runtime → NVIDIA 드라이버 → PyTorch"
+feedback = "runtime이 드라이버 위에서 동작한다."
+
+[[questions.choices]]
+text = "GPU → PyTorch → cuDNN → NVIDIA 드라이버"
+feedback = "PyTorch가 가장 위층이다."

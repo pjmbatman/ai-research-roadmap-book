@@ -2,7 +2,7 @@
 id: linux-and-remote
 title: "Linux·서버·원격 개발"
 title_en: "Linux, Servers, and Remote Development"
-track: workbench
+track: research-infrastructure
 status: outline
 summary: "연구 서버를 안정적으로 다루기 위한 Linux, 자원 모니터링, SSH, 원격·클라우드 실행 구조를 익힌다."
 ---

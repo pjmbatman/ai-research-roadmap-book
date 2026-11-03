@@ -4,7 +4,7 @@ title: "재현성"
 title_en: "Reproducibility"
 tier: core
 status: outline
-prerequisites: [experiment-operations/experiment-tracking]
+prerequisites: [experiment-operations/experiment-tracking, environments/docker]
 ---
 
 # 재현성

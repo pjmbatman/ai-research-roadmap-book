@@ -1,0 +1,90 @@
+# 12.3 분포 기반 문제 정의 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "squared-loss-optimum"
+type = "single"
+objective = 2
+prompt = '''$x$가 주어졌을 때 $y$의 조건부분포 $p(y \mid x)$를 안다고 하자. 기대 제곱손실 $\mathbb{E}[(y - \hat{y})^2 \mid x]$를 최소화하는 점 예측 $\hat{y}$는?'''
+explanation = '''$\mathbb{E}[(y-\hat{y})^2 \mid x]$를 $\hat{y}$로 미분해 0으로 두면 $\hat{y} = \mathbb{E}[y \mid x]$를 얻는다. MSE로 학습한 모델은 (충분한 용량과 데이터가 있다면) 조건부 평균을 추정한다.'''
+
+[[questions.choices]]
+text = '''조건부 평균 $\mathbb{E}[y \mid x]$'''
+correct = true
+
+[[questions.choices]]
+text = "조건부 중앙값"
+feedback = "중앙값은 절댓값 손실의 최적해다."
+
+[[questions.choices]]
+text = "조건부 최빈값(mode)"
+feedback = "최빈값은 0-1 손실(연속 변수에서는 그 극한)의 최적해다."
+
+[[questions]]
+id = "absolute-loss-optimum"
+type = "single"
+objective = 2
+prompt = '''같은 상황에서 기대 절댓값손실 $\mathbb{E}[\,|y - \hat{y}|\, \mid x]$를 최소화하는 $\hat{y}$는?'''
+explanation = '''절댓값손실의 최적해는 조건부 중앙값이다. 이상치에 덜 민감한 대표값을 원할 때 L1 손실을 쓰는 이유가 여기에 있다.'''
+
+[[questions.choices]]
+text = "조건부 평균"
+
+[[questions.choices]]
+text = "조건부 중앙값"
+correct = true
+
+[[questions.choices]]
+text = "조건부 분산"
+feedback = "분산은 대표값이 아니라 퍼짐의 척도다."
+
+[[questions]]
+id = "pinball-quantile"
+type = "numeric"
+objective = 3
+prompt = '''분위수 회귀에서 pinball loss의 파라미터를 $\tau = 0.9$로 두고 학습하면, 모델은 $p(y \mid x)$의 몇 % 분위수를 추정하는가? (숫자만 입력, 예: 50)'''
+answer = 90
+tolerance = 0
+explanation = '''pinball loss $\rho_\tau(u) = u(\tau - \mathbb{1}[u < 0])$의 기대값을 최소화하는 값은 $\tau$ 분위수다. $\tau = 0.5$이면 중앙값(절댓값손실의 절반)과 같다. 서로 다른 $\tau$로 학습한 두 모델로 예측 구간을 만들 수 있다.'''
+
+[[questions]]
+id = "bimodal-mean"
+type = "single"
+objective = 1
+prompt = '''어떤 입력 $x$에서 $y$가 $-1$ 근처 또는 $+1$ 근처에 같은 확률로 나타난다(쌍봉 분포). MSE로 학습한 모델이 이 $x$에서 0에 가까운 값을 예측했다. 가장 정확한 해석은?'''
+explanation = '''MSE의 최적해는 조건부 평균이고, 쌍봉 분포의 평균은 두 봉우리 사이, 즉 실제로는 거의 일어나지 않는 값일 수 있다. 모델의 학습이 잘못된 것이 아니라 문제 정의(점 예측 + 제곱손실)가 이 데이터에 맞지 않는 것이다. 혼합 밀도 네트워크처럼 분포를 출력하는 모델이 대안이다.'''
+
+[[questions.choices]]
+text = "모델이 과소적합되었으므로 더 큰 모델을 쓰면 해결된다."
+feedback = "더 큰 모델도 MSE 아래에서는 조건부 평균, 즉 0 근처로 수렴한다."
+
+[[questions.choices]]
+text = "모델은 조건부 평균을 잘 추정했지만, 그 값은 실제로 거의 관측되지 않는 값이다. 점 예측 대신 분포를 출력하는 정의가 필요하다."
+correct = true
+
+[[questions.choices]]
+text = "데이터에 label 오류가 있으므로 이상치를 제거해야 한다."
+feedback = "두 봉우리는 오류가 아니라 실제 분포의 모양이다."
+
+[[questions]]
+id = "distribution-statements"
+type = "multiple"
+objective = 1
+prompt = "다음 중 옳은 것을 모두 고르시오."
+explanation = '''$p(\theta \mid D)$는 파라미터의 사후분포, $p_\theta(y \mid x)$는 조건부 예측분포다. 이분산 회귀는 평균과 함께 입력에 따라 달라지는 분산을 출력한다. 분산이 고정된 가우시안 우도를 최대화하는 것은 제곱오차 합을 최소화하는 것과 같은 해를 준다. 예측 구간은 새 관측값 $y$의 범위, 신뢰 구간은 파라미터(또는 평균) 같은 고정된 미지량의 범위를 다루므로 대상이 다르다.'''
+
+[[questions.choices]]
+text = '''$p(\theta \mid D)$는 데이터를 본 뒤 파라미터에 대한 사후분포다.'''
+correct = true
+
+[[questions.choices]]
+text = "이분산(heteroscedastic) 가우시안 회귀는 입력에 따라 달라지는 평균과 분산을 함께 출력한다."
+correct = true
+
+[[questions.choices]]
+text = "분산이 고정된 가우시안 우도를 최대화하는 것은 제곱오차 합을 최소화하는 것과 같은 해를 준다."
+correct = true
+
+[[questions.choices]]
+text = "예측 구간과 신뢰 구간은 같은 대상의 불확실성을 나타낸다."
+feedback = "예측 구간은 새 관측값, 신뢰 구간은 고정된 미지량(예: 평균)의 범위다."

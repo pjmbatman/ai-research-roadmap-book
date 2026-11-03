@@ -4,43 +4,48 @@
 
 > 문제 정의부터 재현 가능한 논문까지, 독립 연구자를 위한 훈련 체계
 
-28개 부 · 190개 장. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다.
+12개 트랙 · 28개 부 · 190개 장 · 퀴즈 17문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
-## 한눈에 보기
+## 트랙 구성
 
-| 부 | 제목 | 트랙 | 장 수 | 필수 |
-|---|---|---|---:|---:|
-| 0 | [시작하기](content/00-orientation/index.md) | 시작하기 | 5 | 4 |
-| 1 | [AI 연구의 지도](content/01-research-landscape/index.md) | 시작하기 | 5 | 4 |
-| 2 | [Linux·서버·원격 개발](content/02-linux-and-remote/index.md) | 연구 작업대 | 5 | 5 |
-| 3 | [실행 환경·패키지·컨테이너](content/03-environments/index.md) | 연구 작업대 | 6 | 6 |
-| 4 | [Git·협업·AI 에이전트](content/04-git-and-agents/index.md) | 연구 작업대 | 6 | 4 |
-| 5 | [Python과 계산 기초](content/05-python-and-computing/index.md) | 연구 작업대 | 5 | 5 |
-| 6 | [연구 코드 엔지니어링](content/06-research-code-engineering/index.md) | 연구 작업대 | 7 | 7 |
-| 7 | [선형대수와 기하](content/07-linear-algebra/index.md) | 수학적 기초 | 9 | 7 |
-| 8 | [미적분과 자동미분](content/08-calculus-and-autodiff/index.md) | 수학적 기초 | 4 | 4 |
-| 9 | [수치해석과 시뮬레이션](content/09-numerical-methods/index.md) | 수학적 기초 | 7 | 6 |
-| 10 | [확률론](content/10-probability/index.md) | 수학적 기초 | 7 | 6 |
-| 11 | [통계적 추론](content/11-statistical-inference/index.md) | 수학적 기초 | 6 | 5 |
-| 12 | [베이지안 추론](content/12-bayesian-inference/index.md) | 수학적 기초 | 8 | 4 |
-| 13 | [최적화](content/13-optimization/index.md) | 수학적 기초 | 7 | 4 |
-| 14 | [정보이론과 학습이론](content/14-information-and-learning-theory/index.md) | 수학적 기초 | 5 | 3 |
-| 15 | [데이터 설계·처리·품질 관리](content/15-data/index.md) | 모델링 | 6 | 5 |
-| 16 | [고전 머신러닝과 통계 모델링](content/16-classical-ml/index.md) | 모델링 | 8 | 7 |
-| 17 | [딥러닝과 PyTorch](content/17-deep-learning-pytorch/index.md) | 모델링 | 10 | 9 |
-| 18 | [신경망 아키텍처와 표현학습](content/18-architectures/index.md) | 모델링 | 8 | 5 |
-| 19 | [생성모델·자기지도학습·Foundation Model](content/19-generative-and-foundation-models/index.md) | 모델링 | 9 | 6 |
-| 20 | [강화학습과 순차 의사결정](content/20-reinforcement-learning/index.md) | 모델링 | 4 | 1 |
-| 21 | [신뢰성: 불확실성·강건성·해석](content/21-reliability/index.md) | 모델링 | 6 | 3 |
-| 22 | [실험 관리·재현성·성능·분산학습](content/22-experiment-operations/index.md) | 연구 실천 | 7 | 5 |
-| 23 | [연구 방법론과 학술 소통](content/23-research-practice/index.md) | 연구 실천 | 12 | 11 |
-| 24 | [Scientific Machine Learning](content/24-scientific-ml/index.md) | 도메인 | 7 | 3 |
-| 25 | [배터리 AI 연구](content/25-battery-ai/index.md) | 도메인 | 7 | 4 |
-| 26 | [연구실 표준화와 종합 프로젝트](content/26-lab-operations/index.md) | 연구실 | 6 | 6 |
-| 부록 | [부록](content/appendices/index.md) | 부록 | 8 | 0 |
+| 레이어 | 코드 | 트랙 | 핵심 질문 | 부 | 장 | 평가 |
+|---|---|---|---|---|---:|---|
+| L0 입문 | `ORI` | **오리엔테이션**<br>Orientation | AI 연구란 무엇이고, 이 책으로 어떻게 훈련하는가? | 0, 1 | 10 | 개념 퀴즈 · 문서 산출물 |
+| L1 기반 | `INF` | **연구 인프라**<br>Research Infrastructure | 코드는 어디에서, 어떤 환경으로 실행되는가? | 2, 3, 4 | 17 | 터미널 실습 · 개념 퀴즈 |
+| L1 기반 | `RSE` | **연구 소프트웨어 공학**<br>Research Software Engineering | 수식과 아이디어를 어떻게 정확하고 유지 가능한 코드로 옮기는가? | 5, 6 | 12 | 코드 실습 · 동료·지도 리뷰 |
+| L1 기반 | `MTH` | **수리 기초**<br>Mathematical Foundations | 모델과 학습은 어떤 공간에서, 어떤 계산으로 이루어지는가? | 7, 8, 9, 10 | 27 | 개념 퀴즈 · 코드 실습 |
+| L1 기반 | `PSI` | **확률·통계적 추론**<br>Probabilistic and Statistical Inference | 불확실한 데이터에서 무엇을, 얼마나 확신하며 추론할 수 있는가? | 11, 12, 13, 14 | 26 | 개념 퀴즈 · 코드 실습 |
+| L2 핵심 | `MLC` | **머신러닝 핵심**<br>Machine Learning Core | 데이터에서 신뢰할 수 있는 예측 모델을 어떻게 만들고 평가하는가? | 15, 16, 17, 18 | 32 | 코드 실습 · 개념 퀴즈 |
+| L3 확장 | `MLA` | **머신러닝 심화**<br>Advanced Machine Learning | 분포를 생성하고, 결정을 학습하고, 예측을 언제 믿을 수 있는가? | 19, 20, 21 | 19 | 코드 실습 · 개념 퀴즈 |
+| L3 확장 | `MLS` | **머신러닝 시스템**<br>Machine Learning Systems | 실험을 어떻게 추적·재현하고, 더 크고 빠르게 돌리는가? | 22 | 7 | 코드 실습 · 터미널 실습 |
+| L4 연구 | `RES` | **연구 방법론**<br>Research Methodology | 무엇이 좋은 연구 질문이고, 주장을 어떻게 검증하고 전달하는가? | 23 | 12 | 개념 퀴즈 · 문서 산출물 · 동료·지도 리뷰 |
+| L4 연구 | `SCI` | **과학·공학 AI**<br>Scientific and Engineering AI | 물리 지식과 데이터를 어떻게 결합해 공학 문제를 푸는가? | 24, 25 | 14 | 코드 실습 · 문서 산출물 |
+| L5 조직 | `LAB` | **연구실 운영**<br>Lab Operations | 개인의 역량을 어떻게 연구실의 자산으로 남기는가? | 26 | 6 | 문서 산출물 · 동료·지도 리뷰 |
+| L9 참고 | `REF` | **참고 자료**<br>Reference | 필요할 때 무엇을 찾아보는가? | 부록 | 8 | — |
 
-## 트랙: 시작하기
+## 트랙 간 의존
+
+장 단위 선수 지식(`prerequisites`)을 트랙 단위로 집계한 것이다. 숫자는 선수 지식 연결 수. 모든 화살표는 같은 레이어이거나 아래 레이어를 향한다(`check`가 검증).
+
+| 트랙 | 기대는 트랙 |
+|---|---|
+| `RSE` 연구 소프트웨어 공학 | `INF` 1 |
+| `MTH` 수리 기초 | `RSE` 1 |
+| `PSI` 확률·통계적 추론 | `MTH` 2 |
+| `MLC` 머신러닝 핵심 | `MTH` 10, `PSI` 4, `RSE` 2, `ORI` 1 |
+| `MLA` 머신러닝 심화 | `PSI` 9, `MTH` 3, `MLC` 2 |
+| `MLS` 머신러닝 시스템 | `MLC` 3, `INF` 3, `RSE` 2 |
+| `RES` 연구 방법론 | `ORI` 1, `MLS` 1, `PSI` 1, `MLC` 1 |
+| `SCI` 과학·공학 AI | `MTH` 5, `PSI` 3, `MLA` 3, `ORI` 1, `MLC` 1 |
+| `LAB` 연구실 운영 | `ORI` 2 |
+
+## `ORI` 오리엔테이션 <sub>Orientation</sub>
+
+- **핵심 질문:** AI 연구란 무엇이고, 이 책으로 어떻게 훈련하는가?
+- **도달 목표:** 자신의 연구 문제를 입력·출력·가정·평가로 정의하고, 학습 경로를 세운다
+- **트랙 졸업 과제:** 한 장짜리 문제 정의서와 3개월 학습 계획
 
 ### 제0부. 시작하기 <sub>Orientation</sub>
 
@@ -49,7 +54,7 @@ _이 책이 무엇을 목표로 하며, 어떤 순서와 형식으로 읽고 훈
 - **0.1** [왜 이 책인가](content/00-orientation/01-why-this-book/index.md) · `필수`
   - 목표로 하는 연구자상 · 지식의 목록이 아니라 훈련 체계 · 이 책의 범위와 한계
 - **0.2** [이 책을 읽는 법](content/00-orientation/02-how-to-read/index.md) · `필수`
-  - 부·장·절의 구조와 트랙 · 모든 장의 공통 형식 · 난이도 등급 · 표기법·용어·코드 규칙
+  - 레이어·트랙·부·장 · 모든 장의 공통 형식 · 이론과 실습을 한 화면에서 · 평가 방식 · 난이도 등급 · 표기법·용어·코드 규칙
   - 선수: 0.1 왜 이 책인가
 - **0.3** [학습 경로](content/00-orientation/03-learning-paths/index.md) · `필수`
   - 목차 순서와 학습 순서는 다르다 · 다섯 단계 나선형 경로 · 배경별 경로 · 도메인 트랙 · 기간은 계획 범위, 진도는 산출물
@@ -80,7 +85,11 @@ _AI 연구가 어떤 단계와 결정으로 이루어지는지 전체 지도를 
   - 발표 경로 · 오픈소스와 공유 문화 · 동향을 따라가는 법
   - 선수: 1.1 AI 연구의 생애주기
 
-## 트랙: 연구 작업대
+## `INF` 연구 인프라 <sub>Research Infrastructure</sub>
+
+- **핵심 질문:** 코드는 어디에서, 어떤 환경으로 실행되는가?
+- **도달 목표:** 원격 GPU 서버에서 재현 가능한 환경을 구성하고, 장애를 스스로 진단한다
+- **트랙 졸업 과제:** 새 서버에서 lockfile·컨테이너로 학습 환경을 구성하고 smoke test 통과
 
 ### 제2부. Linux·서버·원격 개발 <sub>Linux, Servers, and Remote Development</sub>
 
@@ -105,7 +114,7 @@ _연구 서버를 안정적으로 다루기 위한 Linux, 자원 모니터링, S
 
 _OS부터 GPU 드라이버, CUDA, Python, 패키지, 컨테이너까지 실행 환경을 계층별로 이해하고 재현 가능하게 만든다._
 
-- **3.1** [AI 소프트웨어 스택의 계층](content/03-environments/01-software-stack/index.md) · `필수`
+- **3.1** [AI 소프트웨어 스택의 계층](content/03-environments/01-software-stack/index.md) · `필수` · 퀴즈 3
   - 계층 구조 · 버전 정보 읽기 · PyTorch 바이너리와 CUDA · 컴파일러와 ABI
   - 선수: 2.1 Linux와 셸의 기초
 - **3.2** [Ubuntu·드라이버·CUDA 설치와 버전 전략](content/03-environments/02-ubuntu-and-cuda/index.md) · `필수`
@@ -147,6 +156,12 @@ _Git과 GitHub로 변경을 추적·협업하고, AI 코딩 도구와 에이전�
   - 작업 흐름 · 격리 · 실행 위치 · 권한 경계 · 연구 무결성
   - 선수: 4.5 MCP와 도구 연결
 
+## `RSE` 연구 소프트웨어 공학 <sub>Research Software Engineering</sub>
+
+- **핵심 질문:** 수식과 아이디어를 어떻게 정확하고 유지 가능한 코드로 옮기는가?
+- **도달 목표:** 설정·CLI·테스트·문서를 갖춘 연구 프로젝트를 만들고 협업한다
+- **트랙 졸업 과제:** config·CLI·테스트·CI를 갖춘 연구 프로젝트 템플릿
+
 ### 제5부. Python과 계산 기초 <sub>Python and Computing Foundations</sub>
 
 _수식을 정확하고 효율적인 코드로 옮기기 위한 Python 언어, 과학 계산 라이브러리, 계산 비용과 컴퓨터 구조를 익힌다._
@@ -187,20 +202,24 @@ _디렉터리 구조, 네이밍, 설정 파일, CLI, 로깅, 테스트, 문서�
   - 선수: 6.4 CLI 설계
 - **6.6** [테스트와 디버깅](content/06-research-code-engineering/06-testing-and-debugging/index.md) · `필수`
   - 테스트의 종류 · 연구 코드에서 테스트할 것 · 디버깅 · 체계적 디버깅 · CI
-  - 선수: 6.5 로깅과 오류 처리
+  - 선수: 6.5 로깅과 오류 처리, 4.2 GitHub 협업과 저장소 관리
 - **6.7** [연구 코드 문서화](content/06-research-code-engineering/07-documentation/index.md) · `필수`
   - README · docstring · 설계 문서 · 변경 기록
   - 선수: 6.1 연구 프로젝트 구조
 
-## 트랙: 수학적 기초
+## `MTH` 수리 기초 <sub>Mathematical Foundations</sub>
+
+- **핵심 질문:** 모델과 학습은 어떤 공간에서, 어떤 계산으로 이루어지는가?
+- **도달 목표:** 선형대수·미분·수치해석·최적화로 모델과 학습 알고리즘을 유도하고 구현한다
+- **트랙 졸업 과제:** 자동미분 엔진과 optimizer를 직접 구현해 MLP를 학습하고 수치미분으로 검증
 
 ### 제7부. 선형대수와 기하 <sub>Linear Algebra and Geometry</sub>
 
 _데이터와 모델을 공간과 변환의 관점에서 이해한다. 선형·아핀·비선형 구조, rank, 분해, 텐서, 다양체, 함수공간까지 다룬다._
 
-- **7.1** [벡터공간과 선형사상](content/07-linear-algebra/01-vector-spaces/index.md) · `필수`
+- **7.1** [벡터공간과 선형사상](content/07-linear-algebra/01-vector-spaces/index.md) · `필수` · 위젯: 2차원 선형·아핀 사상
   - 집합·함수·벡터공간 · span·선형독립·basis·dimension · 선형사상 · 행렬 표현
-- **7.2** [아핀 구조와 비선형성](content/07-linear-algebra/02-affine-and-nonlinear/index.md) · `필수`
+- **7.2** [아핀 구조와 비선형성](content/07-linear-algebra/02-affine-and-nonlinear/index.md) · `필수` · 퀴즈 5 · 위젯: 2차원 선형·아핀 사상, ReLU 신경망의 조각별 아핀 영역
   - 선형 변환과 아핀 변환 · 결합의 종류 · 선형층의 합성 · 비선형성의 역할 · 선형 근사로서의 미분
   - 선수: 7.1 벡터공간과 선형사상
 - **7.3** [행렬의 네 부분공간과 rank](content/07-linear-algebra/03-rank-and-subspaces/index.md) · `필수`
@@ -212,7 +231,7 @@ _데이터와 모델을 공간과 변환의 관점에서 이해한다. 선형·�
 - **7.5** [고윳값과 대칭행렬](content/07-linear-algebra/05-eigen-and-symmetric/index.md) · `필수`
   - 고윳값과 고유벡터 · 스펙트럴 정리 · 양의 정부호성과 이차형식 · 공분산 행렬 · 동역학과 안정성
   - 선수: 7.4 내적·노름·직교성·사영
-- **7.6** [SVD·PCA·저랭크 근사](content/07-linear-algebra/06-svd-and-pca/index.md) · `필수`
+- **7.6** [SVD·PCA·저랭크 근사](content/07-linear-algebra/06-svd-and-pca/index.md) · `필수` · 위젯: SVD: 회전–스케일–회전
   - SVD · 저랭크 근사 · PCA · 계산 · 활용
   - 선수: 7.5 고윳값과 대칭행렬
 - **7.7** [텐서와 einsum](content/07-linear-algebra/07-tensors-and-einsum/index.md) · `필수`
@@ -238,7 +257,7 @@ _다변수 미분, 행렬 미분, 적분과 변수변환, 자동미분과 역전
 - **8.3** [적분과 변수변환](content/08-calculus-and-autodiff/03-integration/index.md) · `필수`
   - 다중적분 · 변수변환 · 가우시안 적분 · 확률밀도의 변환
   - 선수: 8.1 다변수 미분
-- **8.4** [자동미분과 역전파](content/08-calculus-and-autodiff/04-automatic-differentiation/index.md) · `필수`
+- **8.4** [자동미분과 역전파](content/08-calculus-and-autodiff/04-automatic-differentiation/index.md) · `필수` · 위젯: 계산 그래프와 역전파
   - 미분 계산의 세 방법 · 계산 그래프 · forward mode와 reverse mode · 역전파 · 메모리와 고차미분 · gradient 검증 · gradient 소실·폭발
   - 선수: 8.2 행렬 미분
 
@@ -246,7 +265,7 @@ _다변수 미분, 행렬 미분, 적분과 변수변환, 자동미분과 역전
 
 _부동소수점, 안정성과 조건수, 수치 선형대수, 반복법, ODE·PDE·DAE 수치해법과 시뮬레이터 검증을 다룬다._
 
-- **9.1** [부동소수점과 수치 오차](content/09-numerical-methods/01-floating-point/index.md) · `필수`
+- **9.1** [부동소수점과 수치 오차](content/09-numerical-methods/01-floating-point/index.md) · `필수` · 위젯: 부동소수점 비트 구조
   - 부동소수점 표현 · 오차의 종류 · 위험한 연산 · 안정한 계산식
   - 선수: 5.5 컴퓨터 구조와 병렬 계산
 - **9.2** [조건수·안정성·수렴](content/09-numerical-methods/02-conditioning-and-stability/index.md) · `필수`
@@ -261,115 +280,121 @@ _부동소수점, 안정성과 조건수, 수치 선형대수, 반복법, ODE·P
 - **9.5** [보간·근사·수치적분](content/09-numerical-methods/05-interpolation-and-quadrature/index.md) · `필수`
   - 보간 · 근사 · 수치적분 · 고차원 적분
   - 선수: 9.2 조건수·안정성·수렴
-- **9.6** [ODE 수치해법](content/09-numerical-methods/06-ode-solvers/index.md) · `필수`
+- **9.6** [ODE 수치해법](content/09-numerical-methods/06-ode-solvers/index.md) · `필수` · 위젯: ODE solver의 step 크기와 안정성
   - 초기값 문제 · 기본 방법 · 암시적 방법 · stiffness · 적응적 step과 tolerance · 경계값 문제
   - 선수: 9.4 비선형 방정식과 반복법
 - **9.7** [PDE·DAE와 시뮬레이터 검증](content/09-numerical-methods/07-pde-and-dae/index.md) · `심화`
   - PDE 이산화 · 안정성 조건 · DAE · 검증과 확인(V&V) · 시뮬레이터를 데이터 생성기로 쓸 때
   - 선수: 9.6 ODE 수치해법
 
-### 제10부. 확률론 <sub>Probability</sub>
-
-_확률변수와 분포, 조건부확률, 다변량 가우시안, 기댓값과 극한정리, 샘플링, 확률과정의 기초를 다룬다._
-
-- **10.1** [확률공간과 확률변수](content/10-probability/01-random-variables/index.md) · `필수`
-  - 확률공간의 직관 · 확률변수 · 분포의 표현 · 변수변환
-- **10.2** [주요 분포와 지수족](content/10-probability/02-distributions/index.md) · `필수`
-  - 이산 분포 · 연속 분포 · 분포의 생성 이야기 · 지수족 · 혼합분포와 두꺼운 꼬리
-  - 선수: 10.1 확률공간과 확률변수
-- **10.3** [결합·주변·조건부분포와 독립성](content/10-probability/03-conditional-probability/index.md) · `필수`
-  - 결합과 주변화 · 조건부분포 · 베이즈 정리 · 독립과 조건부 독립 · 확률 그래프 모델 입문
-  - 선수: 10.1 확률공간과 확률변수
-- **10.4** [다변량 가우시안](content/10-probability/04-multivariate-gaussian/index.md) · `필수`
-  - 정의와 기하 · 주변화와 조건부 · 선형 변환과 선형-가우시안 모델 · 정밀도 행렬 · 활용
-  - 선수: 10.3 결합·주변·조건부분포와 독립성, 7.5 고윳값과 대칭행렬
-- **10.5** [기댓값·부등식·극한정리](content/10-probability/05-expectation-and-limits/index.md) · `필수`
-  - 기댓값과 모멘트 · 부등식 · 집중 부등식 · 극한정리
-  - 선수: 10.2 주요 분포와 지수족
-- **10.6** [Monte Carlo와 샘플링](content/10-probability/06-sampling/index.md) · `필수`
-  - Monte Carlo 추정 · 기본 샘플링 · importance sampling · 분산 감소 · 재매개변수화
-  - 선수: 10.5 기댓값·부등식·극한정리
-- **10.7** [확률과정 기초](content/10-probability/07-stochastic-processes/index.md) · `심화`
-  - Markov chain · Gaussian process · random walk와 Brownian motion · SDE의 직관 · 시계열 확률모형
-  - 선수: 10.6 Monte Carlo와 샘플링
-
-### 제11부. 통계적 추론 <sub>Statistical Inference</sub>
-
-_추정량의 성질, 우도와 최대우도, 분포 기반 문제 정의, 구간 추정과 검정, 모델 비교의 통계를 다룬다._
-
-- **11.1** [추정량의 성질](content/11-statistical-inference/01-estimators/index.md) · `필수`
-  - 기본 개념 · 편향과 분산 · 점근적 성질 · 효율성
-  - 선수: 10.5 기댓값·부등식·극한정리
-- **11.2** [우도와 최대우도](content/11-statistical-inference/02-likelihood/index.md) · `필수`
-  - 확률과 우도 · 최대우도추정 · 손실함수의 확률적 해석 · MLE의 성질과 한계 · MAP와 정규화
-  - 선수: 11.1 추정량의 성질
-- **11.3** [분포 기반 문제 정의](content/11-statistical-inference/03-distributional-formulation/index.md) · `필수`
-  - 무엇의 분포가 필요한가 · 결정 이론 · 분포를 출력하는 모델 · 적정 점수 규칙 · 불확실성의 출처 구분
-  - 선수: 11.2 우도와 최대우도
-- **11.4** [구간 추정·가설 검정·부트스트랩](content/11-statistical-inference/04-intervals-and-testing/index.md) · `필수`
-  - 신뢰구간 · 가설 검정 · 효과 크기 · 부트스트랩 · 다중 비교와 선택 편향
-  - 선수: 11.1 추정량의 성질
-- **11.5** [모델 비교의 통계](content/11-statistical-inference/05-comparing-models/index.md) · `필수`
-  - 변동의 출처 · 짝지은 비교 · 교차검증 결과의 비교 · 여러 데이터셋에서의 비교 · 보고 방식
-  - 선수: 11.4 구간 추정·가설 검정·부트스트랩
-- **11.6** [회귀모형의 통계적 관점](content/11-statistical-inference/06-regression-models/index.md) · `심화`
-  - 선형모형 · 일반화 선형모형 · 잔차 진단 · 혼합효과 모형
-  - 선수: 11.2 우도와 최대우도
-
-### 제12부. 베이지안 추론 <sub>Bayesian Inference</sub>
-
-_사전·우도·사후·예측분포, 켤레 모델, 계층 모델, 잠재변수와 EM, MCMC, 변분추론, Gaussian process, 베이지안 워크플로를 다룬다._
-
-- **12.1** [베이지안 사고방식](content/12-bayesian-inference/01-bayesian-thinking/index.md) · `필수`
-  - 구성 요소 · 순차적 갱신 · 점추정과의 관계 · 해석의 차이
-  - 선수: 10.3 결합·주변·조건부분포와 독립성, 11.2 우도와 최대우도
-- **12.2** [켤레 모델과 베이지안 선형회귀](content/12-bayesian-inference/02-conjugate-models/index.md) · `필수`
-  - 켤레성 · 베이지안 선형회귀 · evidence와 모델 선택
-  - 선수: 12.1 베이지안 사고방식, 10.4 다변량 가우시안
-- **12.3** [계층 모델](content/12-bayesian-inference/03-hierarchical-models/index.md) · `심화`
-  - 그룹 구조의 데이터 · pooling의 세 가지 · 계층 모델의 구성 · 계산 문제
-  - 선수: 12.2 켤레 모델과 베이지안 선형회귀
-- **12.4** [잠재변수 모델과 EM](content/12-bayesian-inference/04-latent-variables-and-em/index.md) · `필수`
-  - 잠재변수 모델 · Gaussian mixture model · EM 알고리즘 · 결측 데이터
-  - 선수: 12.1 베이지안 사고방식
-- **12.5** [근사 추론 I: MCMC](content/12-bayesian-inference/05-mcmc/index.md) · `심화`
-  - 왜 근사가 필요한가 · Metropolis–Hastings · Gibbs sampling · HMC와 NUTS · 수렴 진단
-  - 선수: 12.1 베이지안 사고방식, 10.7 확률과정 기초
-- **12.6** [근사 추론 II: 변분추론과 Laplace 근사](content/12-bayesian-inference/06-variational-inference/index.md) · `심화`
-  - 변분추론 · 확률적 변분추론 · amortized inference · Laplace 근사 · 근사의 한계
-  - 선수: 12.4 잠재변수 모델과 EM
-- **12.7** [Gaussian Process](content/12-bayesian-inference/07-gaussian-processes/index.md) · `필수`
-  - 함수에 대한 분포 · GP 회귀 · 커널 · 하이퍼파라미터 · 확장
-  - 선수: 10.4 다변량 가우시안, 7.9 함수공간과 연산자
-- **12.8** [베이지안 워크플로](content/12-bayesian-inference/08-bayesian-workflow/index.md) · `심화`
-  - 모델 구축 · 사전 예측 점검 · 사후 점검 · 모델 비교 · 보고
-  - 선수: 12.5 근사 추론 I: MCMC
-
-### 제13부. 최적화 <sub>Optimization</sub>
+### 제10부. 최적화 <sub>Optimization</sub>
 
 _최적화 문제의 구조, 볼록성과 최적성 조건, 제약 최적화, 1차·적응적·2차 방법, 비볼록 손실 지형, 특수한 최적화 문제를 다룬다._
 
-- **13.1** [최적화 문제의 구조](content/13-optimization/01-optimization-basics/index.md) · `필수`
+- **10.1** [최적화 문제의 구조](content/10-optimization/01-optimization-basics/index.md) · `필수`
   - 문제의 구성 · 볼록성 · 최적해의 종류 · 최적성 조건
   - 선수: 8.1 다변수 미분
-- **13.2** [제약 최적화와 쌍대성](content/13-optimization/02-constrained-optimization/index.md) · `필수`
+- **10.2** [제약 최적화와 쌍대성](content/10-optimization/02-constrained-optimization/index.md) · `필수`
   - Lagrange 승수 · KKT 조건 · 쌍대성 · 제약과 penalty · 투영과 근위 연산
-  - 선수: 13.1 최적화 문제의 구조
-- **13.3** [1차 최적화 방법](content/13-optimization/03-first-order-methods/index.md) · `필수`
+  - 선수: 10.1 최적화 문제의 구조
+- **10.3** [1차 최적화 방법](content/10-optimization/03-first-order-methods/index.md) · `필수` · 위젯: 손실 지형 위의 optimizer 궤적
   - Gradient descent · Line search · SGD · Momentum · 수렴 이론 개요
-  - 선수: 13.1 최적화 문제의 구조
-- **13.4** [적응적 방법과 학습 레시피](content/13-optimization/04-adaptive-methods/index.md) · `필수`
+  - 선수: 10.1 최적화 문제의 구조
+- **10.4** [적응적 방법과 학습 레시피](content/10-optimization/04-adaptive-methods/index.md) · `필수` · 위젯: 손실 지형 위의 optimizer 궤적
   - 적응적 방법 · weight decay · 학습률 스케줄 · 실전 기법 · 최신 optimizer의 위치 · 공정한 optimizer 비교
-  - 선수: 13.3 1차 최적화 방법
-- **13.5** [2차 방법과 준뉴턴](content/13-optimization/05-second-order-methods/index.md) · `심화`
+  - 선수: 10.3 1차 최적화 방법
+- **10.5** [2차 방법과 준뉴턴](content/10-optimization/05-second-order-methods/index.md) · `심화`
   - Newton 방법 · Gauss–Newton과 Levenberg–Marquardt · 준뉴턴 · 자연 gradient · 사용처
-  - 선수: 13.3 1차 최적화 방법
-- **13.6** [비볼록 최적화와 손실 지형](content/13-optimization/06-nonconvex-landscape/index.md) · `심화`
+  - 선수: 10.3 1차 최적화 방법
+- **10.6** [비볼록 최적화와 손실 지형](content/10-optimization/06-nonconvex-landscape/index.md) · `심화`
   - 비볼록성 · 평탄함과 일반화 · 학습 동역학 · 손실 지형 분석
-  - 선수: 13.4 적응적 방법과 학습 레시피
-- **13.7** [특수한 최적화 문제](content/13-optimization/07-special-optimization/index.md) · `심화`
+  - 선수: 10.4 적응적 방법과 학습 레시피
+- **10.7** [특수한 최적화 문제](content/10-optimization/07-special-optimization/index.md) · `심화`
   - 다목적 최적화 · 이중수준 최적화 · 블랙박스 최적화 · 베이지안 최적화 · 미분 불가능·이산 문제
-  - 선수: 13.2 제약 최적화와 쌍대성
+  - 선수: 10.2 제약 최적화와 쌍대성
+
+## `PSI` 확률·통계적 추론 <sub>Probabilistic and Statistical Inference</sub>
+
+- **핵심 질문:** 불확실한 데이터에서 무엇을, 얼마나 확신하며 추론할 수 있는가?
+- **도달 목표:** 문제를 분포로 정의하고, 추정·검정·베이지안 추론·일반화를 근거로 결론을 낸다
+- **트랙 졸업 과제:** 같은 회귀 문제를 MLE·MAP·베이지안·GP로 풀고 예측분포를 비교한 보고서
+
+### 제11부. 확률론 <sub>Probability</sub>
+
+_확률변수와 분포, 조건부확률, 다변량 가우시안, 기댓값과 극한정리, 샘플링, 확률과정의 기초를 다룬다._
+
+- **11.1** [확률공간과 확률변수](content/11-probability/01-random-variables/index.md) · `필수` · 위젯: 분포 탐색기
+  - 확률공간의 직관 · 확률변수 · 분포의 표현 · 변수변환
+- **11.2** [주요 분포와 지수족](content/11-probability/02-distributions/index.md) · `필수` · 위젯: 분포 탐색기
+  - 이산 분포 · 연속 분포 · 분포의 생성 이야기 · 지수족 · 혼합분포와 두꺼운 꼬리
+  - 선수: 11.1 확률공간과 확률변수
+- **11.3** [결합·주변·조건부분포와 독립성](content/11-probability/03-conditional-probability/index.md) · `필수`
+  - 결합과 주변화 · 조건부분포 · 베이즈 정리 · 독립과 조건부 독립 · 확률 그래프 모델 입문
+  - 선수: 11.1 확률공간과 확률변수
+- **11.4** [다변량 가우시안](content/11-probability/04-multivariate-gaussian/index.md) · `필수` · 위젯: 다변량 가우시안의 조건부분포
+  - 정의와 기하 · 주변화와 조건부 · 선형 변환과 선형-가우시안 모델 · 정밀도 행렬 · 활용
+  - 선수: 11.3 결합·주변·조건부분포와 독립성, 7.5 고윳값과 대칭행렬
+- **11.5** [기댓값·부등식·극한정리](content/11-probability/05-expectation-and-limits/index.md) · `필수`
+  - 기댓값과 모멘트 · 부등식 · 집중 부등식 · 극한정리
+  - 선수: 11.2 주요 분포와 지수족
+- **11.6** [Monte Carlo와 샘플링](content/11-probability/06-sampling/index.md) · `필수`
+  - Monte Carlo 추정 · 기본 샘플링 · importance sampling · 분산 감소 · 재매개변수화
+  - 선수: 11.5 기댓값·부등식·극한정리
+- **11.7** [확률과정 기초](content/11-probability/07-stochastic-processes/index.md) · `심화`
+  - Markov chain · Gaussian process · random walk와 Brownian motion · SDE의 직관 · 시계열 확률모형
+  - 선수: 11.6 Monte Carlo와 샘플링
+
+### 제12부. 통계적 추론 <sub>Statistical Inference</sub>
+
+_추정량의 성질, 우도와 최대우도, 분포 기반 문제 정의, 구간 추정과 검정, 모델 비교의 통계를 다룬다._
+
+- **12.1** [추정량의 성질](content/12-statistical-inference/01-estimators/index.md) · `필수`
+  - 기본 개념 · 편향과 분산 · 점근적 성질 · 효율성
+  - 선수: 11.5 기댓값·부등식·극한정리
+- **12.2** [우도와 최대우도](content/12-statistical-inference/02-likelihood/index.md) · `필수`
+  - 확률과 우도 · 최대우도추정 · 손실함수의 확률적 해석 · MLE의 성질과 한계 · MAP와 정규화
+  - 선수: 12.1 추정량의 성질
+- **12.3** [분포 기반 문제 정의](content/12-statistical-inference/03-distributional-formulation/index.md) · `필수` · 퀴즈 5 · 위젯: 손실함수가 고르는 대표값
+  - 무엇의 분포가 필요한가 · 결정 이론 · 분포를 출력하는 모델 · 적정 점수 규칙 · 불확실성의 출처 구분
+  - 선수: 12.2 우도와 최대우도
+- **12.4** [구간 추정·가설 검정·부트스트랩](content/12-statistical-inference/04-intervals-and-testing/index.md) · `필수`
+  - 신뢰구간 · 가설 검정 · 효과 크기 · 부트스트랩 · 다중 비교와 선택 편향
+  - 선수: 12.1 추정량의 성질
+- **12.5** [모델 비교의 통계](content/12-statistical-inference/05-comparing-models/index.md) · `필수`
+  - 변동의 출처 · 짝지은 비교 · 교차검증 결과의 비교 · 여러 데이터셋에서의 비교 · 보고 방식
+  - 선수: 12.4 구간 추정·가설 검정·부트스트랩
+- **12.6** [회귀모형의 통계적 관점](content/12-statistical-inference/06-regression-models/index.md) · `심화`
+  - 선형모형 · 일반화 선형모형 · 잔차 진단 · 혼합효과 모형
+  - 선수: 12.2 우도와 최대우도
+
+### 제13부. 베이지안 추론 <sub>Bayesian Inference</sub>
+
+_사전·우도·사후·예측분포, 켤레 모델, 계층 모델, 잠재변수와 EM, MCMC, 변분추론, Gaussian process, 베이지안 워크플로를 다룬다._
+
+- **13.1** [베이지안 사고방식](content/13-bayesian-inference/01-bayesian-thinking/index.md) · `필수` · 위젯: 순차적 베이지안 갱신
+  - 구성 요소 · 순차적 갱신 · 점추정과의 관계 · 해석의 차이
+  - 선수: 11.3 결합·주변·조건부분포와 독립성, 12.2 우도와 최대우도
+- **13.2** [켤레 모델과 베이지안 선형회귀](content/13-bayesian-inference/02-conjugate-models/index.md) · `필수` · 위젯: 순차적 베이지안 갱신
+  - 켤레성 · 베이지안 선형회귀 · evidence와 모델 선택
+  - 선수: 13.1 베이지안 사고방식, 11.4 다변량 가우시안
+- **13.3** [계층 모델](content/13-bayesian-inference/03-hierarchical-models/index.md) · `심화`
+  - 그룹 구조의 데이터 · pooling의 세 가지 · 계층 모델의 구성 · 계산 문제
+  - 선수: 13.2 켤레 모델과 베이지안 선형회귀
+- **13.4** [잠재변수 모델과 EM](content/13-bayesian-inference/04-latent-variables-and-em/index.md) · `필수`
+  - 잠재변수 모델 · Gaussian mixture model · EM 알고리즘 · 결측 데이터
+  - 선수: 13.1 베이지안 사고방식
+- **13.5** [근사 추론 I: MCMC](content/13-bayesian-inference/05-mcmc/index.md) · `심화`
+  - 왜 근사가 필요한가 · Metropolis–Hastings · Gibbs sampling · HMC와 NUTS · 수렴 진단
+  - 선수: 13.1 베이지안 사고방식, 11.7 확률과정 기초
+- **13.6** [근사 추론 II: 변분추론과 Laplace 근사](content/13-bayesian-inference/06-variational-inference/index.md) · `심화`
+  - 변분추론 · 확률적 변분추론 · amortized inference · Laplace 근사 · 근사의 한계
+  - 선수: 13.4 잠재변수 모델과 EM
+- **13.7** [Gaussian Process](content/13-bayesian-inference/07-gaussian-processes/index.md) · `필수` · 위젯: Gaussian process 회귀
+  - 함수에 대한 분포 · GP 회귀 · 커널 · 하이퍼파라미터 · 확장
+  - 선수: 11.4 다변량 가우시안, 7.9 함수공간과 연산자
+- **13.8** [베이지안 워크플로](content/13-bayesian-inference/08-bayesian-workflow/index.md) · `심화`
+  - 모델 구축 · 사전 예측 점검 · 사후 점검 · 모델 비교 · 보고
+  - 선수: 13.5 근사 추론 I: MCMC
 
 ### 제14부. 정보이론과 학습이론 <sub>Information Theory and Learning Theory</sub>
 
@@ -377,21 +402,25 @@ _엔트로피와 KL, 상호정보량, 목적함수 설계의 원리, 일반화 �
 
 - **14.1** [엔트로피·교차엔트로피·KL](content/14-information-and-learning-theory/01-entropy-and-kl/index.md) · `필수`
   - 엔트로피 · 교차엔트로피와 KL · 다른 divergence
-  - 선수: 10.2 주요 분포와 지수족
+  - 선수: 11.2 주요 분포와 지수족
 - **14.2** [상호정보량과 표현](content/14-information-and-learning-theory/02-mutual-information/index.md) · `심화`
   - 상호정보량 · 추정의 어려움 · 정보 병목
   - 선수: 14.1 엔트로피·교차엔트로피·KL
 - **14.3** [목적함수 설계의 원리](content/14-information-and-learning-theory/03-objective-design/index.md) · `필수`
   - 손실 = 음의 로그우도 · divergence 최소화로서의 학습 · ELBO · 대조적 목적함수 · 다중 손실의 결합 · 집계 방식
-  - 선수: 14.1 엔트로피·교차엔트로피·KL, 11.2 우도와 최대우도
+  - 선수: 14.1 엔트로피·교차엔트로피·KL, 12.2 우도와 최대우도
 - **14.4** [일반화의 기초](content/14-information-and-learning-theory/04-generalization-basics/index.md) · `필수`
   - 위험 · 오차 분해 · bias–variance · 용량과 bound · 귀납적 편향과 정규화 · 이론과 실험의 간극
-  - 선수: 10.5 기댓값·부등식·극한정리
+  - 선수: 11.5 기댓값·부등식·극한정리
 - **14.5** [현대 딥러닝의 일반화와 스케일링](content/14-information-and-learning-theory/05-modern-generalization/index.md) · `심화`
   - 과매개변수화 · 암묵적 정규화 · 이론적 관점 · 스케일링 법칙 · 보간과 외삽
   - 선수: 14.4 일반화의 기초
 
-## 트랙: 모델링
+## `MLC` 머신러닝 핵심 <sub>Machine Learning Core</sub>
+
+- **핵심 질문:** 데이터에서 신뢰할 수 있는 예측 모델을 어떻게 만들고 평가하는가?
+- **도달 목표:** 누수 없는 데이터 파이프라인과 강한 baseline 위에서 딥러닝 모델을 학습·평가·재현한다
+- **트랙 졸업 과제:** 공통 데이터셋으로 baseline부터 PyTorch 모델까지, 독립 평가 스크립트로 재현
 
 ### 제15부. 데이터 설계·처리·품질 관리 <sub>Data Design, Processing, and Quality</sub>
 
@@ -406,7 +435,7 @@ _데이터의 의미와 저장 형식, 전처리와 탐색적 분석, 분할과 
 - **15.3** [전처리와 탐색적 분석](content/15-data/03-preprocessing-and-eda/index.md) · `필수`
   - 품질 문제 · 정규화와 스케일링 · 시계열 전처리 · 특징 추출 · 탐색적 분석과 시각화
   - 선수: 15.1 데이터의 의미와 구조
-- **15.4** [데이터 분할과 누수 방지](content/15-data/04-splitting-and-leakage/index.md) · `필수`
+- **15.4** [데이터 분할과 누수 방지](content/15-data/04-splitting-and-leakage/index.md) · `필수` · 위젯: 데이터 분할과 누수
   - 분할 전략 · 독립성의 단위 · 누수의 유형 · fit은 학습 데이터에서만 · validation과 test의 역할 · 사전학습 데이터와의 중복 · 외부 검증
   - 선수: 15.3 전처리와 탐색적 분석
 - **15.5** [데이터셋 버전·문서화·라이선스](content/15-data/05-dataset-versioning/index.md) · `필수`
@@ -425,7 +454,7 @@ _강한 기준 모델, 선형·커널·트리 모델, 비지도학습, 모델 �
   - 선수: 15.4 데이터 분할과 누수 방지
 - **16.2** [선형 모델과 정규화](content/16-classical-ml/02-linear-models/index.md) · `필수`
   - 선형회귀 · 정규화 · 로지스틱 회귀 · 특징 공학
-  - 선수: 16.1 기준 모델의 철학, 7.4 내적·노름·직교성·사영
+  - 선수: 16.1 기준 모델의 철학, 7.4 내적·노름·직교성·사영, 12.2 우도와 최대우도
 - **16.3** [커널 방법과 최근접 이웃](content/16-classical-ml/03-kernels-and-neighbors/index.md) · `필수`
   - 최근접 이웃 · SVM · 커널 방법 · 확장성
   - 선수: 16.2 선형 모델과 정규화, 7.9 함수공간과 연산자
@@ -437,10 +466,10 @@ _강한 기준 모델, 선형·커널·트리 모델, 비지도학습, 모델 �
   - 선수: 7.6 SVD·PCA·저랭크 근사
 - **16.6** [모델 선택과 평가](content/16-classical-ml/06-model-selection/index.md) · `필수`
   - 교차검증 · 회귀 metric · 분류 metric · threshold 선택 · 하이퍼파라미터 탐색 · 진단
-  - 선수: 16.1 기준 모델의 철학, 11.5 모델 비교의 통계
+  - 선수: 16.1 기준 모델의 철학, 12.5 모델 비교의 통계
 - **16.7** [시계열 분석](content/16-classical-ml/07-time-series-analysis/index.md) · `필수`
   - 시계열의 구조 · 고전 모델 · 상태공간 모델 · 예측·필터링·평활 · 평가
-  - 선수: 16.6 모델 선택과 평가, 10.7 확률과정 기초
+  - 선수: 16.6 모델 선택과 평가, 11.7 확률과정 기초
 - **16.8** [생존분석과 인과추론 기초](content/16-classical-ml/08-survival-and-causal/index.md) · `심화`
   - 생존분석 · 수명 예측과의 연결 · 인과추론 기초 · 개입과 반사실
   - 선수: 16.7 시계열 분석
@@ -449,7 +478,7 @@ _강한 기준 모델, 선형·커널·트리 모델, 비지도학습, 모델 �
 
 _신경망의 구성 요소, PyTorch의 tensor·autograd·Module·DataLoader, forward–backward–update 학습 루프, 평가·체크포인트, trainer 설계, 대시보드, 학습 실패 진단을 다룬다._
 
-- **17.1** [신경망의 구성 요소](content/17-deep-learning-pytorch/01-neural-network-components/index.md) · `필수`
+- **17.1** [신경망의 구성 요소](content/17-deep-learning-pytorch/01-neural-network-components/index.md) · `필수` · 위젯: ReLU 신경망의 조각별 아핀 영역
   - 층과 활성화 · 깊이와 폭 · 초기화 · 정규화 층 · residual connection과 dropout · output head
   - 선수: 7.2 아핀 구조와 비선형성, 8.4 자동미분과 역전파
 - **17.2** [PyTorch 텐서와 autograd](content/17-deep-learning-pytorch/02-tensors-and-autograd/index.md) · `필수`
@@ -461,9 +490,9 @@ _신경망의 구성 요소, PyTorch의 tensor·autograd·Module·DataLoader, fo
 - **17.4** [Dataset과 DataLoader](content/17-deep-learning-pytorch/04-datasets-and-dataloaders/index.md) · `필수`
   - Dataset · sample contract · batch 구성 · sampler · 병렬 로딩 · 대용량 데이터
   - 선수: 17.2 PyTorch 텐서와 autograd, 15.4 데이터 분할과 누수 방지
-- **17.5** [학습 루프 해부: forward → loss → backward → update](content/17-deep-learning-pytorch/05-training-loop/index.md) · `필수`
+- **17.5** [학습 루프 해부: forward → loss → backward → update](content/17-deep-learning-pytorch/05-training-loop/index.md) · `필수` · 위젯: 학습 루프 단계 재생기
   - 전체 흐름 · 수식과 코드 · 역할의 구분 · 단위의 구분 · 실전 요소 · end-to-end라는 말의 의미
-  - 선수: 17.3 nn.Module과 모델 구성, 17.4 Dataset과 DataLoader, 13.4 적응적 방법과 학습 레시피
+  - 선수: 17.3 nn.Module과 모델 구성, 17.4 Dataset과 DataLoader, 10.4 적응적 방법과 학습 레시피, 14.3 목적함수 설계의 원리
 - **17.6** [평가·추론·체크포인트](content/17-deep-learning-pytorch/06-evaluation-and-checkpoints/index.md) · `필수`
   - 평가 모드 · metric 집계 · 체크포인트의 내용 · best와 last · 재개와 추론 · inference contract
   - 선수: 17.5 학습 루프 해부: forward → loss → backward → update
@@ -493,7 +522,7 @@ _귀납적 편향의 관점에서 MLP·CNN·순환·상태공간 모델·Transfo
 - **18.3** [순환 모델과 상태공간 모델](content/18-architectures/03-recurrent-and-ssm/index.md) · `필수`
   - RNN · LSTM과 GRU · 시간 convolution · 상태공간 모델 · 학습과 추론 방식 · 불규칙 샘플링
   - 선수: 18.1 귀납적 편향과 아키텍처 선택, 7.5 고윳값과 대칭행렬
-- **18.4** [Attention과 Transformer](content/18-architectures/04-transformers/index.md) · `필수`
+- **18.4** [Attention과 Transformer](content/18-architectures/04-transformers/index.md) · `필수` · 위젯: Attention 계산
   - attention · multi-head와 cross-attention · 위치 정보 · mask · Transformer 블록 · 효율 · 해석의 한계
   - 선수: 18.1 귀납적 편향과 아키텍처 선택, 7.7 텐서와 einsum
 - **18.5** [언어모델과 LLM의 기초](content/18-architectures/05-language-models/index.md) · `심화`
@@ -509,25 +538,31 @@ _귀납적 편향의 관점에서 MLP·CNN·순환·상태공간 모델·Transfo
   - probing · 표현 유사도 · 검색과 최근접 이웃 · 시각화
   - 선수: 18.1 귀납적 편향과 아키텍처 선택, 16.5 비지도학습과 표현 탐색
 
+## `MLA` 머신러닝 심화 <sub>Advanced Machine Learning</sub>
+
+- **핵심 질문:** 분포를 생성하고, 결정을 학습하고, 예측을 언제 믿을 수 있는가?
+- **도달 목표:** 생성모델·강화학습·불확실성 정량화를 문제에 맞게 선택하고 평가한다
+- **트랙 졸업 과제:** 확률적 예측 모델의 calibration·OOD 평가 보고서
+
 ### 제19부. 생성모델·자기지도학습·Foundation Model <sub>Generative Models, Self-Supervised Learning, and Foundation Models</sub>
 
 _생성모델의 공통 문제 정의, 자기회귀·VAE·GAN·flow·확산·flow matching, 생성모델 평가, 자기지도학습, 사전학습과 전이를 다룬다._
 
 - **19.1** [생성모델의 공통 문제 정의](content/19-generative-and-foundation-models/01-generative-modeling/index.md) · `필수`
   - 무엇의 분포인가 · 세 가지 능력 · 생성 · 재구성 · 예측 · 계열 지도
-  - 선수: 10.2 주요 분포와 지수족, 14.1 엔트로피·교차엔트로피·KL
+  - 선수: 11.2 주요 분포와 지수족, 14.1 엔트로피·교차엔트로피·KL
 - **19.2** [자기회귀 모델](content/19-generative-and-foundation-models/02-autoregressive-models/index.md) · `필수`
   - chain rule 분해 · 구조 · 샘플링 · 연속값의 자기회귀
   - 선수: 19.1 생성모델의 공통 문제 정의
 - **19.3** [VAE와 잠재변수 생성모델](content/19-generative-and-foundation-models/03-vae/index.md) · `필수`
   - 모델 · ELBO · 재매개변수화 · 문제와 대응 · 확장
-  - 선수: 19.1 생성모델의 공통 문제 정의, 12.6 근사 추론 II: 변분추론과 Laplace 근사
+  - 선수: 19.1 생성모델의 공통 문제 정의, 13.6 근사 추론 II: 변분추론과 Laplace 근사
 - **19.4** [GAN과 Normalizing Flow](content/19-generative-and-foundation-models/04-gan-and-flows/index.md) · `심화`
   - GAN · GAN의 어려움 · Normalizing flow · flow 구조
   - 선수: 19.1 생성모델의 공통 문제 정의, 8.3 적분과 변수변환
-- **19.5** [확산 모델과 score 기반 모델](content/19-generative-and-foundation-models/05-diffusion-models/index.md) · `필수`
+- **19.5** [확산 모델과 score 기반 모델](content/19-generative-and-foundation-models/05-diffusion-models/index.md) · `필수` · 위젯: 확산 과정의 forward와 reverse
   - forward 과정 · reverse 과정과 학습 · score 관점 · 샘플링 · 조건부 생성 · 과학 데이터에의 적용
-  - 선수: 19.1 생성모델의 공통 문제 정의, 10.7 확률과정 기초
+  - 선수: 19.1 생성모델의 공통 문제 정의, 11.7 확률과정 기초
 - **19.6** [Flow Matching과 연속시간 생성모델](content/19-generative-and-foundation-models/06-flow-matching/index.md) · `심화`
   - 연속 정규화 흐름 · flow matching · rectified flow와 최적 수송 · 확산 모델과의 관계
   - 선수: 19.5 확산 모델과 score 기반 모델, 9.6 ODE 수치해법
@@ -547,13 +582,13 @@ _MDP와 동적계획법, 가치·정책 기반 강화학습, 모델 기반 방�
 
 - **20.1** [MDP와 동적계획법](content/20-reinforcement-learning/01-mdp-and-dp/index.md) · `필수`
   - MDP · 가치함수 · 동적계획법 · 부분 관측
-  - 선수: 10.7 확률과정 기초
+  - 선수: 11.7 확률과정 기초
 - **20.2** [가치 기반·정책 기반 강화학습](content/20-reinforcement-learning/02-model-free-rl/index.md) · `심화`
   - 가치 기반 · 정책 기반 · actor-critic · 실험의 어려움
   - 선수: 20.1 MDP와 동적계획법
 - **20.3** [모델 기반 방법과 최적제어](content/20-reinforcement-learning/03-model-based-control/index.md) · `심화`
   - 최적제어 · MPC · 모델 기반 RL · 미분가능 시뮬레이션과 제어
-  - 선수: 20.1 MDP와 동적계획법, 13.2 제약 최적화와 쌍대성
+  - 선수: 20.1 MDP와 동적계획법, 10.2 제약 최적화와 쌍대성
 - **20.4** [밴딧·오프라인 RL·안전한 의사결정](content/20-reinforcement-learning/04-bandits-and-offline-rl/index.md) · `심화`
   - 밴딧 · 오프라인 RL · 오프 정책 평가 · 안전 제약
   - 선수: 20.2 가치 기반·정책 기반 강화학습
@@ -564,8 +599,8 @@ _불확실성의 종류와 모델링, 예측분포의 평가, conformal predicti
 
 - **21.1** [불확실성 정량화](content/21-reliability/01-uncertainty-quantification/index.md) · `필수`
   - 불확실성의 종류 · 확률적 출력 · 앙상블과 근사 베이지안 · 불확실성 전파
-  - 선수: 11.3 분포 기반 문제 정의, 12.1 베이지안 사고방식
-- **21.2** [예측분포와 구간의 평가](content/21-reliability/02-evaluating-predictive-distributions/index.md) · `필수`
+  - 선수: 12.3 분포 기반 문제 정의, 13.1 베이지안 사고방식
+- **21.2** [예측분포와 구간의 평가](content/21-reliability/02-evaluating-predictive-distributions/index.md) · `필수` · 위젯: Calibration과 reliability diagram
   - 적정 점수 규칙 · calibration · sharpness · 구간 평가 · 재보정
   - 선수: 21.1 불확실성 정량화
 - **21.3** [Conformal Prediction](content/21-reliability/03-conformal-prediction/index.md) · `심화`
@@ -581,7 +616,11 @@ _불확실성의 종류와 모델링, 예측분포의 평가, conformal predicti
   - 예측에서 결정으로 · 비용 기반 threshold · 선택적 예측 · 적용 범위
   - 선수: 21.2 예측분포와 구간의 평가
 
-## 트랙: 연구 실천
+## `MLS` 머신러닝 시스템 <sub>Machine Learning Systems</sub>
+
+- **핵심 질문:** 실험을 어떻게 추적·재현하고, 더 크고 빠르게 돌리는가?
+- **도달 목표:** 실험 추적·재현성·profiling·다중 GPU 학습으로 연구의 처리량과 신뢰를 높인다
+- **트랙 졸업 과제:** 논문 표의 숫자에서 run·설정·데이터로 되돌아가고, DDP로 같은 결과를 재현
 
 ### 제22부. 실험 관리·재현성·성능·분산학습 <sub>Experiment Operations, Reproducibility, and Scale</sub>
 
@@ -592,7 +631,7 @@ _실험 추적, 재현성, 실험 자동화와 하이퍼파라미터 탐색, pro
   - 선수: 6.3 설정 관리, 17.8 학습 모니터링과 대시보드
 - **22.2** [재현성](content/22-experiment-operations/02-reproducibility/index.md) · `필수`
   - 재현성의 수준 · 무작위성의 출처 · 결정적 실행 · 변동성의 보고 · 환경 고정
-  - 선수: 22.1 실험 추적과 결과 관리
+  - 선수: 22.1 실험 추적과 결과 관리, 3.5 Docker와 컨테이너
 - **22.3** [실험 자동화와 하이퍼파라미터 탐색](content/22-experiment-operations/03-experiment-automation/index.md) · `필수`
   - sweep · 탐색 알고리즘 · 탐색 예산 · 견고한 실행
   - 선수: 22.2 재현성, 2.5 공유 서버와 클러스터 사용
@@ -604,10 +643,16 @@ _실험 추적, 재현성, 실험 자동화와 하이퍼파라미터 탐색, pro
   - 선수: 22.4 Profiling과 학습 효율화
 - **22.6** [다중 GPU와 분산 학습](content/22-experiment-operations/06-distributed-training/index.md) · `심화`
   - 병렬화 방식 · DDP · 분산 데이터 · 학습 설정의 변화 · metric과 checkpoint · 통신 병목
-  - 선수: 22.5 GPU 메모리 관리
+  - 선수: 22.5 GPU 메모리 관리, 2.5 공유 서버와 클러스터 사용
 - **22.7** [추론 최적화와 배포](content/22-experiment-operations/07-inference-and-deployment/index.md) · `참조`
   - 내보내기 · 추론 최적화 · 서빙 · 추론 계약의 유지
   - 선수: 17.6 평가·추론·체크포인트
+
+## `RES` 연구 방법론 <sub>Research Methodology</sub>
+
+- **핵심 질문:** 무엇이 좋은 연구 질문이고, 주장을 어떻게 검증하고 전달하는가?
+- **도달 목표:** 논문을 재현하고, 반증 가능한 실험을 설계하고, 주장과 근거가 맞는 논문을 쓴다
+- **트랙 졸업 과제:** 논문 재현 보고서와 독립 연구의 실험 계획서
 
 ### 제23부. 연구 방법론과 학술 소통 <sub>Research Practice and Scholarly Communication</sub>
 
@@ -615,9 +660,9 @@ _문헌 탐색, 논문 읽기와 재현, 연구 질문과 가설, 실험 설계,
 
 - **23.1** [문헌 탐색과 지식 관리](content/23-research-practice/01-literature-search/index.md) · `필수`
   - 탐색 전략 · 도구 · 참고문헌 관리 · 연구 노트 · 분류 방식
-- **23.2** [논문 읽는 법](content/23-research-practice/02-reading-papers/index.md) · `필수`
+- **23.2** [논문 읽는 법](content/23-research-practice/02-reading-papers/index.md) · `필수` · 퀴즈 4
   - 읽기의 단계 · 읽는 순서 · 무엇을 추출하는가 · 비판적 읽기 · 수식과 코드
-  - 선수: 23.1 문헌 탐색과 지식 관리
+  - 선수: 23.1 문헌 탐색과 지식 관리, 1.1 AI 연구의 생애주기
 - **23.3** [논문 재현](content/23-research-practice/03-reproducing-papers/index.md) · `필수`
   - 재현의 종류 · 조건 맞추기 · 차이의 기록 · 불일치의 원인 분리 · 재현 보고서
   - 선수: 23.2 논문 읽는 법, 22.2 재현성
@@ -626,7 +671,7 @@ _문헌 탐색, 논문 읽기와 재현, 연구 질문과 가설, 실험 설계,
   - 선수: 23.3 논문 재현
 - **23.5** [실험 설계](content/23-research-practice/05-experimental-design/index.md) · `필수`
   - 반증 가능한 실험 · 실험의 종류 · 공정성 · 효과의 분리 · 편향 통제 · 실험 계획서
-  - 선수: 23.4 연구 질문과 가설, 11.5 모델 비교의 통계
+  - 선수: 23.4 연구 질문과 가설, 12.5 모델 비교의 통계, 15.4 데이터 분할과 누수 방지
 - **23.6** [결과 분석과 주장의 범위](content/23-research-practice/06-analyzing-results/index.md) · `필수`
   - 오차 분석 · 주장의 범위 · 대안 설명 · 부정적 결과
   - 선수: 23.5 실험 설계
@@ -647,7 +692,11 @@ _문헌 탐색, 논문 읽기와 재현, 연구 질문과 가설, 실험 설계,
 - **23.12** [연구 윤리와 오픈 사이언스](content/23-research-practice/12-research-ethics/index.md) · `필수`
   - 연구 무결성 · 저자와 인용 · 데이터와 라이선스 · AI 도구 사용 · 오픈 사이언스
 
-## 트랙: 도메인
+## `SCI` 과학·공학 AI <sub>Scientific and Engineering AI</sub>
+
+- **핵심 질문:** 물리 지식과 데이터를 어떻게 결합해 공학 문제를 푸는가?
+- **도달 목표:** 물리 모델·데이터 모델·하이브리드 모델을 같은 조건에서 비교하고 도메인 문제에 적용한다
+- **트랙 졸업 과제:** 배터리 문제에서 물리·데이터·하이브리드 모델의 정확도·일관성·비용 비교
 
 ### 제24부. Scientific Machine Learning <sub>Scientific Machine Learning</sub>
 
@@ -667,21 +716,21 @@ _물리 모델과 학습 문제의 대응, PINN, Neural ODE와 미분가능 시�
   - 선수: 24.1 물리 모델과 학습 문제, 7.9 함수공간과 연산자
 - **24.5** [하이브리드 모델과 대리모델](content/24-scientific-ml/05-hybrid-and-surrogate-models/index.md) · `필수`
   - 결합 방식 · 대리모델 · 다중 충실도 · 능동 학습 · 공정한 비교
-  - 선수: 24.1 물리 모델과 학습 문제, 12.7 Gaussian Process
+  - 선수: 24.1 물리 모델과 학습 문제, 13.7 Gaussian Process
 - **24.6** [시스템 식별과 상태 추정](content/24-scientific-ml/06-system-identification-and-estimation/index.md) · `필수`
   - 파라미터 식별 · 관측 가능성 · Kalman filter 계열 · particle filter · 학습과 결합
-  - 선수: 24.1 물리 모델과 학습 문제, 10.4 다변량 가우시안
+  - 선수: 24.1 물리 모델과 학습 문제, 11.4 다변량 가우시안
 - **24.7** [역문제와 불확실성 정량화](content/24-scientific-ml/07-inverse-problems-and-uq/index.md) · `심화`
   - 역문제 · 베이지안 역문제 · 민감도 분석 · 불확실성 전파
-  - 선수: 24.6 시스템 식별과 상태 추정, 12.5 근사 추론 I: MCMC
+  - 선수: 24.6 시스템 식별과 상태 추정, 13.5 근사 추론 I: MCMC
 
 ### 제25부. 배터리 AI 연구 <sub>AI for Battery Research</sub>
 
 _ML 연구자를 위한 배터리 기초, 배터리 모델 계층, 데이터셋과 함정, 상태·수명 예측, 파라미터 추정, 충전 최적화, 배터리 foundation model을 사례 중심으로 다룬다._
 
-- **25.1** [ML 연구자를 위한 배터리 기초](content/25-battery-ai/01-battery-fundamentals/index.md) · `필수`
+- **25.1** [ML 연구자를 위한 배터리 기초](content/25-battery-ai/01-battery-fundamentals/index.md) · `필수` · 위젯: 등가회로 모델 시뮬레이터
   - 셀의 구조와 화학 · 상태 지표 · 시험 프로토콜 · 열화 메커니즘 · 측정 데이터
-- **25.2** [배터리 모델의 계층](content/25-battery-ai/02-battery-models/index.md) · `필수`
+- **25.2** [배터리 모델의 계층](content/25-battery-ai/02-battery-models/index.md) · `필수` · 위젯: 등가회로 모델 시뮬레이터
   - 등가회로 모델(ECM) · 전기화학 모델 · 열 모델과 열화 모델 · DAE 구조 · 시뮬레이션 도구
   - 선수: 25.1 ML 연구자를 위한 배터리 기초, 9.7 PDE·DAE와 시뮬레이터 검증
 - **25.3** [배터리 데이터셋과 데이터 함정](content/25-battery-ai/03-battery-data/index.md) · `필수`
@@ -700,7 +749,11 @@ _ML 연구자를 위한 배터리 기초, 배터리 모델 계층, 데이터셋�
   - 데이터 통합 · 사전학습 과제 · 분할과 중복 · 전이 평가 · 분석
   - 선수: 25.3 배터리 데이터셋과 데이터 함정, 19.9 사전학습·전이·Foundation Model
 
-## 트랙: 연구실
+## `LAB` 연구실 운영 <sub>Lab Operations</sub>
+
+- **핵심 질문:** 개인의 역량을 어떻게 연구실의 자산으로 남기는가?
+- **도달 목표:** handbook·공통 자산·리뷰 체계를 운영하고 연구를 인계한다
+- **트랙 졸업 과제:** 신규 연구원이 구두 설명 없이 따라 할 수 있는 handbook과 리뷰 기록
 
 ### 제26부. 연구실 표준화와 종합 프로젝트 <sub>Lab Standards and Capstone Projects</sub>
 
@@ -725,7 +778,10 @@ _연구실 handbook, 공통 자산, 단계별 리뷰 체계, 지식 관리와 �
   - 평가 질문 · 평가 방법 · 성장 계획 · 최종 산출물
   - 선수: 26.5 단계별 종합 프로젝트
 
-## 트랙: 부록
+## `REF` 참고 자료 <sub>Reference</sub>
+
+- **핵심 질문:** 필요할 때 무엇을 찾아보는가?
+- **도달 목표:** 표기법·용어·공식·명령·템플릿을 빠르게 찾는다
 
 ### 부록. 부록 <sub>Appendices</sub>
 

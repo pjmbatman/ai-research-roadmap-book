@@ -2,7 +2,7 @@
 id: statistical-inference
 title: "통계적 추론"
 title_en: "Statistical Inference"
-track: foundations
+track: probabilistic-inference
 status: outline
 summary: "추정량의 성질, 우도와 최대우도, 분포 기반 문제 정의, 구간 추정과 검정, 모델 비교의 통계를 다룬다."
 ---

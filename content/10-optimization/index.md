@@ -2,7 +2,7 @@
 id: optimization
 title: "최적화"
 title_en: "Optimization"
-track: foundations
+track: mathematical-foundations
 status: outline
 summary: "최적화 문제의 구조, 볼록성과 최적성 조건, 제약 최적화, 1차·적응적·2차 방법, 비볼록 손실 지형, 특수한 최적화 문제를 다룬다."
 ---

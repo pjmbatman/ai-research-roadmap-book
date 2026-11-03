@@ -2,7 +2,7 @@
 id: {{slug}}
 title: "{{title}}"
 title_en: "{{title_en}}"
-track: foundations
+track: mathematical-foundations
 status: outline
 summary: "{{한 문장 요약}}"
 ---

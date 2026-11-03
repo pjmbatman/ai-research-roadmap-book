@@ -4,7 +4,7 @@ title: "테스트와 디버깅"
 title_en: "Testing and Debugging"
 tier: core
 status: outline
-prerequisites: [research-code-engineering/logging-and-errors]
+prerequisites: [research-code-engineering/logging-and-errors, git-and-agents/github-collaboration]
 ---
 
 # 테스트와 디버깅

@@ -2,7 +2,7 @@
 id: appendices
 title: "부록"
 title_en: "Appendices"
-track: appendix
+track: reference
 status: outline
 summary: "표기법, 용어집, 공식 모음, 치트시트, 실패 사례 갤러리, 템플릿, 체크리스트, 추천 자료를 모은다."
 ---

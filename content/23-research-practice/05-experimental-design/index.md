@@ -4,7 +4,7 @@ title: "실험 설계"
 title_en: "Experimental Design"
 tier: core
 status: outline
-prerequisites: [research-practice/research-questions, statistical-inference/comparing-models]
+prerequisites: [research-practice/research-questions, statistical-inference/comparing-models, data/splitting-and-leakage]
 ---
 
 # 실험 설계

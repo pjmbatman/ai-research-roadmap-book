@@ -4,7 +4,7 @@ title: "논문 읽는 법"
 title_en: "How to Read Papers"
 tier: core
 status: outline
-prerequisites: [research-practice/literature-search]
+prerequisites: [research-practice/literature-search, research-landscape/research-lifecycle]
 ---
 
 # 논문 읽는 법

@@ -1,0 +1,82 @@
+# 23.2 논문 읽는 법 — 개념 퀴즈 (코드 실습이 없는 장의 예)
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "claim-scope"
+type = "single"
+objective = 2
+prompt = "한 논문이 초록에서 \"제안 방법은 기존 방법보다 일관되게 우수하다\"고 주장한다. 실험은 데이터셋 하나, seed 하나로 수행되었고 baseline의 하이퍼파라미터 탐색 여부는 적혀 있지 않다. 가장 적절한 평가는?"
+explanation = "근거(데이터셋 1개, 단일 seed, 튜닝 여부 불명확한 baseline)는 '이 조건에서 더 높은 숫자를 얻었다'까지만 지지한다. '일관되게'라는 주장은 여러 데이터셋·seed·공정한 튜닝을 요구한다. 결과를 무시하라는 뜻이 아니라, 주장의 범위가 근거보다 넓다는 뜻이다."
+
+[[questions.choices]]
+text = "주장의 범위가 근거보다 넓다. 이 조건에서의 개선까지만 인정하고, 변동성과 공정한 비교 근거를 확인해야 한다."
+correct = true
+
+[[questions.choices]]
+text = "성능 숫자가 더 높으므로 주장은 타당하다."
+feedback = "단일 seed·단일 데이터셋의 차이는 변동성 안에 있을 수 있다."
+
+[[questions.choices]]
+text = "한계가 있는 논문이므로 결과 전체를 신뢰할 수 없다."
+feedback = "한계는 결과를 버릴 이유가 아니라 주장의 범위를 좁힐 이유다."
+
+[[questions]]
+id = "what-to-extract"
+type = "multiple"
+objective = 2
+prompt = "논문을 읽고 연구 노트에 반드시 추출해야 하는 것을 모두 고르시오."
+explanation = "문제 정의, 가정, 비교 대상, 평가 조건(데이터·분할·metric)은 결과를 해석하고 재현하는 데 필요하다. 저자의 소속이나 인용 수는 문헌 탐색의 단서일 수는 있어도, 주장이 맞는지를 판단하는 근거가 아니다."
+
+[[questions.choices]]
+text = "문제 정의와 가정"
+correct = true
+
+[[questions.choices]]
+text = "비교 대상(baseline)과 평가 조건(데이터·분할·metric)"
+correct = true
+
+[[questions.choices]]
+text = "주장과 그 주장을 뒷받침하는 실험의 대응"
+correct = true
+
+[[questions.choices]]
+text = "저자의 소속 기관과 논문의 인용 수"
+feedback = "탐색의 단서는 될 수 있지만 주장의 타당성 근거는 아니다."
+
+[[questions]]
+id = "first-pass"
+type = "single"
+objective = 1
+prompt = "이 논문을 자세히 읽을 가치가 있는지 판단하기 위한 첫 번째 읽기에서 우선 볼 부분은?"
+explanation = "첫 읽기의 목적은 문제·핵심 아이디어·주요 결과를 빠르게 파악해 깊이 읽을지 결정하는 것이다. 초록, 그림과 표, 결론이 이 정보를 가장 압축해 담고 있다. 방법의 세부와 부록은 읽기로 결정한 뒤에 본다."
+
+[[questions.choices]]
+text = "초록, 그림·표, 결론"
+correct = true
+
+[[questions.choices]]
+text = "방법 절의 수식 유도"
+feedback = "깊이 읽기로 결정한 뒤에 볼 부분이다."
+
+[[questions.choices]]
+text = "부록의 하이퍼파라미터 표"
+feedback = "재현 단계에서 중요하지만 첫 읽기의 대상은 아니다."
+
+[[questions]]
+id = "math-code-mismatch"
+type = "single"
+objective = 3
+prompt = "논문의 손실 식에는 정규화 항의 계수 $\\lambda$가 있는데, 공개 코드에서는 그 항에 추가로 batch 크기의 역수가 곱해져 있다. 재현 시 가장 먼저 할 일은?"
+explanation = "논문과 코드의 불일치는 흔하고, 어느 쪽이 실제 결과를 만든 것인지 모른다. 차이를 기록하고, 보고된 숫자를 만든 쪽(대개 공개 코드)을 기준으로 재현한 뒤, 차이의 영향을 별도로 측정한다. 임의로 한쪽을 '정답'으로 정하면 재현 실패의 원인을 분리할 수 없다."
+
+[[questions.choices]]
+text = "불일치를 재현 보고서에 기록하고, 공개 코드 기준으로 먼저 재현한 뒤 차이의 영향을 따로 실험한다."
+correct = true
+
+[[questions.choices]]
+text = "논문이 공식 기록이므로 코드를 논문 식에 맞게 고쳐서 재현한다."
+feedback = "보고된 숫자는 코드에서 나왔을 가능성이 높다. 먼저 그 조건을 재현해야 차이를 분리할 수 있다."
+
+[[questions.choices]]
+text = "차이가 작아 보이므로 무시한다."
+feedback = "batch 크기에 따른 스케일 차이는 실효 정규화 강도를 크게 바꿀 수 있다."

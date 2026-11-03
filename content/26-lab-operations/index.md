@@ -2,7 +2,7 @@
 id: lab-operations
 title: "연구실 표준화와 종합 프로젝트"
 title_en: "Lab Standards and Capstone Projects"
-track: lab
+track: lab-operations
 status: outline
 summary: "연구실 handbook, 공통 자산, 단계별 리뷰 체계, 지식 관리와 인수인계, 단계별 종합 프로젝트, 역량 평가를 다룬다."
 ---

@@ -1,5 +1,6 @@
 # 책 전체의 메타데이터와 분류 체계.
-# scripts/book.py가 이 파일을 읽어 frontmatter를 검증하고 OUTLINE.md를 만든다.
+# scripts/book.py가 이 파일을 읽어 frontmatter·퀴즈·로드맵 규칙을 검증하고 OUTLINE.md를 만든다.
+# 설계 근거: editorial/roadmap-design.md
 
 [book]
 title = "AI 연구자 로드맵"                       # 가제(working title)
@@ -7,48 +8,202 @@ subtitle = "문제 정의부터 재현 가능한 논문까지, 독립 연구자�
 language = "ko"
 repository = "https://github.com/pjmbatman/ai-research-roadmap-book"
 
-# 트랙: 부(Part)를 묶는 상위 분류. 웹 UI에서 색과 아이콘으로 구분한다.
-# key는 frontmatter의 `track` 값과 일치해야 한다.
+# ---------------------------------------------------------------------------
+# 레이어: 트랙 사이의 의존 방향.
+# 규칙(check가 검증): 장의 선수 지식은 같은 레이어 또는 더 낮은 레이어의 트랙에만 있을 수 있다.
+# 레이어는 '언제 배우는가'가 아니라 '무엇에 기대는가'다. 학습 시점은 학습 경로(단계)가 정한다.
+[[layers]]
+level = 0
+name = "입문"
+name_en = "Entry"
+description = "어떤 선수 지식도 요구하지 않는 출발점"
+
+[[layers]]
+level = 1
+name = "기반"
+name_en = "Foundations"
+description = "서로 병행해 배우는 네 기반 역량. 다른 기반 트랙에만 기댄다"
+
+[[layers]]
+level = 2
+name = "핵심"
+name_en = "Core"
+description = "기반을 결합해 학습 시스템 전체를 다루는 역량"
+
+[[layers]]
+level = 3
+name = "확장"
+name_en = "Extension"
+description = "핵심 위에서 모델링의 폭과 실험의 규모를 넓히는 역량"
+
+[[layers]]
+level = 4
+name = "연구"
+name_en = "Research"
+description = "모든 역량을 연구 질문과 도메인 문제에 통합"
+
+[[layers]]
+level = 5
+name = "조직"
+name_en = "Organization"
+description = "개인 역량을 연구실의 지속 가능한 자산으로 전환"
+
+[[layers]]
+level = 9
+name = "참고"
+name_en = "Reference"
+description = "찾아보는 자료. 선수 지식이 될 수 없다"
+
+# ---------------------------------------------------------------------------
+# 평가 방식: 트랙과 장이 사용하는 통과 확인 수단.
+[assessments]
+quiz = "개념 퀴즈"          # 객관식·복수 선택·수치 입력. 장의 quiz.toml
+code = "코드 실습"          # 브라우저 또는 계산 서버에서 실행, 테스트로 자동 채점
+terminal = "터미널 실습"    # 격리된 Linux 환경에서 명령 수행, 상태 검사로 채점
+document = "문서 산출물"    # 문제 정의서·계획서·보고서. 루브릭 기반 리뷰
+review = "동료·지도 리뷰"   # 코드·실험·발표에 대한 사람의 리뷰
+
+# ---------------------------------------------------------------------------
+# 트랙: 하나의 역량 영역 = 하나의 핵심 질문 + 주된 평가 방식 + 졸업 과제.
+# 이름 규칙(editorial/roadmap-design.md §3):
+#   key  = 영어 kebab-case (frontmatter의 track 값, URL)
+#   code = 영문 대문자 3자 (UI 배지, 짧은 참조)
+#   name = 한국어 분야명(명사구), name_en = 학계·산업에서 통용되는 분야명
+# 배열 순서 = 레이어 오름차순 = content/ 부 번호 순서 (check가 검증).
+
 [[tracks]]
 key = "orientation"
-name = "시작하기"
-description = "책의 목표, 읽는 법, AI 연구의 전체 지도"
+code = "ORI"
+name = "오리엔테이션"
+name_en = "Orientation"
+layer = 0
+question = "AI 연구란 무엇이고, 이 책으로 어떻게 훈련하는가?"
+outcome = "자신의 연구 문제를 입력·출력·가정·평가로 정의하고, 학습 경로를 세운다"
+assessment = ["quiz", "document"]
+capstone = "한 장짜리 문제 정의서와 3개월 학습 계획"
 
 [[tracks]]
-key = "workbench"
-name = "연구 작업대"
-description = "Linux·서버·환경·Git·에이전트·Python·연구 코드 엔지니어링"
+key = "research-infrastructure"
+code = "INF"
+name = "연구 인프라"
+name_en = "Research Infrastructure"
+layer = 1
+question = "코드는 어디에서, 어떤 환경으로 실행되는가?"
+outcome = "원격 GPU 서버에서 재현 가능한 환경을 구성하고, 장애를 스스로 진단한다"
+assessment = ["terminal", "quiz"]
+capstone = "새 서버에서 lockfile·컨테이너로 학습 환경을 구성하고 smoke test 통과"
 
 [[tracks]]
-key = "foundations"
-name = "수학적 기초"
-description = "선형대수·미적분·수치해석·확률·통계·베이지안·최적화·학습이론"
+key = "research-software-engineering"
+code = "RSE"
+name = "연구 소프트웨어 공학"
+name_en = "Research Software Engineering"
+layer = 1
+question = "수식과 아이디어를 어떻게 정확하고 유지 가능한 코드로 옮기는가?"
+outcome = "설정·CLI·테스트·문서를 갖춘 연구 프로젝트를 만들고 협업한다"
+assessment = ["code", "review"]
+capstone = "config·CLI·테스트·CI를 갖춘 연구 프로젝트 템플릿"
 
 [[tracks]]
-key = "modeling"
-name = "모델링"
-description = "데이터·고전 ML·딥러닝·아키텍처·생성모델·강화학습·신뢰성"
+key = "mathematical-foundations"
+code = "MTH"
+name = "수리 기초"
+name_en = "Mathematical Foundations"
+layer = 1
+question = "모델과 학습은 어떤 공간에서, 어떤 계산으로 이루어지는가?"
+outcome = "선형대수·미분·수치해석·최적화로 모델과 학습 알고리즘을 유도하고 구현한다"
+assessment = ["quiz", "code"]
+capstone = "자동미분 엔진과 optimizer를 직접 구현해 MLP를 학습하고 수치미분으로 검증"
 
 [[tracks]]
-key = "practice"
-name = "연구 실천"
-description = "실험 운영·재현성·분산학습·연구 방법론·학술 소통"
+key = "probabilistic-inference"
+code = "PSI"
+name = "확률·통계적 추론"
+name_en = "Probabilistic and Statistical Inference"
+layer = 1
+question = "불확실한 데이터에서 무엇을, 얼마나 확신하며 추론할 수 있는가?"
+outcome = "문제를 분포로 정의하고, 추정·검정·베이지안 추론·일반화를 근거로 결론을 낸다"
+assessment = ["quiz", "code"]
+capstone = "같은 회귀 문제를 MLE·MAP·베이지안·GP로 풀고 예측분포를 비교한 보고서"
 
 [[tracks]]
-key = "domain"
-name = "도메인"
-description = "Scientific ML과 배터리 AI"
+key = "ml-core"
+code = "MLC"
+name = "머신러닝 핵심"
+name_en = "Machine Learning Core"
+layer = 2
+question = "데이터에서 신뢰할 수 있는 예측 모델을 어떻게 만들고 평가하는가?"
+outcome = "누수 없는 데이터 파이프라인과 강한 baseline 위에서 딥러닝 모델을 학습·평가·재현한다"
+assessment = ["code", "quiz"]
+capstone = "공통 데이터셋으로 baseline부터 PyTorch 모델까지, 독립 평가 스크립트로 재현"
 
 [[tracks]]
-key = "lab"
-name = "연구실"
-description = "연구실 표준화·리뷰 체계·종합 프로젝트"
+key = "ml-advanced"
+code = "MLA"
+name = "머신러닝 심화"
+name_en = "Advanced Machine Learning"
+layer = 3
+question = "분포를 생성하고, 결정을 학습하고, 예측을 언제 믿을 수 있는가?"
+outcome = "생성모델·강화학습·불확실성 정량화를 문제에 맞게 선택하고 평가한다"
+assessment = ["code", "quiz"]
+capstone = "확률적 예측 모델의 calibration·OOD 평가 보고서"
 
 [[tracks]]
-key = "appendix"
-name = "부록"
-description = "표기법·용어집·공식·치트시트·템플릿"
+key = "ml-systems"
+code = "MLS"
+name = "머신러닝 시스템"
+name_en = "Machine Learning Systems"
+layer = 3
+question = "실험을 어떻게 추적·재현하고, 더 크고 빠르게 돌리는가?"
+outcome = "실험 추적·재현성·profiling·다중 GPU 학습으로 연구의 처리량과 신뢰를 높인다"
+assessment = ["code", "terminal"]
+capstone = "논문 표의 숫자에서 run·설정·데이터로 되돌아가고, DDP로 같은 결과를 재현"
 
+[[tracks]]
+key = "research-methodology"
+code = "RES"
+name = "연구 방법론"
+name_en = "Research Methodology"
+layer = 4
+question = "무엇이 좋은 연구 질문이고, 주장을 어떻게 검증하고 전달하는가?"
+outcome = "논문을 재현하고, 반증 가능한 실험을 설계하고, 주장과 근거가 맞는 논문을 쓴다"
+assessment = ["quiz", "document", "review"]
+capstone = "논문 재현 보고서와 독립 연구의 실험 계획서"
+
+[[tracks]]
+key = "scientific-ai"
+code = "SCI"
+name = "과학·공학 AI"
+name_en = "Scientific and Engineering AI"
+layer = 4
+question = "물리 지식과 데이터를 어떻게 결합해 공학 문제를 푸는가?"
+outcome = "물리 모델·데이터 모델·하이브리드 모델을 같은 조건에서 비교하고 도메인 문제에 적용한다"
+assessment = ["code", "document"]
+capstone = "배터리 문제에서 물리·데이터·하이브리드 모델의 정확도·일관성·비용 비교"
+
+[[tracks]]
+key = "lab-operations"
+code = "LAB"
+name = "연구실 운영"
+name_en = "Lab Operations"
+layer = 5
+question = "개인의 역량을 어떻게 연구실의 자산으로 남기는가?"
+outcome = "handbook·공통 자산·리뷰 체계를 운영하고 연구를 인계한다"
+assessment = ["document", "review"]
+capstone = "신규 연구원이 구두 설명 없이 따라 할 수 있는 handbook과 리뷰 기록"
+
+[[tracks]]
+key = "reference"
+code = "REF"
+name = "참고 자료"
+name_en = "Reference"
+layer = 9
+question = "필요할 때 무엇을 찾아보는가?"
+outcome = "표기법·용어·공식·명령·템플릿을 빠르게 찾는다"
+assessment = []
+capstone = ""
+
+# ---------------------------------------------------------------------------
 # 난이도 등급: 장(Chapter)의 `tier` 값.
 [tiers]
 core = "필수"         # 모든 연구원이 설명하고 직접 수행할 수 있어야 하는 내용

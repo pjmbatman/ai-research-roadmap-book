@@ -2,7 +2,7 @@
 id: research-code-engineering
 title: "연구 코드 엔지니어링"
 title_en: "Research Code Engineering"
-track: workbench
+track: research-software-engineering
 status: outline
 summary: "디렉터리 구조, 네이밍, 설정 파일, CLI, 로깅, 테스트, 문서화까지 수정·검증·협업 가능한 연구 코드의 규칙을 세운다."
 ---

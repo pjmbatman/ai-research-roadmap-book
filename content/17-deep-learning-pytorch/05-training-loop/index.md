@@ -4,7 +4,7 @@ title: "학습 루프 해부: forward → loss → backward → update"
 title_en: "Anatomy of a Training Loop"
 tier: core
 status: outline
-prerequisites: [deep-learning-pytorch/modules, deep-learning-pytorch/datasets-and-dataloaders, optimization/adaptive-methods]
+prerequisites: [deep-learning-pytorch/modules, deep-learning-pytorch/datasets-and-dataloaders, optimization/adaptive-methods, information-and-learning-theory/objective-design]
 ---
 
 # 학습 루프 해부: forward → loss → backward → update

@@ -7,20 +7,21 @@
 
 ```
 ai-research-roadmap-book/
-├── book.toml              # 책 메타데이터, 트랙·등급·상태 정의 (검증 기준)
+├── book.toml              # 책 메타데이터, 레이어·트랙·평가·등급·상태 정의 (검증 기준)
 ├── OUTLINE.md             # 전체 목차 — 생성 파일, 직접 수정 금지
 ├── README.md
 ├── AGENTS.md / CLAUDE.md  # AI 에이전트 집필 지침
-├── content/               # 책 본문 (웹 문서의 원천)
-├── labs/                  # 장별 실습 코드
-├── data/                  # 용어집·참고문헌 등 구조화된 데이터
+├── content/               # 책 본문 + 장별 퀴즈 (웹 서비스 콘텐츠의 원천)
+├── labs/                  # 장별 실습 코드·연습문제
+├── data/                  # 용어집·참고문헌·위젯 레지스트리
 ├── editorial/             # 편집 규칙·설계 문서 (책에 포함되지 않음)
 ├── templates/             # 새 부·장을 만들 때 쓰는 템플릿
 ├── scripts/               # 검증·생성 도구 (표준 라이브러리만 사용)
 └── .github/workflows/     # CI: 규칙 검증
 ```
 
-`site/`(웹 프레임워크 프로젝트)는 UI/UX 결정 후 추가한다. 본문은 프레임워크에 묶이지 않도록 `content/`에 순수 Markdown으로 둔다. → [ux-design.md](ux-design.md)
+서비스 코드(`apps/web/`, `services/api/`, `services/runner/`, `images/`, `infra/`)는 구축 단계에 맞춰 추가한다. → [platform-architecture.md §8](platform-architecture.md)
+본문은 프레임워크에 묶이지 않도록 `content/`에 Markdown + TOML로 둔다.
 
 ## 2. content/ 구조
 
@@ -31,6 +32,7 @@ content/
 │   ├── index.md                            # 부 소개
 │   ├── 01-vector-spaces/                   # 장(Chapter): NN-slug
 │   │   ├── index.md                        # 장 본문
+│   │   ├── quiz.toml                       # (선택) 개념 퀴즈 — §9
 │   │   └── figures/                        # 이 장에서만 쓰는 그림
 │   │       └── basis-change.svg
 │   └── 02-affine-and-nonlinear/
@@ -75,7 +77,7 @@ YAML의 작은 부분집합만 쓴다: `key: 값`, `key: "따옴표 문자열"`,
 |---|---|---|
 | `id` | ✓ | 부 slug |
 | `title` / `title_en` | ✓ | 한국어 제목 / 영어 제목 |
-| `track` | ✓ | `book.toml`의 `[[tracks]].key` 중 하나 |
+| `track` | ✓ | `book.toml`의 `[[tracks]].key` 중 하나 (아래 표). 부의 순서는 트랙 순서를 따라야 한다 |
 | `status` | ✓ | `outline` · `draft` · `review` · `done` |
 | `summary` | ✓ | 한 문장 요약(부 카드·목차에 표시) |
 
@@ -87,9 +89,27 @@ YAML의 작은 부분집합만 쓴다: `key: 값`, `key: "따옴표 문자열"`,
 | `title` / `title_en` | ✓ | 한국어 제목 / 영어 제목 |
 | `tier` | ✓ | `core`(필수) · `advanced`(심화) · `reference`(참조) |
 | `status` | ✓ | `outline` · `draft` · `review` · `done` |
-| `prerequisites` | ✓ | 선수 장의 `id` 목록. 없으면 `[]`. 순환 금지 |
+| `prerequisites` | ✓ | 선수 장의 `id` 목록. 없으면 `[]`. 순환 금지, **같거나 낮은 레이어의 트랙만** |
+| `assessment` |  | 트랙 기본값과 다른 평가 방식을 쓸 때: `[quiz, code]` 등 (`book.toml`의 `[assessments]` 키) |
 
-필요해지면 추가할 수 있는 선택 필드(도구는 무시한다): `authors`, `reviewers`, `updated`, `labs`, `tags`.
+필요해지면 추가할 수 있는 선택 필드(도구는 무시한다): `authors`, `reviewers`, `updated`, `tags`.
+
+**트랙 key** (정의와 설계 근거: `book.toml`, [roadmap-design.md](roadmap-design.md))
+
+| 레이어 | key | 코드 | 이름 |
+|---|---|---|---|
+| L0 | `orientation` | ORI | 오리엔테이션 |
+| L1 | `research-infrastructure` | INF | 연구 인프라 |
+| L1 | `research-software-engineering` | RSE | 연구 소프트웨어 공학 |
+| L1 | `mathematical-foundations` | MTH | 수리 기초 |
+| L1 | `probabilistic-inference` | PSI | 확률·통계적 추론 |
+| L2 | `ml-core` | MLC | 머신러닝 핵심 |
+| L3 | `ml-advanced` | MLA | 머신러닝 심화 |
+| L3 | `ml-systems` | MLS | 머신러닝 시스템 |
+| L4 | `research-methodology` | RES | 연구 방법론 |
+| L4 | `scientific-ai` | SCI | 과학·공학 AI |
+| L5 | `lab-operations` | LAB | 연구실 운영 |
+| — | `reference` | REF | 참고 자료 (부록) |
 
 ## 6. 장 본문의 구조
 
@@ -114,16 +134,87 @@ YAML의 작은 부분집합만 쓴다: `key: 값`, `key: "따옴표 문자열"`,
 
 - 경로: `labs/<부 slug>/<장 slug>/` — 번호 없이 slug만 쓴다(장 순서가 바뀌어도 경로 유지).
 - 각 실습 디렉터리에는 `README.md`(목표·실행 방법·기대 결과)를 둔다.
+- 자동 채점 연습문제는 `labs/<부 slug>/<장 slug>/exercises/<exercise-id>/`에 둔다:
+
+  ```
+  exercises/power-iteration/
+  ├── problem.md        # 문제 설명 (웹에 표시)
+  ├── starter.py        # 시작 코드 (웹 편집기에 로드)
+  ├── test_public.py    # 공개 테스트 (학습자에게 보임)
+  ├── test_hidden.py    # 비공개 테스트 (계산 서버에서만 실행, 웹 번들에 포함 금지)
+  ├── solution.py       # 참고 해답 (CI가 모든 테스트를 통과하는지 확인)
+  └── exercise.toml     # exec 계층(browser·cpu·gpu), 제한 시간, 연결된 학습 목표
+  ```
 - 노트북은 탐색용, 검증 대상 코드는 `.py`로. 데이터는 저장소에 넣지 않고 내려받기 스크립트를 둔다.
 - 실습 공통 환경은 `labs/pyproject.toml` + lockfile로 관리한다(첫 실습 작성 시 추가).
 
-## 9. 생성 파일
+## 9. 퀴즈 (quiz.toml)
+
+장 디렉터리의 `quiz.toml`. 웹에서는 장 끝(통과 기준 앞)에 퀴즈 블록으로 표시되고, 본문 중간에 한 문항씩 삽입할 수도 있다(§10). 작성 원칙은 [roadmap-design.md §4.1](roadmap-design.md).
+
+```toml
+[[questions]]
+id = "affine-is-not-linear"        # 장 안에서 고유, kebab-case, 영구적
+type = "single"                    # single | multiple | numeric
+objective = 1                      # 연결된 '학습 목표' 번호 (1부터)
+prompt = '''$f(\mathbf{x}) = \mathbf{A}\mathbf{x} + \mathbf{b}$에 대해 옳은 것은?'''
+explanation = '''정답 해설 (필수)'''
+
+[[questions.choices]]              # single·multiple
+text = "선형사상이다."
+feedback = "이 선택지가 왜 틀렸는지 (권장)"
+
+[[questions.choices]]
+text = "아핀 사상이지만 선형사상은 아니다."
+correct = true
+
+# numeric 문항: choices 대신
+# answer = 4
+# tolerance = 0                    # 허용 오차(절댓값)
+```
+
+- 수식이 들어가는 문자열은 **리터럴 문자열**(`'''...'''`)로 쓴다. 백슬래시를 이스케이프하지 않아도 된다.
+- `single`은 정답 1개, `multiple`은 정답 1개 이상·전체 미만, 선택지 2개 이상. `check`가 검증한다.
+- 문항 `id`는 진도·응답 기록의 키다. 문항 내용을 크게 바꾸면 새 `id`를 쓴다.
+
+## 10. 인터랙티브 요소 삽입
+
+본문에는 세 가지 지시문(directive)과 실행 가능한 코드 블록을 쓸 수 있다. 모두 GitHub에서 보면 평범한 텍스트·코드로 보이고, 웹 빌드에서 컴포넌트로 바뀐다. 참조 대상은 `check`가 검증한다.
+
+| 문법 | 의미 | 참조 대상 |
+|---|---|---|
+| `::widget{name="linear-map-2d"}` | 위젯 삽입. 추가 속성은 위젯에 전달 (`preset="shear"`) | `data/widgets.toml`에 등록된 `name` |
+| `::quiz{id="relu-linear-regions"}` | 퀴즈 한 문항을 본문 중간에 삽입 (예측해 보기) | 같은 장 `quiz.toml`의 `id` |
+| `::exercise{id="power-iteration"}` | 자동 채점 연습문제 삽입 | `labs/<부>/<장>/exercises/<id>/` |
+
+실행 가능한 코드 블록은 언어 뒤에 속성을 붙인다.
+
+````md
+```python {exec="browser" session="affine"}
+import numpy as np
+f = lambda x: A @ x + b      # A, b는 위젯이 페이지 상태로 내보낸 값
+f(np.zeros(2))
+```
+````
+
+| 속성 | 값 | 의미 |
+|---|---|---|
+| `exec` | `browser` · `cpu` · `gpu` | 실행 계층. 없으면 실행 불가(보기 전용). [platform-architecture.md §3](platform-architecture.md) |
+| `session` | 이름 | 같은 이름의 셀끼리 변수 상태 공유. 생략 시 페이지 기본 세션 |
+| `hidden` | (값 없음) | 화면에 접힌 준비 코드(import, 데이터 로드) |
+| `readonly` | (값 없음) | 편집 불가 |
+
+- 브라우저 실행(`browser`)에서는 PyTorch를 쓸 수 없다. NumPy·SciPy·pandas·matplotlib·scikit-learn 범위에서 쓴다.
+- 위젯 변수(`binds`)는 같은 세션의 코드 셀에 같은 이름으로 주입된다.
+- 새 위젯이 필요하면 `data/widgets.toml`에 `status = "planned"`로 먼저 등록한다. 본문 집필과 위젯 구현을 병행할 수 있다.
+
+## 11. 생성 파일
 
 | 파일 | 생성 명령 | 규칙 |
 |---|---|---|
 | `OUTLINE.md` | `python3 scripts/book.py outline` | 직접 수정 금지. 구조를 바꾼 커밋에 함께 포함 |
 
-## 10. Git
+## 12. Git
 
 - 브랜치: `<종류>/<짧은-설명>` — `write/linear-algebra-rank`, `fix/broken-links`, `infra/site-setup`
 - 커밋 메시지: `<범위>: <요약>` — `content(07): rank 장 초고`, `editorial: 표기법 규칙 추가`, `scripts: 링크 검사 추가`

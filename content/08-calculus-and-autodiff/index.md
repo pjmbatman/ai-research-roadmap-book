@@ -2,7 +2,7 @@
 id: calculus-and-autodiff
 title: "미적분과 자동미분"
 title_en: "Calculus and Automatic Differentiation"
-track: foundations
+track: mathematical-foundations
 status: outline
 summary: "다변수 미분, 행렬 미분, 적분과 변수변환, 자동미분과 역전파를 직접 유도하고 구현한다."
 ---

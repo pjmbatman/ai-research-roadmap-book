@@ -2,7 +2,7 @@
 id: information-and-learning-theory
 title: "정보이론과 학습이론"
 title_en: "Information Theory and Learning Theory"
-track: foundations
+track: probabilistic-inference
 status: outline
 summary: "엔트로피와 KL, 상호정보량, 목적함수 설계의 원리, 일반화 이론, 현대 딥러닝의 일반화와 스케일링을 다룬다."
 ---

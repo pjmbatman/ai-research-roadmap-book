@@ -2,7 +2,7 @@
 id: generative-and-foundation-models
 title: "생성모델·자기지도학습·Foundation Model"
 title_en: "Generative Models, Self-Supervised Learning, and Foundation Models"
-track: modeling
+track: ml-advanced
 status: outline
 summary: "생성모델의 공통 문제 정의, 자기회귀·VAE·GAN·flow·확산·flow matching, 생성모델 평가, 자기지도학습, 사전학습과 전이를 다룬다."
 ---

@@ -2,7 +2,7 @@
 id: probability
 title: "확률론"
 title_en: "Probability"
-track: foundations
+track: probabilistic-inference
 status: outline
 summary: "확률변수와 분포, 조건부확률, 다변량 가우시안, 기댓값과 극한정리, 샘플링, 확률과정의 기초를 다룬다."
 ---

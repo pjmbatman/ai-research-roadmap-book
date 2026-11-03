@@ -4,7 +4,7 @@ title: "선형 모델과 정규화"
 title_en: "Linear Models and Regularization"
 tier: core
 status: outline
-prerequisites: [classical-ml/baselines, linear-algebra/inner-products-and-projection]
+prerequisites: [classical-ml/baselines, linear-algebra/inner-products-and-projection, statistical-inference/likelihood]
 ---
 
 # 선형 모델과 정규화
