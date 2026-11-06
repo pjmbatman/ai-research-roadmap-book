@@ -33,6 +33,7 @@ const isOutline = status === "outline" || status === "spec";
         <h1><span class="num">{ch.label}</span>{str(ch.meta.title)}</h1>
         {pre.length > 0 && (
           <div class="prereq">
+            <span class="prereq-label">먼저 읽기</span>
             {pre.map((p) => <a class="chip" href={u(p.url)} data-prereq={p.id}><span class="n">{p.label}</span>{str(p.meta.title)}</a>)}
           </div>
         )}
@@ -57,6 +58,7 @@ const isOutline = status === "outline" || status === "spec";
 
       <aside class="toc" aria-label="이 장의 단계">
         <ol data-steplist></ol>
+        <div class="toc-progress"><span>진도</span><b data-chapter-pct>0%</b></div>
         <div class="meter"><i data-chapter-meter></i></div>
       </aside>
     </article>

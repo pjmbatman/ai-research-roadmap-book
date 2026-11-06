@@ -187,6 +187,8 @@ function updateMeter(p: PageData) {
   const s = chapterScore(p.chapterId, totals);
   const meter = document.querySelector<HTMLElement>("[data-chapter-meter]");
   if (meter) meter.style.width = `${Math.round(s.ratio * 100)}%`;
+  const pct = document.querySelector<HTMLElement>("[data-chapter-pct]");
+  if (pct) pct.textContent = `${Math.round(s.ratio * 100)}%`;
 }
 
 /* ---------- 홈 ---------- */

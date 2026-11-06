@@ -413,7 +413,6 @@ input[type="range"] { width: 100%; accent-color: var(--edge); height: 28px; }
 .stepbar .seg[aria-current="true"] { background: var(--edge); transform: scaleY(1.35); }
 .stepbar .seg:hover { background: color-mix(in srgb, var(--edge) 65%, var(--surface-2)); }
 .stepbar .seg[data-tip]:hover::before { content: attr(data-tip); position: absolute; top: 14px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 12.5px; background: var(--ink); color: var(--bg); padding: 3px 8px; border-radius: 6px; z-index: 2; }
-body.paged .prose > section.step { min-height: 52vh; }
 .prose > section.step > .concept > h2:first-child, .prose > section.step > .lead + .box { margin-top: 8px; }
 .prose > section.step > .concept > h2:first-child { margin-top: 18px; }
 .prose .lead p { font-size: 18.5px; color: var(--ink-2); }
@@ -536,3 +535,10 @@ body.paged .prose > section.step { min-height: 52vh; }
 .chapter > .prose { grid-column: 1; }
 .chapter > .toc { grid-column: 2; grid-row: 2 / span 4; }
 .quiz.solved { border-color: color-mix(in srgb, var(--good) 55%, var(--line)); }
+
+/* v0.1.1: dock과 겹침·이름표 */
+.chapter { padding-bottom: 40px; }
+.step-nav { margin-bottom: 24px; }
+.prereq-label { font-size: 13.5px; font-weight: 600; color: var(--ink-2); }
+.toc-progress { display: flex; justify-content: space-between; align-items: baseline; font-size: 13.5px; color: var(--ink-2); margin-top: 8px; }
+.toc-progress b { font-family: var(--mono); color: var(--edge); }
