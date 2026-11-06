@@ -1,10 +1,10 @@
 <!-- 이 파일은 `python3 scripts/book.py outline`으로 생성된다. 직접 수정하지 말 것. -->
 
-# AI 연구자 로드맵 — 전체 목차
+# AI for Science 로드맵 — 전체 목차
 
-> 문제 정의부터 재현 가능한 논문까지, 독립 연구자를 위한 훈련 체계
+> 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-12개 트랙 · 28개 부 · 190개 장 · 퀴즈 17문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 17문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -12,17 +12,18 @@
 
 | 레이어 | 코드 | 트랙 | 핵심 질문 | 부 | 장 | 평가 |
 |---|---|---|---|---|---:|---|
-| L0 입문 | `ORI` | **오리엔테이션**<br>Orientation | AI 연구란 무엇이고, 이 책으로 어떻게 훈련하는가? | 0, 1 | 10 | 개념 퀴즈 · 문서 산출물 |
+| L0 입문 | `ORI` | **오리엔테이션**<br>Orientation | AI 연구란 무엇이고, AI for Science는 어떤 지형인가? | 0, 1 | 11 | 개념 퀴즈 · 문서 산출물 |
 | L1 기반 | `INF` | **연구 인프라**<br>Research Infrastructure | 코드는 어디에서, 어떤 환경으로 실행되는가? | 2, 3, 4 | 17 | 터미널 실습 · 개념 퀴즈 |
-| L1 기반 | `RSE` | **연구 소프트웨어 공학**<br>Research Software Engineering | 수식과 아이디어를 어떻게 정확하고 유지 가능한 코드로 옮기는가? | 5, 6 | 12 | 코드 실습 · 동료·지도 리뷰 |
-| L1 기반 | `MTH` | **수리 기초**<br>Mathematical Foundations | 모델과 학습은 어떤 공간에서, 어떤 계산으로 이루어지는가? | 7, 8, 9, 10 | 27 | 개념 퀴즈 · 코드 실습 |
+| L1 기반 | `RSE` | **연구 소프트웨어 공학**<br>Research Software Engineering | 수식과 아이디어를 어떻게 정확하고 유지 가능한 코드로 옮기는가? | 5, 6 | 12 | 코드 실습 · 동료 리뷰 |
+| L1 기반 | `MTH` | **수리 기초**<br>Mathematical Foundations | 모델과 학습은 어떤 공간에서, 어떤 계산으로 이루어지는가? | 7, 8, 9, 10 | 28 | 개념 퀴즈 · 코드 실습 |
 | L1 기반 | `PSI` | **확률·통계적 추론**<br>Probabilistic and Statistical Inference | 불확실한 데이터에서 무엇을, 얼마나 확신하며 추론할 수 있는가? | 11, 12, 13, 14 | 26 | 개념 퀴즈 · 코드 실습 |
 | L2 핵심 | `MLC` | **머신러닝 핵심**<br>Machine Learning Core | 데이터에서 신뢰할 수 있는 예측 모델을 어떻게 만들고 평가하는가? | 15, 16, 17, 18 | 32 | 코드 실습 · 개념 퀴즈 |
 | L3 확장 | `MLA` | **머신러닝 심화**<br>Advanced Machine Learning | 분포를 생성하고, 결정을 학습하고, 예측을 언제 믿을 수 있는가? | 19, 20, 21 | 19 | 코드 실습 · 개념 퀴즈 |
 | L3 확장 | `MLS` | **머신러닝 시스템**<br>Machine Learning Systems | 실험을 어떻게 추적·재현하고, 더 크고 빠르게 돌리는가? | 22 | 7 | 코드 실습 · 터미널 실습 |
-| L4 연구 | `RES` | **연구 방법론**<br>Research Methodology | 무엇이 좋은 연구 질문이고, 주장을 어떻게 검증하고 전달하는가? | 23 | 12 | 개념 퀴즈 · 문서 산출물 · 동료·지도 리뷰 |
-| L4 연구 | `SCI` | **과학·공학 AI**<br>Scientific and Engineering AI | 물리 지식과 데이터를 어떻게 결합해 공학 문제를 푸는가? | 24, 25 | 14 | 코드 실습 · 문서 산출물 |
-| L5 조직 | `LAB` | **연구실 운영**<br>Lab Operations | 개인의 역량을 어떻게 연구실의 자산으로 남기는가? | 26 | 6 | 문서 산출물 · 동료·지도 리뷰 |
+| L4 방법론 | `RES` | **연구 방법론**<br>Research Methodology | 무엇이 좋은 연구 질문이고, 주장을 어떻게 검증하고 전달하는가? | 23 | 13 | 개념 퀴즈 · 문서 산출물 · 동료 리뷰 |
+| L4 방법론 | `SML` | **과학 머신러닝**<br>Scientific Machine Learning | 물리 법칙·시뮬레이션·실험을 학습과 어떻게 결합하고, 발견의 순환에 넣는가? | 24, 25 | 13 | 코드 실습 · 개념 퀴즈 |
+| L5 응용 | `DOM` | **과학 분야별 응용**<br>Domain Applications | 각 과학 분야의 데이터·문제·평가 기준은 무엇이 다르고, 어디서 실패하는가? | 26, 27, 28, 29, 30 | 26 | 코드 실습 · 개념 퀴즈 · 문서 산출물 |
+| L6 통합 | `CAP` | **종합 프로젝트**<br>Capstone Projects | 배운 것을 하나의 공개 가능한 연구 산출물로 만들 수 있는가? | 31 | 3 | 문서 산출물 · 동료 리뷰 |
 | L9 참고 | `REF` | **참고 자료**<br>Reference | 필요할 때 무엇을 찾아보는가? | 부록 | 8 | — |
 
 ## 트랙 간 의존
@@ -38,12 +39,13 @@
 | `MLA` 머신러닝 심화 | `PSI` 9, `MTH` 3, `MLC` 2 |
 | `MLS` 머신러닝 시스템 | `MLC` 3, `INF` 3, `RSE` 2 |
 | `RES` 연구 방법론 | `ORI` 1, `MLS` 1, `PSI` 1, `MLC` 1 |
-| `SCI` 과학·공학 AI | `MTH` 5, `PSI` 3, `MLA` 3, `ORI` 1, `MLC` 1 |
-| `LAB` 연구실 운영 | `ORI` 2 |
+| `SML` 과학 머신러닝 | `MTH` 6, `PSI` 3, `MLC` 3, `MLA` 3, `ORI` 1 |
+| `DOM` 과학 분야별 응용 | `MLA` 8, `MLC` 7, `SML` 5, `MTH` 3, `ORI` 1 |
+| `CAP` 종합 프로젝트 | `ORI` 1, `RES` 1, `RSE` 1 |
 
 ## `ORI` 오리엔테이션 <sub>Orientation</sub>
 
-- **핵심 질문:** AI 연구란 무엇이고, 이 책으로 어떻게 훈련하는가?
+- **핵심 질문:** AI 연구란 무엇이고, AI for Science는 어떤 지형인가?
 - **도달 목표:** 자신의 연구 문제를 입력·출력·가정·평가로 정의하고, 학습 경로를 세운다
 - **트랙 졸업 과제:** 한 장짜리 문제 정의서와 3개월 학습 계획
 
@@ -57,13 +59,13 @@ _이 책이 무엇을 목표로 하며, 어떤 순서와 형식으로 읽고 훈
   - 레이어·트랙·부·장 · 모든 장의 공통 형식 · 이론과 실습을 한 화면에서 · 평가 방식 · 난이도 등급 · 표기법·용어·코드 규칙
   - 선수: 0.1 왜 이 책인가
 - **0.3** [학습 경로](content/00-orientation/03-learning-paths/index.md) · `필수`
-  - 목차 순서와 학습 순서는 다르다 · 다섯 단계 나선형 경로 · 배경별 경로 · 도메인 트랙 · 기간은 계획 범위, 진도는 산출물
+  - 목차 순서와 학습 순서는 다르다 · 다섯 단계 나선형 경로 · 배경별 경로 · 분야 선택 · 기간은 계획 범위, 진도는 산출물
   - 선수: 0.2 이 책을 읽는 법
 - **0.4** [자가 진단과 역량 지도](content/00-orientation/04-self-assessment/index.md) · `필수`
   - 역량 지도 · 진단 문항 · 진단 결과의 활용
   - 선수: 0.3 학습 경로
-- **0.5** [연구실 세미나로 운영하기](content/00-orientation/05-seminar-guide/index.md) · `참조`
-  - 네 가지 세미나 형식 · 운영 주기와 역할 · 평가와 피드백 · 교재의 갱신
+- **0.5** [스터디·강의로 활용하기](content/00-orientation/05-study-guide/index.md) · `참조`
+  - 네 가지 모임 형식 · 운영 주기와 역할 · 점검과 피드백 · 강의 교재로 쓸 때 · 로드맵에 돌려주기
   - 선수: 0.3 학습 경로
 
 ### 제1부. AI 연구의 지도 <sub>The Landscape of AI Research</sub>
@@ -72,23 +74,26 @@ _AI 연구가 어떤 단계와 결정으로 이루어지는지 전체 지도를 
 
 - **1.1** [AI 연구의 생애주기](content/01-research-landscape/01-research-lifecycle/index.md) · `필수`
   - 문제에서 후속 연구까지 · 연구의 종류 · 학습과 추론, 오프라인과 운영 · 제약과 절충
-- **1.2** [문제를 수학적으로 정의하기](content/01-research-landscape/02-problem-formulation/index.md) · `필수`
+- **1.2** [AI for Science의 지형](content/01-research-landscape/02-ai-for-science-landscape/index.md) · `필수`
+  - AI가 과학에 기여하는 방식 · 과학 문제는 무엇이 다른가 · 분야별 지도 · 성공과 실패에서 배우기 · 두 갈래의 입문자
+  - 선수: 1.1 AI 연구의 생애주기
+- **1.3** [문제를 수학적으로 정의하기](content/01-research-landscape/03-problem-formulation/index.md) · `필수`
   - 변수의 역할 · 문제의 유형 · 정보의 시점 · 범위의 명시 · 문제 정의 문서
   - 선수: 1.1 AI 연구의 생애주기
-- **1.3** [모델링을 나누는 여러 축](content/01-research-landscape/03-modeling-axes/index.md) · `필수`
+- **1.4** [모델링을 나누는 여러 축](content/01-research-landscape/04-modeling-axes/index.md) · `필수`
   - 학습 신호에 따른 구분 · 판별 모델과 생성 모델 · 점 예측과 분포 예측 · 결정론적 모델과 확률적 모델, 빈도주의와 베이지안 · 학습 구성 방식 · 축들은 독립적이다
-  - 선수: 1.2 문제를 수학적으로 정의하기
-- **1.4** [첫 번째 연구 파이프라인 완주하기](content/01-research-landscape/04-first-pipeline/index.md) · `필수`
+  - 선수: 1.3 문제를 수학적으로 정의하기
+- **1.5** [첫 번째 연구 파이프라인 완주하기](content/01-research-landscape/05-first-pipeline/index.md) · `필수`
   - 최소 파이프라인의 구성 · 한 번에 완주하기 · 의도적으로 생략한 것들 · 결과를 의심하는 첫 연습
-  - 선수: 1.2 문제를 수학적으로 정의하기
-- **1.5** [AI 연구 생태계](content/01-research-landscape/05-research-ecosystem/index.md) · `참조`
+  - 선수: 1.3 문제를 수학적으로 정의하기
+- **1.6** [AI 연구 생태계](content/01-research-landscape/06-research-ecosystem/index.md) · `참조`
   - 발표 경로 · 오픈소스와 공유 문화 · 동향을 따라가는 법
   - 선수: 1.1 AI 연구의 생애주기
 
 ## `INF` 연구 인프라 <sub>Research Infrastructure</sub>
 
 - **핵심 질문:** 코드는 어디에서, 어떤 환경으로 실행되는가?
-- **도달 목표:** 원격 GPU 서버에서 재현 가능한 환경을 구성하고, 장애를 스스로 진단한다
+- **도달 목표:** 로컬·원격 GPU 서버에서 재현 가능한 환경을 구성하고, 장애를 스스로 진단한다
 - **트랙 졸업 과제:** 새 서버에서 lockfile·컨테이너로 학습 환경을 구성하고 smoke test 통과
 
 ### 제2부. Linux·서버·원격 개발 <sub>Linux, Servers, and Remote Development</sub>
@@ -243,6 +248,9 @@ _데이터와 모델을 공간과 변환의 관점에서 이해한다. 선형·�
 - **7.9** [함수공간과 연산자](content/07-linear-algebra/09-function-spaces/index.md) · `심화`
   - 함수를 벡터로 · Hilbert 공간과 Banach 공간 · 연산자 · 이산화 · 커널과 RKHS
   - 선수: 7.4 내적·노름·직교성·사영
+- **7.10** [대칭과 군 표현](content/07-linear-algebra/10-symmetry-and-groups/index.md) · `심화`
+  - 대칭과 군 · 군의 표현 · 불변성과 등변성 · 대칭을 모델에 넣는 방법 · 과학에서의 대칭
+  - 선수: 7.5 고윳값과 대칭행렬
 
 ### 제8부. 미적분과 자동미분 <sub>Calculus and Automatic Differentiation</sub>
 
@@ -428,7 +436,7 @@ _데이터의 의미와 저장 형식, 전처리와 탐색적 분석, 분할과 
 
 - **15.1** [데이터의 의미와 구조](content/15-data/01-data-semantics/index.md) · `필수`
   - 데이터의 단위 · label의 생성 과정 · schema와 metadata · 원본 보존
-  - 선수: 1.2 문제를 수학적으로 정의하기
+  - 선수: 1.3 문제를 수학적으로 정의하기
 - **15.2** [저장 형식과 대용량 데이터](content/15-data/02-storage-formats/index.md) · `필수`
   - 형식 비교 · 열 지향 저장과 압축 · 대용량 처리 · 데이터 접근 패턴
   - 선수: 15.1 데이터의 의미와 구조
@@ -691,20 +699,23 @@ _문헌 탐색, 논문 읽기와 재현, 연구 질문과 가설, 실험 설계,
   - 선수: 23.8 논문 작성
 - **23.12** [연구 윤리와 오픈 사이언스](content/23-research-practice/12-research-ethics/index.md) · `필수`
   - 연구 무결성 · 저자와 인용 · 데이터와 라이선스 · AI 도구 사용 · 오픈 사이언스
+- **23.13** [도메인 과학자와의 협업](content/23-research-practice/13-interdisciplinary-collaboration/index.md) · `필수`
+  - 공통 언어 만들기 · 문제 정의 합의 · 평가 기준의 조율 · 데이터와 실험 · 협업의 운영
+  - 선수: 23.4 연구 질문과 가설
 
-## `SCI` 과학·공학 AI <sub>Scientific and Engineering AI</sub>
+## `SML` 과학 머신러닝 <sub>Scientific Machine Learning</sub>
 
-- **핵심 질문:** 물리 지식과 데이터를 어떻게 결합해 공학 문제를 푸는가?
-- **도달 목표:** 물리 모델·데이터 모델·하이브리드 모델을 같은 조건에서 비교하고 도메인 문제에 적용한다
-- **트랙 졸업 과제:** 배터리 문제에서 물리·데이터·하이브리드 모델의 정확도·일관성·비용 비교
+- **핵심 질문:** 물리 법칙·시뮬레이션·실험을 학습과 어떻게 결합하고, 발견의 순환에 넣는가?
+- **도달 목표:** 물리 기반·하이브리드 모델, 역문제, 시뮬레이션 기반 추론, 실험 설계를 문제에 맞게 선택하고 검증한다
+- **트랙 졸업 과제:** 같은 과학 문제에서 물리·데이터·하이브리드 모델을 정확도·물리적 일관성·계산 비용으로 비교
 
 ### 제24부. Scientific Machine Learning <sub>Scientific Machine Learning</sub>
 
-_물리 모델과 학습 문제의 대응, PINN, Neural ODE와 미분가능 시뮬레이션, neural operator, 하이브리드·대리모델, 시스템 식별과 상태 추정, 역문제와 불확실성 정량화를 다룬다._
+_물리 모델과 학습 문제의 대응, PINN, Neural ODE와 미분가능 시뮬레이션, neural operator, 하이브리드·대리모델, 시스템 식별과 상태 추정, 역문제와 불확실성 정량화, 대칭성을 반영한 모델을 다룬다._
 
 - **24.1** [물리 모델과 학습 문제](content/24-scientific-ml/01-physics-and-learning/index.md) · `필수`
   - 물리 모델의 구성 · 변수의 역할 · 문제의 종류 · 단위와 무차원화 · 물리적 제약 · 오차의 분해
-  - 선수: 9.6 ODE 수치해법, 1.2 문제를 수학적으로 정의하기
+  - 선수: 9.6 ODE 수치해법, 1.3 문제를 수학적으로 정의하기
 - **24.2** [물리 정보 신경망(PINN)](content/24-scientific-ml/02-pinn/index.md) · `심화`
   - 목적함수 · 도함수 계산 · 제약의 부과 · 학습의 어려움 · 개선 기법 · 평가
   - 선수: 24.1 물리 모델과 학습 문제, 8.4 자동미분과 역전파
@@ -723,60 +734,157 @@ _물리 모델과 학습 문제의 대응, PINN, Neural ODE와 미분가능 시�
 - **24.7** [역문제와 불확실성 정량화](content/24-scientific-ml/07-inverse-problems-and-uq/index.md) · `심화`
   - 역문제 · 베이지안 역문제 · 민감도 분석 · 불확실성 전파
   - 선수: 24.6 시스템 식별과 상태 추정, 13.5 근사 추론 I: MCMC
+- **24.8** [대칭성을 반영한 과학 모델](content/24-scientific-ml/08-geometric-models/index.md) · `심화`
+  - 기하 데이터의 표현 · 등변 신경망 · 격자·메시·구면 위의 모델 · 대칭 제약의 효과 · 대칭이 깨질 때
+  - 선수: 18.6 그래프 신경망과 기하학적 딥러닝, 7.10 대칭과 군 표현
 
-### 제25부. 배터리 AI 연구 <sub>AI for Battery Research</sub>
+### 제25부. 과학적 발견과 실험 설계 <sub>Scientific Discovery and Experimental Design</sub>
+
+_시뮬레이션 기반 추론, 방정식 발견, 능동 학습과 베이지안 실험 설계, 자율 실험, 과학 foundation model과 AI 에이전트를 다룬다._
+
+- **25.1** [시뮬레이션 기반 추론](content/25-scientific-discovery/01-simulation-based-inference/index.md) · `심화`
+  - 우도 없는 추론 · 고전적 방법 · 신경망 기반 추론 · 진단
+  - 선수: 24.7 역문제와 불확실성 정량화, 19.1 생성모델의 공통 문제 정의
+- **25.2** [방정식 발견과 기호 회귀](content/25-scientific-discovery/02-equation-discovery/index.md) · `심화`
+  - 희소 회귀로 동역학 찾기 · 기호 회귀 · 해석 가능성과 단순성 · 검증
+  - 선수: 24.1 물리 모델과 학습 문제, 16.2 선형 모델과 정규화
+- **25.3** [능동 학습과 베이지안 실험 설계](content/25-scientific-discovery/03-experimental-design/index.md) · `필수`
+  - 왜 실험을 고르는가 · 능동 학습 · 베이지안 실험 설계 · 베이지안 최적화와의 관계 · 평가
+  - 선수: 10.7 특수한 최적화 문제, 21.1 불확실성 정량화
+- **25.4** [자율 실험과 closed-loop 연구](content/25-scientific-discovery/04-autonomous-experimentation/index.md) · `심화`
+  - closed-loop의 구성 · 자율 실험실 · 다목적과 제약 · 운영 문제
+  - 선수: 25.3 능동 학습과 베이지안 실험 설계
+- **25.5** [과학 Foundation Model과 AI 에이전트](content/25-scientific-discovery/05-scientific-foundation-models/index.md) · `심화`
+  - 과학 foundation model · 평가 · LLM과 과학 문헌 · 과학 연구 에이전트 · 위험과 책임
+  - 선수: 19.9 사전학습·전이·Foundation Model, 18.5 언어모델과 LLM의 기초
+
+## `DOM` 과학 분야별 응용 <sub>Domain Applications</sub>
+
+- **핵심 질문:** 각 과학 분야의 데이터·문제·평가 기준은 무엇이 다르고, 어디서 실패하는가?
+- **도달 목표:** 선택한 분야의 데이터를 이해하고, 분야의 평가 기준과 누수 함정을 지키며 문제를 푼다
+- **트랙 졸업 과제:** 선택한 분야의 공개 데이터로 분야 표준 평가를 따르는 연구 결과와 재현 패키지
+
+### 제26부. 물리·공학 시뮬레이션 <sub>Physics and Engineering Simulation</sub>
+
+_연속체 역학과 시뮬레이션의 기초, 시뮬레이션 대리모델, 난류와 closure 모델 학습, 설계 최적화, 벤치마크와 평가를 다룬다._
+
+- **26.1** [ML 연구자를 위한 연속체 역학과 시뮬레이션](content/26-physics-and-engineering/01-simulation-fundamentals/index.md) · `필수`
+  - 지배 방정식 · 무차원수와 영역 · 시뮬레이션 파이프라인 · 시뮬레이션 데이터
+  - 선수: 9.7 PDE·DAE와 시뮬레이터 검증
+- **26.2** [시뮬레이션 대리모델](content/26-physics-and-engineering/02-surrogate-modeling/index.md) · `필수`
+  - 대리모델의 종류 · 구조 선택 · 다중 충실도 · 속도 이득의 측정
+  - 선수: 26.1 ML 연구자를 위한 연속체 역학과 시뮬레이션, 24.4 Neural Operator와 동역학 학습
+- **26.3** [난류와 closure 모델 학습](content/26-physics-and-engineering/03-turbulence-and-closure/index.md) · `심화`
+  - closure 문제 · 학습 기반 closure · solver와의 결합 · 일반화
+  - 선수: 26.2 시뮬레이션 대리모델, 24.5 하이브리드 모델과 대리모델
+- **26.4** [형상·설계 최적화와 역설계](content/26-physics-and-engineering/04-design-optimization/index.md) · `심화`
+  - 설계 문제의 정의 · gradient 기반 설계 · 대리모델 기반 설계 · 생성모델 기반 역설계 · 검증
+  - 선수: 26.2 시뮬레이션 대리모델, 10.7 특수한 최적화 문제
+- **26.5** [시뮬레이션 학습의 벤치마크와 평가](content/26-physics-and-engineering/05-physics-benchmarks/index.md) · `필수`
+  - 정확도 지표 · 장기 rollout · 물리적 일관성 · 일반화 · 비용
+  - 선수: 26.2 시뮬레이션 대리모델, 21.4 분포 이동과 OOD
+
+### 제27부. 지구·기후 <sub>Earth and Climate</sub>
+
+_기상·기후 데이터의 기초, 데이터 기반 기상 예측, 다운스케일링과 기후 모델 에뮬레이션, 예측의 평가를 다룬다._
+
+- **27.1** [기상·기후 데이터의 기초](content/27-earth-and-climate/01-earth-system-data/index.md) · `필수`
+  - 데이터의 종류 · 격자와 좌표 · 변수와 단위 · 저장 형식과 도구
+  - 선수: 15.2 저장 형식과 대용량 데이터
+- **27.2** [데이터 기반 기상 예측](content/27-earth-and-climate/02-weather-forecasting/index.md) · `심화`
+  - 문제 정의 · 모델 구조 · 확률적 예보 · 수치 예보와의 관계
+  - 선수: 27.1 기상·기후 데이터의 기초, 18.7 시계열 딥러닝
+- **27.3** [다운스케일링과 기후 모델 에뮬레이션](content/27-earth-and-climate/03-downscaling-and-emulation/index.md) · `심화`
+  - 다운스케일링 · 생성모델 기반 다운스케일링 · 기후 모델 에뮬레이션 · 평가
+  - 선수: 27.1 기상·기후 데이터의 기초, 19.1 생성모델의 공통 문제 정의
+- **27.4** [기상·기후 예측의 평가](content/27-earth-and-climate/04-climate-evaluation/index.md) · `필수`
+  - 결정론적 지표 · 확률적 지표 · 흐릿함의 함정 · 극한과 사건 · 물리적 일관성
+  - 선수: 27.2 데이터 기반 기상 예측, 21.2 예측분포와 구간의 평가
+
+### 제28부. 화학·재료 <sub>Chemistry and Materials</sub>
+
+_분자와 결정의 표현, 물성 예측, 기계학습 원자간 퍼텐셜, 분자·재료 생성과 역설계, 데이터와 평가의 함정을 다룬다._
+
+- **28.1** [분자와 결정의 표현](content/28-chemistry-and-materials/01-molecular-representations/index.md) · `필수`
+  - 문자열과 지문 · 그래프 표현 · 3차원 표현 · 주기적 결정 · 표현의 선택
+  - 선수: 18.6 그래프 신경망과 기하학적 딥러닝
+- **28.2** [물성 예측](content/28-chemistry-and-materials/02-property-prediction/index.md) · `필수`
+  - 데이터 · 분할 · 모델 · 불확실성
+  - 선수: 28.1 분자와 결정의 표현, 21.1 불확실성 정량화
+- **28.3** [기계학습 원자간 퍼텐셜](content/28-chemistry-and-materials/03-interatomic-potentials/index.md) · `심화`
+  - 문제 정의 · 학습 데이터 · 모델 · 시뮬레이션에서의 평가
+  - 선수: 28.1 분자와 결정의 표현, 24.8 대칭성을 반영한 과학 모델
+- **28.4** [분자·재료 생성과 역설계](content/28-chemistry-and-materials/04-molecular-design/index.md) · `심화`
+  - 생성 방식 · 최적화와 탐색 · 평가 · 실험 검증
+  - 선수: 28.2 물성 예측, 19.7 생성모델의 평가
+- **28.5** [화학·재료 데이터와 평가의 함정](content/28-chemistry-and-materials/05-chemistry-evaluation/index.md) · `필수`
+  - 데이터 품질 · 누수 · 벤치마크 · 실제 활용과의 간극
+  - 선수: 28.2 물성 예측
+
+### 제29부. 생명과학 <sub>Life Sciences</sub>
+
+_ML 연구자를 위한 분자생물학 기초, 생물 서열 모델, 단백질 구조 예측과 설계, 유전체·단일세포 데이터, 평가와 누수를 다룬다._
+
+- **29.1** [ML 연구자를 위한 분자생물학 기초](content/29-life-sciences/01-biology-for-ml/index.md) · `필수`
+  - 생명의 분자 · 데이터의 종류 · 실험과 측정 · 공개 데이터베이스
+  - 선수: 1.2 AI for Science의 지형
+- **29.2** [생물 서열 모델](content/29-life-sciences/02-sequence-models/index.md) · `심화`
+  - 서열의 표현 · 서열 모델 · 사전학습 언어모델 · 진화 정보
+  - 선수: 29.1 ML 연구자를 위한 분자생물학 기초, 18.5 언어모델과 LLM의 기초
+- **29.3** [단백질 구조 예측과 설계](content/29-life-sciences/03-protein-structure/index.md) · `심화`
+  - 구조 예측 문제 · 평가 지표 · 설계 · 한계
+  - 선수: 29.2 생물 서열 모델, 24.8 대칭성을 반영한 과학 모델
+- **29.4** [유전체·단일세포 데이터](content/29-life-sciences/04-omics-and-single-cell/index.md) · `심화`
+  - 데이터의 특성 · 차원 축소와 군집 · 배치 효과 · 모델링
+  - 선수: 29.1 ML 연구자를 위한 분자생물학 기초, 16.5 비지도학습과 표현 탐색
+- **29.5** [생명과학 AI의 평가와 누수](content/29-life-sciences/05-bio-evaluation/index.md) · `필수`
+  - 유사성 기반 누수 · 벤치마크의 함정 · 실험 검증 · 재현성
+  - 선수: 29.2 생물 서열 모델, 15.4 데이터 분할과 누수 방지
+
+### 제30부. 에너지·배터리 <sub>AI for Battery Research</sub>
 
 _ML 연구자를 위한 배터리 기초, 배터리 모델 계층, 데이터셋과 함정, 상태·수명 예측, 파라미터 추정, 충전 최적화, 배터리 foundation model을 사례 중심으로 다룬다._
 
-- **25.1** [ML 연구자를 위한 배터리 기초](content/25-battery-ai/01-battery-fundamentals/index.md) · `필수` · 위젯: 등가회로 모델 시뮬레이터
+- **30.1** [ML 연구자를 위한 배터리 기초](content/30-battery-ai/01-battery-fundamentals/index.md) · `필수` · 위젯: 등가회로 모델 시뮬레이터
   - 셀의 구조와 화학 · 상태 지표 · 시험 프로토콜 · 열화 메커니즘 · 측정 데이터
-- **25.2** [배터리 모델의 계층](content/25-battery-ai/02-battery-models/index.md) · `필수` · 위젯: 등가회로 모델 시뮬레이터
+- **30.2** [배터리 모델의 계층](content/30-battery-ai/02-battery-models/index.md) · `필수` · 위젯: 등가회로 모델 시뮬레이터
   - 등가회로 모델(ECM) · 전기화학 모델 · 열 모델과 열화 모델 · DAE 구조 · 시뮬레이션 도구
-  - 선수: 25.1 ML 연구자를 위한 배터리 기초, 9.7 PDE·DAE와 시뮬레이터 검증
-- **25.3** [배터리 데이터셋과 데이터 함정](content/25-battery-ai/03-battery-data/index.md) · `필수`
+  - 선수: 30.1 ML 연구자를 위한 배터리 기초, 9.7 PDE·DAE와 시뮬레이터 검증
+- **30.3** [배터리 데이터셋과 데이터 함정](content/30-battery-ai/03-battery-data/index.md) · `필수`
   - 공개 데이터셋 · 이질성 · 분할 · censoring과 중단 · 품질 문제
-  - 선수: 25.1 ML 연구자를 위한 배터리 기초, 15.4 데이터 분할과 누수 방지
-- **25.4** [상태 추정과 수명 예측](content/25-battery-ai/04-state-and-lifetime-prediction/index.md) · `필수`
+  - 선수: 30.1 ML 연구자를 위한 배터리 기초, 15.4 데이터 분할과 누수 방지
+- **30.4** [상태 추정과 수명 예측](content/30-battery-ai/04-state-and-lifetime-prediction/index.md) · `필수`
   - 문제 정의 · SOC·SOH 추정 · 수명 예측 · 불확실성 · 평가
-  - 선수: 25.3 배터리 데이터셋과 데이터 함정, 21.1 불확실성 정량화
-- **25.5** [파라미터 추정과 하이브리드 모델링](content/25-battery-ai/05-parameter-estimation/index.md) · `심화`
+  - 선수: 30.3 배터리 데이터셋과 데이터 함정, 21.1 불확실성 정량화
+- **30.5** [파라미터 추정과 하이브리드 모델링](content/30-battery-ai/05-parameter-estimation/index.md) · `심화`
   - 파라미터 추정 · 대리모델 · 하이브리드 모델 · 평가
-  - 선수: 25.2 배터리 모델의 계층, 24.6 시스템 식별과 상태 추정
-- **25.6** [충전 최적화와 제어](content/25-battery-ai/06-charging-optimization/index.md) · `심화`
+  - 선수: 30.2 배터리 모델의 계층, 24.6 시스템 식별과 상태 추정
+- **30.6** [충전 최적화와 제어](content/30-battery-ai/06-charging-optimization/index.md) · `심화`
   - 문제 정의 · 방법 · 실험 설계 · sim-to-real · 안전 제약
-  - 선수: 25.2 배터리 모델의 계층, 20.3 모델 기반 방법과 최적제어
-- **25.7** [배터리 Foundation Model](content/25-battery-ai/07-battery-foundation-models/index.md) · `심화`
+  - 선수: 30.2 배터리 모델의 계층, 20.3 모델 기반 방법과 최적제어
+- **30.7** [배터리 Foundation Model](content/30-battery-ai/07-battery-foundation-models/index.md) · `심화`
   - 데이터 통합 · 사전학습 과제 · 분할과 중복 · 전이 평가 · 분석
-  - 선수: 25.3 배터리 데이터셋과 데이터 함정, 19.9 사전학습·전이·Foundation Model
+  - 선수: 30.3 배터리 데이터셋과 데이터 함정, 19.9 사전학습·전이·Foundation Model
 
-## `LAB` 연구실 운영 <sub>Lab Operations</sub>
+## `CAP` 종합 프로젝트 <sub>Capstone Projects</sub>
 
-- **핵심 질문:** 개인의 역량을 어떻게 연구실의 자산으로 남기는가?
-- **도달 목표:** handbook·공통 자산·리뷰 체계를 운영하고 연구를 인계한다
-- **트랙 졸업 과제:** 신규 연구원이 구두 설명 없이 따라 할 수 있는 handbook과 리뷰 기록
+- **핵심 질문:** 배운 것을 하나의 공개 가능한 연구 산출물로 만들 수 있는가?
+- **도달 목표:** 문제 정의부터 재현 패키지까지 독립적으로 수행하고, 결과를 오픈소스 커뮤니티에 공개한다
+- **트랙 졸업 과제:** 논문 초안과 공개 재현 패키지(코드·데이터 카드·실행 환경)
 
-### 제26부. 연구실 표준화와 종합 프로젝트 <sub>Lab Standards and Capstone Projects</sub>
+### 제31부. 종합 프로젝트와 성장 <sub>Capstone Projects and Growth</sub>
 
-_연구실 handbook, 공통 자산, 단계별 리뷰 체계, 지식 관리와 인수인계, 단계별 종합 프로젝트, 역량 평가를 다룬다._
+_여러 트랙을 가로지르는 단계별 종합 프로젝트, 오픈소스·데이터·벤치마크로 과학 커뮤니티에 기여하는 법, 역량 평가와 다음 단계를 다룬다._
 
-- **26.1** [연구실 공통 Handbook](content/26-lab-operations/01-lab-handbook/index.md) · `필수`
-  - onboarding · 표준 · 기록과 발표 · FAQ · 유지보수
-  - 선수: 0.5 연구실 세미나로 운영하기
-- **26.2** [공통 자산](content/26-lab-operations/02-shared-assets/index.md) · `필수`
-  - 공통 프로젝트 템플릿 · 공통 데이터셋 · 수학–코드 대응 실습 · 실패 사례 모음 · 양식 · 에이전트 지침과 skill
-  - 선수: 26.1 연구실 공통 Handbook
-- **26.3** [단계별 리뷰 체계](content/26-lab-operations/03-review-system/index.md) · `필수`
-  - 리뷰 단계 · 체크리스트 · 운영 원칙 · handoff
-  - 선수: 26.2 공통 자산
-- **26.4** [지식 관리와 인수인계](content/26-lab-operations/04-knowledge-management/index.md) · `필수`
-  - 지식의 종류 · 저장소 · 인수인계 · 검색 가능성
-  - 선수: 26.3 단계별 리뷰 체계
-- **26.5** [단계별 종합 프로젝트](content/26-lab-operations/05-capstone-projects/index.md) · `필수`
-  - A. 회귀·분류 baseline · B. NumPy 기반 작은 신경망 · C. PyTorch 연구 템플릿 · D. 실제 시계열·배터리 예측 · E. 확률적 예측 모델 · F. 논문 재현 · G. Scientific ML 비교 · H. 독립 연구
+- **31.1** [단계별 종합 프로젝트](content/31-capstone/01-capstone-projects/index.md) · `필수`
+  - A. 회귀·분류 baseline · B. NumPy 기반 작은 신경망 · C. PyTorch 연구 템플릿 · D. 과학 데이터 예측 · E. 확률적 예측 모델 · F. 논문 재현 · G. 물리·데이터·하이브리드 비교 · H. 독립 연구
   - 선수: 0.3 학습 경로
-- **26.6** [역량 평가와 성장](content/26-lab-operations/06-competency-assessment/index.md) · `필수`
-  - 평가 질문 · 평가 방법 · 성장 계획 · 최종 산출물
-  - 선수: 26.5 단계별 종합 프로젝트
+- **31.2** [오픈소스·데이터·벤치마크로 기여하기](content/31-capstone/02-open-science-contribution/index.md) · `필수`
+  - 오픈소스 기여 · 데이터셋 공개 · 벤치마크 설계 · 재현 패키지 · 이 로드맵에 기여하기
+  - 선수: 23.12 연구 윤리와 오픈 사이언스, 6.7 연구 코드 문서화
+- **31.3** [역량 평가와 다음 단계](content/31-capstone/03-competency-assessment/index.md) · `필수`
+  - 평가 질문 · 과학 연구자로서의 질문 · 성장 계획 · 최종 산출물
+  - 선수: 31.1 단계별 종합 프로젝트
 
 ## `REF` 참고 자료 <sub>Reference</sub>
 

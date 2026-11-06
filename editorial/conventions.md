@@ -107,8 +107,9 @@ YAML의 작은 부분집합만 쓴다: `key: 값`, `key: "따옴표 문자열"`,
 | L3 | `ml-advanced` | MLA | 머신러닝 심화 |
 | L3 | `ml-systems` | MLS | 머신러닝 시스템 |
 | L4 | `research-methodology` | RES | 연구 방법론 |
-| L4 | `scientific-ai` | SCI | 과학·공학 AI |
-| L5 | `lab-operations` | LAB | 연구실 운영 |
+| L4 | `scientific-ml` | SML | 과학 머신러닝 |
+| L5 | `domain-applications` | DOM | 과학 분야별 응용 |
+| L6 | `capstone` | CAP | 종합 프로젝트 |
 | — | `reference` | REF | 참고 자료 (부록) |
 
 ## 6. 장 본문의 구조
