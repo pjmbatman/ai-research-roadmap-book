@@ -542,3 +542,150 @@ input[type="range"] { width: 100%; accent-color: var(--edge); height: 28px; }
 .prereq-label { font-size: 13.5px; font-weight: 600; color: var(--ink-2); }
 .toc-progress { display: flex; justify-content: space-between; align-items: baseline; font-size: 13.5px; color: var(--ink-2); margin-top: 8px; }
 .toc-progress b { font-family: var(--mono); color: var(--edge); }
+
+/* ================= v0.2 벤치마킹 적용 (editorial/benchmarks.md) ================= */
+/* 글자 크기 토큰: 13·14·16·18·20·24 (Starlight·VitePress), 본문 폭 45rem */
+:root { --fs-xs: 13px; --fs-sm: 14px; --fs-base: 16px; --fs-md: 18px; --fs-lg: 20px; --fs-xl: 24px; --measure: 45rem; }
+body { font-size: var(--fs-base); }
+
+/* 장: 한 단(45rem), 오른쪽 목차 없음 */
+.chapter.reader { display: block; max-width: var(--measure); margin: 0 auto; padding-bottom: 24px; }
+.chapter.reader .chapter-head { max-width: none; margin-bottom: 18px; gap: 10px; }
+.chapter.reader .chapter-head h1 { font-size: clamp(28px, 4vw, 38px); }
+.chapter.reader .prose { font-size: 17px; }
+.chapter.reader .prose h2 { font-size: var(--fs-xl); }
+.chapter.reader .prose h3 { font-size: var(--fs-lg); }
+.chapter.reader .lead p { font-size: var(--fs-md); }
+.chapter.reader .box { padding: 6px 24px 10px; }
+.chapter.reader .box > h2 { font-size: var(--fs-md); }
+
+/* 선수 지식 미리보기 (MyST) */
+.chip.has-preview { position: relative; }
+.chip .preview { position: absolute; left: 0; top: calc(100% + 8px); z-index: 30; width: max-content; max-width: 320px; padding: 10px 12px; border-radius: 12px; background: var(--ink); color: var(--bg); font-size: var(--fs-sm); line-height: 1.55; white-space: normal; opacity: 0; transform: translateY(-4px); pointer-events: none; transition: opacity var(--dur-quick), transform var(--dur-quick) var(--ease-out); box-shadow: var(--shadow); }
+.chip.has-preview:hover .preview, .chip.has-preview:focus-visible .preview { opacity: 1; transform: none; }
+
+/* 상단 내비: ← 장 / 단계 ▾ → + 단계 막대 + 드롭다운 (TutorialKit) */
+.chapnav { position: sticky; top: 0; z-index: 25; margin: 0 -12px 10px; padding: 10px 12px 12px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.chapnav-row { display: grid; grid-template-columns: 40px 1fr 40px; gap: 8px; align-items: center; }
+.chapnav-btn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); display: grid; place-items: center; cursor: pointer; transition: border-color var(--dur-quick), transform var(--dur-instant); }
+.chapnav-btn svg { width: 18px; height: 18px; }
+.chapnav-btn:hover:not(:disabled) { border-color: var(--edge); }
+.chapnav-btn:active:not(:disabled) { transform: scale(0.96); }
+.chapnav-btn:disabled { opacity: 0.35; cursor: default; }
+.chapnav-title { display: flex; align-items: center; justify-content: center; gap: 10px; min-width: 0; height: 40px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; font-size: var(--fs-base); cursor: pointer; }
+.chapnav-title .where { font-family: var(--mono); font-size: var(--fs-sm); color: var(--edge); font-weight: 700; flex: none; }
+.chapnav-title b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chapnav-title .caret { width: 16px; height: 16px; flex: none; color: var(--mute); transition: transform var(--dur-quick) var(--ease-out); }
+.chapnav-title[aria-expanded="true"] .caret { transform: rotate(180deg); }
+.chapnav .stepbar { position: static; padding: 10px 0 0; margin: 0; background: transparent; gap: 5px; }
+.chapnav .stepbar .seg { height: 8px; border-radius: 4px; }
+.chapnav .stepbar .seg[aria-current="true"] { transform: none; }
+.chapnav-panel { position: absolute; left: 12px; right: 12px; top: calc(100% - 4px); display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 16px 18px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); max-height: 70vh; overflow-y: auto; }
+.chapnav-panel h4 { margin: 0 0 8px; font-size: var(--fs-sm); color: var(--mute); font-weight: 600; }
+.chapnav-panel ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.chapnav-panel a { display: grid; grid-template-columns: 2.6em 1fr; gap: 8px; align-items: baseline; padding: 6px 8px; border-radius: 9px; text-decoration: none; font-size: var(--fs-sm); }
+.chapnav-panel a:hover { background: var(--surface-2); }
+.chapnav-panel a[aria-current="true"], .chapnav-panel a[aria-current="page"] { background: var(--edge-soft); color: var(--ink); font-weight: 600; }
+.chapnav-panel .k, .chapnav-panel .n { font-family: var(--mono); font-size: var(--fs-xs); color: var(--mute); }
+.chapnav-panel .meter { margin-top: 6px; }
+.drop-in { animation: drop-in var(--dur-move) var(--ease-out); }
+@keyframes drop-in { from { opacity: 0; transform: translateY(-8px) scale(0.98); } }
+
+/* 하단 dock에 이전·다음 (Duolingo 하단 버튼) */
+.dock-stepper { gap: 6px; }
+.dock-stepper .dock-prev svg { width: 18px; height: 18px; }
+.dock-stepper .dock-prev:disabled { opacity: 0.35; cursor: default; transform: none !important; }
+.dock-count { font-family: var(--mono); font-size: var(--fs-sm); color: var(--ink-2); min-width: 4.2em; text-align: center; align-self: center; }
+.dock .dock-next { width: auto !important; padding: 0 16px; background: var(--edge) !important; color: var(--on-edge) !important; font: inherit; font-weight: 700; font-size: var(--fs-sm); }
+.dock .dock-next:hover { transform: none !important; filter: brightness(1.06); }
+.dock .dock-next:disabled { opacity: 0.4; cursor: default; }
+.dock-stepper [data-tip]:hover::before { opacity: 1; }
+@media (max-width: 720px) { .dock-stepper .dock-extra { display: none; } }
+
+/* 퀴즈: 주 버튼 하나 */
+.quiz-actions { justify-content: flex-end; }
+.quiz-primary { min-width: 120px; justify-content: center; padding: 10px 20px; font-size: var(--fs-base); }
+.quiz-primary:disabled { background: var(--surface-2); border-color: var(--line); color: var(--mute); opacity: 1; }
+.quiz-primary.is-right { background: var(--good); border-color: var(--good); color: #fff; }
+.quiz-primary.is-wrong { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.quiz-related { display: inline-block; margin-top: 8px; padding: 0; border: 0; background: none; color: var(--edge); font: inherit; font-weight: 600; cursor: pointer; }
+.quiz-numeric { grid-template-columns: 1fr; }
+.quiz-numeric > input[type="number"] { justify-self: start; }
+
+/* 연습문제: 넓은 화면은 문제 | 코드 분할 (svelte·TutorialKit), 좁은 화면은 전환 */
+.reader .exercise, .reader .ex-group { position: relative; left: 50%; width: min(1180px, calc(100vw - 40px)); transform: translateX(-50%); }
+.reader .ex-group > .exercise { left: auto; width: auto; transform: none; }
+.exercise { overflow: visible; }
+.ex-head { gap: 12px; }
+.ex-head h3 { flex: 1; }
+.ex-switch { display: none; gap: 2px; padding: 3px; border-radius: 10px; background: var(--surface-2); }
+.ex-switch button { border: 0; background: transparent; font: inherit; font-size: var(--fs-sm); font-weight: 600; color: var(--mute); padding: 5px 12px; border-radius: 8px; cursor: pointer; }
+.ex-switch button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(11,16,32,0.12); }
+.ex-split { display: grid; grid-template-columns: minmax(360px, 38%) 1fr; min-height: 460px; }
+.ex-split .ex-body { padding: 14px 20px 16px; border-right: 1px solid var(--line); font-size: var(--fs-base); overflow-y: auto; max-height: 640px; }
+.ex-work { display: grid; grid-template-rows: auto 1fr auto auto; min-width: 0; }
+.ex-edhead { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--code-bg); color: var(--code-ink); border-bottom: 1px solid color-mix(in srgb, var(--code-ink) 12%, transparent); }
+.ex-edhead .fname { font-family: var(--mono); font-size: var(--fs-xs); opacity: 0.75; }
+.ex-edhead .spacer, .ex-bar .spacer { flex: 1; }
+.ex-edhead .btn-sm { background: transparent; color: var(--code-ink); border-color: color-mix(in srgb, var(--code-ink) 30%, transparent); }
+.ex-work .ex-editor { margin: 0; border-radius: 0; min-height: 260px; background: var(--code-bg); }
+.ex-work .ex-editor .cm-editor { max-height: 420px; }
+.ex-work .ex-bar { padding: 10px 14px; border-top: 1px solid var(--line); }
+.ex-work .ex-results { padding: 0 14px 14px; max-height: 260px; overflow-y: auto; }
+.ex-results .nm { text-transform: none; }
+.cell-status.all { color: var(--good); }
+.exercise.passed { border-color: color-mix(in srgb, var(--good) 55%, var(--line)); }
+.btn-sm { padding: 4px 10px; font-size: var(--fs-xs); border-radius: 8px; }
+.icon-btn { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; border: 1px solid transparent; background: transparent; color: inherit; cursor: pointer; opacity: 0.8; }
+.icon-btn:hover { opacity: 1; border-color: currentColor; }
+.icon-btn svg { width: 15px; height: 15px; }
+.ex-group > .tabbar button { display: inline-flex; gap: 8px; align-items: baseline; }
+.ex-group > .tabbar .k { font-family: var(--mono); font-size: var(--fs-xs); color: var(--edge); }
+@media (max-width: 860px) {
+  .ex-switch { display: inline-flex; }
+  .ex-split { grid-template-columns: 1fr; min-height: 0; }
+  .ex-split .ex-body { border-right: 0; max-height: none; }
+  .exercise[data-view="problem"] .ex-work { display: none; }
+  .exercise[data-view="code"] .ex-body { display: none; }
+}
+
+/* 위젯 */
+.wframe-head { padding: 8px 10px 8px 14px; }
+.wframe-head b { flex: 1; }
+.wcap { margin: 0; font-size: var(--fs-sm); color: var(--ink-2); min-height: 1.6em; }
+.readout.hot { font-size: var(--fs-sm); font-weight: 700; padding: 3px 12px; }
+
+/* 목차 단계의 장: '다룰 내용' 카드 */
+.outline-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 10px; }
+.ocard { border-radius: 16px; border: 1px solid var(--line); background: var(--surface); padding: 16px 18px; }
+.ocard h2, .ocard h3 { margin: 0 0 8px; font-size: var(--fs-base); }
+.ocard ul, .ocard ol { margin: 0; padding-left: 1.1em; font-size: var(--fs-sm); color: var(--ink-2); line-height: 1.65; }
+.ocard p { margin: 0; font-size: var(--fs-sm); color: var(--ink-2); }
+.ocard-goals { grid-column: 1 / -1; background: var(--midnight); color: var(--glacier); border-color: var(--midnight); }
+.ocard-goals ol { color: var(--glacier); font-size: var(--fs-base); }
+.ocard-goals h2 { color: var(--coral); }
+.ocard-lab { border-left: 4px solid var(--ink-2); }
+.ocard-pitfalls { border-left: 4px solid var(--warn); }
+.ocard-pass { border-left: 4px solid var(--good); }
+.outline-cta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-end; margin: 18px 0 8px; color: var(--ink-2); font-size: var(--fs-sm); }
+.outline-cta span { flex: 1; }
+@media (max-width: 640px) { .outline-grid { grid-template-columns: 1fr; } }
+
+/* 지도 옆 패널 (roadmap.sh) */
+.map-info { top: 60px; bottom: auto; width: min(320px, calc(100% - 28px)); gap: 10px; }
+.map-info .mi-top { display: flex; justify-content: space-between; align-items: center; }
+.map-info .mi-state { font-size: var(--fs-xs); font-weight: 700; padding: 2px 9px; border-radius: 999px; border: 1px solid rgba(220,230,242,0.3); }
+.map-info .mi-state[data-state="learning"] { color: var(--glacier); border-color: #3fc79a; }
+.map-info .mi-state[data-state="done"] { background: #3fc79a; color: var(--midnight); border-color: #3fc79a; }
+.map-info .mi-goals { margin: 0; padding-left: 1.1em; font-size: var(--fs-sm); color: #b9c6d8; line-height: 1.6; }
+/* 미리보기는 가리킬 때만 그린다(가로 넘침 방지), 터치 기기에서는 쓰지 않는다 */
+.chip .preview { display: none; opacity: 1; transform: none; max-width: min(320px, calc(100vw - 40px)); }
+.chip.has-preview:hover .preview, .chip.has-preview:focus-visible .preview { display: block; animation: pop var(--dur-quick) var(--ease-out); }
+@media (hover: none) { .chip.has-preview .preview { display: none !important; } }
+/* 연습문제가 있는 실습 단계는 상자 없이(넓은 연습문제가 상자를 넘어가 어색해지지 않게) */
+.reader .box-lab:has(.exercise) { background: transparent; border: 0; padding-left: 0; padding-right: 0; }
+.dock .dock-next { white-space: nowrap; flex: none; }
+@media (max-width: 480px) {
+  .dock-stepper [data-theme-toggle] { display: none; }
+  .dock-stepper { gap: 4px; padding: 6px 8px; }
+}

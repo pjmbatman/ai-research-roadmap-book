@@ -1,8 +1,8 @@
 // 로드맵 지도: 트랙을 레이어 순서로 열에 놓고, 장을 점으로, 선수 지식을 곡선으로 그린다(canvas).
 // 가리킨 장의 선수 지식 전체(조상)를 코랄로, 그 장에 의존하는 장(자손)을 밝게 강조한다.
-import { progress } from "./store";
+import { progress, chapterScore } from "./store";
 
-interface N { id: string; label: string; title: string; url: string; tier: string; status: string; track: string; pre: string[]; x: number; y: number }
+interface N { id: string; label: string; title: string; url: string; tier: string; status: string; track: string; pre: string[]; goals: string[]; quiz: number; ex: number; checks: number; x: number; y: number }
 const READY = new Set(["draft", "review", "done"]);
 
 export function mountMap() {
@@ -26,6 +26,13 @@ export function mountMap() {
   let hover: N | null = null, pinned: N | null = null;
   let W = 0, H = 0;
   const visited = () => progress.all();
+  // 진도 상태(benchmarks.md §3.5): 시작 전 · 학습 중(방문) · 완료(퀴즈·연습문제·통과 기준을 모두 마침)
+  const stateOf = (n: N): "none" | "learning" | "done" => {
+    if (!visited()[n.id]?.visited) return "none";
+    const sc = chapterScore(n.id, { quiz: n.quiz, exercises: n.ex, checks: n.checks });
+    return sc.total && sc.ratio >= 1 ? "done" : "learning";
+  };
+  const STATE_LABEL = { none: "시작 전", learning: "학습 중", done: "완료" };
 
   function layout() {
     const dpr = Math.min(devicePixelRatio || 1, 2);
@@ -79,17 +86,17 @@ export function mountMap() {
       const mx = (a.x + n.x) / 2;
       ctx.bezierCurveTo(mx, a.y, mx, n.y, n.x, n.y); ctx.stroke();
     }
-    // 노드
-    const v = visited();
+    // 노드: 채움 = 진도 상태, 코랄 = 지금 보는 장과 그 선수 지식
     for (const n of nodes) {
       const on = shown(n);
       const isF = focus?.id === n.id, isA = anc.has(n.id), isD = desc.has(n.id);
-      const r = isF ? 6 : n.tier === "core" ? 3.6 : 2.6;
-      ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, 7);
+      const st = stateOf(n);
+      const r = isF ? 6.5 : n.tier === "core" ? 4 : 3;
       const dim = (focus && !isF && !isA && !isD) || !on;
-      ctx.fillStyle = isF || isA ? "#ff6b5a" : dim ? "rgba(220,230,242,0.16)" : READY.has(n.status) ? "#dce6f2" : "rgba(220,230,242,0.55)";
+      ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, 7);
+      ctx.fillStyle = isF || isA ? "#ff6b5a" : dim ? "rgba(220,230,242,0.14)" : st === "done" ? "#3fc79a" : st === "learning" ? "#dce6f2" : READY.has(n.status) ? "rgba(220,230,242,0.7)" : "rgba(220,230,242,0.38)";
       ctx.fill();
-      if (v[n.id]?.visited && !dim) { ctx.strokeStyle = "#3fc79a"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(n.x, n.y, r + 2.5, 0, 7); ctx.stroke(); }
+      if (st === "learning" && !dim && !isF && !isA) { ctx.strokeStyle = "#3fc79a"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(n.x, n.y, r + 2.5, 0, 7); ctx.stroke(); }
       if (isF) { ctx.fillStyle = "#dce6f2"; ctx.font = "600 12px Pretendard Variable, sans-serif"; const s = `${n.label} ${n.title}`; const w = ctx.measureText(s).width; ctx.fillText(s, Math.min(n.x + 10, W - w - 8), n.y - 9); }
     }
   }
@@ -100,14 +107,21 @@ export function mountMap() {
     const t = tracks.find((x) => x.key === n.track);
     const anc = closure(n.id, (id) => byId.get(id)?.pre ?? []);
     const desc = closure(n.id, (id) => kids.get(id) ?? []);
-    info.innerHTML = `<span class="badge"></span><b></b><span class="nums"><span><i class="hot"></i></span><span><i></i></span></span><a class="btn btn-primary"></a>`;
-    info.children[0].textContent = t?.code ?? "";
-    info.children[1].textContent = `${n.label} ${n.title}`;
+    const st = stateOf(n);
+    info.innerHTML = `<div class="mi-top"><span class="badge"></span><span class="mi-state"></span></div><b></b><ul class="mi-goals"></ul><div class="nums"><span><i class="hot"></i></span><span><i></i></span></div><a class="btn btn-primary"></a>`;
+    info.querySelector(".badge")!.textContent = t?.code ?? "";
+    const stEl = info.querySelector<HTMLElement>(".mi-state")!;
+    stEl.textContent = STATE_LABEL[st];
+    stEl.dataset.state = st;
+    info.querySelector("b")!.textContent = `${n.label} ${n.title}`;
+    const ul = info.querySelector(".mi-goals")!;
+    n.goals.forEach((g) => { const li = document.createElement("li"); li.textContent = g; ul.append(li); });
     const nums = info.querySelectorAll(".nums > span");
     nums[0].append(`선수 ${anc.size}`);
     nums[1].append(`다음 ${desc.size}`);
-    const a = info.children[3] as HTMLAnchorElement;
-    a.href = base + n.url; a.textContent = "열기 →";
+    const a = info.querySelector<HTMLAnchorElement>("a.btn")!;
+    a.href = base + n.url;
+    a.textContent = st === "none" ? "읽기 시작 →" : "이어서 읽기 →";
   }
 
   const at = (e: MouseEvent) => {

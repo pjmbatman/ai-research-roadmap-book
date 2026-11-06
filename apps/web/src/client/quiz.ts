@@ -52,7 +52,7 @@ function openDialog(chapterId: string, q: Q) {
   close.type = "button";
   close.setAttribute("aria-label", "닫기");
   close.addEventListener("click", () => dialog!.close());
-  dialog.append(close, renderQuestion(chapterId, q));
+  dialog.append(close, renderQuestion(chapterId, q, { onContinue: () => dialog!.close(), continueLabel: "계속 읽기" }));
   dialog.showModal();
 }
 
@@ -60,12 +60,7 @@ function openDialog(chapterId: string, q: Q) {
 function mountCarousel(root: HTMLElement, page: PageData, qs: Q[]) {
   const bar = h("div", "qbar");
   const stage = h("div", "qstage");
-  const nav = h("div", "qnav");
-  const prev = h("button", "btn", "←") as HTMLButtonElement;
-  const next = h("button", "btn btn-primary", "다음 문항") as HTMLButtonElement;
-  prev.type = next.type = "button";
-  nav.append(prev, next);
-  root.append(bar, stage, nav);
+  root.append(bar, stage);
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   let cur = -1;
   const done = () => progress.get(page.chapterId).quiz ?? {};
@@ -87,16 +82,13 @@ function mountCarousel(root: HTMLElement, page: PageData, qs: Q[]) {
     const dir = i >= cur ? 1 : -1;
     cur = i;
     stage.innerHTML = "";
-    const card = i < qs.length ? renderQuestion(page.chapterId, qs[i]) : summary(page, qs, go);
+    const card = i < qs.length
+      ? renderQuestion(page.chapterId, qs[i], { onContinue: () => go(i + 1), continueLabel: i === qs.length - 1 ? "결과 보기" : "다음 문항", related: true })
+      : summary(page, qs, go);
     if (!reduced) card.classList.add(dir > 0 ? "enter-next" : "enter-prev");
     stage.append(card);
-    prev.disabled = i === 0;
-    next.hidden = i === qs.length;
-    next.textContent = i === qs.length - 1 ? "요약 보기" : "다음 문항";
     paint();
   }
-  prev.addEventListener("click", () => go(cur - 1));
-  next.addEventListener("click", () => go(cur + 1));
   window.addEventListener("progress-change", paint);
   const first = qs.findIndex((q) => !done()[q.id]?.correct);
   go(first < 0 ? qs.length : first);
@@ -109,33 +101,61 @@ function record(chapterId: string, id: string, correct: boolean) {
   });
 }
 
-function renderQuestion(chapterId: string, q: Q): HTMLElement {
+interface QOpts { onContinue?: () => void; continueLabel?: string; related?: boolean }
+
+/** 문항 카드. 하단 주 버튼 하나가 '확인' → (정답) '계속' / (오답) '다시'로 바뀐다 (benchmarks.md §3.3). */
+function renderQuestion(chapterId: string, q: Q, opts: QOpts = {}): HTMLElement {
   const box = h("div", "quiz");
   box.id = `quiz-${q.id}`;
   box.dataset.quizId = q.id;
-  const head = h("div", "quiz-head");
-  const tag = h("span", "tag", q.type === "multiple" ? "모두 고르기" : "");
-  const state = h("span", "quiz-state");
-  head.append(tag);
-  const prompt = h("div", "quiz-prompt", q.prompt);
+  if (q.type === "multiple") box.append(h("div", "quiz-head", `<span class="tag">모두 고르기</span>`));
+  box.append(h("div", "quiz-prompt", q.prompt));
+  if (progress.get(chapterId).quiz?.[q.id]?.correct) box.classList.add("solved");
+
   const fb = h("div", "quiz-fb");
   fb.hidden = true;
   fb.setAttribute("aria-live", "polite");
-  box.append(head, prompt);
+  const primary = h("button", "btn btn-primary quiz-primary", "확인") as HTMLButtonElement;
+  primary.type = "button";
+  primary.disabled = true;
+  let phase: "answer" | "right" | "wrong" = "answer";
+  let read: () => { ok: boolean; extra: string } | null = () => null;
+  let clearMarks = () => {};
 
-  const prev = progress.get(chapterId).quiz?.[q.id];
-  if (prev?.correct) { box.classList.add("solved"); }
-  head.append(state);
-
-  const showResult = (ok: boolean, extra = "") => {
-    fb.hidden = false;
-    fb.className = `quiz-fb ${ok ? "good" : ""}`;
-    fb.innerHTML = ok
-      ? `<span class="lbl">정답.</span>${q.explanation}`
-      : `<span class="lbl">다시 생각해 보자.</span>${extra}`;
-    record(chapterId, q.id, ok);
-    if (ok) box.classList.add("solved");
+  const setPhase = (ph: typeof phase) => {
+    phase = ph;
+    primary.classList.toggle("is-right", ph === "right");
+    primary.classList.toggle("is-wrong", ph === "wrong");
+    if (ph === "answer") { primary.textContent = "확인"; fb.hidden = true; }
+    if (ph === "right") { primary.textContent = opts.continueLabel ?? "계속"; primary.disabled = !opts.onContinue; }
+    if (ph === "wrong") { primary.textContent = "다시"; primary.disabled = false; }
   };
+  const answered = () => { if (phase !== "answer") { clearMarks(); setPhase("answer"); } primary.disabled = false; };
+
+  primary.addEventListener("click", () => {
+    if (phase === "right") { opts.onContinue?.(); return; }
+    if (phase === "wrong") { clearMarks(); setPhase("answer"); primary.disabled = true; return; }
+    const r = read();
+    if (!r) return;
+    fb.hidden = false;
+    fb.className = `quiz-fb ${r.ok ? "good" : ""}`;
+    fb.innerHTML = r.ok ? `<span class="lbl">정답</span>${q.explanation}` : `<span class="lbl">다시 생각해 보자</span>${r.extra}`;
+    if (!r.ok && opts.related) {
+      const anchor = document.querySelector(`.quiz-open[data-quiz-open="${q.id}"]`);
+      if (anchor) {
+        const a = h("button", "quiz-related", "이 내용을 다룬 절로 →") as HTMLButtonElement;
+        a.type = "button";
+        a.addEventListener("click", () => {
+          window.dispatchEvent(new CustomEvent("show-step-of", { detail: anchor }));
+          setTimeout(() => anchor.scrollIntoView({ block: "center" }), 60);
+        });
+        fb.append(a);
+      }
+    }
+    record(chapterId, q.id, r.ok);
+    if (r.ok) box.classList.add("solved");
+    setPhase(r.ok ? "right" : "wrong");
+  });
 
   if (q.type === "single" || q.type === "multiple") {
     const ul = h("ul", "quiz-choices");
@@ -148,50 +168,30 @@ function renderQuestion(chapterId: string, q: Q): HTMLElement {
       b.setAttribute("aria-pressed", "false");
       b.innerHTML = `<span class="k">${KEYS[i]}</span><span>${c.html}</span>`;
       b.addEventListener("click", () => {
-        if (q.type === "single") {
-          buttons.forEach((x) => { x.setAttribute("aria-pressed", "false"); x.classList.remove("is-wrong", "is-right"); });
-          b.setAttribute("aria-pressed", "true");
-          if (c.correct) { b.classList.add("is-right"); showResult(true); }
-          else {
-            void b.offsetWidth;
-            b.classList.add("is-wrong");
-            showResult(false, c.feedback || "이 선택지가 왜 틀렸는지 문항의 조건을 다시 읽어 보자.");
-          }
-        } else {
-          b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true"));
-          buttons.forEach((x) => x.classList.remove("is-wrong", "is-right"));
-          fb.hidden = true;
-        }
+        if (q.type === "single") buttons.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+        else b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true"));
+        if (!buttons.some((x) => x.getAttribute("aria-pressed") === "true")) { primary.disabled = true; return; }
+        answered();
       });
       buttons.push(b);
       li.append(b);
       ul.append(li);
     });
     box.append(ul);
-    if (q.type === "multiple") {
-      const actions = h("div", "quiz-actions");
-      const check = h("button", "btn btn-primary", "확인") as HTMLButtonElement;
-      check.type = "button";
-      const hint = h("span", "quiz-hint", "");
-      check.addEventListener("click", () => {
-        const picked = buttons.map((b) => b.getAttribute("aria-pressed") === "true");
-        if (!picked.some(Boolean)) { hint.textContent = "하나 이상 고른다"; return; }
-        hint.textContent = "";
-        const wrong: string[] = [];
-        let missed = 0;
-        q.choices.forEach((c, i) => {
-          if (picked[i] && !c.correct) { buttons[i].classList.add("is-wrong"); wrong.push(`<b>${KEYS[i]}</b> ${c.feedback || "옳지 않은 진술이다."}`); }
-          if (picked[i] && c.correct) buttons[i].classList.add("is-right");
-          if (!picked[i] && c.correct) missed++;
-        });
-        const ok = !wrong.length && !missed;
-        const parts = [...wrong];
-        if (missed) parts.push(`옳은 진술 ${missed}개를 더 골라야 한다.`);
-        showResult(ok, parts.join("<br />"));
+    clearMarks = () => buttons.forEach((x) => x.classList.remove("is-wrong", "is-right"));
+    read = () => {
+      const picked = buttons.map((b) => b.getAttribute("aria-pressed") === "true");
+      if (!picked.some(Boolean)) return null;
+      const wrong: string[] = [];
+      let missed = 0;
+      q.choices.forEach((c, i) => {
+        if (picked[i] && !c.correct) { void buttons[i].offsetWidth; buttons[i].classList.add("is-wrong"); wrong.push(q.type === "multiple" ? `<b>${KEYS[i]}</b> ${c.feedback || "옳지 않은 진술이다."}` : (c.feedback || "이 선택지가 왜 틀렸는지 문항의 조건을 다시 읽어 보자.")); }
+        if (picked[i] && c.correct) buttons[i].classList.add("is-right");
+        if (!picked[i] && c.correct) missed++;
       });
-      actions.append(check, hint);
-      box.append(actions);
-    }
+      if (missed && q.type === "multiple") wrong.push(`옳은 진술 ${missed}개를 더 골라야 한다.`);
+      return { ok: !wrong.length && !missed, extra: wrong.join("<br />") };
+    };
   } else {
     const wrap = h("div", "quiz-numeric");
     const s = q.slider;
@@ -199,41 +199,36 @@ function renderQuestion(chapterId: string, q: Q): HTMLElement {
     const num = h("input") as HTMLInputElement;
     num.type = "number";
     num.setAttribute("aria-label", "답");
-    let range: HTMLInputElement | null = null;
     if (s) {
       const row = h("div", "quiz-slider");
-      range = h("input") as HTMLInputElement;
+      const range = h("input") as HTMLInputElement;
       range.type = "range";
       range.min = String(s.min); range.max = String(s.max); range.step = String(s.step);
       range.value = String(s.min);
       range.setAttribute("aria-label", "슬라이더로 답 고르기");
       const out = h("output");
       const sync = (v: string) => { out.textContent = `${v}${unit}`; };
-      range.addEventListener("input", () => { num.value = range!.value; sync(range!.value); fb.hidden = true; });
-      num.addEventListener("input", () => { if (num.value !== "") { range!.value = num.value; sync(num.value); } });
+      range.addEventListener("input", () => { num.value = range.value; sync(range.value); answered(); });
+      num.addEventListener("input", () => { if (num.value !== "") { range.value = num.value; sync(num.value); } });
       sync(range.value);
       num.value = range.value;
       num.min = range.min; num.max = range.max; num.step = range.step;
       row.append(range, out);
       wrap.append(row);
     }
-    const actions = h("div", "quiz-actions");
-    const check = h("button", "btn btn-primary", "확인") as HTMLButtonElement;
-    check.type = "button";
-    const label = h("label", "");
-    label.append(num);
-    check.addEventListener("click", () => {
-      const v = Number(num.value);
-      if (num.value === "" || Number.isNaN(v)) { showResult(false, "숫자를 입력한다."); return; }
-      const ok = Math.abs(v - (q.answer ?? NaN)) <= (q.tolerance ?? 0) + 1e-12;
-      showResult(ok, v < (q.answer ?? 0) ? "그보다 크다." : "그보다 작다.");
-    });
-    num.addEventListener("keydown", (e) => { if (e.key === "Enter") check.click(); });
-    actions.append(label, check);
-    wrap.append(actions);
+    num.addEventListener("input", () => (num.value === "" ? (primary.disabled = true) : answered()));
+    num.addEventListener("keydown", (e) => { if (e.key === "Enter" && !primary.disabled) primary.click(); });
+    wrap.append(num);
     box.append(wrap);
+    read = () => {
+      const v = Number(num.value);
+      if (num.value === "" || Number.isNaN(v)) return null;
+      const ok = Math.abs(v - (q.answer ?? NaN)) <= (q.tolerance ?? 0) + 1e-12;
+      return { ok, extra: v < (q.answer ?? 0) ? "그보다 크다." : "그보다 작다." };
+    };
   }
-  box.append(fb);
+  box.append(fb, h("div", "quiz-actions"));
+  box.lastElementChild!.append(primary);
   return box;
 }
 

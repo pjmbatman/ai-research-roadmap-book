@@ -73,6 +73,7 @@ await test("테마 토글이 data-theme을 바꾸고 저장한다", async () => 
 });
 
 const step = async (title) => {
+  await page.click("[data-chapnav-toggle]");
   await page.locator("[data-steplist] a", { hasText: title }).first().click();
   await page.waitForFunction((t) => [...document.querySelectorAll("section.step")].find((s) => !s.hidden)?.dataset.title === t, title);
 };
@@ -104,13 +105,17 @@ await test("본문 속 확인 문제: 버튼 → 대화상자, 오답 피드백,
   await page.click('.quiz-open[data-quiz-open="affine-is-not-linear"]');
   const q = page.locator(".quiz-dialog #quiz-affine-is-not-linear");
   await q.waitFor();
+  assert(await q.locator(".quiz-primary").isDisabled(), "답을 고르기 전에는 확인 버튼이 비활성");
   await q.locator(".quiz-choice").nth(0).click();
+  await q.locator(".quiz-primary").click();
   await q.locator(".quiz-choice.is-wrong").waitFor();
   assert((await q.locator(".quiz-fb").textContent()).includes("원점"), "오답 피드백이 선택지 feedback이 아님");
   await q.locator(".quiz-choice").nth(1).click();
+  await q.locator(".quiz-primary").click();
   await q.locator(".quiz-fb.good").waitFor();
   await shot("quiz-dialog");
-  await page.click(".dialog-close");
+  await q.locator(".quiz-primary").click();   // 계속 읽기 → 닫힘
+  assert(!(await page.locator(".quiz-dialog").evaluate((d) => d.open)), "계속 읽기로 대화상자가 닫혀야 함");
   assert((await page.textContent('.quiz-open[data-quiz-open="affine-is-not-linear"]')).includes("맞힘"), "버튼에 맞힘 표시");
   const p = await page.evaluate(() => JSON.parse(localStorage.getItem("roadmap:progress:v1")).chapters["linear-algebra/affine-and-nonlinear"].quiz["affine-is-not-linear"]);
   assert(p.correct && p.tries === 2, JSON.stringify(p));
@@ -121,12 +126,15 @@ await test("개념 퀴즈 단계: 한 문항씩, 복수 선택은 누락을 알�
   await page.locator(".qbar .seg").nth(2).click();
   const q = page.locator(".qstage #quiz-affine-combinations");
   await q.locator(".quiz-choice").nth(0).click();
-  await q.locator("button:has-text('확인')").click();
+  await q.locator(".quiz-primary").click();
   assert((await q.locator(".quiz-fb").textContent()).includes("더 골라야"), "누락 안내 없음");
+  assert((await q.locator(".quiz-primary").textContent()).trim() === "다시", "오답 뒤 주 버튼은 '다시'");
+  await q.locator(".quiz-primary").click();
   await q.locator(".quiz-choice").nth(1).click();
   await q.locator(".quiz-choice").nth(2).click();
-  await q.locator("button:has-text('확인')").click();
+  await q.locator(".quiz-primary").click();
   await q.locator(".quiz-fb.good").waitFor();
+  assert((await q.locator(".quiz-primary").textContent()).trim() === "다음 문항", "정답 뒤 주 버튼은 '다음 문항'");
   assert(await page.locator(".qbar .seg").nth(2).evaluate((e) => e.classList.contains("ok")), "진행 막대에 정답 표시");
 });
 await test("수치 문항: 슬라이더로 답을 고른다", async () => {
@@ -134,11 +142,12 @@ await test("수치 문항: 슬라이더로 답을 고른다", async () => {
   const q = page.locator(".qstage #quiz-relu-linear-regions");
   const r = q.locator('input[type="range"]');
   await r.fill("3");
-  await q.locator("button:has-text('확인')").click();
+  await q.locator(".quiz-primary").click();
   assert(!(await q.locator(".quiz-fb").getAttribute("class")).includes("good"), "3은 오답이어야 함");
+  assert(await q.locator(".quiz-related").isVisible(), "오답 피드백에 관련 절 링크");
   await r.fill("4");
   assert((await q.locator("output").textContent()).trim() === "4", "슬라이더 출력 갱신 안 됨");
-  await q.locator("button:has-text('확인')").click();
+  await q.locator(".quiz-primary").click();
   await q.locator(".quiz-fb.good").waitFor();
   await shot("quiz-carousel");
 });
@@ -225,7 +234,6 @@ if (PYO || process.env.PYODIDE_CDN === "1") {
     const ex = page.locator(`.exercise[data-exercise="${id}"]`);
     const panel = await ex.getAttribute("data-panel");
     if (panel) await page.click(`.ex-group > .tabbar button[data-tab="${panel}"]`);
-    await ex.locator('.tabbar button[data-tab="code"]').click();
     await ex.locator("[data-run]").click();
     await page.waitForFunction((id) => {
       const b = document.querySelector(`.exercise[data-exercise="${id}"] [data-run]`);
@@ -255,6 +263,14 @@ if (PYO || process.env.PYODIDE_CDN === "1") {
     await shot("exercise");
   });
 }
+
+console.log("목차 단계의 장");
+await test("본문이 없는 장은 '다룰 내용' 카드를 한 화면에 보인다", async () => {
+  await go("/linear-algebra/vector-spaces/");
+  assert((await page.locator(".outline-grid .ocard").count()) >= 5, "카드 수");
+  assert((await page.locator(".dock-stepper").count()) === 0, "단계 이동 없음");
+  await shot("outline");
+});
 
 console.log("진도·지도·트랙");
 await test("진도 페이지가 기록을 요약한다", async () => {

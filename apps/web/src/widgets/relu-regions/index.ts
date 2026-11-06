@@ -91,6 +91,9 @@ export function mount(root: HTMLElement) {
       const toPx = (x: number, y: number) => [ox + ((x + 3) / 6) * side, oy + ((3 - y) / 6) * side] as const;
       for (let r = 0; r < layers[0].W.length; r++) {
         const [w1, w2] = layers[0].W[r], bb = layers[0].b[r];
+        const newest = r === layers[0].W.length - 1;   // 가장 최근에 더한 뉴런의 경계는 코랄
+        ctx.strokeStyle = newest ? C.edge : "rgba(220,230,242,0.65)";
+        ctx.lineWidth = newest ? 2 : 1.2;
         ctx.beginPath();
         if (Math.abs(w2) > Math.abs(w1)) { ctx.moveTo(...toPx(-4, (-bb + 4 * w1) / w2)); ctx.lineTo(...toPx(4, (-bb - 4 * w1) / w2)); }
         else { ctx.moveTo(...toPx((-bb + 4 * w2) / w1, -4)); ctx.lineTo(...toPx((-bb - 4 * w2) / w1, 4)); }
@@ -107,14 +110,26 @@ export function mount(root: HTMLElement) {
     const n = width;
     const maxLines = 1 + n + (n * (n - 1)) / 2;
     ro.set("count", `활성 영역 ≥ ${count}개`, "hot");
-    ro.set("neurons", `은닉 뉴런 ${width * depth}개 (${depth}층 × ${width})`);
-    ro.set("bound", depth === 1 ? `직선 ${n}개의 최대 영역 수 ${maxLines}` : `첫 층만이면 최대 ${maxLines}`);
+    ro.set("bound", depth === 1 ? `직선 ${n}개로 최대 ${maxLines}개` : `${depth}층 × ${width} 뉴런`);
     pageState.set("weights", layers.map((L) => ({ W: L.W, b: L.b })), root);
     draw();
   }
 
   const pw = param({ label: "폭", min: 1, max: 16, step: 1, value: width, fmt: (v) => `${v}`, aria: "층당 뉴런 수", onInput: (v) => { width = v; update(); } });
-  const depthBtns = presets([{ key: "1", label: "은닉 1층" }, { key: "2", label: "은닉 2층" }, { key: "3", label: "은닉 3층" }], (k) => { depth = Number(k); update(); }, "1");
+  // 단계형 그림 카드(benchmarks.md §3.4-18): 한 뉴런 → 두 뉴런 → 한 층 → 깊게
+  const STEPS = {
+    s1: { label: "1 뉴런", w: 1, d: 1, cap: "뉴런 하나는 평면에 직선 하나를 긋고, 그 양쪽에서 켜짐과 꺼짐이 갈린다." },
+    s2: { label: "2 뉴런", w: 2, d: 1, cap: "직선 두 개가 평면을 최대 네 조각으로 나눈다. 조각마다 다른 아핀 사상이 적용된다." },
+    s3: { label: "한 층", w: 6, d: 1, cap: "한 층의 직선 n개는 최대 1 + n + n(n−1)/2개 조각을 만든다. 폭을 바꿔 본다." },
+    s4: { label: "깊게", w: 6, d: 2, cap: "층을 쌓으면 앞 층이 만든 조각을 다시 접어 나눈다. 경계가 꺾인 선이 된다." },
+  } as const;
+  type SK = keyof typeof STEPS;
+  const cap = el("p", "wcap");
+  const depthBtns = presets((Object.keys(STEPS) as SK[]).map((k) => ({ key: k, label: STEPS[k].label })), (k) => {
+    width = STEPS[k].w; depth = STEPS[k].d; pw.set(width); cap.textContent = STEPS[k].cap; update();
+  }, "s3");
+  depthBtns.row.classList.add("segmented");
+  cap.textContent = STEPS.s3.cap;
   const tools = el("div", "wframe-row");
   const reseed = el("button", "preset");
   reseed.type = "button";
@@ -127,7 +142,7 @@ export function mount(root: HTMLElement) {
   const grid = el("div", "param-grid");
   grid.append(pw.row);
   const ro = readouts();
-  f.panel.append(depthBtns.row, grid, tools, ro.row);
+  f.panel.append(depthBtns.row, cap, grid, tools, ro.row);
 
   f.canvas.addEventListener("pointermove", (e) => {
     const r = f.canvas.getBoundingClientRect();

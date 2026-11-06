@@ -30,7 +30,22 @@ async function load(node: HTMLElement, page: PageData) {
     return;
   }
   try {
-    (await impl()).mount(node, attrs);
+    const mod = await impl();
+    // 모든 위젯에 초기화(benchmarks.md §3.4-16): 처음 상태로 다시 그린다.
+    const mountWithReset = () => {
+      mod.mount(node, attrs);
+      const head = node.querySelector(".wframe-head");
+      if (!head) return;
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "icon-btn";
+      b.setAttribute("aria-label", "처음 상태로");
+      b.title = "처음 상태로";
+      b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>';
+      b.addEventListener("click", mountWithReset);
+      head.append(b);
+    };
+    mountWithReset();
     node.dataset.ready = "true";
   } catch (err) {
     node.textContent = `위젯을 불러오지 못했다: ${String(err)}`;

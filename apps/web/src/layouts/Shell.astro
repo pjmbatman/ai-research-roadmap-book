@@ -5,8 +5,8 @@ import "@fontsource/jetbrains-mono/600.css";
 import "katex/dist/katex.min.css";
 import "../styles/global.css";
 
-interface Props { title: string; description?: string; current?: string; pageData?: unknown }
-const { title, description = "과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵", current = "", pageData } = Astro.props;
+interface Props { title: string; description?: string; current?: string; pageData?: unknown; stepper?: { next?: string; nextLabel?: string } }
+const { title, description = "과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵", current = "", pageData, stepper } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const u = (p: string) => base + p;
 const fullTitle = title === "AI for Science 로드맵" ? title : `${title} · AI for Science 로드맵`;
@@ -38,17 +38,17 @@ const fullTitle = title === "AI for Science 로드맵" ? title : `${title} · AI
       <span>MIT · CC BY 4.0</span>
     </footer>
 
-    <nav class="dock" aria-label="주요 메뉴">
+    <nav class:list={["dock", { "dock-stepper": stepper }]} aria-label="주요 메뉴">
       <a href={u("")} data-tip="홈" aria-current={current === "home" ? "page" : undefined} aria-label="홈">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
       </a>
-      <a href={u("map/")} data-tip="로드맵 지도" aria-current={current === "map" ? "page" : undefined} aria-label="로드맵 지도">
+      <a class="dock-extra" href={u("map/")} data-tip="로드맵 지도" aria-current={current === "map" ? "page" : undefined} aria-label="로드맵 지도">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M7 7l4 9M17 7l-4 9M7 6h10"/></svg>
       </a>
-      <a href={u("tracks/")} data-tip="트랙과 목차" aria-current={current === "tracks" ? "page" : undefined} aria-label="트랙과 목차">
+      <a class="dock-extra" href={u("tracks/")} data-tip="트랙과 목차" aria-current={current === "tracks" ? "page" : undefined} aria-label="트랙과 목차">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/></svg>
       </a>
-      <a href={u("progress/")} data-tip="내 진도" aria-current={current === "progress" ? "page" : undefined} aria-label="내 진도">
+      <a class="dock-extra" href={u("progress/")} data-tip="내 진도" aria-current={current === "progress" ? "page" : undefined} aria-label="내 진도">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
       </a>
       <span class="sep" aria-hidden="true"></span>
@@ -58,6 +58,16 @@ const fullTitle = title === "AI for Science 로드맵" ? title : `${title} · AI
       <button type="button" data-theme-toggle data-tip="테마 바꾸기" aria-label="라이트·다크 테마 바꾸기">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       </button>
+      {stepper && (
+        <>
+          <span class="sep" aria-hidden="true"></span>
+          <button type="button" class="dock-prev" data-prev aria-label="이전 단계">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+          <span class="dock-count tabular" data-stepcount aria-live="polite"></span>
+          <button type="button" class="dock-next" data-next data-next-chapter={stepper.next} data-next-chapter-label={stepper.nextLabel}>다음</button>
+        </>
+      )}
     </nav>
 
     <div class="palette" data-palette role="dialog" aria-modal="true" aria-label="검색">

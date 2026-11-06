@@ -2,7 +2,7 @@
 // 무대 배경은 테마와 무관하게 Midnight이고, 그 위의 선은 Glacier, 지금 볼 곳만 Coral로 칠한다.
 export const C = {
   bg: "#0b1020", ink: "#dce6f2", faint: "rgba(220,230,242,0.14)", mid: "rgba(220,230,242,0.45)",
-  edge: "#ff6b5a", edgeSoft: "rgba(255,107,90,0.18)", good: "#3fc79a", blue: "#9fc6ff",
+  edge: "#ff6b5a", edgeSoft: "rgba(255,107,90,0.18)", good: "#3fc79a", ink2: "rgba(220,230,242,0.62)",
 };
 const KIND: Record<string, string> = { manipulate: "직접 조작", stepper: "단계별 보기", simulate: "시뮬레이션", compare: "비교" };
 

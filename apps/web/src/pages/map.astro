@@ -4,11 +4,15 @@ import { loadBook, allChapters, str } from "../lib/book";
 const { parts, config } = loadBook();
 const tracks = (config.tracks as any[]).map((t, i) => ({ ...t, i })).filter((t) => t.layer < 9).sort((a, b) => a.layer - b.layer || a.i - b.i);
 const layers = (config.layers as any[]).filter((l) => l.level < 9);
+const sec = (body: string, title: string) => (new RegExp(`^## ${title}\\s*\\n([\\s\\S]*?)(?=^## |$(?![\\s\\S]))`, "m").exec(body)?.[1] ?? "").split("\n").filter((l) => l.startsWith("- ")).map((l) => l.slice(2).trim());
+const goalsOf = (body: string) => sec(body, "학습 목표").slice(0, 3);
+const passOf = (body: string) => sec(body, "통과 기준").length;
 const nodes = allChapters()
   .filter((c) => c.partSlug !== "appendices")
   .map((c) => ({
     id: c.id, label: c.label, title: str(c.meta.title), url: c.url, tier: str(c.meta.tier), status: str(c.meta.status),
     track: str(parts.find((p) => p.slug === c.partSlug)?.meta.track), pre: (c.meta.prerequisites as string[]) || [],
+    goals: goalsOf(c.body), quiz: c.quiz.length, ex: Object.keys(c.exercises).length, checks: passOf(c.body),
   }));
 const data = { tracks: tracks.map((t) => ({ key: t.key, code: t.code, name: t.name, layer: t.layer })), layers: layers.map((l) => ({ level: l.level, name: l.name })), nodes };
 ---
