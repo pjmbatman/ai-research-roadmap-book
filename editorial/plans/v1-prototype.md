@@ -55,7 +55,7 @@
 | S5 | ✅ 통과 | 홈 레이어 스택(자동 순회·선택), 선수 지식 그래프 지도(조상·자손 강조, 필터), 진도 벤토. 데스크톱·모바일(390px) 스크린샷 검토 1회: 지도의 빈 REF 열과 홈 트랙 수(REF 포함) 수정 |
 | S4b | ✅ 통과 | 사용자 피드백("스크롤 대신 버튼·탭·하위 화면, 작은 글씨 없이, 심플하고 세련되게") 반영, ADR 0009. 장은 절 단위 단계(단계 막대·이전/다음·←→·#주소), 본문 속 퀴즈는 버튼 → 대화상자, 개념 퀴즈는 한 문항씩(진행 막대·요약 카드), 연습문제는 탭(연습문제별 · 문제/코드/해답), 트랙 목록은 레이어 탭, 트랙 페이지는 부 탭. 화면 맨 위 로딩 막대, 페이지 사이 View Transitions, 패널 전환 애니메이션. 홈은 한 화면, 주석성 작은 글씨 제거. 함께 고친 버그: KaTeX CSS 버전 불일치(≠ 깨짐), Pyodide 패키지 로딩 메시지가 출력에 섞임, `hidden`이 `display` 규칙에 덮임. Playwright 22개 통과·콘솔 오류 0 |
 | S6 | ✅ 통과 | `check.yml`에 실습(해답 통과·시작 코드 실패·퀴즈 정답) 작업과 사이트(타입 검사·빌드·링크·Playwright, CDN Pyodide) 작업 추가. `deploy.yml`: 검증 → 빌드(`configure-pages`의 base path) → Pages 배포. 배포용 base path(`/ai-research-roadmap-book/`) 빌드·링크 검사 통과, YAML 구문 확인. README·CHANGELOG v0.1.0 |
-| S7 | 대기 | |
+| S7 | ✅ 통과 | `main`으로 가는 PR [pjmbatman/ai-research-roadmap-book#1](https://github.com/pjmbatman/ai-research-roadmap-book/pull/1) 생성(요약·검증 결과·사용자가 할 일). merge와 Pages 활성화는 사용자 몫(§4) |
 
 ## 4. 사용자에게 돌아왔을 때 확인할 것
 
