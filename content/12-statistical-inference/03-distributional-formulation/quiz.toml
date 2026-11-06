@@ -29,6 +29,7 @@ explanation = '''절댓값손실의 최적해는 조건부 중앙값이다. 이�
 
 [[questions.choices]]
 text = "조건부 평균"
+feedback = "평균은 제곱손실의 최적해다. 절댓값손실은 큰 오차를 덜 강하게 벌주므로 다른 대표값을 고른다."
 
 [[questions.choices]]
 text = "조건부 중앙값"
@@ -89,3 +90,41 @@ correct = true
 [[questions.choices]]
 text = "예측 구간과 신뢰 구간은 같은 대상의 불확실성을 나타낸다."
 feedback = "예측 구간은 새 관측값, 신뢰 구간은 고정된 미지량(예: 평균)의 범위다."
+
+[[questions]]
+id = "overconfident-score"
+type = "single"
+objective = 3
+prompt = '''참 분포가 $\mathcal{N}(0, 1)$인 데이터에 대해, 평균은 맞지만 표준편차를 0.3으로 너무 작게 잡은 예측분포 $\mathcal{N}(0, 0.3^2)$을 적정 점수 규칙(NLL, CRPS)으로 평가하면?'''
+explanation = '''적정 점수 규칙은 참 분포를 그대로 보고할 때 기대 점수가 가장 좋다. 표준편차를 너무 작게 잡은(과신한) 예측분포는 꼬리 쪽 관측값에서 큰 벌점을 받는다. 이 장의 코드에서 NLL은 참 분포일 때 1.420, 과신한 분포일 때 5.286이었다. 평균만 보는 RMSE는 두 예측을 구별하지 못한다.'''
+
+[[questions.choices]]
+text = "평균이 맞으므로 참 분포와 같은 점수를 받는다."
+feedback = "그것은 평균만 보는 점 예측 지표(RMSE)의 결론이다. 적정 점수 규칙은 분포 전체를 평가한다."
+
+[[questions.choices]]
+text = "꼬리 쪽 관측값에서 큰 벌점을 받아 참 분포보다 점수가 나쁘다."
+correct = true
+
+[[questions.choices]]
+text = "구간이 좁아 정밀하므로 참 분포보다 점수가 좋다."
+feedback = "좁은 구간은 맞을 때만 좋다. 실제 관측값의 퍼짐보다 좁으면 자주 틀리고 큰 벌점을 받는다."
+
+[[questions]]
+id = "irreducible-uncertainty"
+type = "single"
+objective = 1
+prompt = "같은 측정 장비로 데이터를 계속 더 모아도 줄어들지 않는 불확실성은?"
+explanation = '''측정 잡음처럼 데이터 생성 과정 자체에 있는 무작위성(aleatoric 불확실성)은 데이터를 늘려도 줄지 않는다. 파라미터 불확실성(epistemic)은 데이터가 늘수록 줄어든다. 모델 구조가 틀린 데서 오는 오차는 데이터를 늘려도 사라지지 않지만, 모델을 바꾸면 줄일 수 있다는 점에서 측정 잡음과 다르다.'''
+
+[[questions.choices]]
+text = "측정 잡음에서 오는 불확실성"
+correct = true
+
+[[questions.choices]]
+text = "파라미터 추정의 불확실성"
+feedback = "데이터가 늘수록 파라미터는 더 정확히 추정된다. 이 불확실성은 줄어든다."
+
+[[questions.choices]]
+text = "학습에 사용한 난수 시드에서 오는 불확실성"
+feedback = "시드에 따른 변동은 학습 절차의 변동이다. 여러 시드로 반복하고 데이터가 늘면 대개 작아진다."

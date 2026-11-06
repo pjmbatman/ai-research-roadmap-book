@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 17문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 20문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -224,7 +224,7 @@ _데이터와 모델을 공간과 변환의 관점에서 이해한다. 선형·�
 
 - **7.1** [벡터공간과 선형사상](content/07-linear-algebra/01-vector-spaces/index.md) · `필수` · 위젯: 2차원 선형·아핀 사상
   - 집합·함수·벡터공간 · span·선형독립·basis·dimension · 선형사상 · 행렬 표현
-- **7.2** [아핀 구조와 비선형성](content/07-linear-algebra/02-affine-and-nonlinear/index.md) · `필수` · 퀴즈 5 · 위젯: 2차원 선형·아핀 사상, ReLU 신경망의 조각별 아핀 영역
+- **7.2** [아핀 구조와 비선형성](content/07-linear-algebra/02-affine-and-nonlinear/index.md) · `필수` · 퀴즈 6 · 위젯: 2차원 선형·아핀 사상, ReLU 신경망의 조각별 아핀 영역
   - 선형 변환과 아핀 변환 · 결합의 종류 · 선형층의 합성 · 비선형성의 역할 · 선형 근사로서의 미분
   - 선수: 7.1 벡터공간과 선형사상
 - **7.3** [행렬의 네 부분공간과 rank](content/07-linear-algebra/03-rank-and-subspaces/index.md) · `필수`
@@ -362,7 +362,7 @@ _추정량의 성질, 우도와 최대우도, 분포 기반 문제 정의, 구�
 - **12.2** [우도와 최대우도](content/12-statistical-inference/02-likelihood/index.md) · `필수`
   - 확률과 우도 · 최대우도추정 · 손실함수의 확률적 해석 · MLE의 성질과 한계 · MAP와 정규화
   - 선수: 12.1 추정량의 성질
-- **12.3** [분포 기반 문제 정의](content/12-statistical-inference/03-distributional-formulation/index.md) · `필수` · 퀴즈 5 · 위젯: 손실함수가 고르는 대표값
+- **12.3** [분포 기반 문제 정의](content/12-statistical-inference/03-distributional-formulation/index.md) · `필수` · 퀴즈 7 · 위젯: 손실함수가 고르는 대표값
   - 무엇의 분포가 필요한가 · 결정 이론 · 분포를 출력하는 모델 · 적정 점수 규칙 · 불확실성의 출처 구분
   - 선수: 12.2 우도와 최대우도
 - **12.4** [구간 추정·가설 검정·부트스트랩](content/12-statistical-inference/04-intervals-and-testing/index.md) · `필수`

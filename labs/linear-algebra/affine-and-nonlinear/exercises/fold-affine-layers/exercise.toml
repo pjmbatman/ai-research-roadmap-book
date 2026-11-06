@@ -1,0 +1,6 @@
+title = "두 아핀 층을 하나로 접기"
+chapter = "linear-algebra/affine-and-nonlinear"
+objective = 2
+exec = "browser"
+entry = "fold"
+timeout_s = 10
