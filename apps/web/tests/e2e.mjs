@@ -2,6 +2,7 @@
 // 사용: PYODIDE_DIR=<pyodide 배포본 폴더> node tests/e2e.mjs
 //   - 빌드는 PUBLIC_PYODIDE_URL=/pyodide/ 로 해 두어야 한다. 이 스크립트가 PYODIDE_DIR을 /pyodide/ 경로로 서빙한다.
 //   - PYODIDE_DIR이 없으면 코드 실행·채점 테스트는 건너뛴다(퀴즈·위젯·검색·진도만 확인).
+//     PYODIDE_CDN=1이면 기본 빌드(CDN의 Pyodide)로 코드 실행·채점까지 확인한다(CI용, 네트워크 필요).
 //   - SHOTS=<폴더>를 주면 주요 화면의 스크린샷을 저장한다.
 import http from "node:http";
 import fs from "node:fs";
@@ -151,7 +152,7 @@ await test("loss-to-estimator: 지수분포에서 손실마다 다른 대표값"
   await shot("widget-loss");
 });
 
-if (PYO) {
+if (PYO || process.env.PYODIDE_CDN === "1") {
   console.log("브라우저 Python (Pyodide)");
   await go(CH72);
   await test("코드 셀 실행: 기록된 출력과 같은 결과", async () => {

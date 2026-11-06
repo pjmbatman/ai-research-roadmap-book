@@ -6,11 +6,53 @@ on:
 
 jobs:
   book:
+    name: 원고 구조
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Validate structure, frontmatter, links and OUTLINE.md
+      - name: Validate structure, frontmatter, links, code cells and OUTLINE.md
         run: python scripts/book.py check
+
+  labs:
+    name: 실습 코드·연습문제·퀴즈 정답
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Solutions pass, quiz answers verified
+        working-directory: labs
+        run: uv run pytest -q .
+      - name: Starter code must not pass the exercise tests
+        working-directory: labs
+        run: |
+          if EXERCISE_MODULE=starter uv run pytest -q $(ls -d */*/exercises); then
+            echo "시작 코드가 테스트를 통과한다: 연습문제가 아무것도 확인하지 않는다"; exit 1
+          fi
+
+  site:
+    name: 웹 사이트 빌드·브라우저 테스트
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - name: No broken internal links
+        run: npm run test:links
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: End-to-end (quizzes, widgets, Pyodide cells and exercise grading)
+        run: npm test
+        env:
+          PYODIDE_CDN: "1"

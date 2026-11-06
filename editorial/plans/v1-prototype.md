@@ -53,7 +53,7 @@
 | S3 | ✅ 통과 | Astro 정적 사이트(`apps/web`). 원고 로더·Markdown 파이프라인(지시문·실행 셀·고정 절 박스·KaTeX)·셸(dock·⌘K 검색·테마)·장/부/트랙/지도/진도 페이지. 빌드 265쪽(장 215), 내부 링크 6,204개 중 깨짐 0(base `/`와 `/ai-research-roadmap-book/` 둘 다). `tsc --noEmit` 오류 0 |
 | S4 | ✅ 통과 | 퀴즈(단일·복수·수치+슬라이더, 목표별 요약), 코드 셀(CodeMirror + Pyodide 워커, session 공유, 앞 셀 자동 실행), 연습문제(브라우저 pytest 호환 채점기), 위젯 3종(`prototype`), 페이지 상태 버스, 진도 저장·내보내기. Playwright 19개 통과·콘솔 오류 0 — Pyodide 0.29.5 배포본(numpy 포함)을 GitHub 릴리스에서 받아 로컬로 서빙해 numpy 셀 실행과 연습문제 채점까지 확인 |
 | S5 | ✅ 통과 | 홈 레이어 스택(자동 순회·선택), 선수 지식 그래프 지도(조상·자손 강조, 필터), 진도 벤토. 데스크톱·모바일(390px) 스크린샷 검토 1회: 지도의 빈 REF 열과 홈 트랙 수(REF 포함) 수정 |
-| S6 | 대기 | |
+| S6 | ✅ 통과 | `check.yml`에 실습(해답 통과·시작 코드 실패·퀴즈 정답) 작업과 사이트(타입 검사·빌드·링크·Playwright, CDN Pyodide) 작업 추가. `deploy.yml`: 검증 → 빌드(`configure-pages`의 base path) → Pages 배포. 배포용 base path(`/ai-research-roadmap-book/`) 빌드·링크 검사 통과, YAML 구문 확인. README·CHANGELOG v0.1.0 |
 | S7 | 대기 | |
 
 ## 4. 사용자에게 돌아왔을 때 확인할 것
