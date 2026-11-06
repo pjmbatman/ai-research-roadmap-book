@@ -1,7 +1,8 @@
 ---
 import Shell from "../../layouts/Shell.astro";
 import { loadBook, trackByKey, str } from "../../lib/book";
-import { isReady } from "../../lib/site";
+import { isReady, trackKeyOf, trackCodeOf } from "../../lib/site";
+import { coverSVG } from "../../lib/cover";
 
 export function getStaticPaths() {
   return loadBook().parts.map((p) => ({ params: { part: p.slug }, props: { slug: p.slug } }));
@@ -12,7 +13,7 @@ const track = trackByKey(str(part.meta.track));
 const u = (p: string) => import.meta.env.BASE_URL + p;
 ---
 <Shell title={str(part.meta.title)} description={str(part.meta.summary)}>
-  <div class="container narrow">
+  <div style="max-width:860px;margin:0 auto">
     <div class="page-head">
       <nav class="crumbs">
         {track && <a href={u(`tracks/${track.key}/`)}>{track.code} {track.name}</a>}
@@ -24,6 +25,7 @@ const u = (p: string) => import.meta.env.BASE_URL + p;
       <ul class="ch-list">
         {part.chapters.map((c) => (
           <li><a href={u(c.url)} data-chapter-link={c.id}>
+            <span class="thumb" set:html={coverSVG({ id: c.id, track: trackKeyOf(c), code: "", ratio: 0.75 })} />
             <span class="n">{c.label}</span><span>{str(c.meta.title)}</span>
             <span>{isReady(c) && <span class="badge">읽기</span>}</span>
           </a></li>

@@ -210,3 +210,4 @@ if (document.querySelector("[data-tabs]")) import("./tabs").then((m) => m.mountA
 if (document.querySelector("[data-progress-page]")) import("./progress-page").then((m) => m.mountProgress());
 if (document.querySelector("[data-tmap]")) import("./map").then((m) => m.mountMap());
 if (document.querySelector("[data-roadmap]")) import("./roadmap").then((m) => m.mountRoadmap());
+if (document.querySelector("[data-dashboard]")) import("./dashboard").then((m) => m.mountDashboard());

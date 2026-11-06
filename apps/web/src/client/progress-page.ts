@@ -1,6 +1,7 @@
 // 내 진도: 장 상태(roadmap.sh 모델)를 집계해 숫자 카드·트랙 막대·최근 목록으로 보이고, JSON으로 내보내고 가져온다.
 import { progress, chapterState } from "./store";
 import type { ChapterSummary } from "../lib/site";
+import { coverSVG } from "../lib/cover";
 
 export function mountProgress() {
   const data: { tracks: { key: string; code: string; name: string }[]; chapters: ChapterSummary[] } = JSON.parse(document.getElementById("progress-data")!.textContent!);
@@ -31,7 +32,7 @@ export function mountProgress() {
       const a = document.createElement("a");
       a.href = `${base}tracks/${t.key}/`;
       a.title = t.name;
-      a.innerHTML = `<span class="badge badge-code">${t.code}</span><div class="progress"><i style="width:${(100 * d) / chs.length}%"></i></div><span class="muted tabular" style="text-align:right">${d}/${chs.length}</span>`;
+      a.innerHTML = `<span class="thumb">${coverSVG({ id: t.key, track: t.key, code: "", ratio: 1 })}</span><span class="badge badge-code">${t.code}</span><div class="progress"><i style="width:${(100 * d) / chs.length}%"></i></div><span class="muted tabular" style="text-align:right">${d}/${chs.length}</span>`;
       tr.append(a);
     }
     const rec = $("recent");

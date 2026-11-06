@@ -10,23 +10,23 @@ const data = {
 };
 ---
 <Shell title="내 진도" current="progress">
-  <div class="container" data-progress-page>
+  <div data-progress-page>
     <div class="page-head">
       <h1>내 진도</h1>
       <p>로그인 없이 이 브라우저에 저장된다. 다른 기기로 옮기려면 내보내기를 쓴다.</p>
     </div>
     <div class="stats">
-      <div class="card stat"><small>완료한 장</small><div class="big"><span data-k="done">0</span><span class="of" data-k="done-of"></span></div></div>
-      <div class="card stat"><small>학습 중</small><div class="big"><span data-k="learning">0</span></div></div>
-      <div class="card stat"><small>맞힌 퀴즈</small><div class="big"><span data-k="quiz">0</span><span class="of" data-k="quiz-of"></span></div></div>
-      <div class="card stat"><small>통과한 연습문제</small><div class="big"><span data-k="ex">0</span><span class="of" data-k="ex-of"></span></div></div>
+      <div class="card stat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><div><div class="big"><span data-k="done">0</span><span class="of" data-k="done-of"></span></div><small>완료한 장</small></div></div>
+      <div class="card stat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l3 8 6-16 3 8h4"/></svg></span><div><div class="big"><span data-k="learning">0</span></div><small>학습 중</small></div></div>
+      <div class="card stat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg></span><div><div class="big"><span data-k="quiz">0</span><span class="of" data-k="quiz-of"></span></div><small>맞힌 퀴즈</small></div></div>
+      <div class="card stat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></span><div><div class="big"><span data-k="ex">0</span><span class="of" data-k="ex-of"></span></div><small>통과한 연습문제</small></div></div>
     </div>
     <div class="two-col">
       <div class="card panel"><h2>트랙</h2><div class="track-rows" data-k="tracks"></div></div>
-      <div class="card panel">
+      <div class="panel-dark panel">
         <h2>최근에 본 장</h2>
         <div class="recent" data-k="recent"></div>
-        <h2 style="margin-top:8px">기록 옮기기</h2>
+        <h2 style="margin-top:10px">기록 옮기기</h2>
         <div class="panel-actions">
           <button class="btn" type="button" data-act="export">내보내기</button>
           <label class="btn" style="cursor:pointer">가져오기<input type="file" accept="application/json" data-act="import" hidden /></label>

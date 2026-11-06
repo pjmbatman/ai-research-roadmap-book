@@ -1,8 +1,9 @@
 ---
-// 트랙 목록: 레이어 탭 아래 트랙 카드 (roadmap.sh 로드맵 목록).
+// 트랙 목록 = 라이브러리 (ADR 0011, visionOS 음악 앱): 안쪽 사이드바에 레이어, 오른쪽에 트랙 커버 격자.
 import Shell from "../../layouts/Shell.astro";
 import { loadBook, allChapters, str } from "../../lib/book";
 import { chapterSummary } from "../../lib/site";
+import { coverSVG } from "../../lib/cover";
 const { parts, config } = loadBook();
 const u = (p: string) => import.meta.env.BASE_URL + p;
 const tracks = config.tracks as any[];
@@ -11,28 +12,31 @@ const count = (key: string) => parts.filter((p) => str(p.meta.track) === key).re
 const summary = allChapters().map(chapterSummary);
 ---
 <Shell title="트랙" current="tracks">
-  <div class="container">
-    <div class="page-head">
-      <h1>트랙</h1>
-      <p>레이어는 아래에서 위로 쌓인다. 트랙은 같거나 아래 레이어에만 기댄다.</p>
+  <div class="library layer-tabs" data-tabs>
+    <div class="lib-side tabbar">
+      <h2>트랙</h2>
+      {layers.map((l, i) => <button data-tab={`L${l.level}`} data-selected={i === 0 ? "true" : undefined}><span class="lv">{l.level < 9 ? `L${l.level}` : "·"}</span>{l.name}</button>)}
     </div>
-    <div data-tabs class="layer-tabs">
-      <div class="tabbar">
-        {layers.map((l, i) => <button data-tab={`L${l.level}`} data-selected={i === 0 ? "true" : undefined}>{l.level < 9 ? `L${l.level} ` : ""}{l.name}</button>)}
-      </div>
-      {layers.map((l) => (
-        <div data-panel={`L${l.level}`} class="grid-cards" style="margin-top: 16px">
+    {layers.map((l) => (
+      <section data-panel={`L${l.level}`}>
+        <div class="page-head">
+          <h1>{l.name}</h1>
+          <p>{l.description}</p>
+        </div>
+        <div class="tile-grid">
           {tracks.filter((t) => t.layer === l.level).map((t) => (
-            <a class="card track-card" href={u(`tracks/${t.key}/`)}>
-              <span class="top"><span class="badge badge-code">{t.code}</span><span class="muted tabular" style="font-size:13px">{count(t.key)}장</span></span>
-              <h3>{t.name}</h3>
-              <p>{t.question}</p>
-              <div class="progress"><i data-track-progress={t.key}></i></div>
+            <a class="track-tile track-card" href={u(`tracks/${t.key}/`)}>
+              <span class="cover" set:html={coverSVG({ id: t.key, track: t.key, code: t.code, ratio: 11 / 16 })} />
+              <span class="meta">
+                <h3>{t.name}</h3>
+                <p>{t.question}</p>
+                <span class="row"><span class="tabular">{count(t.key)}장</span><span class="progress"><i data-track-progress={t.key}></i></span></span>
+              </span>
             </a>
           ))}
         </div>
-      ))}
-    </div>
+      </section>
+    ))}
   </div>
   <script type="application/json" id="chapters-data" set:html={JSON.stringify(summary).replace(/</g, "\\u003c")} />
 </Shell>

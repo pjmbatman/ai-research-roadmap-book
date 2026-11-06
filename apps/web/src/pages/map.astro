@@ -4,6 +4,7 @@
 import Shell from "../layouts/Shell.astro";
 import { loadBook, allChapters, str } from "../lib/book";
 import { chapterSummary, trackEdges } from "../lib/site";
+import { coverSVG } from "../lib/cover";
 const { parts, config } = loadBook();
 const tracks = (config.tracks as any[]).filter((t) => t.layer < 9);
 const layers = (config.layers as any[]).filter((l) => l.level < 9).sort((a, b) => a.level - b.level);
@@ -15,7 +16,7 @@ const data = {
 };
 ---
 <Shell title="로드맵" current="map" description="트랙과 선수 관계를 레이어 순서로 펼친 전체 로드맵">
-  <div class="container">
+  <div>
     <div class="page-head">
       <h1>로드맵</h1>
       <p>위에서 아래로 내려갈수록 앞 레이어를 바탕으로 한다. 트랙을 누르면 연결이 드러난다.</p>
@@ -28,6 +29,7 @@ const data = {
           <div class="nodes">
             {tracks.filter((t) => t.layer === l.level).map((t) => (
               <button type="button" class="tnode" data-track={t.key} aria-pressed="false">
+                <span class="thumb" set:html={coverSVG({ id: t.key, track: t.key, code: "", ratio: 1 })} />
                 <span class="code">{t.code}</span>
                 <b>{t.name}</b>
                 <div class="progress"><i data-track-progress={t.key}></i></div>

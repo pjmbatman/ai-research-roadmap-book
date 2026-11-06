@@ -6,7 +6,8 @@ import Shell from "../../../layouts/Shell.astro";
 import { allChapters, partOf, trackOfChapter, prerequisites, dependents, neighbors, STATUS_LABEL, str } from "../../../lib/book";
 import { renderChapter, renderMarkdown, renderInline } from "../../../lib/markdown";
 import { chapterData } from "../../../lib/page";
-import { goalsOf, isReady } from "../../../lib/site";
+import { goalsOf, isReady, trackKeyOf, trackCodeOf } from "../../../lib/site";
+import { coverSVG } from "../../../lib/cover";
 
 export function getStaticPaths() {
   return allChapters().map((ch) => ({ params: { part: ch.partSlug, chapter: ch.slug }, props: { id: ch.id } }));
@@ -35,10 +36,11 @@ const html = lessonMode ? renderChapter(ch.body, { assetBase: `${base}content-as
 const FIXED_KIND: Record<string, string> = { "실습": "lab", "실패 사례": "pitfalls", "통과 기준": "pass" };
 const outline = lessonMode ? [] : sectionsOf(ch.body).filter((s) => s.title !== "학습 목표" && s.body);
 const goals = goalsOf(ch);
+const coverHTML = coverSVG({ id: ch.id, track: trackKeyOf(ch), code: trackCodeOf(trackKeyOf(ch)), label: ch.label });
 ---
 {lessonMode ? (
   <Shell title={`${ch.label} ${str(ch.meta.title)}`} description={`${str(ch.meta.title)} — ${str(part.meta.title)}`} pageData={data}
-    lesson={{ closeHref, closeLabel: track ? `${track.code} 로드맵` : partLabel, nextHref: next?.url, nextLabel: next ? `${next.label} ${str(next.meta.title)}` : undefined }}>
+    lesson={{ closeHref, closeLabel: track ? `${track.code} 로드맵` : partLabel, label: ch.label, title: str(ch.meta.title), nextHref: next?.url, nextLabel: next ? `${next.label} ${str(next.meta.title)}` : undefined }}>
     <article class="lesson" data-chapter={ch.id}>
       <header class="lesson-head">
         <nav class="crumbs">
@@ -46,7 +48,10 @@ const goals = goalsOf(ch);
           <span>/</span><a href={u(part.url)}>{partLabel}</a>
           {status !== "done" && <span class="badge">{STATUS_LABEL[status] ?? status}</span>}
         </nav>
-        <h1><span class="num">{ch.label}</span>{str(ch.meta.title)}</h1>
+        <div class="cover-row">
+          <span class="cover" set:html={coverHTML} />
+          <h1><span class="num">{ch.label}</span>{str(ch.meta.title)}</h1>
+        </div>
         {pre.length > 0 && (
           <div class="prereq">
             <span>먼저 읽기</span>
@@ -67,8 +72,10 @@ const goals = goalsOf(ch);
   </Shell>
 ) : (
   <Shell title={`${ch.label} ${str(ch.meta.title)}`} description={`${str(ch.meta.title)} — ${str(part.meta.title)}`} pageData={data} current="tracks">
-    <div class="container narrow">
-      <div class="page-head">
+    <div style="max-width:960px;margin:0 auto">
+      <div class="outline-hero">
+      <span class="cover" set:html={coverHTML} />
+      <div class="page-head" style="margin:0">
         <nav class="crumbs">
           {track && <a href={u(closeHref)}>{`${track.code} ${track.name}`}</a>}
           <span>/</span><a href={u(part.url)}>{partLabel} {str(part.meta.title)}</a>
@@ -82,8 +89,9 @@ const goals = goalsOf(ch);
           </div>
         )}
       </div>
+      </div>
       <section class="outline-grid">
-        <div class="card ocard ocard-goals">
+        <div class="panel-dark ocard ocard-goals">
           <h2>이 장을 마치면</h2>
           <ol>{goals.map((g) => <li set:html={renderInline(g)} />)}</ol>
         </div>

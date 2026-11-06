@@ -2,6 +2,7 @@
 import { progress, chapterState, STATE_LABEL } from "./store";
 import { openSheet, el } from "./sheet";
 import type { ChapterSummary } from "../lib/site";
+import { coverSVG } from "../lib/cover";
 
 export function mountRoadmap() {
   const chapters: ChapterSummary[] = JSON.parse(document.getElementById("chapters-data")!.textContent || "[]");
@@ -25,7 +26,9 @@ export function mountRoadmap() {
     openSheet((panel) => {
       const head = el("div", "sheet-head");
       const st = el("span", "badge");
-      head.append(el("span", "muted tabular", c.label), el("h2", "", c.title), st);
+      const cv = el("span", "cover");
+      cv.innerHTML = coverSVG({ id: c.id, track: c.track, code: c.code, label: c.label });
+      head.append(cv, el("h2", "", c.title), st);
       panel.append(head);
       if (c.goals.length) {
         panel.append(el("h3", "", "이 장을 마치면"));

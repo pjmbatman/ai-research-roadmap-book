@@ -272,7 +272,7 @@ console.log("목차 단계의 장");
 await test("본문이 없는 장은 '다룰 내용' 카드를 한 화면에 보인다", async () => {
   await go("/linear-algebra/vector-spaces/");
   assert((await page.locator(".outline-grid .ocard").count()) >= 5, "카드 수");
-  assert((await page.locator(".lesson-actions").count()) === 0, "레슨 이동 막대 없음");
+  assert((await page.locator(".player").count()) === 0, "레슨 재생 막대 없음");
   await shot("outline");
 });
 

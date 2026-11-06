@@ -9,12 +9,13 @@ export const goalsOf = (c: Chapter) => section(c.body, "학습 목표");
 export const passCount = (c: Chapter) => section(c.body, "통과 기준").length;
 export const isReady = (c: Chapter) => ["draft", "review", "done"].includes(str(c.meta.status));
 export const trackKeyOf = (c: Chapter) => str(loadBook().parts.find((p) => p.slug === c.partSlug)?.meta.track);
+export const trackCodeOf = (key: string) => ((loadBook().config.tracks as any[]).find((t) => t.key === key)?.code as string) ?? "REF";
 
 /** 클라이언트가 진도 상태를 계산하는 데 필요한 장 요약 */
 export function chapterSummary(c: Chapter) {
   return {
     id: c.id, label: c.label, title: str(c.meta.title), url: c.url, ready: isReady(c), tier: str(c.meta.tier),
-    track: trackKeyOf(c), goals: goalsOf(c), pre: (c.meta.prerequisites as string[]) || [],
+    track: trackKeyOf(c), code: trackCodeOf(trackKeyOf(c)), goals: goalsOf(c), pre: (c.meta.prerequisites as string[]) || [],
     quiz: c.quiz.length, ex: Object.keys(c.exercises).length, checks: passCount(c),
   };
 }

@@ -1,23 +1,31 @@
 ---
-// 공통 틀 (editorial/design-system.md §3, ADR 0010).
-// 일반 화면: shadcn/ui 문서 사이트식 머리(로고 · 메뉴 · 검색 · 테마). 화면 아래 dock은 쓰지 않는다.
-// 레슨 화면(본문이 있는 장): Brilliant·Duolingo식 레슨 바(닫기 · 진행 막대 · k/N · 단계 목록)와 아래 고정 이전·계속 막대.
+// 공통 틀 (design-system.md §5, ADR 0011): 왼쪽에 떠 있는 세로 알약 탭 막대(visionOS) + 큰 유리 창.
+// 레슨 화면: 창 위에 주소창 모양 알약(닫기 · 제목 · 단계 목록), 아래에 재생 막대 모양 알약(이전 · 진행 · k/N · 다음).
 import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 import "@fontsource/jetbrains-mono/400.css";
 import "@fontsource/jetbrains-mono/600.css";
 import "katex/dist/katex.min.css";
 import "../styles/global.css";
 
-interface Lesson { closeHref: string; closeLabel: string; nextHref?: string; nextLabel?: string }
+interface Lesson { closeHref: string; closeLabel: string; label: string; title: string; nextHref?: string; nextLabel?: string }
 interface Props { title: string; description?: string; current?: string; pageData?: unknown; lesson?: Lesson }
 const { title, description = "과학 문제를 AI로 정의하고 검증하는 연구자를 위한 오픈소스 로드맵", current = "", pageData, lesson } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const u = (p: string) => base + p;
 const fullTitle = title === "AI for Science 로드맵" ? title : `${title} · AI for Science 로드맵`;
+const I = {
+  home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>',
+  map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7.5 8l3.5 7.6M16.5 8 13 15.6M8.5 6h7"/></svg>',
+  tracks: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>',
+  progress: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V4M16 20v-6M22 20H2"/></svg>',
+  search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  theme: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>',
+};
 const nav = [
-  { key: "map", href: "map/", label: "로드맵" },
-  { key: "tracks", href: "tracks/", label: "트랙" },
-  { key: "progress", href: "progress/", label: "내 진도" },
+  { key: "home", href: "", label: "홈", icon: I.home },
+  { key: "map", href: "map/", label: "로드맵", icon: I.map },
+  { key: "tracks", href: "tracks/", label: "트랙", icon: I.tracks },
+  { key: "progress", href: "progress/", label: "내 진도", icon: I.progress },
 ];
 ---
 <!doctype html>
@@ -33,61 +41,63 @@ const nav = [
     </script>
   </head>
   <body data-base={base} class:list={{ "lesson-mode": !!lesson }}>
-    {lesson ? (
-      <header class="lesson-bar">
-        <div class="inner">
-          <a class="icon-btn" href={u(lesson.closeHref)} aria-label={`${lesson.closeLabel}(으)로 나가기`} title={lesson.closeLabel}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          </a>
-          <div class="progress" role="progressbar" aria-label="이 장의 진행" aria-valuemin="0" aria-valuemax="100" data-lesson-progress><i></i></div>
-          <span class="count tabular" data-stepcount></span>
-          <button type="button" class="icon-btn" data-lesson-menu-toggle aria-expanded="false" aria-label="단계 목록">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <div class="lesson-menu" data-lesson-menu hidden>
-            <h4>단계</h4>
-            <ol data-steplist></ol>
-            <div class="meta">
-              <span>진도 <b data-chapter-pct>0%</b></span>
-              <div class="progress"><i data-chapter-meter></i></div>
-              <span><button type="button" class="btn btn-sm btn-ghost" data-open-palette>검색</button> <button type="button" class="btn btn-sm btn-ghost" data-theme-toggle>테마</button></span>
-            </div>
-          </div>
-        </div>
-      </header>
-    ) : (
-      <header class="site-header">
-        <div class="inner">
-          <a class="brand" href={u("")}><span class="brand-mark" aria-hidden="true">AI</span>AI for Science 로드맵</a>
-          <nav class="site-nav" aria-label="주요 메뉴">
-            {nav.map((n) => <a href={u(n.href)} aria-current={current === n.key ? "page" : undefined}>{n.label}</a>)}
-          </nav>
-          <div class="header-actions">
-            <button class="search-trigger" type="button" data-open-palette aria-label="검색"><span>장·트랙 검색…</span><kbd>⌘K</kbd></button>
-            <button class="icon-btn" type="button" data-theme-toggle aria-label="라이트·다크 테마 바꾸기">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
-            </button>
+    <nav class="rail glass" aria-label="주요 메뉴">
+      {nav.map((n) => <a href={u(n.href)} data-tip={n.label} aria-label={n.label} aria-current={current === n.key ? "page" : undefined} set:html={n.icon} />)}
+      <span class="sep" aria-hidden="true"></span>
+      <button type="button" data-open-palette data-tip="검색 ⌘K" aria-label="검색" set:html={I.search} />
+      <button type="button" data-theme-toggle data-tip="테마" aria-label="라이트·다크 테마 바꾸기" set:html={I.theme} />
+    </nav>
+
+    {lesson && (
+      <header class="lesson-top glass">
+        <a class="icon-btn" href={u(lesson.closeHref)} aria-label={`${lesson.closeLabel}(으)로 나가기`} title={lesson.closeLabel}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </a>
+        <div class="title"><span class="n">{lesson.label}</span>{lesson.title}</div>
+        <button type="button" class="icon-btn" data-lesson-menu-toggle aria-expanded="false" aria-label="단계 목록">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>
+        </button>
+        <div class="lesson-menu" data-lesson-menu hidden>
+          <h4>단계</h4>
+          <ol data-steplist></ol>
+          <div class="meta">
+            <span>이 장의 진도 <b data-chapter-pct>0%</b></span>
+            <div class="progress"><i data-chapter-meter></i></div>
           </div>
         </div>
       </header>
     )}
 
-    <main><slot /></main>
-
-    {lesson ? (
-      <nav class="lesson-actions" aria-label="단계 이동">
-        <div class="inner">
-          <button type="button" class="btn btn-lg" data-prev>이전</button>
-          <button type="button" class="btn btn-primary btn-lg" data-next data-next-chapter={lesson.nextHref ? u(lesson.nextHref) : undefined} data-next-chapter-label={lesson.nextLabel}>계속</button>
-        </div>
-      </nav>
-    ) : (
-      <footer class="site-footer">
-        <div class="inner">
+    <div class="stage">
+      <main class:list={["window", "glass", { "lesson-window": !!lesson }]}>
+        {!lesson && (
+          <div class="win-top">
+            <a class="brand" href={u("")}><span class="brand-mark" aria-hidden="true">AI</span>AI for Science 로드맵</a>
+            <button class="search-field" type="button" data-open-palette aria-label="검색">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <span>장, 트랙, 개념 검색</span><kbd>⌘K</kbd>
+            </button>
+          </div>
+        )}
+        <slot />
+      </main>
+      {!lesson && (
+        <footer class="site-footer">
           <span>코드 MIT · 본문 CC BY 4.0</span>
           <a href="https://github.com/pjmbatman/ai-research-roadmap-book">GitHub</a>
-        </div>
-      </footer>
+        </footer>
+      )}
+    </div>
+
+    {lesson && (
+      <nav class="player glass" aria-label="단계 이동">
+        <button type="button" class="btn" data-prev aria-label="이전 단계">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <div class="progress" role="progressbar" aria-label="이 장의 진행" aria-valuemin="0" aria-valuemax="100" data-lesson-progress><i></i></div>
+        <span class="count" data-stepcount></span>
+        <button type="button" class="btn btn-primary" data-next data-next-chapter={lesson.nextHref ? u(lesson.nextHref) : undefined} data-next-chapter-label={lesson.nextLabel}>계속</button>
+      </nav>
     )}
 
     <div class="palette" data-palette role="dialog" aria-modal="true" aria-label="검색">

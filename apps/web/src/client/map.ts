@@ -2,6 +2,7 @@
 import { chapterState } from "./store";
 import { openSheet, el } from "./sheet";
 import type { ChapterSummary } from "../lib/site";
+import { coverSVG } from "../lib/cover";
 
 interface T { key: string; code: string; name: string; question: string; outcome: string; layer: number; n: number }
 
@@ -50,7 +51,9 @@ export function mountMap() {
     const done = chs.filter((c) => chapterState(c.id, { quiz: c.quiz, exercises: c.ex, checks: c.checks }) === "done").length;
     openSheet((panel, close) => {
       const head = el("div", "sheet-head");
-      head.append(el("span", "badge badge-code", t.code), el("h2", "", t.name));
+      const cv = el("span", "cover wide");
+      cv.innerHTML = coverSVG({ id: t.key, track: t.key, code: t.code, ratio: 10 / 16 });
+      head.append(cv, el("h2", "", t.name));
       panel.append(head, el("p", "", t.question));
       panel.append(el("h3", "", "도달 목표"), el("p", "muted", t.outcome));
       panel.append(el("h3", "", `진도 ${done} / ${chs.length}`));
