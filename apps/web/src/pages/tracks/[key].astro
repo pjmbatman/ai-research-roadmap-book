@@ -1,0 +1,44 @@
+---
+import Shell from "../../layouts/Shell.astro";
+import { loadBook, STATUS_LABEL, TIER_LABEL, str } from "../../lib/book";
+
+export function getStaticPaths() {
+  return (loadBook().config.tracks as any[]).map((t) => ({ params: { key: t.key }, props: { key: t.key } }));
+}
+const { key } = Astro.props as { key: string };
+const { parts, config } = loadBook();
+const t = (config.tracks as any[]).find((x) => x.key === key);
+const layer = (config.layers as any[]).find((l) => l.level === t.layer);
+const tparts = parts.filter((p) => str(p.meta.track) === key);
+const chapters = tparts.flatMap((p) => p.chapters);
+const u = (p: string) => import.meta.env.BASE_URL + p;
+const assess = config.assessments as Record<string, string>;
+---
+<Shell title={`${t.code} ${t.name}`} description={t.question} current="tracks">
+  <div class="page" data-track={key} data-track-chapters={JSON.stringify(chapters.map((c) => c.id))}>
+    <p class="eyebrow">L{t.layer} {layer?.name} · {t.name_en}</p>
+    <h1 style="font-size: clamp(32px, 5vw, 54px); margin: 6px 0 12px;"><span class="badge badge-code" style="font-size:16px; vertical-align: middle">{t.code}</span> {t.name}</h1>
+    <div class="bento" style="margin: 18px 0 8px;">
+      <div class="tile dark wide"><small>핵심 질문</small><div style="font-size: 20px; font-weight: 700; line-height: 1.4">{t.question}</div></div>
+      <div class="tile"><small>이 트랙의 장</small><div class="big">{chapters.length}</div><small>필수 {chapters.filter((c) => str(c.meta.tier) === "core").length}</small></div>
+      <div class="tile"><small>내 진도</small><div class="big" data-track-done>0</div><div class="meter"><i data-track-meter></i></div></div>
+      <div class="tile wide"><small>도달 목표</small><div style="font-size: 16px">{t.outcome}</div></div>
+      <div class="tile"><small>평가 방식</small><div style="display:flex; gap:6px; flex-wrap:wrap">{(t.assessment as string[]).map((a) => <span class="chip">{assess[a]}</span>)}</div></div>
+      <div class="tile"><small>졸업 과제</small><div style="font-size: 14.5px">{t.capstone || "—"}</div></div>
+    </div>
+    <div class="part-list" style="margin-top: 26px;">
+      {tparts.map((p) => (
+        <div class="part-block">
+          <h3><a href={u(p.url)}>{p.label === "부록" ? "부록" : `제${p.label}부`} {str(p.meta.title)}</a></h3>
+          <p>{str(p.meta.summary)}</p>
+          <ul class="ch-list">
+            {p.chapters.map((c) => (
+              <li><a href={u(c.url)} data-chapter-link={c.id}><span class="n">{c.label}</span><span>{str(c.meta.title)}</span>
+                <span class="st"><span class="badge">{TIER_LABEL[str(c.meta.tier)]}</span><span class={`badge badge-status-${str(c.meta.status)}`}>{STATUS_LABEL[str(c.meta.status)]}</span></span></a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</Shell>

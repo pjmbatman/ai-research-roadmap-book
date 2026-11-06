@@ -1,0 +1,91 @@
+---
+import Shell from "../../../layouts/Shell.astro";
+import { allChapters, partOf, trackOfChapter, prerequisites, dependents, neighbors, headings, FIXED, STATUS_LABEL, TIER_LABEL, str } from "../../../lib/book";
+import { renderChapter } from "../../../lib/markdown";
+import { chapterData } from "../../../lib/page";
+import { slug as slugify } from "github-slugger";
+
+export function getStaticPaths() {
+  return allChapters().map((ch) => ({ params: { part: ch.partSlug, chapter: ch.slug }, props: { id: ch.id } }));
+}
+const { id } = Astro.props as { id: string };
+const ch = allChapters().find((c) => c.id === id)!;
+const part = partOf(ch);
+const track = trackOfChapter(ch);
+const base = import.meta.env.BASE_URL;
+const u = (p: string) => base + p;
+const status = str(ch.meta.status);
+const tier = str(ch.meta.tier);
+const html = renderChapter(ch.body, { assetBase: `${base}content-assets/${ch.partSlug}/${ch.slug}/`, quizSection: ch.quiz.length > 0 });
+const toc = headings(ch.body).filter((h) => h !== "학습 목표");
+if (ch.quiz.length) toc.splice(Math.max(0, toc.indexOf("통과 기준")), 0, "개념 퀴즈");
+const slug = (h: string) => slugify(h);
+const pre = prerequisites(ch);
+const deps = dependents(ch);
+const { prev, next } = neighbors(ch);
+const data = chapterData(ch);
+const isOutline = status === "outline" || status === "spec";
+---
+<Shell title={`${ch.label} ${str(ch.meta.title)}`} description={`${str(ch.meta.title)} — ${str(part.meta.title)}`} pageData={data}>
+  <div class="page">
+    <article class="chapter" data-chapter={ch.id}>
+      <header class="chapter-head">
+        <nav class="crumbs" aria-label="위치">
+          {track && <a class="badge badge-code" href={u(`tracks/${track.key}/`)}>{track.code}</a>}
+          {track && <a href={u(`tracks/${track.key}/`)}>{track.name}</a>}
+          <span aria-hidden="true">/</span>
+          <a href={u(part.url)}>{part.label === "부록" ? "부록" : `제${part.label}부`} {str(part.meta.title)}</a>
+        </nav>
+        <h1><span class="num">{ch.label}</span>{str(ch.meta.title)}</h1>
+        <p class="en">{str(ch.meta.title_en)}</p>
+        <div class="meta-row">
+          <span class={`badge badge-tier-${tier}`}>{TIER_LABEL[tier] ?? tier}</span>
+          <span class={`badge badge-status-${status}`}>{STATUS_LABEL[status] ?? status}</span>
+          {ch.quiz.length > 0 && <span class="badge">퀴즈 {ch.quiz.length}</span>}
+          {Object.keys(ch.exercises).length > 0 && <span class="badge">연습문제 {Object.keys(ch.exercises).length}</span>}
+          {Object.keys(data.widgets).length > 0 && <span class="badge">위젯 {Object.keys(data.widgets).length}</span>}
+        </div>
+        {pre.length > 0 && (
+          <div class="prereq">
+            <span>선수 지식</span>
+            {pre.map((p) => <a class="chip" href={u(p.url)} data-prereq={p.id}><span class="n">{p.label}</span>{str(p.meta.title)}</a>)}
+          </div>
+        )}
+        {isOutline && (
+          <div class="status-banner">
+            이 장은 아직 <b>{status === "spec" ? "장 명세" : "상세 목차"}</b> 단계다. 아래는 다룰 내용의 계획이다.
+            <a href="https://github.com/pjmbatman/ai-research-roadmap-book/blob/main/CONTRIBUTING.md">집필에 기여하기</a>
+          </div>
+        )}
+      </header>
+
+      <div class="prose" set:html={html} />
+
+      <aside class="toc" aria-label="이 페이지">
+        <div>
+          <h4>이 페이지</h4>
+          <ol>{toc.map((h) => <li><a href={`#${slug(h)}`}>{h}</a></li>)}</ol>
+        </div>
+        <div class="progress-mini">
+          <h4>이 장의 진도</h4>
+          <div class="meter"><i data-chapter-meter></i></div>
+          <small data-chapter-progress style="color:var(--mute)"></small>
+        </div>
+        <div>
+          <h4>실행 환경</h4>
+          <span class="chip" data-runtime-chip>브라우저 Python 대기 중</span>
+        </div>
+      </aside>
+
+      <footer class="chapter-foot">
+        {deps.length > 0 && (
+          <div class="prereq"><span>이 장을 선수로 하는 장</span>{deps.map((d) => <a class="chip" href={u(d.url)}><span class="n">{d.label}</span>{str(d.meta.title)}</a>)}</div>
+        )}
+        <nav class="pager" aria-label="이전·다음 장">
+          {prev ? <a href={u(prev.url)}><span class="dir">← 이전 {prev.label}</span>{str(prev.meta.title)}</a> : <span />}
+          {next ? <a class="next" href={u(next.url)}><span class="dir">다음 {next.label} →</span>{str(next.meta.title)}</a> : <span />}
+        </nav>
+      </footer>
+    </article>
+  </div>
+</Shell>

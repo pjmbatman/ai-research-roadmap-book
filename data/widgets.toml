@@ -17,7 +17,7 @@ name = "linear-map-2d"
 kind = "manipulate"
 title = "2차원 선형·아핀 사상"
 chapters = ["linear-algebra/vector-spaces", "linear-algebra/affine-and-nonlinear"]
-status = "planned"
+status = "prototype"
 interaction = "basis 벡터를 끌거나 행렬 성분·bias를 입력하면 격자와 도형이 변형된다. bias를 켜고 끄며 원점 보존 여부를 본다"
 binds = ["A", "b"]
 motion = "항등 사상에서 목표 사상으로 격자가 연속적으로 변형되는 보간"
@@ -27,7 +27,7 @@ name = "relu-regions"
 kind = "manipulate"
 title = "ReLU 신경망의 조각별 아핀 영역"
 chapters = ["linear-algebra/affine-and-nonlinear", "deep-learning-pytorch/neural-network-components"]
-status = "planned"
+status = "prototype"
 interaction = "뉴런 수와 가중치를 바꾸면 2차원 입력 공간이 선형 영역으로 나뉘는 모습과 영역 수가 갱신된다"
 binds = ["weights"]
 
@@ -102,7 +102,7 @@ name = "loss-to-estimator"
 kind = "manipulate"
 title = "손실함수가 고르는 대표값"
 chapters = ["statistical-inference/distributional-formulation"]
-status = "planned"
+status = "prototype"
 interaction = "조건부분포 모양(단봉·쌍봉·비대칭)을 바꾸고 MSE·MAE·pinball 손실의 최적 예측이 어디에 놓이는지 본다"
 binds = ["tau", "shape"]
 

@@ -1,0 +1,38 @@
+---
+import Shell from "../../layouts/Shell.astro";
+import { loadBook, trackByKey, STATUS_LABEL, TIER_LABEL, str } from "../../lib/book";
+import { renderMarkdown } from "../../lib/markdown";
+
+export function getStaticPaths() {
+  return loadBook().parts.map((p) => ({ params: { part: p.slug }, props: { slug: p.slug } }));
+}
+const { slug } = Astro.props as { slug: string };
+const part = loadBook().parts.find((p) => p.slug === slug)!;
+const track = trackByKey(str(part.meta.track));
+const u = (p: string) => import.meta.env.BASE_URL + p;
+const intro = renderMarkdown(part.body.replace(/^# .+\n/m, ""));
+---
+<Shell title={str(part.meta.title)} description={str(part.meta.summary)}>
+  <div class="page">
+    <div style="max-width: 860px; margin: 0 auto;">
+      <nav class="crumbs">
+        {track && <a class="badge badge-code" href={u(`tracks/${track.key}/`)}>{track.code}</a>}
+        {track && <a href={u(`tracks/${track.key}/`)}>{track.name}</a>}
+      </nav>
+      <p class="eyebrow" style="margin-top:18px">{part.label === "부록" ? "부록" : `제${part.label}부`}</p>
+      <h1 style="font-size: clamp(32px, 5vw, 52px); margin: 6px 0 4px;">{str(part.meta.title)}</h1>
+      <p style="color: var(--mute); margin-top:0">{str(part.meta.title_en)}</p>
+      <div class="prose" set:html={intro} />
+      <div class="part-block" style="margin-top: 24px;">
+        <ul class="ch-list">
+          {part.chapters.map((c) => (
+            <li><a href={u(c.url)} data-chapter-link={c.id}>
+              <span class="n">{c.label}</span><span>{str(c.meta.title)}</span>
+              <span class="st"><span class="badge">{TIER_LABEL[str(c.meta.tier)]}</span><span class={`badge badge-status-${str(c.meta.status)}`}>{STATUS_LABEL[str(c.meta.status)]}</span></span>
+            </a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</Shell>
