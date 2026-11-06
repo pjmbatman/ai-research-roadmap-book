@@ -18,8 +18,8 @@
 | 파일 | 역할 | 상태 |
 |---|---|---|
 | `README.md` | 프로젝트 소개, 구조, 시작 방법 | 있음 |
-| `LICENSE` | 코드 라이선스(예: MIT) | **결정 필요** |
-| `LICENSE-CONTENT` | 본문·그림 라이선스(예: CC BY 4.0) | **결정 필요** |
+| `LICENSE` | 코드 라이선스: MIT | 있음 |
+| `LICENSE-CONTENT` | 본문·퀴즈·그림·데이터 라이선스: CC BY 4.0, 적용 범위와 출처 표기 방법 | 있음 |
 | `CONTRIBUTING.md` | 기여 방법 | 있음 |
 | `CODE_OF_CONDUCT.md` | 커뮤니티 행동 강령(Contributor Covenant 등) | **결정 필요**(신고 연락처) |
 | `CHANGELOG.md` | 공개 변경 기록 | 있음 |

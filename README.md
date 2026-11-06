@@ -78,7 +78,14 @@ python3 scripts/book.py new-chapter 07-linear-algebra matrix-exponential "행렬
 - [x] 퀴즈 형식과 예시 4개 장(17문항), 위젯 레지스트리(18개 계획)
 - [x] 플랫폼 아키텍처·UX 설계 초안
 - [x] 작업 흐름·ADR·Claude skill·이슈/PR 템플릿
-- [ ] 라이선스·행동 강령·인용 정보 결정 (본문·코드 라이선스, 신고 연락처, 저자 표기)
+- [x] 라이선스: 코드 MIT, 본문 CC BY 4.0
+- [ ] 행동 강령·인용 정보 (신고 연락처, 저자 표기)
 - [ ] P1 정적 학습 사이트 (Astro + Pyodide + 퀴즈 + 위젯 3종 + 브라우저 진도)
 - [ ] P2 연습문제·로컬 런타임 어댑터 (PyTorch 실습)
 - [ ] 1단계 학습 경로의 필수 장 초고
+
+## 라이선스
+
+- 코드(`scripts/`, `labs/`, 웹 사이트 등): [MIT](LICENSE)
+- 본문·퀴즈·그림·데이터·문서: [CC BY 4.0](LICENSE-CONTENT). 출처를 밝히면 자유롭게 쓰고 고칠 수 있다.
+- 본문 안의 코드 예제는 MIT로도 쓸 수 있다.

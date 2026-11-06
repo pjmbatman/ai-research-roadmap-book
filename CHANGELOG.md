@@ -12,3 +12,4 @@
 - 플랫폼 설계: 로그인 없는 정적 사이트 + 런타임 어댑터
 - Claude Code skill: `write-chapter`, `review-chapter`, `add-quiz`
 - 이슈·PR 템플릿
+- 라이선스: 코드 MIT(`LICENSE`), 본문·데이터 CC BY 4.0(`LICENSE-CONTENT`)

@@ -1,0 +1,37 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 pjmbatman and the AI for Science Roadmap contributors
+
+The written content of this repository is licensed under the Creative Commons
+Attribution 4.0 International License. The full legal code is available at:
+
+    https://creativecommons.org/licenses/by/4.0/legalcode
+
+Human-readable summary:
+
+    https://creativecommons.org/licenses/by/4.0/
+
+Scope
+-----
+
+Licensed under CC BY 4.0 (this file):
+  - content/   chapter text, quizzes (quiz.toml), figures and other media
+  - data/      glossary, reference list, widget registry
+  - editorial/ design and editorial documents
+  - OUTLINE.md and other documentation files
+
+Licensed under the MIT License (see LICENSE):
+  - scripts/, labs/, templates/, .claude/, .github/ and any website or
+    application code (for example apps/)
+  - Code examples embedded in content/ may also be used under the MIT License.
+
+Material from third parties keeps its own license and is marked where it
+appears.
+
+Attribution
+-----------
+
+When you reuse the content, credit it as:
+
+    "AI for Science Roadmap" by pjmbatman and contributors,
+    https://github.com/pjmbatman/ai-research-roadmap-book, CC BY 4.0
