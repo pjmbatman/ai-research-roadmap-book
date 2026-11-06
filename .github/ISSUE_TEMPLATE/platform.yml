@@ -1,0 +1,17 @@
+name: 플랫폼 작업
+description: 웹 사이트·위젯·런타임·CI 작업
+title: "web: "
+labels: ["type:platform"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: 목표
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: 완료 기준
+    validations:
+      required: true

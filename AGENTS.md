@@ -7,6 +7,7 @@
 1. `editorial/conventions.md` — 디렉터리·파일명·frontmatter·장 구조 규칙
 2. `editorial/style-guide.md` — 문체·용어·수식·코드 표기
 3. `OUTLINE.md` — 전체 목차(생성 파일)
+4. `editorial/workflow.md` — 작업 흐름: 한 Issue = 한 브랜치 = 한 PR, 장 status 생명주기, 커밋 메시지
 
 ## 반드시 지킬 것
 

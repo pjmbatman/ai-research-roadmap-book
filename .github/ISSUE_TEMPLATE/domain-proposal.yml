@@ -1,0 +1,23 @@
+name: 새 분야 제안
+description: 과학 분야별 응용(DOM) 트랙에 새 분야의 부를 제안한다
+title: "design: 새 분야 — "
+labels: ["type:design", "track:DOM"]
+body:
+  - type: input
+    id: domain
+    attributes:
+      label: 분야
+      description: 예) 천문학, 고에너지 물리, 신경과학
+    validations:
+      required: true
+  - type: textarea
+    id: outline
+    attributes:
+      label: 장 구성 초안
+      description: 분야 기초 → 데이터 → 대표 문제와 모델 → 평가와 함정 (editorial/roadmap-design.md §2.3)
+    validations:
+      required: true
+  - type: textarea
+    id: data
+    attributes:
+      label: 공개 데이터와 표준 평가 방식

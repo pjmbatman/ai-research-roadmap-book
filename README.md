@@ -9,6 +9,8 @@ AI를 배우는 과학자·공학자와 과학 문제로 넘어오는 AI 연구�
 - **로드맵 설계 근거(독자·트랙·레이어·평가):** [editorial/roadmap-design.md](editorial/roadmap-design.md)
 - **플랫폼 아키텍처(정적 사이트 + 런타임 어댑터):** [editorial/platform-architecture.md](editorial/platform-architecture.md)
 - **UI/UX(상호작용·모션·실습 화면):** [editorial/ux-design.md](editorial/ux-design.md)
+- **작업 흐름(파일 지도·Issue→PR·Claude skill):** [editorial/workflow.md](editorial/workflow.md)
+- **결정 기록(ADR):** [editorial/decisions/](editorial/decisions/)
 - **기여 방법:** [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## 로드맵 구조
@@ -75,7 +77,8 @@ python3 scripts/book.py new-chapter 07-linear-algebra matrix-exponential "행렬
 - [x] 레이어·트랙 체계와 검증 규칙
 - [x] 퀴즈 형식과 예시 4개 장(17문항), 위젯 레지스트리(18개 계획)
 - [x] 플랫폼 아키텍처·UX 설계 초안
-- [ ] 라이선스 결정 (본문·코드)
+- [x] 작업 흐름·ADR·Claude skill·이슈/PR 템플릿
+- [ ] 라이선스·행동 강령·인용 정보 결정 (본문·코드 라이선스, 신고 연락처, 저자 표기)
 - [ ] P1 정적 학습 사이트 (Astro + Pyodide + 퀴즈 + 위젯 3종 + 브라우저 진도)
 - [ ] P2 연습문제·로컬 런타임 어댑터 (PyTorch 실습)
 - [ ] 1단계 학습 경로의 필수 장 초고

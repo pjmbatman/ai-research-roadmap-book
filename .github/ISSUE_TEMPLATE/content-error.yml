@@ -1,0 +1,23 @@
+name: 내용 오류
+description: 잘못된 설명·수식·코드·퀴즈 정답·링크를 신고한다
+title: "fix: "
+labels: ["type:fix"]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: 위치
+      description: 장 번호와 절 제목, 또는 파일 경로
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: 무엇이 틀렸나
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 근거
+      description: 올바른 내용과 출처, 또는 재현 방법

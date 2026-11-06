@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 scripts/book.py check)",
+      "Bash(python3 scripts/book.py outline)",
+      "Bash(python3 scripts/book.py outline --check)",
+      "Bash(python3 scripts/book.py stats)"
+    ]
+  }
+}

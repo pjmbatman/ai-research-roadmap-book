@@ -1,0 +1,28 @@
+name: 장 집필
+description: 상세 목차 상태의 장을 초고로 쓰거나, 초고를 개선한다
+title: "content(부.장): "
+labels: ["type:content"]
+body:
+  - type: input
+    id: chapter
+    attributes:
+      label: 장 id 또는 번호
+      description: 예) linear-algebra/affine-and-nonlinear 또는 7.2
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: 범위
+      options:
+        - 본문 초고
+        - 실습·연습문제
+        - 퀴즈
+        - 위젯 연결
+        - 전체
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: 요구 사항·참고 자료

@@ -11,6 +11,8 @@ ai-research-roadmap-book/
 ├── OUTLINE.md             # 전체 목차 — 생성 파일, 직접 수정 금지
 ├── README.md
 ├── AGENTS.md / CLAUDE.md  # AI 에이전트 집필 지침
+├── CONTRIBUTING.md · CHANGELOG.md
+├── .claude/               # Claude Code 설정·skill (write-chapter, review-chapter, add-quiz)
 ├── content/               # 책 본문 + 장별 퀴즈 (웹 서비스 콘텐츠의 원천)
 ├── labs/                  # 장별 실습 코드·연습문제
 ├── data/                  # 용어집·참고문헌·위젯 레지스트리
@@ -220,6 +222,8 @@ f(np.zeros(2))
 
 ## 12. Git
 
-- 브랜치: `<종류>/<짧은-설명>` — `write/linear-algebra-rank`, `fix/broken-links`, `infra/site-setup`
-- 커밋 메시지: `<범위>: <요약>` — `content(07): rank 장 초고`, `editorial: 표기법 규칙 추가`, `scripts: 링크 검사 추가`
-- 한 PR에는 한 부(또는 한 주제)의 변경만. PR 전에 `python3 scripts/book.py check` 통과.
+브랜치 이름, 커밋 메시지, Issue·PR 흐름은 [workflow.md](workflow.md) §3–§4가 원천이다. 요약:
+
+- 브랜치: `<종류>/<짧은-설명>` — `write/linear-algebra-affine-and-nonlinear`, `fix/broken-links`, `design/site-framework`, `web/quiz-component`, `infra/ci-deploy`
+- 커밋 메시지: `<범위>: <요약>` — `content(07.2): 아핀 구조 초고`, `quiz(12.3): 분위수 문항 추가`, `design: ADR 0006`
+- 한 Issue = 한 브랜치 = 한 PR. PR 전에 `python3 scripts/book.py check` 통과.
