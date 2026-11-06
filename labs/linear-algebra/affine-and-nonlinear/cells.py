@@ -38,12 +38,12 @@ print("rank(W) =", np.linalg.matrix_rank(W))
 def relu(z):
     return np.maximum(0.0, z)
 
-def g(x):
+def relu_sum(x):
     return relu(x) + relu(x - 1) + relu(x - 2)
 
 h = 1e-6
 for x0 in [-1.0, 0.5, 1.5, 2.5]:
-    print(f"x = {x0:4.1f}  기울기 = {(g(x0 + h) - g(x0)) / h:.3f}")
+    print(f"x = {x0:4.1f}  기울기 = {(relu_sum(x0 + h) - relu_sum(x0)) / h:.3f}")
 
 # %% cell 5 — 국소 선형화의 오차
 a = 0.5

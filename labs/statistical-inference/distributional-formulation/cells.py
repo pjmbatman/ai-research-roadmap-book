@@ -24,7 +24,7 @@ print(f"pinball(0.9)  {q_pb:.3f}   표본 90% 분위수 {np.quantile(y, tau):.3f
 # %% cell 2 — 이분산 가우시안 회귀
 rng = np.random.default_rng(1)
 x = rng.uniform(0, 1, size=2000)
-y = 2.0 * x + rng.normal(size=2000) * (0.1 + 0.5 * x)   # 잡음이 x에 비례해 커진다
+y = 2.0 * x + rng.normal(size=2000) * (0.1 + 0.5 * x)   # 잡음이 x에 따라 커진다
 
 w, c = np.polyfit(x, y, 1)                  # 평균은 최소제곱으로 시작
 alpha, beta = 0.0, np.log(np.std(y - (w * x + c)))

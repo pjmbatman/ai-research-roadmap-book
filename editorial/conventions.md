@@ -219,7 +219,7 @@ f(0)             = [0.5  0.25]
 ```
 ````
 
-- 본문의 실행 코드 블록은 `labs/<부 slug>/<장 slug>/cells.py`의 셀과 같아야 하고, `output` 블록은 그 파일을 실제로 실행한 결과를 붙인다.
+- 본문의 실행 코드 블록은 `labs/<부 slug>/<장 slug>/cells.py`의 셀과 같아야 하고, `output` 블록은 그 파일을 실제로 실행한 결과를 붙인다. 블록과 셀의 일치는 `book.py check`가 검사한다.
 - `browser` 셀에서는 PyTorch를 쓸 수 없다. NumPy·SciPy·pandas·matplotlib·scikit-learn 범위에서, **몇 초 안에 끝나는 크기**로 쓴다.
 - `python` 셀은 학습자가 로컬 런타임을 연결해야 실행된다. 연결하지 않은 독자도 읽을 수 있도록 빌드 시 기록된 출력이 함께 표시된다.
 - `gpu`는 GPU가 꼭 필요한 소수의 장(분산 학습·profiling)에만 쓴다.
