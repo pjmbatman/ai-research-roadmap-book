@@ -42,9 +42,10 @@ feedback = "분산은 대표값이 아니라 퍼짐의 척도다."
 id = "pinball-quantile"
 type = "numeric"
 objective = 3
-prompt = '''분위수 회귀에서 pinball loss의 파라미터를 $\tau = 0.9$로 두고 학습하면, 모델은 $p(y \mid x)$의 몇 % 분위수를 추정하는가? (숫자만 입력, 예: 50)'''
+prompt = '''분위수 회귀에서 pinball loss의 파라미터를 $\tau = 0.9$로 두고 학습하면, 모델은 $p(y \mid x)$의 몇 % 분위수를 추정하는가?'''
 answer = 90
 tolerance = 0
+slider = { min = 0, max = 100, step = 5, unit = "%" }
 explanation = '''pinball loss $\rho_\tau(u) = u(\tau - \mathbb{1}[u < 0])$의 기대값을 최소화하는 값은 $\tau$ 분위수다. $\tau = 0.5$이면 중앙값(절댓값손실의 절반)과 같다. 서로 다른 $\tau$로 학습한 두 모델로 예측 구간을 만들 수 있다.'''
 
 [[questions]]

@@ -9,6 +9,7 @@ AI를 배우는 과학자·공학자와 과학 문제로 넘어오는 AI 연구�
 - **로드맵 설계 근거(독자·트랙·레이어·평가):** [editorial/roadmap-design.md](editorial/roadmap-design.md)
 - **플랫폼 아키텍처(정적 사이트 + 런타임 어댑터):** [editorial/platform-architecture.md](editorial/platform-architecture.md)
 - **UI/UX(상호작용·모션·실습 화면):** [editorial/ux-design.md](editorial/ux-design.md)
+- **디자인 시스템(테마·효과 도구 상자·슬라이더와 인터랙션 원칙):** [editorial/design-system.md](editorial/design-system.md)
 - **작업 흐름(파일 지도·Issue→PR·Claude skill):** [editorial/workflow.md](editorial/workflow.md)
 - **결정 기록(ADR):** [editorial/decisions/](editorial/decisions/)
 - **기여 방법:** [CONTRIBUTING.md](CONTRIBUTING.md)

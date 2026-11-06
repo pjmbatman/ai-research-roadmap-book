@@ -13,3 +13,5 @@
 - Claude Code skill: `write-chapter`, `review-chapter`, `add-quiz`
 - 이슈·PR 템플릿
 - 라이선스: 코드 MIT(`LICENSE`), 본문·데이터 CC BY 4.0(`LICENSE-CONTENT`)
+- 디자인 시스템(`editorial/design-system.md`, ADR 0007): 단일 테마(Midnight · Glacier + Coral), 효과 도구 상자, 슬라이더·직접 조작·퀴즈 인터랙션 원칙
+- 위젯 `kind`(manipulate · stepper · simulate · compare)와 수치 퀴즈의 슬라이더 응답(`slider`)
