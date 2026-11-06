@@ -6,6 +6,8 @@ export interface ChapterProgress {
   quiz?: Record<string, { correct: boolean; tries: number }>;
   exercises?: Record<string, { passed: boolean; code?: string }>;
   checks?: Record<string, boolean>;
+  /** 로드맵에서 직접 고른 상태(roadmap.sh). 자동 판정보다 우선한다. */
+  mark?: "learning" | "done" | "skipped";
 }
 interface Saved { version: 1; chapters: Record<string, ChapterProgress> }
 
@@ -53,6 +55,17 @@ export function chapterScore(id: string, totals: { quiz: number; exercises: numb
   const total = totals.quiz + totals.exercises + totals.checks;
   return { done: q + e + c, total, ratio: total ? (q + e + c) / total : 0 };
 }
+
+export type ChapterState = "none" | "learning" | "done" | "skipped";
+/** 장 상태: 직접 고른 상태 > 모두 마침(완료) > 열어 봄(학습 중) > 시작 전 (editorial/ux-design.md §3) */
+export function chapterState(id: string, totals: { quiz: number; exercises: number; checks: number }): ChapterState {
+  const p = progress.get(id);
+  if (p.mark) return p.mark;
+  const s = chapterScore(id, totals);
+  if (s.total && s.ratio >= 1) return "done";
+  return p.visited ? "learning" : "none";
+}
+export const STATE_LABEL: Record<ChapterState, string> = { none: "시작 전", learning: "학습 중", done: "완료", skipped: "건너뜀" };
 
 /** 같은 페이지의 위젯·수식·코드 셀이 공유하는 상태 */
 class StateBus extends EventTarget {

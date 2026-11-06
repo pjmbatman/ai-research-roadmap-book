@@ -71,7 +71,7 @@ export function mount(root: HTMLElement) {
     const names: Record<Loss, string> = { mse: "평균", mae: "중앙값", pinball: `${Math.round(tau * 100)}% 분위수` };
     const at: Record<Loss, number> = { mse: stats.mean, mae: stats.median, pinball: stats.q };
     (["mse", "mae", "pinball"] as Loss[]).filter((l) => l !== loss).forEach((l) => {
-      ctx.strokeStyle = "rgba(220,230,242,0.28)"; ctx.lineWidth = 1;
+      ctx.strokeStyle = C.mid; ctx.lineWidth = 1;
       ctx.setLineDash([3, 4]);
       ctx.beginPath(); ctx.moveTo(X(at[l]), top + 10); ctx.lineTo(X(at[l]), split - 8); ctx.stroke();
       ctx.setLineDash([]);

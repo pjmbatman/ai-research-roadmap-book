@@ -1,6 +1,6 @@
 # UI/UX 벤치마킹
 
-> 상태: **채택** (2026-11-06, 사용자 승인). §5의 1–6을 v0.2에 적용했다(상태를 주소에 담는 §3.4-19, 브라우저 Python 유지 §3.2-11은 다음 단계). 사용자 피드백 "디자인·UI/UX는 임의로 정하지 말고 인기 있는 레퍼런스를 벤치마킹한다"에 따라 작성했다.
+> 상태: **채택** (2026-11-06). v0.2는 이 패턴들을 기존 디자인 위에 덧붙였고, 사용자 피드백("여전히 그대로")에 따라 v0.3에서 기존 디자인을 버리고 이 문서와 [ADR 0010](decisions/0010-reference-based-design.md)으로 처음부터 다시 만든다. 시각 기반은 shadcn/ui다(§2의 표에 추가). 사용자 피드백 "디자인·UI/UX는 임의로 정하지 말고 인기 있는 레퍼런스를 벤치마킹한다"에 따라 작성했다.
 > 원칙은 [design-system.md](design-system.md) §1, 화면 단위 규칙은 [ADR 0009](decisions/0009-paged-reading.md)를 따른다.
 
 ## 1. 조사 방법과 한계
@@ -20,6 +20,7 @@
 | 학습 | [Exercism](https://exercism.org) | 트랙별 수만 명 | 지시문 \| 편집기, 테스트를 '명세'로 공개 |
 | 학습 | [The Odin Project](https://www.theodinproject.com) | 커리큘럼 약 1.3만 스타 | 고정된 수업 형식, 확인 문제가 답이 있는 절로 링크 |
 | 학습 | [Khan Academy](https://www.khanacademy.org) | 등록 1.9억 (2024–25 연차 보고서) | 3–4단계 숙련도 사다리 |
+| 디자인 시스템 | [shadcn/ui](https://ui.shadcn.com) | 약 12만 스타 (2026-07) | 시각 기반 전체: neutral 색 토큰, radius, Button·Card·Tabs·Sheet·Command 컴포넌트 (v0.3부터 그대로 채택) |
 | 문서 프레임워크 | [Starlight](https://starlight.astro.build) | 약 9천 스타 (2026-07) | 본문 45rem, 줄간격 1.75, 13–24px 6단계 글자 크기, 콜아웃 4종, 탭 선택 기억 |
 | 문서 프레임워크 | [VitePress](https://vitepress.dev) | 약 1.8만 스타 (2026-07) | 본문 최대 688px, ⌘K 검색 화살표 이동, 코드 그룹 탭 |
 | 문서 프레임워크 | [Docusaurus](https://docusaurus.io) | 약 6.4만 스타 (2026-04) | 코드 블록 제목·복사, 이전/다음 페이저 |

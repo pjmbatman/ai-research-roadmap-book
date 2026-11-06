@@ -1,34 +1,43 @@
 ---
+// 로드맵 전체 (roadmap.sh): 레이어를 위(L0)에서 아래(L6)로 줄지어 놓고, 트랙 사이의 선수 관계를 선으로 잇는다.
+// 트랙을 누르면 오른쪽 서랍에 핵심 질문·진도·의존 트랙과 로드맵 열기 버튼이 나온다.
 import Shell from "../layouts/Shell.astro";
 import { loadBook, allChapters, str } from "../lib/book";
+import { chapterSummary, trackEdges } from "../lib/site";
 const { parts, config } = loadBook();
-const tracks = (config.tracks as any[]).map((t, i) => ({ ...t, i })).filter((t) => t.layer < 9).sort((a, b) => a.layer - b.layer || a.i - b.i);
-const layers = (config.layers as any[]).filter((l) => l.level < 9);
-const sec = (body: string, title: string) => (new RegExp(`^## ${title}\\s*\\n([\\s\\S]*?)(?=^## |$(?![\\s\\S]))`, "m").exec(body)?.[1] ?? "").split("\n").filter((l) => l.startsWith("- ")).map((l) => l.slice(2).trim());
-const goalsOf = (body: string) => sec(body, "학습 목표").slice(0, 3);
-const passOf = (body: string) => sec(body, "통과 기준").length;
-const nodes = allChapters()
-  .filter((c) => c.partSlug !== "appendices")
-  .map((c) => ({
-    id: c.id, label: c.label, title: str(c.meta.title), url: c.url, tier: str(c.meta.tier), status: str(c.meta.status),
-    track: str(parts.find((p) => p.slug === c.partSlug)?.meta.track), pre: (c.meta.prerequisites as string[]) || [],
-    goals: goalsOf(c.body), quiz: c.quiz.length, ex: Object.keys(c.exercises).length, checks: passOf(c.body),
-  }));
-const data = { tracks: tracks.map((t) => ({ key: t.key, code: t.code, name: t.name, layer: t.layer })), layers: layers.map((l) => ({ level: l.level, name: l.name })), nodes };
+const tracks = (config.tracks as any[]).filter((t) => t.layer < 9);
+const layers = (config.layers as any[]).filter((l) => l.level < 9).sort((a, b) => a.level - b.level);
+const count = (key: string) => parts.filter((p) => str(p.meta.track) === key).reduce((s, p) => s + p.chapters.length, 0);
+const data = {
+  tracks: tracks.map((t) => ({ key: t.key, code: t.code, name: t.name, question: t.question, outcome: t.outcome, layer: t.layer, n: count(t.key) })),
+  edges: trackEdges(),
+  chapters: allChapters().map(chapterSummary),
+};
 ---
-<Shell title="로드맵 지도" current="map" description="장과 선수 지식 관계를 레이어·트랙 순서로 펼친 지도">
-  <div class="page">
-    <h1 class="page-title">지도</h1>
-    <div class="map-wrap" data-map>
-      <canvas aria-label="장과 선수 지식 관계 그래프. 같은 내용을 트랙과 목차 페이지에서 목록으로 볼 수 있다." role="img"></canvas>
-      <div class="map-tools" role="group" aria-label="보기 설정">
-        <button type="button" data-filter="all" aria-pressed="true">전체</button>
-        <button type="button" data-filter="core" aria-pressed="false">필수만</button>
-        <button type="button" data-filter="ready" aria-pressed="false">완성된 장</button>
-        <button type="button" data-filter="visited" aria-pressed="false">내가 읽은 장</button>
-      </div>
-      <div class="map-info" data-map-info aria-live="polite"></div>
+<Shell title="로드맵" current="map" description="트랙과 선수 관계를 레이어 순서로 펼친 전체 로드맵">
+  <div class="container">
+    <div class="page-head">
+      <h1>로드맵</h1>
+      <p>위에서 아래로 내려갈수록 앞 레이어를 바탕으로 한다. 트랙을 누르면 연결이 드러난다.</p>
     </div>
-    <script type="application/json" id="map-data" set:html={JSON.stringify(data).replace(/</g, "\\u003c")} />
+    <div class="tmap" data-tmap>
+      <svg class="links" aria-hidden="true"></svg>
+      {layers.map((l) => (
+        <div class="tmap-row">
+          <div class="lv">L{l.level}<b>{l.name}</b></div>
+          <div class="nodes">
+            {tracks.filter((t) => t.layer === l.level).map((t) => (
+              <button type="button" class="tnode" data-track={t.key} aria-pressed="false">
+                <span class="code">{t.code}</span>
+                <b>{t.name}</b>
+                <div class="progress"><i data-track-progress={t.key}></i></div>
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
   </div>
+  <script type="application/json" id="map-data" set:html={JSON.stringify(data).replace(/</g, "\\u003c")} />
+  <script type="application/json" id="chapters-data" set:html={JSON.stringify(data.chapters).replace(/</g, "\\u003c")} />
 </Shell>

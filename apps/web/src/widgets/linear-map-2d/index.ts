@@ -39,13 +39,13 @@ export function mount(root: HTMLElement, attrs: Record<string, string>) {
     const R = 6;
     // 원래 격자
     ctx.lineWidth = 1;
-    ctx.strokeStyle = "rgba(220,230,242,0.15)";
+    ctx.strokeStyle = C.faint;
     for (let k = -R; k <= R; k++) {
       line(toPx(k, -R), toPx(k, R));
       line(toPx(-R, k), toPx(R, k));
     }
     // 변형된 격자
-    ctx.strokeStyle = "rgba(220,230,242,0.26)";
+    ctx.strokeStyle = C.grid2;
     for (let k = -R; k <= R; k++) {
       line(toPx(...apply(m, k, -R)), toPx(...apply(m, k, R)));
       line(toPx(...apply(m, -R, k)), toPx(...apply(m, R, k)));
@@ -59,9 +59,9 @@ export function mount(root: HTMLElement, attrs: Record<string, string>) {
     ctx.beginPath();
     sq.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
     ctx.closePath();
-    ctx.fillStyle = "rgba(220,230,242,0.10)";
+    ctx.fillStyle = C.fill;
     ctx.fill();
-    ctx.strokeStyle = "rgba(220,230,242,0.6)";
+    ctx.strokeStyle = C.ink2;
     ctx.stroke();
     // 기저 벡터의 상: 원점의 상에서 출발
     const o = toPx(...apply(m, 0, 0));

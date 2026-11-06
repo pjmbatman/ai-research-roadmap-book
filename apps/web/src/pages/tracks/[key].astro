@@ -1,6 +1,9 @@
 ---
+// 트랙 = 로드맵 (roadmap.sh): 부는 가운데 세로로 이어지는 주제 노드, 장은 좌우의 하위 노드.
+// 노드를 누르면 오른쪽 서랍에 학습 목표·선수 지식·상태(학습 중·완료·건너뜀·초기화)·읽기 버튼이 나온다.
 import Shell from "../../layouts/Shell.astro";
-import { loadBook, str } from "../../lib/book";
+import { loadBook, allChapters, str } from "../../lib/book";
+import { chapterSummary } from "../../lib/site";
 
 export function getStaticPaths() {
   return (loadBook().config.tracks as any[]).map((t) => ({ params: { key: t.key }, props: { key: t.key } }));
@@ -11,29 +14,44 @@ const t = (config.tracks as any[]).find((x) => x.key === key);
 const tparts = parts.filter((p) => str(p.meta.track) === key);
 const chapters = tparts.flatMap((p) => p.chapters);
 const u = (p: string) => import.meta.env.BASE_URL + p;
+const summary = allChapters().map(chapterSummary);
+const half = (n: number) => Math.ceil(n / 2);
 ---
 <Shell title={`${t.code} ${t.name}`} description={t.question} current="tracks">
-  <div class="page" data-track={key} data-track-chapters={JSON.stringify(chapters.map((c) => c.id))}>
-    <h1 class="page-title"><span class="badge badge-code">{t.code}</span> {t.name}</h1>
-    <div class="bento">
-      <div class="tile dark wide"><small>핵심 질문</small><div class="q">{t.question}</div></div>
-      <div class="tile"><small>읽은 장</small><div class="big"><span data-track-done>0</span><span class="of">/{chapters.length}</span></div><div class="meter"><i data-track-meter></i></div></div>
-      <div class="tile"><small>도달 목표</small><div class="o">{t.outcome}</div></div>
+  <div class="container">
+    <div class="page-head">
+      <nav class="crumbs"><a href={u("tracks/")}>트랙</a><span>/</span><span>{t.code}</span></nav>
+      <h1><span class="badge badge-code" style="height:28px;font-size:14px">{t.code}</span>{t.name}</h1>
+      <p>{t.question}</p>
     </div>
-    <div data-tabs class="part-tabs">
-      <div class="tabbar">
-        {tparts.map((p, i) => <button data-tab={p.slug} data-selected={i === 0 ? "true" : undefined}>{p.label === "부록" ? "부록" : `${p.label}부`} {str(p.meta.title)}</button>)}
-      </div>
-      {tparts.map((p) => (
-        <div data-panel={p.slug} class="part-block">
-          <ul class="ch-list">
-            {p.chapters.map((c) => (
-              <li><a href={u(c.url)} data-chapter-link={c.id}><span class="n">{c.label}</span><span>{str(c.meta.title)}</span>
-                <span class="st">{["draft", "review", "done"].includes(str(c.meta.status)) && <span class="badge badge-ready">읽기</span>}</span></a></li>
-            ))}
-          </ul>
+    <div class="card panel" style="margin-bottom: 8px">
+      <div class="section-head">
+        <div class="rm-legend">
+          <span><i class="ready"></i>본문 있음</span>
+          <span><i class="learning"></i>학습 중</span>
+          <span><i class="done"></i>완료</span>
         </div>
+        <span class="muted tabular" style="font-size:14px">완료 <b data-track-done={key}>0</b> / {chapters.length}</span>
+      </div>
+      <div class="progress"><i data-track-progress={key}></i></div>
+    </div>
+    <div class="roadmap" data-roadmap>
+      {tparts.map((p) => (
+        <section class="rm-part">
+          <a class="rm-topic" href={u(p.url)}><small>{p.label === "부록" ? "부록" : `${p.label}부`}</small><b>{str(p.meta.title)}</b></a>
+          <div class="rm-side left">
+            {p.chapters.slice(0, half(p.chapters.length)).map((c) => (
+              <button type="button" class="rm-node" data-node={c.id}><span class="n">{c.label}</span><span class="t">{str(c.meta.title)}</span></button>
+            ))}
+          </div>
+          <div class="rm-side right">
+            {p.chapters.slice(half(p.chapters.length)).map((c) => (
+              <button type="button" class="rm-node" data-node={c.id}><span class="n">{c.label}</span><span class="t">{str(c.meta.title)}</span></button>
+            ))}
+          </div>
+        </section>
       ))}
     </div>
   </div>
+  <script type="application/json" id="chapters-data" set:html={JSON.stringify(summary).replace(/</g, "\\u003c")} />
 </Shell>

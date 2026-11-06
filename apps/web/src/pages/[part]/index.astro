@@ -1,6 +1,7 @@
 ---
 import Shell from "../../layouts/Shell.astro";
 import { loadBook, trackByKey, str } from "../../lib/book";
+import { isReady } from "../../lib/site";
 
 export function getStaticPaths() {
   return loadBook().parts.map((p) => ({ params: { part: p.slug }, props: { slug: p.slug } }));
@@ -11,18 +12,20 @@ const track = trackByKey(str(part.meta.track));
 const u = (p: string) => import.meta.env.BASE_URL + p;
 ---
 <Shell title={str(part.meta.title)} description={str(part.meta.summary)}>
-  <div class="page narrow">
-    <nav class="crumbs">
-      {track && <a class="badge badge-code" href={u(`tracks/${track.key}/`)}>{track.code}</a>}
-      {track && <a href={u(`tracks/${track.key}/`)}>{track.name}</a>}
-    </nav>
-    <h1 class="page-title">{part.label === "부록" ? "부록" : `${part.label}부`} {str(part.meta.title)}</h1>
-    <div class="part-block">
+  <div class="container narrow">
+    <div class="page-head">
+      <nav class="crumbs">
+        {track && <a href={u(`tracks/${track.key}/`)}>{track.code} {track.name}</a>}
+      </nav>
+      <h1>{part.label === "부록" ? "부록" : `${part.label}부`} {str(part.meta.title)}</h1>
+      {part.meta.summary && <p>{str(part.meta.summary)}</p>}
+    </div>
+    <div class="card" style="overflow:hidden">
       <ul class="ch-list">
         {part.chapters.map((c) => (
           <li><a href={u(c.url)} data-chapter-link={c.id}>
             <span class="n">{c.label}</span><span>{str(c.meta.title)}</span>
-            <span class="st">{["draft", "review", "done"].includes(str(c.meta.status)) && <span class="badge badge-ready">읽기</span>}</span>
+            <span>{isReady(c) && <span class="badge">읽기</span>}</span>
           </a></li>
         ))}
       </ul>

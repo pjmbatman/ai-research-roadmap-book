@@ -4,6 +4,22 @@
 
 ## [Unreleased]
 
+### Changed
+- **UI/UX를 처음부터 다시 만들었다** ([ADR 0010](editorial/decisions/0010-reference-based-design.md)). 이전 방향(Midnight·Glacier·Coral 테마, floating dock, 효과 도구 상자, 위젯 `kind`, 캔버스 지도)과 그 명세를 폐기했다.
+  - 시각 기반: shadcn/ui v4 neutral 토큰을 그대로 쓴다. 상태 색은 Tailwind 팔레트에서 가져왔다.
+  - 공통 머리: shadcn/ui 문서 사이트 형식. dock은 없앴다.
+  - 홈·트랙·로드맵: roadmap.sh 형식. 부는 주제 노드, 장은 하위 노드이고, 노드 서랍에서 학습 중·완료·건너뜀을 고른다.
+  - 로드맵 전체: 레이어별 트랙과 의존선, 트랙 서랍.
+  - 장 읽기: Brilliant·Duolingo식 레슨 화면(레슨 바·진행 막대·하단 이전/계속), 퀴즈는 카드형 선택지와 주 버튼 하나.
+  - 연습문제: TutorialKit·svelte식 분할 화면.
+  - 위젯: Card 틀, 색은 테마 토큰을 따르고 초기화 버튼이 있다.
+  - 코드 편집기: 토큰 기반 색과 GitHub 기본 문법 색.
+- 위젯 레지스트리에서 디자인 명세 필드(`kind`·`interaction`·`binds`·`motion`)를 지웠다.
+- 장 상태 모델: 시작 전 · 학습 중 · 완료 · 건너뜀 (roadmap.sh)
+
+### Added
+- UI/UX 벤치마킹(`editorial/benchmarks.md`)
+
 ## [0.1.0] - 2026-11-06 — 프로토타입 1
 
 ### Added

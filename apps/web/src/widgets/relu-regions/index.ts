@@ -2,7 +2,7 @@
 // 입력 평면 [-3, 3]²의 각 점에서 은닉 뉴런의 켜짐·꺼짐(활성 패턴)을 계산해, 같은 패턴을 같은 색으로 칠한다.
 // 같은 패턴의 입력에는 같은 아핀 사상이 적용된다. 영역 수는 화면 격자에서 센 값이므로 아주 작은 영역은 놓칠 수 있다(하한).
 // 초기화는 labs/linear-algebra/affine-and-nonlinear/plane_warp.py와 같은 규칙(W ~ N(0, 1/n_in), b ~ N(0, 0.25))이다.
-import { frame, param, presets, readouts, el, C, rng } from "../frame";
+import { frame, param, presets, readouts, el, C, rng, rgbOf } from "../frame";
 import { pageState } from "../../client/store";
 
 type Layer = { W: number[][]; b: number[] };
@@ -59,7 +59,10 @@ export function mount(root: HTMLElement) {
   const rgb = (id: number): [number, number, number] => {
     // Glacier 계열의 차가운 색조 안에서만 바꾼다(엣지 색은 강조에만 쓴다)
     const g = (id * 0.6180339887) % 1;
-    const hue = (205 + g * 60) / 360, sat = 0.38, light = (14 + ((id * 37) % 23)) / 100;
+    // 영역 색: chart(blue) 계열 색조 안에서만 바꾸고, 바탕(--card)의 밝기에 맞춰 명도를 고른다
+    const [br, bg2, bb2] = rgbOf(C.bg);
+    const dark = br + bg2 + bb2 < 384;
+    const hue = (205 + g * 60) / 360, sat = dark ? 0.35 : 0.55, light = (dark ? 16 + ((id * 37) % 20) : 78 + ((id * 37) % 17)) / 100;
     const q = light < 0.5 ? light * (1 + sat) : light + sat - light * sat, pp = 2 * light - q;
     const ch = (t: number) => { t = (t + 1) % 1; return t < 1 / 6 ? pp + (q - pp) * 6 * t : t < 0.5 ? q : t < 2 / 3 ? pp + (q - pp) * (2 / 3 - t) * 6 : pp; };
     return [ch(hue + 1 / 3) * 255, ch(hue) * 255, ch(hue - 1 / 3) * 255];
@@ -75,7 +78,7 @@ export function mount(root: HTMLElement) {
     const cache = new Map<number, [number, number, number]>();
     for (let k = 0; k < RES * RES; k++) {
       const id = ids[k];
-      let c = id === hid ? ([255, 107, 90] as [number, number, number]) : cache.get(id);
+      let c = id === hid ? rgbOf(C.edge) : cache.get(id);
       if (!c) { c = rgb(id); cache.set(id, c); }
       img.data[4 * k] = c[0]; img.data[4 * k + 1] = c[1]; img.data[4 * k + 2] = c[2]; img.data[4 * k + 3] = id === hid ? 170 : 255;
     }
@@ -86,13 +89,13 @@ export function mount(root: HTMLElement) {
       // 첫 층 뉴런의 경계 w·x + b = 0 (직선). 깊은 층의 경계는 꺾인 선이라 색 경계로만 보인다.
       ctx.save();
       ctx.beginPath(); ctx.rect(ox, oy, side, side); ctx.clip();
-      ctx.strokeStyle = "rgba(220,230,242,0.65)";
+      ctx.strokeStyle = C.mid;
       ctx.lineWidth = 1.2;
       const toPx = (x: number, y: number) => [ox + ((x + 3) / 6) * side, oy + ((3 - y) / 6) * side] as const;
       for (let r = 0; r < layers[0].W.length; r++) {
         const [w1, w2] = layers[0].W[r], bb = layers[0].b[r];
         const newest = r === layers[0].W.length - 1;   // 가장 최근에 더한 뉴런의 경계는 코랄
-        ctx.strokeStyle = newest ? C.edge : "rgba(220,230,242,0.65)";
+        ctx.strokeStyle = newest ? C.edge : C.mid;
         ctx.lineWidth = newest ? 2 : 1.2;
         ctx.beginPath();
         if (Math.abs(w2) > Math.abs(w1)) { ctx.moveTo(...toPx(-4, (-bb + 4 * w1) / w2)); ctx.lineTo(...toPx(4, (-bb - 4 * w1) / w2)); }

@@ -1,11 +1,12 @@
 ---
-// 장 페이지 (editorial/benchmarks.md §3.1).
-// 본문이 있는 장: 720px 한 단 + 상단 '트랙 / 장 / 단계' 내비(드롭다운) + 하단 dock에 이전·다음.
-// 목차 단계의 장: 단계로 넘기지 않고 '다룰 내용'을 카드로 한 화면에 보인다(§5-6).
+// 장 페이지 (design-system.md §3).
+// 본문이 있는 장: 레슨 화면(Brilliant·Duolingo) — 레슨 바 + 한 번에 한 단계 + 아래 이전·계속.
+// 목차 단계의 장: 학습 목표 카드 + 절별 카드 한 화면.
 import Shell from "../../../layouts/Shell.astro";
 import { allChapters, partOf, trackOfChapter, prerequisites, dependents, neighbors, STATUS_LABEL, str } from "../../../lib/book";
 import { renderChapter, renderMarkdown, renderInline } from "../../../lib/markdown";
 import { chapterData } from "../../../lib/page";
+import { goalsOf, isReady } from "../../../lib/site";
 
 export function getStaticPaths() {
   return allChapters().map((ch) => ({ params: { part: ch.partSlug, chapter: ch.slug }, props: { id: ch.id } }));
@@ -17,114 +18,87 @@ const track = trackOfChapter(ch);
 const base = import.meta.env.BASE_URL;
 const u = (p: string) => base + p;
 const status = str(ch.meta.status);
-const isOutline = status === "outline" || status === "spec";
+const lessonMode = isReady(ch);
 const pre = prerequisites(ch);
 const deps = dependents(ch);
 const { next } = neighbors(ch);
 const data = chapterData(ch);
 const partLabel = part.label === "부록" ? "부록" : `${part.label}부`;
+const closeHref = track ? `tracks/${track.key}/` : part.url;
 
-// 장 본문을 절(##) 단위로 나눈다: 목차 단계 장의 카드와 선수 지식 미리보기에 쓴다.
 const sectionsOf = (body: string) =>
   body.split(/^## /m).slice(1).map((chunk) => {
     const nl = chunk.indexOf("\n");
     return { title: chunk.slice(0, nl).trim(), body: chunk.slice(nl + 1).trim() };
   });
-const goalsOf = (body: string) =>
-  (sectionsOf(body).find((s) => s.title === "학습 목표")?.body ?? "").split("\n").filter((l) => l.startsWith("- ")).map((l) => l.slice(2));
-const preview = (c: (typeof pre)[number]) => goalsOf(c.body).slice(0, 3).join(" · ");
-
-const html = isOutline ? "" : renderChapter(ch.body, { assetBase: `${base}content-assets/${ch.partSlug}/${ch.slug}/`, quizSection: ch.quiz.length > 0 });
+const html = lessonMode ? renderChapter(ch.body, { assetBase: `${base}content-assets/${ch.partSlug}/${ch.slug}/`, quizSection: ch.quiz.length > 0 }) : "";
 const FIXED_KIND: Record<string, string> = { "실습": "lab", "실패 사례": "pitfalls", "통과 기준": "pass" };
-const outline = isOutline ? sectionsOf(ch.body).filter((s) => s.title !== "학습 목표" && s.body) : [];
-const goals = goalsOf(ch.body);
-const siblings = part.chapters;
+const outline = lessonMode ? [] : sectionsOf(ch.body).filter((s) => s.title !== "학습 목표" && s.body);
+const goals = goalsOf(ch);
 ---
-<Shell title={`${ch.label} ${str(ch.meta.title)}`} description={`${str(ch.meta.title)} — ${str(part.meta.title)}`} pageData={data}
-  stepper={isOutline ? undefined : { next: next ? u(next.url) : undefined, nextLabel: next ? `${next.label} ${str(next.meta.title)}` : undefined }}>
-  <div class="page">
-    <article class:list={["chapter", "reader", { "is-outline": isOutline }]} data-chapter={ch.id}>
-      <header class="chapter-head">
-        <nav class="crumbs" aria-label="위치">
-          {track && <a class="badge badge-code" href={u(`tracks/${track.key}/`)}>{track.code}</a>}
-          <a href={u(part.url)}>{partLabel} {str(part.meta.title)}</a>
-          {status !== "done" && <span class={`badge badge-status-${status}`}>{STATUS_LABEL[status] ?? status}</span>}
+{lessonMode ? (
+  <Shell title={`${ch.label} ${str(ch.meta.title)}`} description={`${str(ch.meta.title)} — ${str(part.meta.title)}`} pageData={data}
+    lesson={{ closeHref, closeLabel: track ? `${track.code} 로드맵` : partLabel, nextHref: next?.url, nextLabel: next ? `${next.label} ${str(next.meta.title)}` : undefined }}>
+    <article class="lesson" data-chapter={ch.id}>
+      <header class="lesson-head">
+        <nav class="crumbs">
+          {track && <a href={u(closeHref)}>{`${track.code} ${track.name}`}</a>}
+          <span>/</span><a href={u(part.url)}>{partLabel}</a>
+          {status !== "done" && <span class="badge">{STATUS_LABEL[status] ?? status}</span>}
         </nav>
         <h1><span class="num">{ch.label}</span>{str(ch.meta.title)}</h1>
         {pre.length > 0 && (
           <div class="prereq">
-            <span class="prereq-label">먼저 읽기</span>
-            {pre.map((p) => (
-              <a class="chip has-preview" href={u(p.url)} data-prereq={p.id}>
-                <span class="n">{p.label}</span>{str(p.meta.title)}
-                {preview(p) && <span class="preview" role="tooltip">{preview(p)}</span>}
-              </a>
-            ))}
+            <span>먼저 읽기</span>
+            {pre.map((p) => <a class="chip" href={u(p.url)} data-prereq={p.id}><span class="n">{p.label}</span>{str(p.meta.title)}</a>)}
           </div>
         )}
       </header>
-
-      {isOutline ? (
-        <>
-          <section class="outline-grid">
-            <div class="ocard ocard-goals">
-              <h2>이 장을 마치면</h2>
-              <ol>{goals.map((g) => <li set:html={renderInline(g)} />)}</ol>
-            </div>
-            {outline.map((s) => (
-              <div class:list={["ocard", FIXED_KIND[s.title] && `ocard-${FIXED_KIND[s.title]}`]}>
-                <h3>{s.title}</h3>
-                <div class="ocard-body" set:html={renderMarkdown(s.body)} />
-              </div>
-            ))}
-          </section>
-          <div class="outline-cta">
-            <span>본문을 쓰는 중인 장이다.</span>
-            <a class="btn" href="https://github.com/pjmbatman/ai-research-roadmap-book/blob/main/CONTRIBUTING.md">집필에 참여하기</a>
-            {next && <a class="btn btn-primary" href={u(next.url)}>{next.label} {str(next.meta.title)} →</a>}
-          </div>
-        </>
-      ) : (
-        <>
-          <div class="chapnav" data-chapnav>
-            <div class="chapnav-row">
-              <button type="button" class="chapnav-btn" data-prev aria-label="이전 단계">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
-              </button>
-              <button type="button" class="chapnav-title" data-chapnav-toggle aria-expanded="false" aria-controls="chapnav-panel">
-                <span class="where">{ch.label}</span>
-                <b data-step-title></b>
-                <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-              </button>
-              <button type="button" class="chapnav-btn" data-next aria-label="다음 단계">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-              </button>
-            </div>
-            <div class="stepbar" data-stepbar aria-label="단계"></div>
-            <div class="chapnav-panel" id="chapnav-panel" data-chapnav-panel hidden>
-              <div>
-                <h4>이 장</h4>
-                <ol class="steplist" data-steplist></ol>
-                <div class="toc-progress"><span>진도</span><b data-chapter-pct>0%</b></div>
-                <div class="meter"><i data-chapter-meter></i></div>
-              </div>
-              <div>
-                <h4>{partLabel} {str(part.meta.title)}</h4>
-                <ol class="sibling-list">
-                  {siblings.map((c) => (
-                    <li><a href={u(c.url)} data-chapter-link={c.id} aria-current={c.id === ch.id ? "page" : undefined}><span class="n">{c.label}</span>{str(c.meta.title)}</a></li>
-                  ))}
-                </ol>
-              </div>
-            </div>
-          </div>
-          <div class="prose" data-steps set:html={html} />
-          <div class="chapter-done" data-done hidden>
-            {next && <a class="btn btn-primary btn-lg" href={u(next.url)}>{next.label} {str(next.meta.title)} →</a>}
-            {deps.slice(0, 4).map((d) => <a class="chip" href={u(d.url)}><span class="n">{d.label}</span>{str(d.meta.title)}</a>)}
-          </div>
-        </>
-      )}
+      <div class="prose" data-steps set:html={html} />
+      <div class="card chapter-done" data-done hidden>
+        <h3>이 장의 마지막 단계다</h3>
+        <div class="row">
+          {next && <a class="btn btn-primary btn-lg" href={u(next.url)}>{next.label} {str(next.meta.title)} →</a>}
+          {track && <a class="btn btn-lg" href={u(closeHref)}>{track.code} 로드맵으로</a>}
+        </div>
+        {deps.length > 0 && <div class="row">{deps.slice(0, 4).map((d) => <a class="chip" href={u(d.url)}><span class="n">{d.label}</span>{str(d.meta.title)}</a>)}</div>}
+      </div>
     </article>
-  </div>
-</Shell>
+  </Shell>
+) : (
+  <Shell title={`${ch.label} ${str(ch.meta.title)}`} description={`${str(ch.meta.title)} — ${str(part.meta.title)}`} pageData={data} current="tracks">
+    <div class="container narrow">
+      <div class="page-head">
+        <nav class="crumbs">
+          {track && <a href={u(closeHref)}>{`${track.code} ${track.name}`}</a>}
+          <span>/</span><a href={u(part.url)}>{partLabel} {str(part.meta.title)}</a>
+          <span class="badge">{STATUS_LABEL[status] ?? status}</span>
+        </nav>
+        <h1><span class="muted tabular">{ch.label}</span>{str(ch.meta.title)}</h1>
+        {pre.length > 0 && (
+          <div class="prereq">
+            <span>먼저 읽기</span>
+            {pre.map((p) => <a class="chip" href={u(p.url)} data-prereq={p.id}><span class="n">{p.label}</span>{str(p.meta.title)}</a>)}
+          </div>
+        )}
+      </div>
+      <section class="outline-grid">
+        <div class="card ocard ocard-goals">
+          <h2>이 장을 마치면</h2>
+          <ol>{goals.map((g) => <li set:html={renderInline(g)} />)}</ol>
+        </div>
+        {outline.map((s) => (
+          <div class:list={["card", "ocard", FIXED_KIND[s.title] && `ocard-${FIXED_KIND[s.title]}`]}>
+            <h3>{s.title}</h3>
+            <div set:html={renderMarkdown(s.body)} />
+          </div>
+        ))}
+      </section>
+      <div class="card outline-cta">
+        <span>본문을 쓰는 중인 장이다.</span>
+        <a class="btn" href="https://github.com/pjmbatman/ai-research-roadmap-book/blob/main/CONTRIBUTING.md">집필에 참여하기</a>
+        {next && <a class="btn btn-primary" href={u(next.url)}>{next.label} {str(next.meta.title)} →</a>}
+      </div>
+    </div>
+  </Shell>
+)}

@@ -44,7 +44,6 @@ QUIZ_TYPES = ("single", "multiple", "numeric")
 WIDGETS = ROOT / "data" / "widgets.toml"
 LABS = ROOT / "labs"
 WIDGET_STATUSES = ("planned", "prototype", "implemented")
-WIDGET_KINDS = ("manipulate", "stepper", "simulate", "compare")
 EXEC_TIERS = ("browser", "python", "gpu")
 DIRECTIVE = re.compile(r'^::(widget|quiz|exercise)\{(.*)\}\s*$', flags=re.M)
 DIRECTIVE_ATTR = re.compile(r'(\w+)="([^"]*)"')
@@ -272,9 +271,7 @@ def load_widgets(errors: Errors) -> list[dict]:
         seen.add(name)
         if w.get("status") not in WIDGET_STATUSES:
             errors.add(WIDGETS, f"위젯 '{name}': status는 {WIDGET_STATUSES} 중 하나")
-        if w.get("kind") not in WIDGET_KINDS:
-            errors.add(WIDGETS, f"위젯 '{name}': kind는 {WIDGET_KINDS} 중 하나")
-        for f in ("title", "chapters", "interaction"):
+        for f in ("title", "chapters"):
             if not w.get(f):
                 errors.add(WIDGETS, f"위젯 '{name}': '{f}' 없음")
     return widgets

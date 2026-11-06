@@ -1,56 +1,61 @@
 ---
+// 홈 (roadmap.sh): 한 줄 소개와 시작 버튼, 지금 읽을 수 있는 장, 레이어 탭 아래 트랙(로드맵) 카드.
 import Shell from "../layouts/Shell.astro";
 import { loadBook, allChapters, str } from "../lib/book";
+import { chapterSummary, isReady } from "../lib/site";
 const { parts, config } = loadBook();
 const u = (p: string) => import.meta.env.BASE_URL + p;
-const layers = (config.layers as any[]).filter((l) => l.level < 9).sort((a, b) => b.level - a.level);
-const tracks = config.tracks as any[];
-const chaptersOfTrack = (key: string) => parts.filter((p) => str(p.meta.track) === key).flatMap((p) => p.chapters);
-const stackData = layers.map((l) => ({
-  level: l.level, name: l.name, desc: l.description,
-  tracks: tracks.filter((t) => t.layer === l.level).map((t) => ({ key: t.key, code: t.code, name: t.name, n: chaptersOfTrack(t.key).length })),
-}));
-const ready = allChapters().filter((c) => ["draft", "review", "done"].includes(str(c.meta.status)) && c.partSlug !== "appendices");
+const tracks = (config.tracks as any[]).filter((t) => t.layer < 9);
+const layers = (config.layers as any[]).filter((l) => l.level < 9).sort((a, b) => a.level - b.level);
+const chaptersOf = (key: string) => parts.filter((p) => str(p.meta.track) === key).flatMap((p) => p.chapters);
+const ready = allChapters().filter((c) => isReady(c) && c.partSlug !== "appendices");
+const summary = allChapters().map(chapterSummary);
 ---
 <Shell title="AI for Science 로드맵" current="home">
-  <div class="page home">
+  <div class="container">
     <section class="hero">
-      <div>
-        <h1>과학 문제를 <em>AI로</em><br />정의하고 검증하는 법.</h1>
-        <p>읽고, 조작하고, 브라우저에서 바로 실행하며 배우는 오픈소스 로드맵.</p>
-        <div class="hero-cta">
-          <a class="btn btn-primary btn-lg" href={u("orientation/how-to-read/")}>시작하기</a>
-          <a class="btn btn-lg" href={u("map/")}>지도</a>
+      <span class="badge">오픈소스 · {tracks.length}개 트랙 · {allChapters().length}개 장</span>
+      <h1>과학 문제를 AI로 정의하고 검증하는 법</h1>
+      <p>읽고, 직접 조작하고, 브라우저에서 코드를 실행하며 배우는 연구자용 로드맵.</p>
+      <div class="cta">
+        <a class="btn btn-primary btn-lg" href={u("orientation/how-to-read/")}>시작하기</a>
+        <a class="btn btn-lg" href={u("map/")}>로드맵 보기</a>
+      </div>
+    </section>
+
+    {ready.length > 0 && (
+      <section class="section">
+        <div class="section-head"><h2>지금 읽을 수 있는 장</h2></div>
+        <div class="ready-list">
+          {ready.map((c) => (
+            <a class="card ready-item" href={u(c.url)} data-chapter-link={c.id}>
+              <span class="n">{c.label}</span><b>{str(c.meta.title)}</b><span class="muted" aria-hidden="true">→</span>
+            </a>
+          ))}
         </div>
-        {ready.length > 0 && (
-          <div class="ready-row">
-            {ready.map((c) => (
-              <a class="ready-card" href={u(c.url)} data-chapter-link={c.id}>
-                <span class="n">{c.label}</span>
-                <b>{str(c.meta.title)}</b>
-                <span class="go" aria-hidden="true">→</span>
+      </section>
+    )}
+
+    <section class="section">
+      <div class="section-head"><h2>트랙</h2><a class="btn btn-sm btn-ghost" href={u("tracks/")}>전체 보기 →</a></div>
+      <div data-tabs>
+        <div class="tabbar">
+          {layers.map((l, i) => <button data-tab={`L${l.level}`} data-selected={i === 0 ? "true" : undefined}>{l.name}</button>)}
+        </div>
+        {layers.map((l) => (
+          <div data-panel={`L${l.level}`} class="grid-cards" style="margin-top: 14px">
+            {tracks.filter((t) => t.layer === l.level).map((t) => (
+              <a class="card track-card" href={u(`tracks/${t.key}/`)}>
+                <span class="top"><span class="badge badge-code">{t.code}</span><span class="muted tabular" style="font-size:13px">{chaptersOf(t.key).length}장</span></span>
+                <h3>{t.name}</h3>
+                <p>{t.question}</p>
+                <div class="progress"><i data-track-progress={t.key}></i></div>
               </a>
             ))}
           </div>
-        )}
-      </div>
-      <div class="stack-wrap" data-stack={JSON.stringify(stackData)}>
-        <div class="stack-legend" role="group" aria-label="레이어">
-          {stackData.map((l) => <button type="button" data-level={l.level} aria-pressed="false">L{l.level} {l.name}</button>)}
-        </div>
-        <div class="stack" aria-hidden="true">
-          {[...stackData].reverse().map((l, i) => (
-            <div class="plane" style={`--i:${i}`} data-level={l.level}>
-              {Array.from({ length: 8 }, (_, k) => <i class={k < l.tracks.length ? "t" : ""} />)}
-            </div>
-          ))}
-        </div>
-        <div class="stack-card" aria-live="polite">
-          <span class="layer-label" data-stack-title></span>
-          <span data-stack-desc></span>
-          <div class="tracks" data-stack-tracks></div>
-        </div>
+        ))}
       </div>
     </section>
   </div>
+  <script type="application/json" id="chapters-data" set:html={JSON.stringify(summary).replace(/</g, "\\u003c")} />
 </Shell>

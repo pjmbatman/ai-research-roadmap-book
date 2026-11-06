@@ -48,12 +48,12 @@ const CH72 = "/linear-algebra/affine-and-nonlinear/";
 const CH123 = "/statistical-inference/distributional-formulation/";
 
 console.log("홈·검색·테마");
-await test("홈: 레이어 스택이 레이어를 고르면 카드가 바뀐다", async () => {
+await test("홈: 레이어 탭을 고르면 그 레이어의 트랙 카드가 보인다", async () => {
   await go("/");
-  await page.click('.stack-legend button[data-level="3"]');
-  const t = await page.textContent("[data-stack-title]");
-  assert(t.includes("L3"), `카드 제목: ${t}`);
-  assert((await page.locator("[data-stack-tracks] a").count()) >= 1, "L3 트랙 링크 없음");
+  await page.click('.tabbar button[data-tab="L3"]');
+  const cards = await page.locator('[data-panel="L3"]:not([hidden]) .track-card').allTextContents();
+  assert(cards.length === 2 && cards.some((c) => c.includes("MLA")), cards.join("|"));
+  assert((await page.locator(".dock").count()) === 0, "dock은 없어야 함");
   await shot("home");
 });
 await test("⌘K 검색: 장 번호로 찾아 이동한다", async () => {
@@ -65,6 +65,7 @@ await test("⌘K 검색: 장 번호로 찾아 이동한다", async () => {
 });
 await test("테마 토글이 data-theme을 바꾸고 저장한다", async () => {
   const before = await page.evaluate(() => document.documentElement.dataset.theme || "");
+  if (await page.locator("[data-lesson-menu-toggle]").count()) await page.click("[data-lesson-menu-toggle]");   // 레슨 화면에서는 메뉴 안에 있다
   await page.click("[data-theme-toggle]");
   const after = await page.evaluate(() => document.documentElement.dataset.theme);
   assert(after && after !== before, `${before} → ${after}`);
@@ -73,7 +74,7 @@ await test("테마 토글이 data-theme을 바꾸고 저장한다", async () => 
 });
 
 const step = async (title) => {
-  await page.click("[data-chapnav-toggle]");
+  await page.click("[data-lesson-menu-toggle]");
   await page.locator("[data-steplist] a", { hasText: title }).first().click();
   await page.waitForFunction((t) => [...document.querySelectorAll("section.step")].find((s) => !s.hidden)?.dataset.title === t, title);
 };
@@ -81,7 +82,7 @@ const visibleStep = () => page.evaluate(() => [...document.querySelectorAll("sec
 
 console.log("단계로 넘겨 읽기 (7.2)");
 await go(CH72);
-await test("한 번에 한 단계만 보이고, 다음 버튼·→ 키·단계 막대로 넘긴다", async () => {
+await test("레슨: 한 번에 한 단계만 보이고, 계속 버튼·→ 키·단계 목록으로 넘긴다", async () => {
   let v = await visibleStep();
   assert(v.length === 1 && v[0] === "학습 목표", `처음 단계: ${v}`);
   await page.click("[data-next]");
@@ -89,8 +90,11 @@ await test("한 번에 한 단계만 보이고, 다음 버튼·→ 키·단계 �
   assert(v[0] === "선형 변환과 아핀 변환" && decodeURIComponent(page.url()).endsWith("#선형-변환과-아핀-변환"), `다음: ${v} ${page.url()}`);
   await page.keyboard.press("ArrowRight");
   assert((await visibleStep())[0] === "결합의 종류", "→ 키");
-  await page.locator(".stepbar .seg").nth(0).click();
-  assert((await visibleStep())[0] === "학습 목표", "단계 막대");
+  assert((await page.textContent("[data-stepcount]")).trim() === "3 / 11", "k / N");
+  await step("학습 목표");
+  assert((await visibleStep())[0] === "학습 목표", "단계 목록");
+  assert(await page.locator(".site-header").count() === 0, "레슨 화면에는 사이트 머리가 없다");
+  await shot("lesson");
 });
 await test("주소의 #으로 단계를 바로 연다", async () => {
   await go(CH72 + "#" + encodeURIComponent("통과-기준"));
@@ -268,36 +272,28 @@ console.log("목차 단계의 장");
 await test("본문이 없는 장은 '다룰 내용' 카드를 한 화면에 보인다", async () => {
   await go("/linear-algebra/vector-spaces/");
   assert((await page.locator(".outline-grid .ocard").count()) >= 5, "카드 수");
-  assert((await page.locator(".dock-stepper").count()) === 0, "단계 이동 없음");
+  assert((await page.locator(".lesson-actions").count()) === 0, "레슨 이동 막대 없음");
   await shot("outline");
 });
 
 console.log("진도·지도·트랙");
 await test("진도 페이지가 기록을 요약한다", async () => {
   await go("/progress/");
-  const v = Number(await page.textContent('[data-k="visited"]'));
+  const v = Number(await page.textContent('[data-k="learning"]'));
   const q = Number(await page.textContent('[data-k="quiz"]'));
-  assert(v >= 2 && q >= 3, `읽은 장 ${v}, 맞힌 퀴즈 ${q}`);
+  assert(v >= 2 && q >= 3, `학습 중 ${v}, 맞힌 퀴즈 ${q}`);
   assert((await page.locator('[data-k="recent"] a').count()) >= 2, "최근 장");
   await shot("progress");
 });
-await test("지도: 장을 누르면 정보 카드에 선수 지식 수가 나온다", async () => {
+await test("로드맵 전체: 트랙을 누르면 연결이 강조되고 서랍이 열린다", async () => {
   await go("/map/");
-  const box = await page.locator("[data-map] canvas").boundingBox();
-  // 화면 좌표를 훑어 첫 노드를 찾는다
-  const hit = await page.evaluate(() => {
-    const c = document.querySelector("[data-map] canvas");
-    return { w: c.clientWidth, h: c.clientHeight };
-  });
-  let found = false;
-  for (let y = 95; y < hit.h && !found; y += 6) {
-    for (let x = 20; x < hit.w && !found; x += hit.w / 12 / 2) {
-      await page.mouse.move(box.x + x, box.y + y);
-      if (await page.locator("[data-map-info] b").isVisible().catch(() => false)) found = true;
-    }
-  }
-  assert(found, "노드를 찾지 못함");
+  assert((await page.locator(".tmap svg.links path").count()) > 10, "트랙 의존선");
+  await page.click('.tnode[data-track="probabilistic-inference"]');
+  await page.locator(".sheet h2").waitFor();
+  assert((await page.textContent(".sheet h2")).includes("확률"), await page.textContent(".sheet h2"));
+  assert(await page.locator(".tmap.focusing").count() === 1, "강조 상태");
   await shot("map");
+  await page.keyboard.press("Escape");
 });
 await test("트랙 목록: 레이어 탭을 바꾸면 그 레이어의 트랙만 보인다", async () => {
   await go("/tracks/");
@@ -306,9 +302,19 @@ await test("트랙 목록: 레이어 탭을 바꾸면 그 레이어의 트랙만
   assert(cards.length === 1 && cards[0].includes("MLC"), cards.join("|"));
   assert(await page.locator('[data-panel="L0"]').isHidden(), "다른 탭은 숨김");
 });
-await test("트랙 페이지가 읽은 장 수를 보여 준다", async () => {
+await test("트랙 로드맵: 노드 서랍에서 상태를 고르면 노드와 진도가 바뀐다", async () => {
   await go("/tracks/mathematical-foundations/");
-  assert(Number(await page.textContent("[data-track-done]")) >= 1, "읽은 장 0");
+  const node = page.locator('[data-node="linear-algebra/affine-and-nonlinear"]');
+  assert((await node.getAttribute("data-state")) === "learning", "열어 본 장은 학습 중");
+  await node.click();
+  await page.locator(".sheet .state-group").waitFor();
+  await shot("roadmap-sheet");
+  await page.locator(".sheet .state-group button", { hasText: "완료" }).click();
+  assert((await node.getAttribute("data-state")) === "done", "완료로 바뀜");
+  assert(Number(await page.textContent("[data-track-done]")) === 1, "트랙 완료 수");
+  await page.locator(".sheet .state-group button", { hasText: "초기화" }).click();
+  await page.keyboard.press("Escape");
+  await shot("roadmap");
 });
 await test("모바일 폭에서 장 페이지가 가로로 넘치지 않는다", async () => {
   await page.setViewportSize({ width: 390, height: 844 });

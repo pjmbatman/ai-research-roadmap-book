@@ -1,34 +1,38 @@
 ---
+// 트랙 목록: 레이어 탭 아래 트랙 카드 (roadmap.sh 로드맵 목록).
 import Shell from "../../layouts/Shell.astro";
-import { loadBook, str } from "../../lib/book";
+import { loadBook, allChapters, str } from "../../lib/book";
+import { chapterSummary } from "../../lib/site";
 const { parts, config } = loadBook();
 const u = (p: string) => import.meta.env.BASE_URL + p;
-const layers = new Map((config.layers as any[]).map((l) => [l.level, l]));
 const tracks = config.tracks as any[];
-const levels = [...new Set(tracks.map((t) => t.layer as number))].sort((a, b) => a - b);
+const layers = (config.layers as any[]).sort((a, b) => a.level - b.level).filter((l) => tracks.some((t) => t.layer === l.level));
+const count = (key: string) => parts.filter((p) => str(p.meta.track) === key).reduce((s, p) => s + p.chapters.length, 0);
+const summary = allChapters().map(chapterSummary);
 ---
-<Shell title="트랙과 목차" current="tracks">
-  <div class="page">
-    <h1 class="page-title">트랙</h1>
+<Shell title="트랙" current="tracks">
+  <div class="container">
+    <div class="page-head">
+      <h1>트랙</h1>
+      <p>레이어는 아래에서 위로 쌓인다. 트랙은 같거나 아래 레이어에만 기댄다.</p>
+    </div>
     <div data-tabs class="layer-tabs">
       <div class="tabbar">
-        {levels.map((lv, i) => <button data-tab={`L${lv}`} data-selected={i === 0 ? "true" : undefined}>L{lv} {layers.get(lv)?.name}</button>)}
+        {layers.map((l, i) => <button data-tab={`L${l.level}`} data-selected={i === 0 ? "true" : undefined}>{l.level < 9 ? `L${l.level} ` : ""}{l.name}</button>)}
       </div>
-      {levels.map((lv) => (
-        <div data-panel={`L${lv}`} class="track-grid">
-          {tracks.filter((t) => t.layer === lv).map((t) => {
-            const n = parts.filter((p) => str(p.meta.track) === t.key).reduce((s, p) => s + p.chapters.length, 0);
-            return (
-              <a class="track-card" href={u(`tracks/${t.key}/`)}>
-                <span class="badge badge-code">{t.code}</span>
-                <h3>{t.name}</h3>
-                <p>{t.question}</p>
-                <span class="foot"><span>{n}장</span><span>→</span></span>
-              </a>
-            );
-          })}
+      {layers.map((l) => (
+        <div data-panel={`L${l.level}`} class="grid-cards" style="margin-top: 16px">
+          {tracks.filter((t) => t.layer === l.level).map((t) => (
+            <a class="card track-card" href={u(`tracks/${t.key}/`)}>
+              <span class="top"><span class="badge badge-code">{t.code}</span><span class="muted tabular" style="font-size:13px">{count(t.key)}장</span></span>
+              <h3>{t.name}</h3>
+              <p>{t.question}</p>
+              <div class="progress"><i data-track-progress={t.key}></i></div>
+            </a>
+          ))}
         </div>
       ))}
     </div>
   </div>
+  <script type="application/json" id="chapters-data" set:html={JSON.stringify(summary).replace(/</g, "\\u003c")} />
 </Shell>
