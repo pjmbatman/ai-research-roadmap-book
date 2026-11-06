@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" role="img" aria-labelledby="t d" font-family="sans-serif" font-size="14">
+  <title id="t">두 점의 아핀 결합과 convex 결합</title>
+  <desc id="d">점 p와 q를 지나는 직선. 계수 λ로 쓴 점 (1−λ)p + λq는 λ가 0과 1 사이이면 선분 위(convex 결합), 그 밖이면 선분 밖의 직선 위(아핀 결합이지만 convex 결합은 아님)에 놓인다.</desc>
+  <line x1="20" y1="120" x2="620" y2="120" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="6 6"/>
+  <line x1="200" y1="120" x2="440" y2="120" stroke="#FF6B5A" stroke-width="4"/>
+  <g fill="currentColor">
+    <circle cx="200" cy="120" r="6"/>
+    <circle cx="440" cy="120" r="6"/>
+    <text x="200" y="100" text-anchor="middle" font-weight="700">p (λ = 0)</text>
+    <text x="440" y="100" text-anchor="middle" font-weight="700">q (λ = 1)</text>
+  </g>
+  <g fill="#FF6B5A">
+    <circle cx="368" cy="120" r="5"/>
+    <text x="368" y="150" text-anchor="middle">λ = 0.7</text>
+  </g>
+  <g fill="currentColor" fill-opacity="0.75">
+    <circle cx="80" cy="120" r="5"/>
+    <text x="80" y="150" text-anchor="middle">λ = −0.5</text>
+    <circle cx="560" cy="120" r="5"/>
+    <text x="560" y="150" text-anchor="middle">λ = 1.5</text>
+  </g>
+  <text x="320" y="185" text-anchor="middle" fill="currentColor" fill-opacity="0.8">(1 − λ)p + λq : 직선 전체 = 아핀 결합, 굵은 선분 = convex 결합</text>
+</svg>

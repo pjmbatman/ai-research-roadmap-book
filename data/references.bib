@@ -1,3 +1,38 @@
 % 참고문헌 데이터베이스 (BibTeX).
 % 키 규칙: <첫 저자 성 소문자><연도><제목 첫 단어 소문자>  예: goodfellow2016deep
-% 원문을 직접 확인한 문헌만 추가한다.
+% 원문을 직접 확인한 문헌만 추가한다. note에 확인한 근거를 적는다.
+
+@article{leshno1993multilayer,
+  author  = {Leshno, Moshe and Lin, Vladimir Ya. and Pinkus, Allan and Schocken, Shimon},
+  title   = {Multilayer Feedforward Networks with a Nonpolynomial Activation Function Can Approximate Any Function},
+  journal = {Neural Networks},
+  volume  = {6},
+  number  = {6},
+  pages   = {861--867},
+  year    = {1993},
+  doi     = {10.1016/S0893-6080(05)80131-5},
+  note    = {확인: 저자 사본(pinkus.net.technion.ac.il)과 NYU 아카이브 초록. 활성화가 다항식이 아닐 때에만 연속함수를 임의 정확도로 근사}
+}
+
+@inproceedings{montufar2014number,
+  author    = {Mont{\'u}far, Guido F. and Pascanu, Razvan and Cho, Kyunghyun and Bengio, Yoshua},
+  title     = {On the Number of Linear Regions of Deep Neural Networks},
+  booktitle = {Advances in Neural Information Processing Systems 27},
+  pages     = {2924--2932},
+  year      = {2014},
+  eprint    = {1402.1869},
+  archivePrefix = {arXiv},
+  note      = {확인: NeurIPS 논문집 초록. 조각별 선형 활성화 신경망의 선형 영역 수가 폭보다 깊이에 따라 훨씬 빠르게 늘 수 있음}
+}
+
+@article{gneiting2007strictly,
+  author  = {Gneiting, Tilmann and Raftery, Adrian E.},
+  title   = {Strictly Proper Scoring Rules, Prediction, and Estimation},
+  journal = {Journal of the American Statistical Association},
+  volume  = {102},
+  number  = {477},
+  pages   = {359--378},
+  year    = {2007},
+  doi     = {10.1198/016214506000001437},
+  note    = {확인: 서지 기록과 초록. 적정 점수 규칙의 이론, CRPS, 분위수 추정과 interval score}
+}

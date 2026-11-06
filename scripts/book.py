@@ -44,10 +44,13 @@ QUIZ_TYPES = ("single", "multiple", "numeric")
 WIDGETS = ROOT / "data" / "widgets.toml"
 LABS = ROOT / "labs"
 WIDGET_STATUSES = ("planned", "prototype", "implemented")
+WIDGET_KINDS = ("manipulate", "stepper", "simulate", "compare")
 EXEC_TIERS = ("browser", "python", "gpu")
 DIRECTIVE = re.compile(r'^::(widget|quiz|exercise)\{(.*)\}\s*$', flags=re.M)
 DIRECTIVE_ATTR = re.compile(r'(\w+)="([^"]*)"')
 FENCE_EXEC = re.compile(r'^```\w+\s*\{[^}\n]*\bexec="([^"]*)"', flags=re.M)
+FENCE_EXEC_BODY = re.compile(r'^```\w+\s*\{[^}\n]*\bexec="[^"]*"[^\n]*\n(.*?)^```', flags=re.M | re.S)
+CELL_SPLIT = re.compile(r"^# %% ", flags=re.M)
 
 
 # --------------------------------------------------------------------------- model
@@ -228,6 +231,17 @@ def check_quiz(ch: Chapter, assessments: set[str], errors: Errors) -> None:
                 errors.add(where, "numeric 문항에는 수치 answer가 필요함")
             if not isinstance(q.get("tolerance", 0), (int, float)) or q.get("tolerance", 0) < 0:
                 errors.add(where, "tolerance는 0 이상의 수여야 함")
+            slider = q.get("slider")
+            if slider is not None:
+                lo, hi, step = slider.get("min"), slider.get("max"), slider.get("step")
+                if not all(isinstance(v, (int, float)) for v in (lo, hi, step)) or step <= 0 or lo >= hi:
+                    errors.add(where, "slider에는 min < max, step > 0인 수치가 필요함")
+                elif isinstance(q.get("answer"), (int, float)):
+                    ans = q["answer"]
+                    if not lo <= ans <= hi:
+                        errors.add(where, "정답이 slider 범위 밖에 있음")
+                    elif abs((ans - lo) / step - round((ans - lo) / step)) > 1e-9 and q.get("tolerance", 0) < step / 2:
+                        errors.add(where, "slider 눈금으로 정답에 도달할 수 없음 (step 또는 tolerance 조정)")
             continue
         choices = q.get("choices", [])
         if len(choices) < 2:
@@ -258,6 +272,8 @@ def load_widgets(errors: Errors) -> list[dict]:
         seen.add(name)
         if w.get("status") not in WIDGET_STATUSES:
             errors.add(WIDGETS, f"위젯 '{name}': status는 {WIDGET_STATUSES} 중 하나")
+        if w.get("kind") not in WIDGET_KINDS:
+            errors.add(WIDGETS, f"위젯 '{name}': kind는 {WIDGET_KINDS} 중 하나")
         for f in ("title", "chapters", "interaction"):
             if not w.get(f):
                 errors.add(WIDGETS, f"위젯 '{name}': '{f}' 없음")
@@ -280,6 +296,18 @@ def check_embeds(ch: Chapter, part_slug: str, widget_names: set[str], errors: Er
     for tier in FENCE_EXEC.findall(ch.body):
         if tier not in EXEC_TIERS:
             errors.add(ch.path, f"코드 블록 exec는 {EXEC_TIERS} 중 하나여야 함 (현재 '{tier}')")
+    # 본문 실행 코드 블록은 labs/<부>/<장>/cells.py의 셀과 순서대로 같아야 한다(conventions §8).
+    cells_py = LABS / part_slug / ch.slug / "cells.py"
+    blocks = FENCE_EXEC_BODY.findall(ch.body)
+    if cells_py.is_file():
+        cells = [c.split("\n", 1)[1] if "\n" in c else "" for c in CELL_SPLIT.split(cells_py.read_text(encoding="utf-8"))[1:]]
+        if len(blocks) != len(cells):
+            errors.add(ch.path, f"실행 코드 블록 {len(blocks)}개, {cells_py.relative_to(ROOT)} 셀 {len(cells)}개")
+        for i, (block, cell) in enumerate(zip(blocks, cells), 1):
+            if block.strip() != cell.strip():
+                errors.add(ch.path, f"실행 코드 블록 {i}이 {cells_py.relative_to(ROOT)}의 cell {i}과 다름")
+    elif blocks:
+        errors.add(ch.path, f"실행 코드 블록이 있는데 {cells_py.relative_to(ROOT)}가 없음")
 
 
 def check(parts: list[Part], config: dict, errors: Errors) -> None:

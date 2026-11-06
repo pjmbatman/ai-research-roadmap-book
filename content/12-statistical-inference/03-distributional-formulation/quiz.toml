@@ -29,28 +29,30 @@ explanation = '''절댓값손실의 최적해는 조건부 중앙값이다. 이�
 
 [[questions.choices]]
 text = "조건부 평균"
+feedback = "평균은 제곱손실의 최적해다. 절댓값손실은 큰 오차를 덜 강하게 벌주므로 다른 대표값을 고른다."
 
 [[questions.choices]]
 text = "조건부 중앙값"
 correct = true
 
 [[questions.choices]]
-text = "조건부 분산"
-feedback = "분산은 대표값이 아니라 퍼짐의 척도다."
+text = "조건부 최빈값(mode)"
+feedback = "최빈값은 0-1 손실(연속 변수에서는 그 극한)의 최적해다. 절댓값손실은 위아래로 넘칠 확률이 같아지는 점을 고른다."
 
 [[questions]]
 id = "pinball-quantile"
 type = "numeric"
-objective = 3
-prompt = '''분위수 회귀에서 pinball loss의 파라미터를 $\tau = 0.9$로 두고 학습하면, 모델은 $p(y \mid x)$의 몇 % 분위수를 추정하는가? (숫자만 입력, 예: 50)'''
+objective = 2
+prompt = '''분위수 회귀에서 pinball loss의 파라미터를 $\tau = 0.9$로 두고 학습하면, 모델은 $p(y \mid x)$의 몇 % 분위수를 추정하는가?'''
 answer = 90
 tolerance = 0
+slider = { min = 0, max = 100, step = 5, unit = "%" }
 explanation = '''pinball loss $\rho_\tau(u) = u(\tau - \mathbb{1}[u < 0])$의 기대값을 최소화하는 값은 $\tau$ 분위수다. $\tau = 0.5$이면 중앙값(절댓값손실의 절반)과 같다. 서로 다른 $\tau$로 학습한 두 모델로 예측 구간을 만들 수 있다.'''
 
 [[questions]]
 id = "bimodal-mean"
 type = "single"
-objective = 1
+objective = 2
 prompt = '''어떤 입력 $x$에서 $y$가 $-1$ 근처 또는 $+1$ 근처에 같은 확률로 나타난다(쌍봉 분포). MSE로 학습한 모델이 이 $x$에서 0에 가까운 값을 예측했다. 가장 정확한 해석은?'''
 explanation = '''MSE의 최적해는 조건부 평균이고, 쌍봉 분포의 평균은 두 봉우리 사이, 즉 실제로는 거의 일어나지 않는 값일 수 있다. 모델의 학습이 잘못된 것이 아니라 문제 정의(점 예측 + 제곱손실)가 이 데이터에 맞지 않는 것이다. 혼합 밀도 네트워크처럼 분포를 출력하는 모델이 대안이다.'''
 
@@ -71,10 +73,10 @@ id = "distribution-statements"
 type = "multiple"
 objective = 1
 prompt = "다음 중 옳은 것을 모두 고르시오."
-explanation = '''$p(\theta \mid D)$는 파라미터의 사후분포, $p_\theta(y \mid x)$는 조건부 예측분포다. 이분산 회귀는 평균과 함께 입력에 따라 달라지는 분산을 출력한다. 분산이 고정된 가우시안 우도를 최대화하는 것은 제곱오차 합을 최소화하는 것과 같은 해를 준다. 예측 구간은 새 관측값 $y$의 범위, 신뢰 구간은 파라미터(또는 평균) 같은 고정된 미지량의 범위를 다루므로 대상이 다르다.'''
+explanation = '''$p(\theta \mid \mathcal{D})$는 파라미터의 사후분포, $p_\theta(y \mid x)$는 조건부 예측분포다. 이분산 회귀는 평균과 함께 입력에 따라 달라지는 분산을 출력한다. 분산이 고정된 가우시안 우도를 최대화하는 것은 제곱오차 합을 최소화하는 것과 같은 해를 준다. 예측 구간은 새 관측값 $y$의 범위, 신뢰 구간은 파라미터(또는 평균) 같은 고정된 미지량의 범위를 다루므로 대상이 다르다.'''
 
 [[questions.choices]]
-text = '''$p(\theta \mid D)$는 데이터를 본 뒤 파라미터에 대한 사후분포다.'''
+text = '''$p(\theta \mid \mathcal{D})$는 데이터를 본 뒤 파라미터에 대한 사후분포다.'''
 correct = true
 
 [[questions.choices]]
@@ -88,3 +90,41 @@ correct = true
 [[questions.choices]]
 text = "예측 구간과 신뢰 구간은 같은 대상의 불확실성을 나타낸다."
 feedback = "예측 구간은 새 관측값, 신뢰 구간은 고정된 미지량(예: 평균)의 범위다."
+
+[[questions]]
+id = "overconfident-score"
+type = "single"
+objective = 3
+prompt = '''참 분포가 $\mathcal{N}(0, 1)$인 데이터에 대해, 평균은 맞지만 표준편차를 0.3으로 너무 작게 잡은 예측분포 $\mathcal{N}(0, 0.3^2)$을 적정 점수 규칙(NLL, CRPS)으로 평가하면?'''
+explanation = '''적정 점수 규칙은 참 분포를 그대로 보고할 때 기대 점수가 가장 좋다. 표준편차를 너무 작게 잡은(과신한) 예측분포는 꼬리 쪽 관측값에서 큰 벌점을 받는다. 이 장의 코드에서 NLL은 참 분포일 때 1.420, 과신한 분포일 때 5.286이었다. 평균만 보는 RMSE는 두 예측을 구별하지 못한다.'''
+
+[[questions.choices]]
+text = "평균이 맞으므로 참 분포와 같은 점수를 받는다."
+feedback = "그것은 평균만 보는 점 예측 지표(RMSE)의 결론이다. 적정 점수 규칙은 분포 전체를 평가한다."
+
+[[questions.choices]]
+text = "꼬리 쪽 관측값에서 큰 벌점을 받아 참 분포보다 점수가 나쁘다."
+correct = true
+
+[[questions.choices]]
+text = "구간이 좁아 정밀하므로 참 분포보다 점수가 좋다."
+feedback = "좁은 구간은 맞을 때만 좋다. 실제 관측값의 퍼짐보다 좁으면 자주 틀리고 큰 벌점을 받는다."
+
+[[questions]]
+id = "irreducible-uncertainty"
+type = "single"
+objective = 1
+prompt = "같은 측정 장비로 데이터를 계속 더 모아도 줄어들지 않는 불확실성은?"
+explanation = '''측정 잡음처럼 데이터 생성 과정 자체에 있는 무작위성(aleatoric 불확실성)은 데이터를 늘려도 줄지 않는다. 파라미터 불확실성(epistemic)은 데이터가 늘수록 줄어든다. 모델 구조가 틀린 데서 오는 오차는 데이터를 늘려도 사라지지 않지만, 모델을 바꾸면 줄일 수 있다는 점에서 측정 잡음과 다르다.'''
+
+[[questions.choices]]
+text = "측정 잡음에서 오는 불확실성"
+correct = true
+
+[[questions.choices]]
+text = "파라미터 추정의 불확실성"
+feedback = "데이터가 늘수록 파라미터는 더 정확히 추정된다. 이 불확실성은 줄어든다."
+
+[[questions.choices]]
+text = "학습에 사용한 난수 시드에서 오는 불확실성"
+feedback = "시드에 따른 변동은 학습 절차의 변동이다. 여러 시드로 반복하고 데이터가 늘면 대개 작아진다."

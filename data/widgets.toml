@@ -7,29 +7,33 @@
 #   title       한국어 이름
 #   chapters    사용하는 장 id 목록 (첫 번째가 주 사용처)
 #   status      planned | prototype | implemented
+#   kind        manipulate | stepper | simulate | compare  (인터랙션 틀, editorial/design-system.md §8)
 #   interaction 학습자가 하는 일(직접 조작 → 관찰)
 #   binds       페이지 상태로 내보내는 변수. 같은 페이지의 코드 셀·수식·다른 위젯과 공유된다
 #   motion      애니메이션이 설명하는 과정 (없으면 생략)
 
 [[widgets]]
 name = "linear-map-2d"
+kind = "manipulate"
 title = "2차원 선형·아핀 사상"
 chapters = ["linear-algebra/vector-spaces", "linear-algebra/affine-and-nonlinear"]
-status = "planned"
+status = "prototype"
 interaction = "basis 벡터를 끌거나 행렬 성분·bias를 입력하면 격자와 도형이 변형된다. bias를 켜고 끄며 원점 보존 여부를 본다"
 binds = ["A", "b"]
 motion = "항등 사상에서 목표 사상으로 격자가 연속적으로 변형되는 보간"
 
 [[widgets]]
 name = "relu-regions"
+kind = "manipulate"
 title = "ReLU 신경망의 조각별 아핀 영역"
 chapters = ["linear-algebra/affine-and-nonlinear", "deep-learning-pytorch/neural-network-components"]
-status = "planned"
+status = "prototype"
 interaction = "뉴런 수와 가중치를 바꾸면 2차원 입력 공간이 선형 영역으로 나뉘는 모습과 영역 수가 갱신된다"
 binds = ["weights"]
 
 [[widgets]]
 name = "svd-explorer"
+kind = "stepper"
 title = "SVD: 회전–스케일–회전"
 chapters = ["linear-algebra/svd-and-pca"]
 status = "planned"
@@ -39,6 +43,7 @@ motion = "V^T 회전 → Σ 스케일 → U 회전의 3단계 애니메이션"
 
 [[widgets]]
 name = "autodiff-graph"
+kind = "stepper"
 title = "계산 그래프와 역전파"
 chapters = ["calculus-and-autodiff/automatic-differentiation"]
 status = "planned"
@@ -48,6 +53,7 @@ motion = "forward 값이 왼쪽→오른쪽, gradient가 오른쪽→왼쪽으�
 
 [[widgets]]
 name = "float-precision"
+kind = "manipulate"
 title = "부동소수점 비트 구조"
 chapters = ["numerical-methods/floating-point"]
 status = "planned"
@@ -56,6 +62,7 @@ binds = ["x"]
 
 [[widgets]]
 name = "ode-stability"
+kind = "compare"
 title = "ODE solver의 step 크기와 안정성"
 chapters = ["numerical-methods/ode-solvers"]
 status = "planned"
@@ -64,6 +71,7 @@ binds = ["h", "method"]
 
 [[widgets]]
 name = "optimizer-landscape"
+kind = "simulate"
 title = "손실 지형 위의 optimizer 궤적"
 chapters = ["optimization/first-order-methods", "optimization/adaptive-methods"]
 status = "planned"
@@ -73,6 +81,7 @@ motion = "여러 optimizer가 동시에 이동하는 궤적 재생(일시정지�
 
 [[widgets]]
 name = "distribution-explorer"
+kind = "manipulate"
 title = "분포 탐색기"
 chapters = ["probability/distributions", "probability/random-variables"]
 status = "planned"
@@ -81,6 +90,7 @@ binds = ["dist", "params", "samples"]
 
 [[widgets]]
 name = "gaussian-conditioning"
+kind = "manipulate"
 title = "다변량 가우시안의 조건부분포"
 chapters = ["probability/multivariate-gaussian"]
 status = "planned"
@@ -89,14 +99,16 @@ binds = ["mu", "Sigma", "x1"]
 
 [[widgets]]
 name = "loss-to-estimator"
+kind = "manipulate"
 title = "손실함수가 고르는 대표값"
 chapters = ["statistical-inference/distributional-formulation"]
-status = "planned"
+status = "prototype"
 interaction = "조건부분포 모양(단봉·쌍봉·비대칭)을 바꾸고 MSE·MAE·pinball 손실의 최적 예측이 어디에 놓이는지 본다"
 binds = ["tau", "shape"]
 
 [[widgets]]
 name = "bayesian-update"
+kind = "stepper"
 title = "순차적 베이지안 갱신"
 chapters = ["bayesian-inference/bayesian-thinking", "bayesian-inference/conjugate-models"]
 status = "planned"
@@ -106,6 +118,7 @@ motion = "관측 하나마다 사후분포가 갱신되는 전이"
 
 [[widgets]]
 name = "gp-regression"
+kind = "manipulate"
 title = "Gaussian process 회귀"
 chapters = ["bayesian-inference/gaussian-processes"]
 status = "planned"
@@ -114,6 +127,7 @@ binds = ["X", "y", "kernel"]
 
 [[widgets]]
 name = "split-leakage"
+kind = "compare"
 title = "데이터 분할과 누수"
 chapters = ["data/splitting-and-leakage"]
 status = "planned"
@@ -122,6 +136,7 @@ binds = ["split"]
 
 [[widgets]]
 name = "training-loop-stepper"
+kind = "stepper"
 title = "학습 루프 단계 재생기"
 chapters = ["deep-learning-pytorch/training-loop"]
 status = "planned"
@@ -131,6 +146,7 @@ motion = "데이터 흐름과 gradient 흐름을 단계별로 강조"
 
 [[widgets]]
 name = "attention-visualizer"
+kind = "manipulate"
 title = "Attention 계산"
 chapters = ["architectures/transformers"]
 status = "planned"
@@ -139,6 +155,7 @@ binds = ["tokens", "mask"]
 
 [[widgets]]
 name = "diffusion-process"
+kind = "stepper"
 title = "확산 과정의 forward와 reverse"
 chapters = ["generative-and-foundation-models/diffusion-models"]
 status = "planned"
@@ -148,6 +165,7 @@ motion = "데이터 분포가 가우시안으로 흩어졌다가 다시 모이�
 
 [[widgets]]
 name = "calibration-diagram"
+kind = "manipulate"
 title = "Calibration과 reliability diagram"
 chapters = ["reliability/evaluating-predictive-distributions"]
 status = "planned"
@@ -156,6 +174,7 @@ binds = ["temperature"]
 
 [[widgets]]
 name = "battery-ecm"
+kind = "simulate"
 title = "등가회로 모델 시뮬레이터"
 chapters = ["battery-ai/battery-models", "battery-ai/battery-fundamentals"]
 status = "planned"

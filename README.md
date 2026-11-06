@@ -9,6 +9,7 @@ AI를 배우는 과학자·공학자와 과학 문제로 넘어오는 AI 연구�
 - **로드맵 설계 근거(독자·트랙·레이어·평가):** [editorial/roadmap-design.md](editorial/roadmap-design.md)
 - **플랫폼 아키텍처(정적 사이트 + 런타임 어댑터):** [editorial/platform-architecture.md](editorial/platform-architecture.md)
 - **UI/UX(상호작용·모션·실습 화면):** [editorial/ux-design.md](editorial/ux-design.md)
+- **디자인 시스템(테마·효과 도구 상자·슬라이더와 인터랙션 원칙):** [editorial/design-system.md](editorial/design-system.md)
 - **작업 흐름(파일 지도·Issue→PR·Claude skill):** [editorial/workflow.md](editorial/workflow.md)
 - **결정 기록(ADR):** [editorial/decisions/](editorial/decisions/)
 - **기여 방법:** [CONTRIBUTING.md](CONTRIBUTING.md)
@@ -45,9 +46,10 @@ data/              용어집, 참고문헌, 위젯 레지스트리
 editorial/         편집 규칙과 설계 문서 (책에 포함되지 않음)
 templates/         부·장 템플릿
 scripts/book.py    검증·목차 생성 도구 (Python 3.11+, 외부 의존성 없음)
+apps/web/          웹 사이트 (Astro 정적 사이트, Pyodide)
 ```
 
-웹 사이트(`apps/web`)는 [구축 단계](editorial/platform-architecture.md#8-단계별-구축)에 맞춰 추가한다. 백엔드·DB·계산 서버는 두지 않는다.
+웹 사이트(`apps/web`)는 원고를 빌드 시점에 읽어 정적 HTML을 만든다. 백엔드·DB·계산 서버는 두지 않고, 코드는 학습자의 브라우저(Pyodide)에서 실행한다.
 자세한 규칙은 [editorial/conventions.md](editorial/conventions.md), 문체는 [editorial/style-guide.md](editorial/style-guide.md)를 따른다.
 
 ## 작업 방법
@@ -68,7 +70,29 @@ python3 scripts/book.py stats
 python3 scripts/book.py new-chapter 07-linear-algebra matrix-exponential "행렬 지수함수" "Matrix Exponential"
 ```
 
-`check`가 검증하는 것: 디렉터리·파일 이름, frontmatter, 선수 지식의 존재·순환·**레이어 방향**, 트랙 순서, 퀴즈 형식, 위젯·퀴즈·연습문제 참조, 상대 링크, OUTLINE.md 최신 여부. CI가 push마다 실행한다.
+`check`가 검증하는 것: 디렉터리·파일 이름, frontmatter, 선수 지식의 존재·순환·**레이어 방향**, 트랙 순서, 퀴즈 형식, 위젯·퀴즈·연습문제 참조, 본문 코드 블록과 `labs/**/cells.py`의 일치, 상대 링크, OUTLINE.md 최신 여부. CI가 push마다 실행한다.
+
+실습 코드와 연습문제(Python 3.11+, [uv](https://docs.astral.sh/uv/)):
+
+```bash
+cd labs && uv run pytest -q .
+```
+
+웹 사이트(Node.js 22, 버전은 집필 시점 예시):
+
+```bash
+cd apps/web && npm ci && npm run dev
+```
+
+```bash
+cd apps/web && npm run build && npm run test:links
+```
+
+```bash
+cd apps/web && npx playwright install chromium && PYODIDE_CDN=1 npm test
+```
+
+`main`에 반영되면 `.github/workflows/deploy.yml`이 사이트를 빌드해 GitHub Pages에 배포한다.
 
 ## 현재 상태
 
@@ -80,8 +104,10 @@ python3 scripts/book.py new-chapter 07-linear-algebra matrix-exponential "행렬
 - [x] 작업 흐름·ADR·Claude skill·이슈/PR 템플릿
 - [x] 라이선스: 코드 MIT, 본문 CC BY 4.0
 - [ ] 행동 강령·인용 정보 (신고 연락처, 저자 표기)
-- [ ] P1 정적 학습 사이트 (Astro + Pyodide + 퀴즈 + 위젯 3종 + 브라우저 진도)
-- [ ] P2 연습문제·로컬 런타임 어댑터 (PyTorch 실습)
+- [x] P1 정적 학습 사이트 (Astro + Pyodide + 퀴즈 + 위젯 3종 + 브라우저 진도) — v0.1.0 프로토타입
+- [x] 시범 장 2개 초고: 7.2 아핀 구조와 비선형성, 12.3 분포 기반 문제 정의
+- [x] 브라우저 연습문제 채점 (저장소의 pytest 테스트를 그대로 실행)
+- [ ] 로컬 런타임 어댑터 (PyTorch 실습)
 - [ ] 1단계 학습 경로의 필수 장 초고
 
 ## 라이선스

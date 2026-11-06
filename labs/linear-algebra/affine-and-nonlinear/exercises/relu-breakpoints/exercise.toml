@@ -1,0 +1,6 @@
+title = "ReLU 합의 꺾이는 점 찾기"
+chapter = "linear-algebra/affine-and-nonlinear"
+objective = 3
+exec = "browser"
+entry = "breakpoints"
+timeout_s = 10

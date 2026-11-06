@@ -1,0 +1,6 @@
+title = "이분산 가우시안의 음의 로그우도"
+chapter = "statistical-inference/distributional-formulation"
+objective = 3
+exec = "browser"
+entry = "gaussian_nll"
+timeout_s = 15

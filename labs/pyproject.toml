@@ -1,0 +1,24 @@
+[project]
+name = "ai-for-science-roadmap-labs"
+version = "0.1.0"
+description = "AI for Science 로드맵의 실습 코드와 연습문제"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = [
+    "numpy>=1.26",
+    "matplotlib>=3.8",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+# 연습문제 테스트는 EXERCISE_MODULE(기본값 solution)이 가리키는 모듈을 채점한다.
+testpaths = ["."]
+python_files = ["test_*.py"]
+addopts = "--import-mode=importlib"

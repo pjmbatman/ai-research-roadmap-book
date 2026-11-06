@@ -1,0 +1,56 @@
+---
+import Shell from "../layouts/Shell.astro";
+import { loadBook, allChapters, str } from "../lib/book";
+const { parts, config } = loadBook();
+const u = (p: string) => import.meta.env.BASE_URL + p;
+const layers = (config.layers as any[]).filter((l) => l.level < 9).sort((a, b) => b.level - a.level);
+const tracks = config.tracks as any[];
+const chaptersOfTrack = (key: string) => parts.filter((p) => str(p.meta.track) === key).flatMap((p) => p.chapters);
+const stackData = layers.map((l) => ({
+  level: l.level, name: l.name, desc: l.description,
+  tracks: tracks.filter((t) => t.layer === l.level).map((t) => ({ key: t.key, code: t.code, name: t.name, n: chaptersOfTrack(t.key).length })),
+}));
+const ready = allChapters().filter((c) => ["draft", "review", "done"].includes(str(c.meta.status)) && c.partSlug !== "appendices");
+---
+<Shell title="AI for Science 로드맵" current="home">
+  <div class="page home">
+    <section class="hero">
+      <div>
+        <h1>과학 문제를 <em>AI로</em><br />정의하고 검증하는 법.</h1>
+        <p>읽고, 조작하고, 브라우저에서 바로 실행하며 배우는 오픈소스 로드맵.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary btn-lg" href={u("orientation/how-to-read/")}>시작하기</a>
+          <a class="btn btn-lg" href={u("map/")}>지도</a>
+        </div>
+        {ready.length > 0 && (
+          <div class="ready-row">
+            {ready.map((c) => (
+              <a class="ready-card" href={u(c.url)} data-chapter-link={c.id}>
+                <span class="n">{c.label}</span>
+                <b>{str(c.meta.title)}</b>
+                <span class="go" aria-hidden="true">→</span>
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+      <div class="stack-wrap" data-stack={JSON.stringify(stackData)}>
+        <div class="stack-legend" role="group" aria-label="레이어">
+          {stackData.map((l) => <button type="button" data-level={l.level} aria-pressed="false">L{l.level} {l.name}</button>)}
+        </div>
+        <div class="stack" aria-hidden="true">
+          {[...stackData].reverse().map((l, i) => (
+            <div class="plane" style={`--i:${i}`} data-level={l.level}>
+              {Array.from({ length: 8 }, (_, k) => <i class={k < l.tracks.length ? "t" : ""} />)}
+            </div>
+          ))}
+        </div>
+        <div class="stack-card" aria-live="polite">
+          <span class="layer-label" data-stack-title></span>
+          <span data-stack-desc></span>
+          <div class="tracks" data-stack-tracks></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</Shell>

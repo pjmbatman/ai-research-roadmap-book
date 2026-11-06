@@ -52,7 +52,8 @@
 | `workflow.md` | 이 문서. 파일 지도와 작업 흐름 |
 | `roadmap-design.md` | 독자·트랙·레이어·평가 설계 근거 |
 | `platform-architecture.md` | 정적 사이트·런타임 어댑터 구조 |
-| `ux-design.md` | 상호작용·모션·화면 설계 |
+| `ux-design.md` | 정보 구조·장 페이지·실습 화면 설계 |
+| `design-system.md` | 테마(색·글꼴·모션 토큰), 효과 도구 상자, 인터랙션 원칙 |
 | `decisions/NNNN-제목.md` | **결정 기록(ADR).** 한 결정에 한 파일 |
 
 ### 2.4 Claude 작업 환경

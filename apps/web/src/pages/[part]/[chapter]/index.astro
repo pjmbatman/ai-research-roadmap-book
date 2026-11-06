@@ -1,0 +1,64 @@
+---
+import Shell from "../../../layouts/Shell.astro";
+import { allChapters, partOf, trackOfChapter, prerequisites, dependents, neighbors, STATUS_LABEL, str } from "../../../lib/book";
+import { renderChapter } from "../../../lib/markdown";
+import { chapterData } from "../../../lib/page";
+
+export function getStaticPaths() {
+  return allChapters().map((ch) => ({ params: { part: ch.partSlug, chapter: ch.slug }, props: { id: ch.id } }));
+}
+const { id } = Astro.props as { id: string };
+const ch = allChapters().find((c) => c.id === id)!;
+const part = partOf(ch);
+const track = trackOfChapter(ch);
+const base = import.meta.env.BASE_URL;
+const u = (p: string) => base + p;
+const status = str(ch.meta.status);
+const html = renderChapter(ch.body, { assetBase: `${base}content-assets/${ch.partSlug}/${ch.slug}/`, quizSection: ch.quiz.length > 0 });
+const pre = prerequisites(ch);
+const deps = dependents(ch);
+const { next } = neighbors(ch);
+const data = chapterData(ch);
+const isOutline = status === "outline" || status === "spec";
+---
+<Shell title={`${ch.label} ${str(ch.meta.title)}`} description={`${str(ch.meta.title)} — ${str(part.meta.title)}`} pageData={data}>
+  <div class="page">
+    <article class="chapter" data-chapter={ch.id}>
+      <header class="chapter-head">
+        <nav class="crumbs" aria-label="위치">
+          {track && <a class="badge badge-code" href={u(`tracks/${track.key}/`)}>{track.code}</a>}
+          <a href={u(part.url)}>{part.label === "부록" ? "부록" : `${part.label}부`} {str(part.meta.title)}</a>
+          {status !== "done" && <span class={`badge badge-status-${status}`}>{STATUS_LABEL[status] ?? status}</span>}
+        </nav>
+        <h1><span class="num">{ch.label}</span>{str(ch.meta.title)}</h1>
+        {pre.length > 0 && (
+          <div class="prereq">
+            {pre.map((p) => <a class="chip" href={u(p.url)} data-prereq={p.id}><span class="n">{p.label}</span>{str(p.meta.title)}</a>)}
+          </div>
+        )}
+        {isOutline && (
+          <div class="status-banner">
+            아직 <b>{status === "spec" ? "명세" : "목차"}</b> 단계인 장이다.
+            <a href="https://github.com/pjmbatman/ai-research-roadmap-book/blob/main/CONTRIBUTING.md">집필에 기여하기</a>
+          </div>
+        )}
+      </header>
+
+      <nav class="stepbar" aria-label="단계" data-stepbar></nav>
+      <div class="prose" data-steps set:html={html} />
+      <nav class="step-nav" data-stepnav>
+        <button type="button" class="btn" data-prev>←</button>
+        <button type="button" class="btn btn-primary" data-next>다음</button>
+      </nav>
+      <div class="chapter-done" data-done hidden>
+        {next && <a class="btn btn-primary" href={u(next.url)}>{next.label} {str(next.meta.title)} →</a>}
+        {deps.slice(0, 4).map((d) => <a class="chip" href={u(d.url)}><span class="n">{d.label}</span>{str(d.meta.title)}</a>)}
+      </div>
+
+      <aside class="toc" aria-label="이 장의 단계">
+        <ol data-steplist></ol>
+        <div class="meter"><i data-chapter-meter></i></div>
+      </aside>
+    </article>
+  </div>
+</Shell>
