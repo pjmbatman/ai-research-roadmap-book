@@ -58,4 +58,26 @@
 
 ## 4. 사용자에게 돌아왔을 때 확인할 것
 
-(진행하며 채운다)
+**배포하려면 (사용자만 할 수 있는 일)**
+
+1. `claude/zen-brown-fgj45b` → `main` PR을 검토하고 merge한다.
+2. 저장소 **Settings → Pages → Build and deployment → Source**를 **GitHub Actions**로 바꾼다. 그 뒤 `main`에 push가 생기면 `deploy` 워크플로가 배포한다. merge보다 먼저 바꾸지 못했다면 Actions 탭에서 `deploy`를 수동 실행(`Run workflow`)한다.
+3. 배포 주소(집필 시점 예시): `https://pjmbatman.github.io/ai-research-roadmap-book/`. 7.2·12.3 장에서 코드 셀 실행과 연습문제 채점을 한 번 눌러 본다.
+
+**검토가 필요한 결정**
+
+- 시범 장 7.2·12.3은 `draft`다. 내용을 읽고 `review`·`done`으로 올리는 것은 사용자가 한다(AGENTS.md).
+- ADR 0008(공통 실행 예제: 감쇠 진동자·열 방정식·배터리)은 잠정이다. 확정할지 정한다.
+- 위젯 3종은 `prototype`이다. 조작감·색·문구를 보고 고칠 점을 이슈로 남긴다.
+- 대화 중 붙여 넣은 GitHub 토큰은 폐기한다(이 작업에는 쓰지 않았다).
+
+**확인한 것과 확인하지 못한 것**
+
+- 이 컨테이너에서는 jsdelivr CDN이 막혀 있어, Pyodide 0.29.5 배포본(numpy 포함)을 GitHub 릴리스에서 받아 로컬로 서빙해 브라우저 테스트를 돌렸다. CDN을 쓰는 실제 배포 환경의 실행은 CI의 `site` 작업(`PYODIDE_CDN=1`)과 배포 후 수동 확인으로 검증한다.
+- `deploy` 워크플로는 `main`에서만 돌기 때문에 실제 배포는 merge 뒤에 처음 실행된다.
+
+**다음 단계 후보**
+
+- 1단계 학습 경로의 필수 장 초고(`write-chapter` skill), 장마다 위젯·연습문제 추가
+- 로컬 런타임 어댑터(PyTorch 실습, ADR 0004)
+- 행동 강령·`CITATION.cff`(저자 표기 결정 필요)
