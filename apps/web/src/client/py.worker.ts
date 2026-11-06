@@ -41,7 +41,7 @@ self.onmessage = async (e: MessageEvent) => {
       }
       // 실행 코드뿐 아니라 함께 쓴 파일(제출 코드·테스트)의 import도 보고 필요한 패키지를 불러온다.
       const sources = [e.data.code, ...Object.entries(e.data.files as Record<string, string>).filter(([p]) => p.endsWith(".py")).map(([, c]) => c)];
-      await pyodide.loadPackagesFromImports(sources.join("\n"));
+      await pyodide.loadPackagesFromImports(sources.join("\n"), { messageCallback: () => {}, errorCallback: (m: string) => post({ id, type: "stdout", text: m + "\n" }) });
       const result = await pyodide.runPythonAsync(e.data.code, { globals: space(e.data.ns) });
       let value: unknown = undefined;
       if (result && typeof result.toJs === "function") { value = result.toJs({ dict_converter: Object.fromEntries }); result.destroy?.(); }

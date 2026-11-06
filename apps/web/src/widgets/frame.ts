@@ -15,7 +15,8 @@ export function frame(root: HTMLElement, title: string, kind: string, aspect = 0
   root.innerHTML = "";
   const wrap = el("div", "wframe");
   const head = el("div", "wframe-head");
-  head.innerHTML = `<b></b><span class="kind">위젯 · ${KIND[kind] ?? kind}</span>`;
+  head.innerHTML = `<b></b>`;
+  head.dataset.kind = KIND[kind] ?? kind;
   head.querySelector("b")!.textContent = title;
   const stage = el("div", "wframe-stage");
   const canvas = document.createElement("canvas");

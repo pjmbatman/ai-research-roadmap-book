@@ -19,15 +19,87 @@ const h = <K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string, html?: s
 
 export function mountQuizzes(page: PageData) {
   const qs = page.quiz as Q[];
-  const inline = new Set<string>();
+  // 본문 속 문항: 버튼 하나. 누르면 문항 카드를 대화상자로 띄운다.
   document.querySelectorAll<HTMLElement>(".quiz-slot[data-quiz]").forEach((slot) => {
     const q = qs.find((x) => x.id === slot.dataset.quiz);
     if (!q) return;
-    inline.add(q.id);
-    slot.replaceWith(renderQuestion(page.chapterId, q));
+    const b = h("button", "quiz-open") as HTMLButtonElement;
+    b.type = "button";
+    b.dataset.quizOpen = q.id;
+    const sync = () => {
+      const ok = !!progress.get(page.chapterId).quiz?.[q.id]?.correct;
+      b.classList.toggle("done", ok);
+      b.innerHTML = `<span class="dot"></span>${ok ? "확인 문제 · 맞힘" : "확인 문제"}`;
+    };
+    sync();
+    window.addEventListener("progress-change", sync);
+    b.addEventListener("click", () => openDialog(page.chapterId, q));
+    slot.replaceWith(b);
   });
   const all = document.querySelector<HTMLElement>(".quiz-all");
-  if (all) renderSummary(all, page, qs, inline);
+  if (all) mountCarousel(all, page, qs);
+}
+
+let dialog: HTMLDialogElement | null = null;
+function openDialog(chapterId: string, q: Q) {
+  if (!dialog) {
+    dialog = h("dialog", "quiz-dialog") as HTMLDialogElement;
+    dialog.addEventListener("click", (e) => { if (e.target === dialog) dialog!.close(); });
+    document.body.append(dialog);
+  }
+  dialog.innerHTML = "";
+  const close = h("button", "dialog-close", "×") as HTMLButtonElement;
+  close.type = "button";
+  close.setAttribute("aria-label", "닫기");
+  close.addEventListener("click", () => dialog!.close());
+  dialog.append(close, renderQuestion(chapterId, q));
+  dialog.showModal();
+}
+
+/** 개념 퀴즈 단계: 한 번에 한 문항. 위쪽 막대가 진행과 정답을 보여 준다. 마지막은 학습 목표별 요약. */
+function mountCarousel(root: HTMLElement, page: PageData, qs: Q[]) {
+  const bar = h("div", "qbar");
+  const stage = h("div", "qstage");
+  const nav = h("div", "qnav");
+  const prev = h("button", "btn", "←") as HTMLButtonElement;
+  const next = h("button", "btn btn-primary", "다음 문항") as HTMLButtonElement;
+  prev.type = next.type = "button";
+  nav.append(prev, next);
+  root.append(bar, stage, nav);
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let cur = -1;
+  const done = () => progress.get(page.chapterId).quiz ?? {};
+  const segs = [...qs, null].map((q, i) => {
+    const b = h("button", "seg") as HTMLButtonElement;
+    b.type = "button";
+    b.setAttribute("aria-label", q ? `문항 ${i + 1}` : "요약");
+    if (!q) b.classList.add("seg-sum");
+    b.addEventListener("click", () => go(i));
+    bar.append(b);
+    return b;
+  });
+  const paint = () => segs.forEach((b, i) => {
+    b.setAttribute("aria-current", String(i === cur));
+    b.classList.toggle("ok", i < qs.length && !!done()[qs[i].id]?.correct);
+  });
+  function go(i: number) {
+    i = Math.max(0, Math.min(qs.length, i));
+    const dir = i >= cur ? 1 : -1;
+    cur = i;
+    stage.innerHTML = "";
+    const card = i < qs.length ? renderQuestion(page.chapterId, qs[i]) : summary(page, qs, go);
+    if (!reduced) card.classList.add(dir > 0 ? "enter-next" : "enter-prev");
+    stage.append(card);
+    prev.disabled = i === 0;
+    next.hidden = i === qs.length;
+    next.textContent = i === qs.length - 1 ? "요약 보기" : "다음 문항";
+    paint();
+  }
+  prev.addEventListener("click", () => go(cur - 1));
+  next.addEventListener("click", () => go(cur + 1));
+  window.addEventListener("progress-change", paint);
+  const first = qs.findIndex((q) => !done()[q.id]?.correct);
+  go(first < 0 ? qs.length : first);
 }
 
 function record(chapterId: string, id: string, correct: boolean) {
@@ -42,10 +114,9 @@ function renderQuestion(chapterId: string, q: Q): HTMLElement {
   box.id = `quiz-${q.id}`;
   box.dataset.quizId = q.id;
   const head = h("div", "quiz-head");
-  const tag = h("span", "tag", q.type === "multiple" ? "개념 확인 · 모두 고르기" : q.type === "numeric" ? "개념 확인 · 값 맞히기" : "개념 확인");
-  const obj = h("span", "", `목표 ${q.objective}${q.objectiveText ? ` · ${q.objectiveText}` : ""}`);
+  const tag = h("span", "tag", q.type === "multiple" ? "모두 고르기" : "");
   const state = h("span", "quiz-state");
-  head.append(tag, obj);
+  head.append(tag);
   const prompt = h("div", "quiz-prompt", q.prompt);
   const fb = h("div", "quiz-fb");
   fb.hidden = true;
@@ -53,7 +124,7 @@ function renderQuestion(chapterId: string, q: Q): HTMLElement {
   box.append(head, prompt);
 
   const prev = progress.get(chapterId).quiz?.[q.id];
-  if (prev?.correct) { state.textContent = "✓ 맞힌 문항"; state.className = "quiz-state done"; }
+  if (prev?.correct) { box.classList.add("solved"); }
   head.append(state);
 
   const showResult = (ok: boolean, extra = "") => {
@@ -63,7 +134,7 @@ function renderQuestion(chapterId: string, q: Q): HTMLElement {
       ? `<span class="lbl">정답.</span>${q.explanation}`
       : `<span class="lbl">다시 생각해 보자.</span>${extra}`;
     record(chapterId, q.id, ok);
-    if (ok) { state.textContent = "✓ 맞힌 문항"; state.className = "quiz-state done"; }
+    if (ok) box.classList.add("solved");
   };
 
   if (q.type === "single" || q.type === "multiple") {
@@ -101,11 +172,10 @@ function renderQuestion(chapterId: string, q: Q): HTMLElement {
       const actions = h("div", "quiz-actions");
       const check = h("button", "btn btn-primary", "확인") as HTMLButtonElement;
       check.type = "button";
-      const hint = h("small", "", "");
-      hint.style.color = "var(--mute)";
+      const hint = h("span", "quiz-hint", "");
       check.addEventListener("click", () => {
         const picked = buttons.map((b) => b.getAttribute("aria-pressed") === "true");
-        if (!picked.some(Boolean)) { hint.textContent = "하나 이상 고른 뒤 확인한다."; return; }
+        if (!picked.some(Boolean)) { hint.textContent = "하나 이상 고른다"; return; }
         hint.textContent = "";
         const wrong: string[] = [];
         let missed = 0;
@@ -145,14 +215,12 @@ function renderQuestion(chapterId: string, q: Q): HTMLElement {
       num.value = range.value;
       num.min = range.min; num.max = range.max; num.step = range.step;
       row.append(range, out);
-      const ticks = h("div", "ticks", `<span>${s.min}${unit}</span><span>${s.max}${unit}</span>`);
-      wrap.append(row, ticks);
+      wrap.append(row);
     }
     const actions = h("div", "quiz-actions");
     const check = h("button", "btn btn-primary", "확인") as HTMLButtonElement;
     check.type = "button";
-    const label = h("label", "", "직접 입력 ");
-    label.style.fontSize = "14px";
+    const label = h("label", "");
     label.append(num);
     check.addEventListener("click", () => {
       const v = Number(num.value);
@@ -169,22 +237,30 @@ function renderQuestion(chapterId: string, q: Q): HTMLElement {
   return box;
 }
 
-function renderSummary(root: HTMLElement, page: PageData, qs: Q[], inline: Set<string>) {
-  const card = h("div", "quiz-summary card");
-  const update = () => {
-    const done = progress.get(page.chapterId).quiz ?? {};
-    const rows = page.objectives.map((text, i) => {
-      const ofGoal = qs.filter((q) => q.objective === i + 1);
-      const ok = ofGoal.filter((q) => done[q.id]?.correct).length;
-      const links = ofGoal.map((q, j) => `<a href="#quiz-${q.id}" class="chip ${done[q.id]?.correct ? "done" : ""}">${done[q.id]?.correct ? "✓" : "○"} 문항 ${j + 1}</a>`).join("");
-      return `<li><div class="goal"><span class="gn">${i + 1}</span><span>${text}</span><span class="cnt tabular">${ok}/${ofGoal.length}</span></div><div class="links">${links}</div></li>`;
+function summary(page: PageData, qs: Q[], go: (i: number) => void): HTMLElement {
+  const card = h("div", "quiz quiz-summary");
+  const done = progress.get(page.chapterId).quiz ?? {};
+  const total = qs.filter((q) => done[q.id]?.correct).length;
+  card.innerHTML = `<div class="sum-big"><b class="tabular">${total}</b><span>/ ${qs.length}</span></div><ul class="goal-list"></ul>`;
+  const ul = card.querySelector("ul")!;
+  page.objectives.forEach((text, gi) => {
+    const li = h("li");
+    const head = h("div", "goal");
+    head.innerHTML = `<span class="gn">${gi + 1}</span><span></span>`;
+    head.children[1].textContent = text;
+    const links = h("div", "links");
+    qs.forEach((q, qi) => {
+      if (q.objective !== gi + 1) return;
+      const b = h("button", `qdot ${done[q.id]?.correct ? "ok" : ""}`) as HTMLButtonElement;
+      b.type = "button";
+      b.textContent = String(qi + 1);
+      b.setAttribute("aria-label", `문항 ${qi + 1}${done[q.id]?.correct ? " (맞힘)" : ""}`);
+      b.addEventListener("click", () => go(qi));
+      links.append(b);
     });
-    const total = qs.filter((q) => done[q.id]?.correct).length;
-    card.innerHTML = `<p class="sum-head"><b class="tabular">${total} / ${qs.length}</b> 문항을 맞혔다. 학습 목표별로 확인한다.</p><ul class="goal-list">${rows.join("")}</ul>`;
-  };
-  update();
-  window.addEventListener("progress-change", update);
-  root.append(card);
-  const rest = qs.filter((q) => !inline.has(q.id));
-  rest.forEach((q) => root.append(renderQuestion(page.chapterId, q)));
+    head.append(links);
+    li.append(head);
+    ul.append(li);
+  });
+  return card;
 }

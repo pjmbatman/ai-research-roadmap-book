@@ -27,15 +27,15 @@ const fullTitle = title === "AI for Science 로드맵" ? title : `${title} · AI
     <header class="topbar">
       <a class="brand" href={u("")}><span class="brand-mark" aria-hidden="true"></span>AI for Science 로드맵</a>
       <div class="topbar-actions">
-        <button class="kbd-hint" type="button" data-open-palette aria-label="장·용어 검색 열기">검색 <kbd>⌘</kbd><kbd>K</kbd></button>
+        <button class="kbd-hint" type="button" data-open-palette aria-label="검색"><kbd>⌘</kbd><kbd>K</kbd></button>
       </div>
     </header>
 
     <main><slot /></main>
 
     <footer class="footer">
-      <span>코드 MIT · 본문 CC BY 4.0 · 로그인 없이 브라우저에 진도를 저장합니다</span>
-      <a href="https://github.com/pjmbatman/ai-research-roadmap-book">GitHub에서 기여하기</a>
+      <a href="https://github.com/pjmbatman/ai-research-roadmap-book">GitHub</a>
+      <span>MIT · CC BY 4.0</span>
     </footer>
 
     <nav class="dock" aria-label="주요 메뉴">
@@ -63,7 +63,7 @@ const fullTitle = title === "AI for Science 로드맵" ? title : `${title} · AI
     <div class="palette" data-palette role="dialog" aria-modal="true" aria-label="검색">
       <div class="palette-box">
         <label class="sr-only" for="palette-input">장·부·트랙 검색</label>
-        <input id="palette-input" type="search" placeholder="장 제목, 번호(예: 7.2), 영어 제목으로 검색" autocomplete="off" />
+        <input id="palette-input" type="search" placeholder="검색" autocomplete="off" />
         <ul role="listbox" aria-label="검색 결과"></ul>
       </div>
     </div>

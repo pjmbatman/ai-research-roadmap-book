@@ -86,7 +86,7 @@ function remarkBook(ctx: RenderContext) {
             type: "html",
             value:
               `<div class="cell" data-exec="${esc(meta.exec)}" data-session="${esc(meta.session || "default")}" data-lang="${esc(k.lang || "python")}">` +
-              `<div class="cell-bar"><span class="badge badge-exec">${esc(meta.exec)}</span><span class="cell-lang">${esc(k.lang || "")}</span></div>` +
+              `<div class="cell-bar"></div>` +
               `<pre class="cell-src"><code>${esc(k.value)}</code></pre>` +
               (out ? `<pre class="cell-out" data-recorded="true">${esc(out)}</pre>` : `<pre class="cell-out" hidden></pre>`) +
               `</div>`,
@@ -104,34 +104,45 @@ function remarkBook(ctx: RenderContext) {
   };
 }
 
+// 장 본문을 단계(step)로 나눈다(ADR 0009). 절(h2) 하나가 한 단계이고, 첫 절 앞의 도입 문단은 첫 단계에 붙는다.
+// 고정 절은 전용 박스로 감싸고, 퀴즈가 있으면 '통과 기준' 앞에 개념 퀴즈 단계를 넣는다.
 function rehypeSections(ctx: RenderContext) {
   return (tree: any) => {
-    const out: any[] = [];
+    const steps: any[] = [];
+    const lead: any[] = [];
     let current: any = null;
-    const flush = () => { if (current) out.push(current); current = null; };
+    const step = (title: string, inner: any) => ({
+      type: "element", tagName: "section", properties: { className: ["step"], dataTitle: title }, children: [inner],
+    });
+    const flush = () => { if (current) steps.push(step(current.title, current.node)); current = null; };
     for (const node of tree.children) {
       if (node.type === "element" && node.tagName === "h2") {
         flush();
         const title = textOf(node);
         if (title === "통과 기준" && ctx.quizSection) {
-          out.push({
-            type: "element", tagName: "section", properties: { className: ["box", "box-quiz"], id: "quiz-all-section" },
+          steps.push(step("개념 퀴즈", {
+            type: "element", tagName: "section", properties: { className: ["box", "box-quiz"] },
             children: [
               { type: "element", tagName: "h2", properties: { id: "개념-퀴즈" }, children: [{ type: "text", value: "개념 퀴즈" }] },
               { type: "element", tagName: "div", properties: { className: ["quiz-all"] }, children: [] },
             ],
-          });
+          }));
         }
         const cls = FIXED.includes(title) ? ["box", `box-${FIXED_CLASS[title]}`] : ["concept"];
-        current = { type: "element", tagName: "section", properties: { className: cls }, children: [node] };
+        current = { title, node: { type: "element", tagName: "section", properties: { className: cls }, children: [node] } };
       } else if (current) {
-        current.children.push(node);
-      } else {
-        out.push(node);
+        current.node.children.push(node);
+      } else if (!(node.type === "text" && !node.value.trim())) {
+        lead.push(node);
       }
     }
     flush();
-    tree.children = out;
+    if (lead.length) {
+      const intro = { type: "element", tagName: "div", properties: { className: ["lead"] }, children: lead };
+      if (steps.length) steps[0].children.unshift(intro);
+      else steps.push(step("", intro));
+    }
+    tree.children = steps;
   };
 }
 

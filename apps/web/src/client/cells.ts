@@ -15,23 +15,18 @@ export function mountCells() {
     const out = el.querySelector<HTMLElement>("pre.cell-out")!;
     const bar = el.querySelector<HTMLElement>(".cell-bar")!;
     const original = src.textContent || "";
-    bar.append(Object.assign(document.createElement("span"), { className: "spacer" }));
-
     if (exec !== "browser") {
-      const note = document.createElement("span");
-      note.className = "cell-status";
-      note.textContent = exec === "gpu" ? "GPU가 있는 로컬 환경에서 실행" : "로컬 Python에서 실행(PyTorch 등)";
-      bar.append(note, copyButton(() => original));
+      const tag = Object.assign(document.createElement("span"), { className: "cell-tag", textContent: exec === "gpu" ? "GPU" : "로컬 Python" });
+      bar.append(tag, spacer(), copyButton(() => original));
       return;
     }
 
     const status = Object.assign(document.createElement("span"), { className: "cell-status" });
     status.setAttribute("aria-live", "polite");
     const runBtn = Object.assign(document.createElement("button"), { className: "run", type: "button", textContent: "▶ 실행" }) as HTMLButtonElement;
-    runBtn.title = "실행 (Shift+Enter)";
-    const resetBtn = Object.assign(document.createElement("button"), { type: "button", textContent: "되돌리기" }) as HTMLButtonElement;
-    resetBtn.title = "원래 코드로 되돌리기";
-    bar.append(status, resetBtn, copyButton(() => cell.get()), runBtn);
+    runBtn.title = "Shift+Enter";
+    const resetBtn = iconButton(ICON.reset, "원래 코드로 되돌리기");
+    bar.append(status, spacer(), resetBtn, copyButton(() => cell.get()), runBtn);
 
     const host = document.createElement("div");
     src.replaceWith(host);
@@ -41,7 +36,7 @@ export function mountCells() {
       el, session: el.dataset.session || "default", get: ed.get, original, ran: false,
       run: async ({ quiet = false } = {}) => {
         runBtn.disabled = true;
-        status.textContent = quiet ? "앞 셀 실행 중…" : "실행 중…";
+        runBtn.textContent = "실행 중"; status.textContent = "";
         const t0 = performance.now();
         const live: string[] = [];
         out.hidden = false;
@@ -49,13 +44,16 @@ export function mountCells() {
         const r = await session(cell.session).run(ed.get(), { onStdout: (s) => { if (!quiet) { live.push(s); out.textContent = live.join(""); } } });
         runBtn.disabled = false;
         cell.ran = r.ok;
-        if (quiet && r.ok) { status.textContent = "실행됨"; return true; }
+        runBtn.textContent = "▶ 실행";
+        if (quiet && r.ok) return true;
         out.dataset.recorded = "false";
         out.dataset.live = "true";
         out.textContent = (r.stdout || "") + (r.ok ? "" : (r.stdout ? "\n" : "") + cleanError(r.error || ""));
         if (!out.textContent) out.textContent = "(출력 없음)";
         out.classList.toggle("error", !r.ok);
-        status.textContent = r.ok ? `완료 · ${((performance.now() - t0) / 1000).toFixed(1)}초` : "오류";
+        status.textContent = r.ok ? "✓" : "";
+        status.dataset.ok = String(r.ok);
+        void t0;
         return r.ok;
       },
     };
@@ -65,7 +63,7 @@ export function mountCells() {
       queue = queue.then(async () => {
         const mine = cells.filter((c) => c.session === cell.session);
         for (const c of mine.slice(0, mine.indexOf(cell))) {
-          if (!c.ran && !(await c.run({ quiet: true }))) { status.textContent = "앞 셀에서 오류"; return; }
+          if (!c.ran && !(await c.run({ quiet: true }))) { status.textContent = "앞 셀 오류"; return; }
         }
         await cell.run();
       });
@@ -73,16 +71,29 @@ export function mountCells() {
     resetBtn.addEventListener("click", () => {
       ed.set(original.replace(/\n$/, ""));
       out.classList.remove("error");
-      status.textContent = "원래 코드";
+      status.textContent = "";
     });
   });
 }
 
+const ICON = {
+  reset: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>',
+  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>',
+};
+const spacer = () => Object.assign(document.createElement("span"), { className: "spacer" });
+export function iconButton(svg: string, label: string) {
+  const b = Object.assign(document.createElement("button"), { type: "button", className: "icon" }) as HTMLButtonElement;
+  b.innerHTML = svg;
+  b.setAttribute("aria-label", label);
+  b.title = label;
+  return b;
+}
 function copyButton(get: () => string) {
-  const b = Object.assign(document.createElement("button"), { type: "button", textContent: "복사" }) as HTMLButtonElement;
+  const b = iconButton(ICON.copy, "코드 복사");
   b.addEventListener("click", async () => {
-    try { await navigator.clipboard.writeText(get()); b.textContent = "복사됨"; } catch { b.textContent = "복사 실패"; }
-    setTimeout(() => (b.textContent = "복사"), 1400);
+    try { await navigator.clipboard.writeText(get()); b.innerHTML = ICON.check; } catch {}
+    setTimeout(() => (b.innerHTML = ICON.copy), 1200);
   });
   return b;
 }

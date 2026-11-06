@@ -116,9 +116,8 @@ export function mount(root: HTMLElement) {
   const grid = el("div", "param-grid");
   grid.append(pt.row, pc.row);
   const ro = readouts();
-  const lab1 = el("small", "", "분포 모양"), lab2 = el("small", "", "아래 곡선의 손실");
-  [lab1, lab2].forEach((l) => (l.style.color = "var(--mute)"));
-  f.panel.append(lab1, shapeBtns.row, lab2, lossBtns.row, grid, ro.row);
+  lossBtns.row.classList.add("segmented");
+  f.panel.append(shapeBtns.row, lossBtns.row, grid, ro.row);
 
   // 그림 위에서 ŷ 끌기
   let dragging = false;

@@ -127,9 +127,7 @@ export function mount(root: HTMLElement) {
   const grid = el("div", "param-grid");
   grid.append(pw.row);
   const ro = readouts();
-  const note = el("small", "", "같은 색 = 같은 활성 패턴 = 같은 아핀 사상. 영역에 마우스를 올리면 그 조각이 강조된다. 같은 뉴런 수에서 폭과 깊이를 바꿔 비교해 보자(예: 1층 × 12 vs 2층 × 6).");
-  note.style.color = "var(--mute)";
-  f.panel.append(depthBtns.row, grid, tools, ro.row, note);
+  f.panel.append(depthBtns.row, grid, tools, ro.row);
 
   f.canvas.addEventListener("pointermove", (e) => {
     const r = f.canvas.getBoundingClientRect();

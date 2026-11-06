@@ -1,41 +1,34 @@
 ---
 import Shell from "../../layouts/Shell.astro";
-import { loadBook, STATUS_LABEL, str } from "../../lib/book";
+import { loadBook, str } from "../../lib/book";
 const { parts, config } = loadBook();
 const u = (p: string) => import.meta.env.BASE_URL + p;
 const layers = new Map((config.layers as any[]).map((l) => [l.level, l]));
 const tracks = config.tracks as any[];
+const levels = [...new Set(tracks.map((t) => t.layer as number))].sort((a, b) => a - b);
 ---
 <Shell title="트랙과 목차" current="tracks">
   <div class="page">
-    <p class="eyebrow">전체 목차</p>
-    <h1 style="font-size: clamp(32px, 5vw, 52px); margin: 6px 0 10px;">트랙과 목차</h1>
-    <p style="color: var(--ink-2); max-width: 64ch">레이어는 아래에서 위로 쌓인다. 각 트랙은 같거나 아래 레이어의 트랙에만 기댄다. 학습 순서는 레이어가 아니라 학습 경로(0.3장)가 정한다.</p>
-    {tracks.map((t) => {
-      const tparts = parts.filter((p) => str(p.meta.track) === t.key);
-      const layer = layers.get(t.layer);
-      return (
-        <section style="margin-top: 40px;" id={t.key}>
-          <div class="section-title" style="margin-top: 0">
-            <h2><span class="badge badge-code">{t.code}</span> {t.name} <small style="color:var(--mute); font-weight:400; font-size:15px">{t.name_en}</small></h2>
-            <span class="layer-label">L{t.layer} {layer?.name}</span>
-          </div>
-          <p style="margin: 0 0 12px; color: var(--ink-2)">{t.question}</p>
-          <div class="part-list">
-            {tparts.map((p) => (
-              <div class="part-block">
-                <h3><a href={u(p.url)}>{p.label === "부록" ? "부록" : `제${p.label}부`} {str(p.meta.title)}</a></h3>
-                <p>{str(p.meta.summary)}</p>
-                <ul class="ch-list">
-                  {p.chapters.map((c) => (
-                    <li><a href={u(c.url)} data-chapter-link={c.id}><span class="n">{c.label}</span><span>{str(c.meta.title)}</span><span class="st"><span class={`badge badge-status-${str(c.meta.status)}`}>{STATUS_LABEL[str(c.meta.status)]}</span></span></a></li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-      );
-    })}
+    <h1 class="page-title">트랙</h1>
+    <div data-tabs class="layer-tabs">
+      <div class="tabbar">
+        {levels.map((lv, i) => <button data-tab={`L${lv}`} data-selected={i === 0 ? "true" : undefined}>L{lv} {layers.get(lv)?.name}</button>)}
+      </div>
+      {levels.map((lv) => (
+        <div data-panel={`L${lv}`} class="track-grid">
+          {tracks.filter((t) => t.layer === lv).map((t) => {
+            const n = parts.filter((p) => str(p.meta.track) === t.key).reduce((s, p) => s + p.chapters.length, 0);
+            return (
+              <a class="track-card" href={u(`tracks/${t.key}/`)}>
+                <span class="badge badge-code">{t.code}</span>
+                <h3>{t.name}</h3>
+                <p>{t.question}</p>
+                <span class="foot"><span>{n}장</span><span>→</span></span>
+              </a>
+            );
+          })}
+        </div>
+      ))}
+    </div>
   </div>
 </Shell>

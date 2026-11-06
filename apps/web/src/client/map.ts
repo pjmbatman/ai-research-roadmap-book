@@ -95,16 +95,19 @@ export function mountMap() {
   }
 
   function showInfo(n: N | null) {
-    if (!n) { info.innerHTML = `<span class="muted">장을 가리키거나 눌러 본다. 코랄 = 이 장에 필요한 선수 지식, 밝은 선 = 이 장 다음에 올 수 있는 장, 초록 고리 = 내가 읽은 장.</span>`; return; }
+    info.hidden = !n;
+    if (!n) return;
     const t = tracks.find((x) => x.key === n.track);
     const anc = closure(n.id, (id) => byId.get(id)?.pre ?? []);
     const desc = closure(n.id, (id) => kids.get(id) ?? []);
-    info.innerHTML = `<b></b><span class="muted"></span><span class="muted"></span><a></a>`;
-    info.children[0].textContent = `${n.label} ${n.title}`;
-    info.children[1].textContent = `${t?.code ?? ""} ${t?.name ?? ""} · ${n.tier === "core" ? "필수" : "심화"} · ${READY.has(n.status) ? "본문 있음" : "목차 단계"}`;
-    info.children[2].textContent = `선수 지식 전체 ${anc.size}개 장 · 이 장에 의존하는 장 ${desc.size}개`;
+    info.innerHTML = `<span class="badge"></span><b></b><span class="nums"><span><i class="hot"></i></span><span><i></i></span></span><a class="btn btn-primary"></a>`;
+    info.children[0].textContent = t?.code ?? "";
+    info.children[1].textContent = `${n.label} ${n.title}`;
+    const nums = info.querySelectorAll(".nums > span");
+    nums[0].append(`선수 ${anc.size}`);
+    nums[1].append(`다음 ${desc.size}`);
     const a = info.children[3] as HTMLAnchorElement;
-    a.href = base + n.url; a.textContent = "이 장 열기 →";
+    a.href = base + n.url; a.textContent = "열기 →";
   }
 
   const at = (e: MouseEvent) => {

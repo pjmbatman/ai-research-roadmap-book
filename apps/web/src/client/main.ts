@@ -1,6 +1,7 @@
 // 모든 페이지 공통: 테마, ⌘K 검색, 목차 추적, 진도 표시. 장 페이지에서는 퀴즈·코드 셀·연습문제·위젯을 붙인다.
 // 무거운 모듈(CodeMirror, 위젯)은 그 요소가 있는 페이지에서만 동적으로 불러온다.
 import { progress, chapterScore } from "./store";
+import { mountSteps } from "./steps";
 
 const base = document.body.dataset.base || "/";
 export const url = (p: string) => base + p;
@@ -108,18 +109,24 @@ if (palette) {
   });
 }
 
-/* ---------- 목차 추적 ---------- */
-const tocLinks = [...document.querySelectorAll<HTMLAnchorElement>(".toc ol a")];
-if (tocLinks.length) {
-  const targets = tocLinks.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1)))).filter(Boolean) as HTMLElement[];
-  const update = () => {
-    let cur = targets[0];
-    for (const t of targets) if (t.getBoundingClientRect().top < 140) cur = t;
-    tocLinks.forEach((a) => a.setAttribute("aria-current", String(decodeURIComponent(a.hash.slice(1)) === cur?.id)));
-  };
-  addEventListener("scroll", update, { passive: true });
-  update();
-}
+/* ---------- 로딩 막대 ---------- */
+// 기다림이 있는 동안 화면 맨 위에 얇은 막대를 보인다(브라우저 Python 불러오기·실행, 페이지 이동).
+const bar = document.createElement("div");
+bar.className = "loadbar";
+bar.setAttribute("aria-hidden", "true");
+document.body.append(bar);
+const waits = new Set<string>();
+export const loading = {
+  start(k: string) { waits.add(k); bar.dataset.on = "true"; },
+  stop(k: string) { waits.delete(k); if (!waits.size) bar.dataset.on = "false"; },
+};
+document.addEventListener("click", (e) => {
+  const a = (e.target as HTMLElement).closest<HTMLAnchorElement>("a[href]");
+  if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || a.target === "_blank") return;
+  const u = new URL(a.href, location.href);
+  if (u.origin === location.origin && !(u.pathname === location.pathname && u.hash)) loading.start("nav");
+});
+addEventListener("pageshow", () => loading.stop("nav"));
 
 /* ---------- 방문 표시 ---------- */
 function markVisited() {
@@ -142,6 +149,7 @@ window.addEventListener("progress-change", markVisited);
 /* ---------- 장 페이지 ---------- */
 if (page) {
   progress.update(page.chapterId, (p) => { p.visited = Date.now(); });
+  mountSteps();
   setupPassChecks(page.chapterId);
   updateMeter(page);
   window.addEventListener("progress-change", () => updateMeter(page));
@@ -151,17 +159,11 @@ if (page) {
   if (document.querySelector(".exercise")) import("./exercise").then((m) => m.mountExercises(page));
   if (document.querySelector(".widget")) import("../widgets/index").then((m) => m.mountWidgets(page));
 
-  const chip = document.querySelector<HTMLElement>("[data-runtime-chip]");
-  if (chip && document.querySelector(".cell[data-exec=browser], .exercise")) {
+  if (document.querySelector(".cell[data-exec=browser], .exercise")) {
     import("./runtime").then(({ onRuntimeState }) =>
-      onRuntimeState((s, detail) => {
-        const label: Record<string, string> = { idle: "브라우저 Python · 첫 실행 때 불러옴", loading: "브라우저 Python 불러오는 중…", ready: "브라우저 Python 준비됨", running: "실행 중…", error: "불러오기 실패" };
-        chip.textContent = label[s] ?? s;
-        chip.dataset.state = s;
-        if (s === "error" && detail) chip.title = detail;
-      }),
+      onRuntimeState((st) => (st === "loading" || st === "running" ? loading.start("py") : loading.stop("py"))),
     );
-  } else if (chip) chip.textContent = "이 장에는 실행 코드가 없음";
+  }
 }
 
 function setupPassChecks(id: string) {
@@ -184,9 +186,7 @@ function updateMeter(p: PageData) {
   const totals = { quiz: p.quiz.length, exercises: Object.keys(p.exercises).length, checks: document.querySelectorAll(".box-pass > ul > li").length };
   const s = chapterScore(p.chapterId, totals);
   const meter = document.querySelector<HTMLElement>("[data-chapter-meter]");
-  const label = document.querySelector<HTMLElement>("[data-chapter-progress]");
   if (meter) meter.style.width = `${Math.round(s.ratio * 100)}%`;
-  if (label) label.textContent = s.total ? `${s.done} / ${s.total} · 퀴즈 ${totals.quiz} · 연습문제 ${totals.exercises} · 통과 기준 ${totals.checks}` : "기록할 항목 없음";
 }
 
 /* ---------- 홈 ---------- */
@@ -201,6 +201,9 @@ if (trackProgress.length) {
     if (n) el.textContent = `읽음 ${n}`;
   });
 }
+
+/* ---------- 탭 바 ---------- */
+if (document.querySelector("[data-tabs]")) import("./tabs").then((m) => m.mountAllTabs());
 
 /* ---------- 진도·지도 페이지 ---------- */
 if (document.querySelector("[data-progress-page]")) import("./progress-page").then((m) => m.mountProgress());

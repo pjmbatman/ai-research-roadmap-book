@@ -5,28 +5,33 @@ import { session } from "./runtime";
 import { HARNESS } from "./harness";
 import { progress } from "./store";
 import { cleanError } from "./cells";
+import { tabs } from "./tabs";
 import type { PageData } from "./main";
 
 export function mountExercises(page: PageData) {
+  groupSiblings(page);
   document.querySelectorAll<HTMLElement>(".exercise[data-exercise]").forEach((root) => {
     const ex = page.exercises[root.dataset.exercise!];
     if (!ex) return;
     const saved = progress.get(page.chapterId).exercises?.[ex.id];
     root.innerHTML = `
-      <div class="ex-head">
-        <h3><span class="layer-label">연습문제 · 목표 ${ex.objective}</span><br /></h3>
-        <span class="ex-state badge"></span>
-      </div>
-      <div class="ex-body prose-inner"></div>
-      <div class="ex-editor"></div>
-      <div class="ex-bar">
-        <button type="button" class="btn btn-primary" data-run>▶ 테스트 실행</button>
-        <button type="button" class="btn" data-reset>처음 코드로</button>
-        <span class="cell-status" aria-live="polite"></span>
-      </div>
-      <ul class="ex-results" aria-live="polite"></ul>
-      <details class="ex-solution"><summary>해답 보기 — 먼저 직접 풀어 본 뒤 비교한다</summary><pre><code></code></pre></details>`;
-    root.querySelector("h3")!.append(ex.titleText);
+      <div class="ex-head"><h3></h3><span class="ex-state"></span></div>
+      <div data-tabs class="ex-tabs">
+        <div class="tabbar"><button data-tab="problem">문제</button><button data-tab="code">코드</button><button data-tab="solution">해답</button></div>
+        <div data-panel="problem" class="ex-body"></div>
+        <div data-panel="code">
+          <div class="ex-editor"></div>
+          <div class="ex-bar">
+            <button type="button" class="btn btn-primary" data-run>▶ 테스트</button>
+            <button type="button" class="btn" data-reset>처음 코드로</button>
+            <span class="cell-status" aria-live="polite"></span>
+          </div>
+          <ul class="ex-results" aria-live="polite"></ul>
+        </div>
+        <div data-panel="solution" class="ex-solution"><pre><code></code></pre></div>
+      </div>`;
+    root.querySelector("h3")!.textContent = ex.titleText;
+    tabs(root.querySelector<HTMLElement>("[data-tabs]")!);
     root.querySelector(".ex-body")!.innerHTML = ex.problem;
     root.querySelector(".ex-solution code")!.textContent = ex.solution;
     const state = root.querySelector<HTMLElement>(".ex-state")!;
@@ -34,8 +39,8 @@ export function mountExercises(page: PageData) {
     const results = root.querySelector<HTMLElement>(".ex-results")!;
     const runBtn = root.querySelector<HTMLButtonElement>("[data-run]")!;
     const setState = (passed?: boolean) => {
-      state.textContent = passed ? "✓ 통과" : passed === false ? "아직 통과 전" : "미제출";
-      state.classList.toggle("badge-status-done", !!passed);
+      state.textContent = passed ? "✓ 통과" : "";
+      state.classList.toggle("ok", !!passed);
     };
     setState(saved?.passed ?? undefined);
 
@@ -59,15 +64,17 @@ export function mountExercises(page: PageData) {
 
     runBtn.addEventListener("click", async () => {
       runBtn.disabled = true;
-      status.textContent = "채점 중…";
+      status.textContent = "";
+      runBtn.textContent = "채점 중";
       results.innerHTML = "";
       const dir = `/home/pyodide/exercises/${ex.id}`;
       const r = await session(`exercise:${ex.id}`).run(`${HARNESS}\nrun_exercise_tests(${JSON.stringify(dir)})`, {
         files: { [`${dir}/submission.py`]: ed.get(), [`${dir}/test_exercise.py`]: ex.tests },
       });
       runBtn.disabled = false;
+      runBtn.textContent = "▶ 테스트";
       if (!r.ok) {
-        status.textContent = "실행 오류";
+        status.textContent = "오류";
         results.innerHTML = `<li><span class="fail">✗</span><span>채점기를 실행하지 못했다.</span><span class="msg"></span></li>`;
         results.querySelector(".msg")!.textContent = cleanError(r.error || "");
         return;
@@ -94,5 +101,34 @@ export function mountExercises(page: PageData) {
         p.exercises[ex.id] = { passed: passed || !!prev?.passed, code: ed.get() };
       });
     });
+  });
+}
+
+/** 같은 자리에 이어진 연습문제 여러 개를 탭 하나로 묶는다. */
+function groupSiblings(page: PageData) {
+  const seen = new Set<Element>();
+  document.querySelectorAll<HTMLElement>(".exercise[data-exercise]").forEach((el) => {
+    if (seen.has(el)) return;
+    const run: HTMLElement[] = [el];
+    let n = el.nextElementSibling;
+    while (n && n.matches(".exercise[data-exercise]")) { run.push(n as HTMLElement); n = n.nextElementSibling; }
+    run.forEach((x) => seen.add(x));
+    if (run.length < 2) return;
+    const box = document.createElement("div");
+    box.className = "ex-group";
+    box.dataset.tabs = "";
+    const bar = document.createElement("div");
+    bar.className = "tabbar";
+    el.before(box);
+    box.append(bar);
+    run.forEach((x, i) => {
+      const b = document.createElement("button");
+      b.dataset.tab = `ex${i}`;
+      b.textContent = page.exercises[x.dataset.exercise!]?.titleText ?? `연습 ${i + 1}`;
+      bar.append(b);
+      x.dataset.panel = `ex${i}`;
+      box.append(x);
+    });
+    tabs(box);
   });
 }

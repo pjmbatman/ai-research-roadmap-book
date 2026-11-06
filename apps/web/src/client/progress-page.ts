@@ -17,13 +17,13 @@ export function mountProgress() {
     const cOk = count((p) => Object.values(p.checks ?? {}).filter(Boolean).length);
     const sum = (k: "quiz" | "ex" | "checks") => data.chapters.reduce((s, c) => s + c[k], 0);
     $("visited").textContent = String(visited.length);
-    $("visited-of").textContent = `전체 ${data.chapters.length}개 장 중`;
+    $("visited-of").textContent = `/${data.chapters.length}`;
     $("quiz").textContent = String(qOk);
-    $("quiz-of").textContent = `지금 풀 수 있는 문항 ${sum("quiz")}개 중`;
+    $("quiz-of").textContent = `/${sum("quiz")}`;
     $("ex").textContent = String(eOk);
-    $("ex-of").textContent = `지금 있는 연습문제 ${sum("ex")}개 중`;
+    $("ex-of").textContent = `/${sum("ex")}`;
     $("checks").textContent = String(cOk);
-    $("checks-of").textContent = `통과 기준 ${sum("checks")}개 중`;
+    $("checks-of").textContent = `/${sum("checks")}`;
 
     const tr = $("tracks");
     tr.innerHTML = "";
@@ -42,7 +42,7 @@ export function mountProgress() {
     const rec = $("recent");
     rec.innerHTML = "";
     const recent = visited.sort((a, b) => (all[b.id].visited ?? 0) - (all[a.id].visited ?? 0)).slice(0, 8);
-    if (!recent.length) rec.innerHTML = `<small>아직 없다. <a href="${base}orientation/how-to-read/">이 책을 읽는 방법</a>부터 시작해 보자.</small>`;
+    if (!recent.length) rec.innerHTML = `<a class="btn btn-primary" href="${base}orientation/how-to-read/">시작하기</a>`;
     for (const c of recent) {
       const a = document.createElement("a");
       a.className = "chip";
@@ -64,14 +64,14 @@ export function mountProgress() {
     a.download = `ai-for-science-roadmap-progress-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(a.href);
-    msg.textContent = "내보냈다.";
+    msg.textContent = "✓";
   });
   document.querySelector<HTMLInputElement>("[data-act=import]")!.addEventListener("change", async (e) => {
     const file = (e.target as HTMLInputElement).files?.[0];
     if (!file) return;
-    try { progress.import(await file.text()); msg.textContent = "가져왔다."; } catch (err: any) { msg.textContent = `가져오지 못했다: ${err.message}`; }
+    try { progress.import(await file.text()); msg.textContent = "✓"; } catch (err: any) { msg.textContent = err.message; }
   });
   document.querySelector("[data-act=reset]")!.addEventListener("click", () => {
-    if (confirm("이 브라우저에 저장된 진도를 모두 지울까? 되돌릴 수 없다.")) { progress.reset(); msg.textContent = "지웠다."; }
+    if (confirm("이 브라우저에 저장된 진도를 모두 지울까? 되돌릴 수 없다.")) { progress.reset(); msg.textContent = "✓"; }
   });
 }

@@ -25,7 +25,7 @@ async function load(node: HTMLElement, page: PageData) {
   const info = page.widgets[name];
   const impl = IMPL[name];
   if (!impl) {
-    node.innerHTML = `<div class="wframe"><div class="wframe-head"><b></b><span class="kind">위젯 · 준비 중</span></div><div class="wframe-panel"><small style="color:var(--mute)">이 위젯은 아직 만들어지지 않았다. 기여를 환영한다.</small></div></div>`;
+    node.innerHTML = `<div class="wframe wframe-empty"><div class="wframe-head"><b></b><span class="badge">준비 중</span></div></div>`;
     node.querySelector("b")!.textContent = info?.title ?? name;
     return;
   }

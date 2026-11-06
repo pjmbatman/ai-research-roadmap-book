@@ -61,7 +61,7 @@ await test("⌘K 검색: 장 번호로 찾아 이동한다", async () => {
   await page.fill("#palette-input", "12.3");
   await page.waitForSelector('.palette li[aria-selected="true"] a');
   await Promise.all([page.waitForNavigation(), page.keyboard.press("Enter")]);
-  assert(page.url().endsWith(CH123), `이동한 주소: ${page.url()}`);
+  assert(new URL(page.url()).pathname === CH123, `이동한 주소: ${page.url()}`);
 });
 await test("테마 토글이 data-theme을 바꾸고 저장한다", async () => {
   const before = await page.evaluate(() => document.documentElement.dataset.theme || "");
@@ -72,20 +72,54 @@ await test("테마 토글이 data-theme을 바꾸고 저장한다", async () => 
   await page.evaluate(() => { localStorage.removeItem("roadmap:theme"); delete document.documentElement.dataset.theme; });
 });
 
-console.log("퀴즈 (7.2)");
+const step = async (title) => {
+  await page.locator("[data-steplist] a", { hasText: title }).first().click();
+  await page.waitForFunction((t) => [...document.querySelectorAll("section.step")].find((s) => !s.hidden)?.dataset.title === t, title);
+};
+const visibleStep = () => page.evaluate(() => [...document.querySelectorAll("section.step")].filter((s) => !s.hidden).map((s) => s.dataset.title));
+
+console.log("단계로 넘겨 읽기 (7.2)");
 await go(CH72);
-await test("단일 선택: 오답은 피드백, 정답은 해설과 진도 기록", async () => {
-  const q = page.locator("#quiz-affine-is-not-linear");
+await test("한 번에 한 단계만 보이고, 다음 버튼·→ 키·단계 막대로 넘긴다", async () => {
+  let v = await visibleStep();
+  assert(v.length === 1 && v[0] === "학습 목표", `처음 단계: ${v}`);
+  await page.click("[data-next]");
+  v = await visibleStep();
+  assert(v[0] === "선형 변환과 아핀 변환" && decodeURIComponent(page.url()).endsWith("#선형-변환과-아핀-변환"), `다음: ${v} ${page.url()}`);
+  await page.keyboard.press("ArrowRight");
+  assert((await visibleStep())[0] === "결합의 종류", "→ 키");
+  await page.locator(".stepbar .seg").nth(0).click();
+  assert((await visibleStep())[0] === "학습 목표", "단계 막대");
+});
+await test("주소의 #으로 단계를 바로 연다", async () => {
+  await go(CH72 + "#" + encodeURIComponent("통과-기준"));
+  assert((await visibleStep())[0] === "통과 기준", String(await visibleStep()));
+  await page.click("[data-next]");
+  assert(await page.locator("[data-done] a.btn-primary").isVisible(), "마지막 단계의 다음 장 버튼");
+});
+
+console.log("퀴즈 (7.2)");
+await test("본문 속 확인 문제: 버튼 → 대화상자, 오답 피드백, 정답 기록", async () => {
+  await step("선형 변환과 아핀 변환");
+  await page.click('.quiz-open[data-quiz-open="affine-is-not-linear"]');
+  const q = page.locator(".quiz-dialog #quiz-affine-is-not-linear");
+  await q.waitFor();
   await q.locator(".quiz-choice").nth(0).click();
   await q.locator(".quiz-choice.is-wrong").waitFor();
   assert((await q.locator(".quiz-fb").textContent()).includes("원점"), "오답 피드백이 선택지 feedback이 아님");
   await q.locator(".quiz-choice").nth(1).click();
   await q.locator(".quiz-fb.good").waitFor();
+  await shot("quiz-dialog");
+  await page.click(".dialog-close");
+  assert((await page.textContent('.quiz-open[data-quiz-open="affine-is-not-linear"]')).includes("맞힘"), "버튼에 맞힘 표시");
   const p = await page.evaluate(() => JSON.parse(localStorage.getItem("roadmap:progress:v1")).chapters["linear-algebra/affine-and-nonlinear"].quiz["affine-is-not-linear"]);
   assert(p.correct && p.tries === 2, JSON.stringify(p));
 });
-await test("복수 선택: 일부만 고르면 부족하다고 알려 주고, 모두 고르면 정답", async () => {
-  const q = page.locator("#quiz-affine-combinations");
+await test("개념 퀴즈 단계: 한 문항씩, 복수 선택은 누락을 알려 준다", async () => {
+  await step("개념 퀴즈");
+  assert((await page.locator(".qstage .quiz").count()) === 1, "한 문항만 보여야 함");
+  await page.locator(".qbar .seg").nth(2).click();
+  const q = page.locator(".qstage #quiz-affine-combinations");
   await q.locator(".quiz-choice").nth(0).click();
   await q.locator("button:has-text('확인')").click();
   assert((await q.locator(".quiz-fb").textContent()).includes("더 골라야"), "누락 안내 없음");
@@ -93,9 +127,11 @@ await test("복수 선택: 일부만 고르면 부족하다고 알려 주고, �
   await q.locator(".quiz-choice").nth(2).click();
   await q.locator("button:has-text('확인')").click();
   await q.locator(".quiz-fb.good").waitFor();
+  assert(await page.locator(".qbar .seg").nth(2).evaluate((e) => e.classList.contains("ok")), "진행 막대에 정답 표시");
 });
 await test("수치 문항: 슬라이더로 답을 고른다", async () => {
-  const q = page.locator("#quiz-relu-linear-regions");
+  await page.locator(".qbar .seg").nth(3).click();
+  const q = page.locator(".qstage #quiz-relu-linear-regions");
   const r = q.locator('input[type="range"]');
   await r.fill("3");
   await q.locator("button:has-text('확인')").click();
@@ -104,12 +140,15 @@ await test("수치 문항: 슬라이더로 답을 고른다", async () => {
   assert((await q.locator("output").textContent()).trim() === "4", "슬라이더 출력 갱신 안 됨");
   await q.locator("button:has-text('확인')").click();
   await q.locator(".quiz-fb.good").waitFor();
+  await shot("quiz-carousel");
 });
-await test("개념 퀴즈 요약이 학습 목표별 진행을 보여 준다", async () => {
-  const s = await page.textContent(".quiz-summary .sum-head");
-  assert(/3 \/ 6/.test(s), s);
+await test("요약 카드가 맞힌 수와 목표별 문항을 보여 준다", async () => {
+  await page.locator(".qbar .seg-sum").click();
+  assert((await page.textContent(".sum-big b")).trim() === "3", await page.textContent(".sum-big"));
+  assert((await page.locator(".goal-list .qdot.ok").count()) === 3, "목표별 정답 점");
 });
 await test("통과 기준 체크가 진도에 저장되고 진도 막대가 움직인다", async () => {
+  await step("통과 기준");
   await page.locator(".box-pass li .check").first().check();
   const w = await page.evaluate(() => document.querySelector("[data-chapter-meter]").style.width);
   assert(w && w !== "0%", `막대 ${w}`);
@@ -117,6 +156,7 @@ await test("통과 기준 체크가 진도에 저장되고 진도 막대가 움�
 
 console.log("위젯");
 await test("linear-map-2d: bias를 끄면 선형사상이 된다", async () => {
+  await step("선형 변환과 아핀 변환");
   const w = page.locator('.widget[data-widget="linear-map-2d"]');
   await w.scrollIntoViewIfNeeded();
   await page.waitForSelector('.widget[data-widget="linear-map-2d"][data-ready="true"]');
@@ -128,6 +168,7 @@ await test("linear-map-2d: bias를 끄면 선형사상이 된다", async () => {
   await shot("widget-linear-map");
 });
 await test("relu-regions: 뉴런을 늘리면 영역 수가 는다", async () => {
+  await step("비선형성의 역할");
   const w = page.locator('.widget[data-widget="relu-regions"]');
   await w.scrollIntoViewIfNeeded();
   await page.waitForSelector('.widget[data-widget="relu-regions"][data-ready="true"]');
@@ -140,6 +181,7 @@ await test("relu-regions: 뉴런을 늘리면 영역 수가 는다", async () =>
 });
 await go(CH123);
 await test("loss-to-estimator: 지수분포에서 손실마다 다른 대표값", async () => {
+  await step("결정 이론");
   const w = page.locator('.widget[data-widget="loss-to-estimator"]');
   await w.scrollIntoViewIfNeeded();
   await page.waitForSelector('.widget[data-widget="loss-to-estimator"][data-ready="true"]');
@@ -148,36 +190,53 @@ await test("loss-to-estimator: 지수분포에서 손실마다 다른 대표값"
   const mean = num(/평균 ([\d.]+)/), med = num(/중앙값 ([\d.]+)/), q90 = num(/90% 분위수 ([\d.]+)/);
   assert(Math.abs(mean - 1) < 0.03 && Math.abs(med - Math.LN2) < 0.03 && Math.abs(q90 - Math.log(10)) < 0.03, t);
   await w.locator(".preset", { hasText: "쌍봉" }).click();
-  assert((await w.locator(".readouts").textContent()).includes("평균 0.00") || (await w.locator(".readouts").textContent()).includes("평균 -0.00"), "쌍봉 평균 0");
+  assert(/평균 -?0\.00/.test(await w.locator(".readouts").textContent()), "쌍봉 평균 0");
   await shot("widget-loss");
 });
 
 if (PYO || process.env.PYODIDE_CDN === "1") {
   console.log("브라우저 Python (Pyodide)");
+  const waitCell = (k) => page.waitForFunction((k) => {
+    const b = document.querySelectorAll(".cell")[k]?.querySelector("button.run");
+    const out = document.querySelectorAll(".cell")[k]?.querySelector(".cell-out");
+    return b && !b.disabled && out?.dataset.live === "true";
+  }, k, { timeout: 120000 });
   await go(CH72);
   await test("코드 셀 실행: 기록된 출력과 같은 결과", async () => {
+    await step("선형 변환과 아핀 변환");
     const cell = page.locator(".cell").first();
     await cell.scrollIntoViewIfNeeded();
     await cell.locator("button.run").click();
-    await cell.locator('.cell-out[data-live="true"]').waitFor({ timeout: 120000 });
-    await page.waitForFunction(() => document.querySelector(".cell .cell-status")?.textContent?.startsWith("완료") || document.querySelector(".cell .cell-status")?.textContent === "오류", null, { timeout: 120000 });
+    await waitCell(0);
     const out = await cell.locator(".cell-out").textContent();
-    assert(out.includes("f(0)             = [0.5  0.25]"), out);
+    assert(out.includes("f(0)             = [0.5  0.25]") && !out.includes("Loading"), out);
   });
   await test("같은 session의 뒤 셀만 실행해도 앞 셀을 먼저 실행한다", async () => {
     await page.reload({ waitUntil: "networkidle" });
+    await step("선형층의 합성");
     const third = page.locator(".cell").nth(2);
-    await third.scrollIntoViewIfNeeded();
     await third.locator("button.run").click();
-    await page.waitForFunction(() => /완료|오류/.test(document.querySelectorAll(".cell .cell-status")[2]?.textContent || ""), null, { timeout: 120000 });
+    await waitCell(2);
     const out = await third.locator(".cell-out").textContent();
     assert(out.includes("True") && out.includes("rank(W) = 2"), out);
   });
-  await test("연습문제: 시작 코드는 테스트에 실패한다", async () => {
-    const ex = page.locator('.exercise[data-exercise="fold-affine-layers"]');
-    await ex.scrollIntoViewIfNeeded();
+  const runExercise = async (id) => {
+    await step("실습");
+    const ex = page.locator(`.exercise[data-exercise="${id}"]`);
+    const panel = await ex.getAttribute("data-panel");
+    if (panel) await page.click(`.ex-group > .tabbar button[data-tab="${panel}"]`);
+    await ex.locator('.tabbar button[data-tab="code"]').click();
     await ex.locator("[data-run]").click();
-    await page.waitForFunction(() => /통과|오류/.test(document.querySelector('.exercise[data-exercise="fold-affine-layers"] .cell-status')?.textContent || ""), null, { timeout: 120000 });
+    await page.waitForFunction((id) => {
+      const b = document.querySelector(`.exercise[data-exercise="${id}"] [data-run]`);
+      return b && !b.disabled && document.querySelector(`.exercise[data-exercise="${id}"] .ex-results li`);
+    }, id, { timeout: 120000 });
+    return ex;
+  };
+  await test("연습문제: 탭으로 나뉘고, 시작 코드는 테스트에 실패한다", async () => {
+    await step("실습");
+    assert((await page.locator(".ex-group > .tabbar button[data-tab]").count()) === 2, "연습문제 탭 2개");
+    const ex = await runExercise("fold-affine-layers");
     assert((await ex.locator(".ex-results .fail").count()) > 0, "실패가 있어야 함");
   });
   await test("연습문제: 해답 코드는 모든 테스트를 통과하고 진도에 기록된다", async () => {
@@ -188,10 +247,7 @@ if (PYO || process.env.PYODIDE_CDN === "1") {
       localStorage.setItem(k, JSON.stringify(s));
     }, sol);
     await page.reload({ waitUntil: "networkidle" });
-    const ex = page.locator('.exercise[data-exercise="relu-breakpoints"]');
-    await ex.scrollIntoViewIfNeeded();
-    await ex.locator("[data-run]").click();
-    await page.waitForFunction(() => /통과|오류/.test(document.querySelector('.exercise[data-exercise="relu-breakpoints"] .cell-status')?.textContent || ""), null, { timeout: 120000 });
+    const ex = await runExercise("relu-breakpoints");
     const status = await ex.locator(".cell-status").textContent();
     const fails = await ex.locator(".ex-results .fail").count();
     assert(fails === 0 && /^(\d+) \/ \1 통과$/.test(status), `${status}, 실패 ${fails}: ${await ex.locator(".ex-results").textContent()}`);
@@ -221,11 +277,18 @@ await test("지도: 장을 누르면 정보 카드에 선수 지식 수가 나�
   for (let y = 95; y < hit.h && !found; y += 6) {
     for (let x = 20; x < hit.w && !found; x += hit.w / 12 / 2) {
       await page.mouse.move(box.x + x, box.y + y);
-      if ((await page.textContent("[data-map-info]")).includes("선수 지식 전체")) found = true;
+      if (await page.locator("[data-map-info] b").isVisible().catch(() => false)) found = true;
     }
   }
   assert(found, "노드를 찾지 못함");
   await shot("map");
+});
+await test("트랙 목록: 레이어 탭을 바꾸면 그 레이어의 트랙만 보인다", async () => {
+  await go("/tracks/");
+  await page.click('.layer-tabs .tabbar button[data-tab="L2"]');
+  const cards = await page.locator('[data-panel="L2"]:not([hidden]) .track-card').allTextContents();
+  assert(cards.length === 1 && cards[0].includes("MLC"), cards.join("|"));
+  assert(await page.locator('[data-panel="L0"]').isHidden(), "다른 탭은 숨김");
 });
 await test("트랙 페이지가 읽은 장 수를 보여 준다", async () => {
   await go("/tracks/mathematical-foundations/");

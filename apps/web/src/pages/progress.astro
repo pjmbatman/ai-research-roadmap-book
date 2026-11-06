@@ -17,23 +17,20 @@ const data = {
 ---
 <Shell title="내 진도" current="progress">
   <div class="page" data-progress-page>
-    <p class="eyebrow">로그인 없음 · 이 브라우저에만 저장</p>
-    <h1 style="font-size: clamp(32px, 5vw, 50px); margin: 6px 0 18px;">내 진도</h1>
+    <h1 class="page-title">내 진도</h1>
     <div class="bento">
-      <div class="tile dark"><small>읽은 장</small><div class="big" data-k="visited">0</div><small data-k="visited-of"></small></div>
-      <div class="tile"><small>맞힌 퀴즈</small><div class="big" data-k="quiz">0</div><small data-k="quiz-of"></small></div>
-      <div class="tile"><small>통과한 연습문제</small><div class="big" data-k="ex">0</div><small data-k="ex-of"></small></div>
-      <div class="tile"><small>확인한 통과 기준</small><div class="big" data-k="checks">0</div><small data-k="checks-of"></small></div>
-      <div class="tile wide"><small>트랙별 읽은 장</small><div class="tile-track" data-k="tracks"></div></div>
-      <div class="tile wide"><small>최근에 본 장</small><div style="display:flex; flex-wrap:wrap; gap:6px" data-k="recent"></div></div>
-      <div class="tile wide">
-        <small>기록 옮기기 — 다른 브라우저로 옮기거나 백업할 때 쓴다</small>
-        <div style="display:flex; flex-wrap:wrap; gap:8px">
-          <button class="btn" type="button" data-act="export">내보내기(JSON)</button>
-          <label class="btn" style="cursor:pointer">가져오기<input type="file" accept="application/json" data-act="import" hidden /></label>
-          <button class="btn btn-ghost" type="button" data-act="reset">모두 지우기</button>
+      <div class="tile dark"><small>읽은 장</small><div class="big"><span data-k="visited">0</span><span class="of" data-k="visited-of"></span></div></div>
+      <div class="tile"><small>퀴즈</small><div class="big"><span data-k="quiz">0</span><span class="of" data-k="quiz-of"></span></div></div>
+      <div class="tile"><small>연습문제</small><div class="big"><span data-k="ex">0</span><span class="of" data-k="ex-of"></span></div></div>
+      <div class="tile"><small>통과 기준</small><div class="big"><span data-k="checks">0</span><span class="of" data-k="checks-of"></span></div></div>
+      <div class="tile wide"><small>트랙</small><div class="tile-track" data-k="tracks"></div></div>
+      <div class="tile wide"><small>최근</small><div class="recent" data-k="recent"></div>
+        <div class="tile-actions">
+          <button class="btn" type="button" data-act="export">내보내기</button>
+          <label class="btn">가져오기<input type="file" accept="application/json" data-act="import" hidden /></label>
+          <button class="btn btn-ghost" type="button" data-act="reset">지우기</button>
+          <span data-k="msg" aria-live="polite"></span>
         </div>
-        <small data-k="msg" aria-live="polite"></small>
       </div>
     </div>
     <script type="application/json" id="progress-data" set:html={JSON.stringify(data).replace(/</g, "\\u003c")} />

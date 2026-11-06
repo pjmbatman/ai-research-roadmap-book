@@ -11,22 +11,28 @@ const stackData = layers.map((l) => ({
   tracks: tracks.filter((t) => t.layer === l.level).map((t) => ({ key: t.key, code: t.code, name: t.name, n: chaptersOfTrack(t.key).length })),
 }));
 const ready = allChapters().filter((c) => ["draft", "review", "done"].includes(str(c.meta.status)) && c.partSlug !== "appendices");
-const start = ["orientation/why-this-book", "orientation/how-to-read", "orientation/learning-paths", "research-landscape/ai-for-science-landscape"]
-  .map((id) => allChapters().find((c) => c.id === id)).filter(Boolean) as any[];
-const total = allChapters().length;
 ---
 <Shell title="AI for Science 로드맵" current="home">
-  <div class="page">
+  <div class="page home">
     <section class="hero">
       <div>
-        <p class="eyebrow">오픈소스 · 이론과 실습을 함께</p>
         <h1>과학 문제를 <em>AI로</em><br />정의하고 검증하는 법.</h1>
-        <p>AI를 배우는 과학자와 과학으로 넘어오는 AI 연구자를 위한 로드맵이다. {tracks.filter((t) => t.layer < 9).length}개 트랙, {total}개 장. 읽고, 위젯을 조작하고, 브라우저에서 코드를 돌리며 배운다.</p>
+        <p>읽고, 조작하고, 브라우저에서 바로 실행하며 배우는 오픈소스 로드맵.</p>
         <div class="hero-cta">
-          <a class="btn btn-primary" href={u("orientation/how-to-read/")}>시작하기</a>
-          <a class="btn" href={u("map/")}>로드맵 지도 보기</a>
-          {ready[0] && <a class="btn btn-ghost" href={u(ready[0].url)}>완성된 장 체험: {ready[0].label}</a>}
+          <a class="btn btn-primary btn-lg" href={u("orientation/how-to-read/")}>시작하기</a>
+          <a class="btn btn-lg" href={u("map/")}>지도</a>
         </div>
+        {ready.length > 0 && (
+          <div class="ready-row">
+            {ready.map((c) => (
+              <a class="ready-card" href={u(c.url)} data-chapter-link={c.id}>
+                <span class="n">{c.label}</span>
+                <b>{str(c.meta.title)}</b>
+                <span class="go" aria-hidden="true">→</span>
+              </a>
+            ))}
+          </div>
+        )}
       </div>
       <div class="stack-wrap" data-stack={JSON.stringify(stackData)}>
         <div class="stack-legend" role="group" aria-label="레이어">
@@ -46,38 +52,5 @@ const total = allChapters().length;
         </div>
       </div>
     </section>
-
-    <div class="section-title"><h2>어디서 시작할까</h2><a href={u("orientation/learning-paths/")}>학습 경로 보기 →</a></div>
-    <div style="display:flex; flex-wrap:wrap; gap:8px">
-      {start.map((c) => <a class="chip" href={u(c.url)} data-chapter-link={c.id}><span class="n">{c.label}</span>{str(c.meta.title)}</a>)}
-    </div>
-
-    {ready.length > 0 && (
-      <>
-        <div class="section-title"><h2>지금 완성된 장</h2><span class="layer-label">위젯 · 코드 실행 · 퀴즈 · 연습문제</span></div>
-        <div class="track-grid">
-          {ready.map((c) => (
-            <a class="track-card" href={u(c.url)} data-chapter-link={c.id}>
-              <span class="layer-label">{c.label}</span>
-              <h3>{str(c.meta.title)}</h3>
-              <p>{str(c.meta.title_en)}</p>
-              <span class="foot"><span>퀴즈 {c.quiz.length} · 연습문제 {Object.keys(c.exercises).length}</span><span>→</span></span>
-            </a>
-          ))}
-        </div>
-      </>
-    )}
-
-    <div class="section-title"><h2>트랙</h2><a href={u("tracks/")}>전체 목차 →</a></div>
-    <div class="track-grid">
-      {tracks.map((t) => (
-        <a class="track-card" href={u(`tracks/${t.key}/`)}>
-          <span style="display:flex; justify-content:space-between; align-items:center"><span class="badge badge-code">{t.code}</span><span class="layer-label">L{t.layer}</span></span>
-          <h3>{t.name}</h3>
-          <p>{t.question}</p>
-          <span class="foot"><span>{chaptersOfTrack(t.key).length}개 장</span><span data-track-progress={t.key} data-track-ids={chaptersOfTrack(t.key).map((c) => c.id).join(",")}></span></span>
-        </a>
-      ))}
-    </div>
   </div>
 </Shell>
