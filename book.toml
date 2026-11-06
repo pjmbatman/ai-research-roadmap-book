@@ -230,6 +230,7 @@ reference = "참조"    # 필요할 때 문서를 읽고 적용할 수 있으면
 # 집필 상태: 부·장의 `status` 값. 이 순서대로 진행한다.
 [statuses]
 outline = "목차"      # 상세 목차(bullet)만 있음
+spec = "명세"         # 절마다 핵심 메시지·예제·위젯·코드·퀴즈를 정한 장 명세 (editorial/content-design.md §6)
 draft = "초고"        # 본문 초고 작성 완료
 review = "검토"       # 내용·코드 리뷰 진행 중
 done = "완료"         # 리뷰 통과, 공개 가능
