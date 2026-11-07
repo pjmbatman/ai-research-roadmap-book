@@ -1,0 +1,114 @@
+# 29.1 ML 연구자를 위한 분자생물학 기초 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "synonymous-variant"
+type = "single"
+objective = 1
+prompt = '''단백질 코딩 영역의 코돈 `GCT`(알라닌)가 한 자리 치환으로 `GCC`가 되었다. 표준 유전 부호에서 `GCC`도 알라닌을 지정한다. 이 변이에 대한 설명으로 옳은 것은?'''
+explanation = '''유전 부호는 중복적이어서 64개 코돈 중 61개가 20종의 아미노산을 지정한다. `GCT`와 `GCC`는 모두 알라닌이므로 단백질 서열은 바뀌지 않는다(동의 변이). DNA 수준에서는 한 글자가 다르지만 단백질 수준에서는 차이가 없다. 그래서 같은 변이 데이터도 어느 분자 수준에서 표현하느냐에 따라 모델이 보는 정보가 달라진다.'''
+
+[[questions.choices]]
+text = "DNA가 바뀌었으므로 단백질 서열도 반드시 한 자리 바뀐다."
+feedback = "여러 코돈이 같은 아미노산을 지정한다. GCT와 GCC는 모두 알라닌이다."
+
+[[questions.choices]]
+text = "단백질 서열은 그대로다. 같은 아미노산을 지정하는 코돈이 여럿이기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "정지 코돈이 생겨 단백질이 짧아진다."
+feedback = "정지 코돈은 TAA·TAG·TGA 세 개뿐이다. GCC는 정지 코돈이 아니다."
+
+[[questions.choices]]
+text = "읽기 틀이 한 칸 밀려 뒤쪽 아미노산이 모두 바뀐다."
+feedback = "읽기 틀이 밀리는 것은 염기가 삽입되거나 삭제될 때다. 치환은 길이를 바꾸지 않는다."
+
+[[questions]]
+id = "central-dogma-flow"
+type = "single"
+objective = 1
+prompt = '''Crick이 정리한 중심 원리(central dogma)가 **일어나지 않는다고** 말하는 서열 정보의 전달은?'''
+explanation = '''중심 원리의 핵심은 서열 정보가 단백질에서 핵산(DNA·RNA)으로, 또는 단백질에서 단백질로 전달되지 않는다는 것이다. RNA에서 DNA로 가는 역전사는 실제로 일어나며 이 원리와 모순되지 않는다. DNA → RNA(전사), RNA → 단백질(번역)은 일반적인 흐름이다.'''
+
+[[questions.choices]]
+text = "RNA → DNA"
+feedback = "역전사(reverse transcription)는 실제로 일어나는 전달이고, 중심 원리와 모순되지 않는다."
+
+[[questions.choices]]
+text = "DNA → RNA"
+feedback = "전사(transcription)다. 중심 원리의 일반적인 흐름이다."
+
+[[questions.choices]]
+text = "단백질 → DNA"
+correct = true
+
+[[questions.choices]]
+text = "RNA → 단백질"
+feedback = "번역(translation)이다. 중심 원리의 일반적인 흐름이다."
+
+[[questions]]
+id = "coding-length"
+type = "numeric"
+objective = 1
+prompt = '''아미노산 100개짜리 단백질을 처음부터 끝까지 암호화하는 코딩 영역(시작 코돈부터 정지 코돈까지, 정지 코돈 포함)은 최소 몇 염기인가?'''
+answer = 303
+tolerance = 0
+explanation = '''아미노산 하나에 코돈 하나(염기 3개)가 필요하므로 100개 × 3 = 300염기이고, 번역을 끝내는 정지 코돈 3염기가 더해져 303염기다. 시작 코돈 ATG는 첫 아미노산(메티오닌)을 지정하므로 100개 안에 이미 들어 있다. 정지 코돈은 아미노산을 지정하지 않으므로 따로 센다.'''
+
+[[questions]]
+id = "tissue-difference"
+type = "single"
+objective = 2
+prompt = '''같은 사람의 간세포와 신경세포를 구분하는 모델을 만든다. 두 세포 유형의 차이를 가장 직접적으로 담는 데이터는?'''
+explanation = '''한 개체의 거의 모든 세포는 같은 유전체를 가진다. 세포 유형의 차이는 어떤 유전자를 얼마나 전사하는가, 즉 유전자 발현에서 나온다. 그래서 세포 유형 분류에는 유전체 서열이 아니라 발현량 데이터를 쓴다.'''
+
+[[questions.choices]]
+text = "두 세포의 유전체 DNA 서열"
+feedback = "한 개체의 세포들은 거의 같은 유전체를 가진다. 서열만으로는 세포 유형이 구분되지 않는다."
+
+[[questions.choices]]
+text = "두 세포의 유전자별 RNA 발현량"
+correct = true
+
+[[questions.choices]]
+text = "두 세포에서 공통으로 쓰는 단백질 하나의 아미노산 서열"
+feedback = "같은 유전자에서 나온 단백질의 서열은 세포 유형과 무관하게 대체로 같다. 차이는 그 단백질을 얼마나 만드는가에 있다."
+
+[[questions]]
+id = "technical-vs-biological"
+type = "single"
+objective = 3
+prompt = '''한 시료를 두 번 시퀀싱한 기술적 반복 사이의 상관이 0.99였다. 이 결과가 말해 주는 것은?'''
+explanation = '''기술적 반복은 같은 시료를 다시 측정한 것이므로 측정 과정의 잡음만 보여 준다. 다른 개체나 다른 배양 사이의 차이는 생물학적 반복으로만 드러난다. 시퀀싱 깊이를 늘리면 기술적 반복의 상관은 1에 가까워지지만 생물학적 반복의 상관은 그만큼 오르지 않는다.'''
+
+[[questions.choices]]
+text = "측정 과정이 재현 가능하다는 것. 개체 간 변동의 크기는 알려 주지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "이 조건의 생물학적 변동이 작아서 새 개체에서도 같은 값이 나온다는 것"
+feedback = "같은 시료를 두 번 잰 것이므로 개체 간 차이는 들어 있지 않다. 새 개체에 대한 주장에는 생물학적 반복이 필요하다."
+
+[[questions.choices]]
+text = "배치 효과가 없다는 것"
+feedback = "두 측정이 같은 배치에서 이루어졌다면 배치 효과는 두 반복에 똑같이 들어가 상관을 낮추지 않는다."
+
+[[questions]]
+id = "confounded-design"
+type = "single"
+objective = 3
+prompt = '''대조군 시료는 모두 1월에, 처리군 시료는 모두 3월에 측정했다. 발현량으로 처리 여부를 분류하는 모델의 교차검증 정확도가 0.98이었다. 이 결과로 말할 수 있는 것은?'''
+explanation = '''측정 시기(배치)와 처리 여부가 완전히 겹쳐 있다. 모델이 처리 효과를 학습했는지 배치 효과를 학습했는지 이 데이터로는 구분할 수 없다. 처리 효과가 전혀 없어도 배치 효과만으로 높은 정확도가 나온다. 배치 보정도 해결책이 되지 못한다. 배치를 제거하면 처리 효과도 함께 제거되기 때문이다. 배치와 조건은 실험 설계 단계에서 교차시켜야 한다.'''
+
+[[questions.choices]]
+text = "처리가 발현량을 바꾼다는 강한 증거다."
+feedback = "처리 효과가 0이어도 배치가 조건과 겹쳐 있으면 정확도는 1에 가깝게 나온다."
+
+[[questions.choices]]
+text = "처리 효과와 배치 효과를 구분할 수 없으므로 처리 효과에 대해 결론을 내릴 수 없다."
+correct = true
+
+[[questions.choices]]
+text = "배치 보정을 적용한 뒤 다시 분류하면 처리 효과만 남는다."
+feedback = "배치와 처리가 완전히 겹치면 배치를 제거하는 보정은 처리 효과도 함께 제거한다. 둘을 나눌 정보가 데이터에 없다."
