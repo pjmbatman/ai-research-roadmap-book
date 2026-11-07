@@ -133,7 +133,7 @@ status = "prototype"
 name = "md-energy-conservation"
 title = "분자동역학 에너지 보존"
 chapters = ["chemistry-and-materials/interatomic-potentials"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "predictor-exploitation"
