@@ -1,0 +1,6 @@
+title = "ridge가 고르는 해"
+chapter = "linear-algebra/rank-and-subspaces"
+objective = 2
+exec = "browser"
+entry = "ridge"
+timeout_s = 10
