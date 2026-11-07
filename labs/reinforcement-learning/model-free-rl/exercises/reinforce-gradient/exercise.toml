@@ -1,0 +1,6 @@
+title = "REINFORCE 기울기와 baseline"
+chapter = "reinforcement-learning/model-free-rl"
+objective = 1
+exec = "browser"
+entry = "reinforce_grad"
+timeout_s = 15

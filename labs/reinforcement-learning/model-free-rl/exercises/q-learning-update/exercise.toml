@@ -1,0 +1,6 @@
+title = "Q-learning 갱신"
+chapter = "reinforcement-learning/model-free-rl"
+objective = 1
+exec = "browser"
+entry = "q_learning_update"
+timeout_s = 10
