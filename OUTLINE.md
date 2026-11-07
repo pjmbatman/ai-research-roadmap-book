@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 978문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1007문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -680,18 +680,18 @@ _문헌 탐색, 논문 읽기와 재현, 연구 질문과 가설, 실험 설계,
 - **23.5** [실험 설계](content/23-research-practice/05-experimental-design/index.md) · `필수` · 퀴즈 6
   - 반증 가능한 실험 · 실험의 종류 · 공정성 · 효과의 분리 · 편향 통제 · 실험 계획서 · 참고 문헌
   - 선수: 23.4 연구 질문과 가설, 12.5 모델 비교의 통계, 15.4 데이터 분할과 누수 방지
-- **23.6** [결과 분석과 주장의 범위](content/23-research-practice/06-analyzing-results/index.md) · `필수`
-  - 오차 분석 · 주장의 범위 · 대안 설명 · 부정적 결과
+- **23.6** [결과 분석과 주장의 범위](content/23-research-practice/06-analyzing-results/index.md) · `필수` · 퀴즈 6
+  - 오차 분석 · 주장의 범위 · 대안 설명 · 부정적 결과 · 참고 문헌
   - 선수: 23.5 실험 설계
-- **23.7** [연구 기록과 연구 노트](content/23-research-practice/07-research-records/index.md) · `필수`
+- **23.7** [연구 기록과 연구 노트](content/23-research-practice/07-research-records/index.md) · `필수` · 퀴즈 6
   - 연구 노트 · 결정 기록 · 주간 보고 · 도구
-- **23.8** [논문 작성](content/23-research-practice/08-writing-papers/index.md) · `필수`
-  - 논문의 뼈대 · 각 절의 역할 · 수식과 알고리즘 · 결과 보고 · 과장 없는 서술 · 도구 · AI 도구와 글쓰기
+- **23.8** [논문 작성](content/23-research-practice/08-writing-papers/index.md) · `필수` · 퀴즈 6
+  - 논문의 뼈대 · 각 절의 역할 · 수식과 알고리즘 · 결과 보고 · 과장 없는 서술 · 도구 · AI 도구와 글쓰기 · 참고 문헌
   - 선수: 23.6 결과 분석과 주장의 범위
-- **23.9** [Figure와 Table 제작](content/23-research-practice/09-figures-and-tables/index.md) · `필수`
-  - figure의 역할 · 시각화 원칙 · 도구 · 재현 가능한 그림 · 표
+- **23.9** [Figure와 Table 제작](content/23-research-practice/09-figures-and-tables/index.md) · `필수` · 퀴즈 6
+  - figure의 역할 · 시각화 원칙 · 도구 · 재현 가능한 그림 · 표 · 참고 문헌
   - 선수: 23.8 논문 작성
-- **23.10** [발표와 학술 소통](content/23-research-practice/10-presentations/index.md) · `필수`
+- **23.10** [발표와 학술 소통](content/23-research-practice/10-presentations/index.md) · `필수` · 퀴즈 5
   - 발표의 종류 · 구성 · 슬라이드 · 질의응답
   - 선수: 23.9 Figure와 Table 제작
 - **23.11** [투고와 동료 심사](content/23-research-practice/11-peer-review/index.md) · `심화` · 퀴즈 7
