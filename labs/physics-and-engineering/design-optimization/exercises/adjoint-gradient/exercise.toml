@@ -1,0 +1,6 @@
+title = "열전도 설계의 adjoint 기울기"
+chapter = "physics-and-engineering/design-optimization"
+objective = 2
+exec = "browser"
+entry = "adjoint_gradient"
+timeout_s = 10
