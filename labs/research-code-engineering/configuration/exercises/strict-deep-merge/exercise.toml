@@ -1,0 +1,6 @@
+title = "오타를 잡는 설정 깊은 병합"
+chapter = "research-code-engineering/configuration"
+objective = 2
+exec = "browser"
+entry = "deep_merge"
+timeout_s = 10
