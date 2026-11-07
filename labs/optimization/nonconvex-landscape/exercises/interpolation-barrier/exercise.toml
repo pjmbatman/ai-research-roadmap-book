@@ -1,0 +1,6 @@
+title = "선형 보간 경로의 손실 장벽"
+chapter = "optimization/nonconvex-landscape"
+objective = 2
+exec = "browser"
+entry = "interpolation_barrier"
+timeout_s = 10

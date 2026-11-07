@@ -1,0 +1,6 @@
+title = "Hessian-vector product로 최대 고윳값 추정하기"
+chapter = "optimization/nonconvex-landscape"
+objective = 2
+exec = "browser"
+entry = "top_hessian_eigenvalue"
+timeout_s = 10
