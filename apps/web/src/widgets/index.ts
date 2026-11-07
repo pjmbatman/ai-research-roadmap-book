@@ -5,6 +5,11 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "linear-map-2d": () => import("./linear-map-2d/index"),
   "relu-regions": () => import("./relu-regions/index"),
   "loss-to-estimator": () => import("./loss-to-estimator/index"),
+  "distribution-explorer": () => import("./distribution-explorer/index"),
+  "gaussian-conditioning": () => import("./gaussian-conditioning/index"),
+  "bayesian-update": () => import("./bayesian-update/index"),
+  "gp-regression": () => import("./gp-regression/index"),
+  "calibration-diagram": () => import("./calibration-diagram/index"),
 };
 
 export function mountWidgets(page: PageData) {

@@ -55,13 +55,13 @@ status = "planned"
 name = "distribution-explorer"
 title = "분포 탐색기"
 chapters = ["probability/distributions", "probability/random-variables"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "gaussian-conditioning"
 title = "다변량 가우시안의 조건부분포"
 chapters = ["probability/multivariate-gaussian"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "loss-to-estimator"
@@ -73,13 +73,13 @@ status = "prototype"
 name = "bayesian-update"
 title = "순차적 베이지안 갱신"
 chapters = ["bayesian-inference/bayesian-thinking", "bayesian-inference/conjugate-models"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "gp-regression"
 title = "Gaussian process 회귀"
 chapters = ["bayesian-inference/gaussian-processes"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "split-leakage"
@@ -109,7 +109,7 @@ status = "planned"
 name = "calibration-diagram"
 title = "Calibration과 reliability diagram"
 chapters = ["reliability/evaluating-predictive-distributions"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "battery-ecm"
