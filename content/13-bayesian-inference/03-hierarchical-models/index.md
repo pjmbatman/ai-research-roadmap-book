@@ -102,6 +102,8 @@ for name, est in (("no pooling", ybar), ("complete pooling", np.full(8, grand)),
 
 측정이 1번인 셀은 $B = 0.80$으로 모집단 평균 쪽으로 크게 끌려가(1.615 → 1.923) 참값 2.038에 가까워졌다. 측정이 40번인 셀은 $B = 0.09$라 거의 움직이지 않는다. 8개 셀 전체의 RMSE는 no pooling 0.344, complete pooling 0.229, partial pooling 0.172로 partial pooling이 가장 작다. 이 데이터에서는 셀 간 차이($\tau = 0.3$)가 작아서 complete pooling도 no pooling보다 낫지만, 측정이 많은 셀(20번, 참값 2.391)의 고유한 값은 지워 버린다.
 
+::widget{name="partial-pooling"}
+
 ::quiz{id="shrinkage-factor"}
 
 **연구에서의 의미.** partial pooling은 12.1장의 bias–variance trade-off를 그룹 구조에 적용한 것이다. 수축은 각 그룹의 추정값에 모집단 평균 쪽으로의 bias를 넣는 대신 분산을 크게 줄인다. 그룹이 셋 이상이고 모든 그룹의 잡음 분산이 같은 정규 모델에서는, 표본평균들을 한 점 쪽으로 수축한 James–Stein 추정량이 참값이 무엇이든 그룹 전체의 기대 제곱오차 합을 표본평균보다 줄인다는 결과가 있고, Efron & Morris(1975)는 야구 타율 예측 같은 실제 데이터에서 그 효과를 보였다. 다만 "전체 합"이 줄어든다는 것이지 모든 그룹에서 줄어든다는 뜻은 아니다. 다른 그룹과 크게 다른 그룹은 평균 쪽으로 잘못 끌려간다.
