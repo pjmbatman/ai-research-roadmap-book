@@ -1,0 +1,6 @@
+title = "사후분산으로 다음 실행점 고르기"
+chapter = "scientific-ml/hybrid-and-surrogate-models"
+objective = 2
+exec = "browser"
+entry = "next_point"
+timeout_s = 10
