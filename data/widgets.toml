@@ -259,37 +259,37 @@ status = "planned"
 name = "basis-expansion"
 title = "기저 전개와 해상도"
 chapters = ["linear-algebra/function-spaces"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "equivariance-check"
 title = "등변성 검사"
 chapters = ["linear-algebra/symmetry-and-groups"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "gradient-hessian-contour"
 title = "기울기와 Hessian 고유벡터"
 chapters = ["calculus-and-autodiff/multivariable-calculus"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "condition-ellipse"
 title = "조건수와 섭동 증폭"
 chapters = ["numerical-methods/conditioning-and-stability"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "iterative-solver-race"
 title = "반복법 수렴 비교"
 chapters = ["numerical-methods/numerical-linear-algebra"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "newton-basins"
 title = "Newton 끌개 영역"
 chapters = ["numerical-methods/nonlinear-equations"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "runge-interpolation"
