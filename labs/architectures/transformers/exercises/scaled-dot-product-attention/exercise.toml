@@ -1,0 +1,6 @@
+title = "scaled dot-product attention 구현하기"
+chapter = "architectures/transformers"
+objective = 1
+exec = "browser"
+entry = "attention"
+timeout_s = 10

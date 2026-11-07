@@ -386,3 +386,54 @@
   archiveprefix = {arXiv},
   note          = {확인: arXiv 기록(2023년 12월 1일 제출, v2 2024년 5월). SSM 파라미터를 입력의 함수로 두는 selective SSM과 하드웨어를 고려한 병렬 재귀 알고리즘}
 }
+
+@inproceedings{vaswani2017attention,
+  author    = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, {\L}ukasz and Polosukhin, Illia},
+  title     = {Attention Is All You Need},
+  booktitle = {Advances in Neural Information Processing Systems 30},
+  pages     = {5998--6008},
+  year      = {2017},
+  eprint    = {1706.03762},
+  note      = {확인: NeurIPS proceedings 서지(NIPS 2017, 5998–6008). scaled dot-product attention, multi-head attention, 사인·코사인 위치 인코딩, d_model 512·d_ff 2048}
+}
+
+@article{su2024roformer,
+  author  = {Su, Jianlin and Ahmed, Murtadha and Lu, Yu and Pan, Shengfeng and Bo, Wen and Liu, Yunfeng},
+  title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
+  journal = {Neurocomputing},
+  volume  = {568},
+  pages   = {127063},
+  year    = {2024},
+  doi     = {10.1016/j.neucom.2023.127063},
+  note    = {확인: 서지 기록(Neurocomputing 568, 127063)과 arXiv:2104.09864. 회전으로 절대 위치를 인코딩하되 self-attention의 내적에 상대 위치만 남기는 RoPE}
+}
+
+@inproceedings{xiong2020layer,
+  author    = {Xiong, Ruibin and Yang, Yunchang and He, Di and Zheng, Kai and Zheng, Shuxin and Xing, Chen and Zhang, Huishuai and Lan, Yanyan and Wang, Liwei and Liu, Tie-Yan},
+  title     = {On Layer Normalization in the Transformer Architecture},
+  booktitle = {Proceedings of the 37th International Conference on Machine Learning (ICML)},
+  series    = {PMLR},
+  volume    = {119},
+  pages     = {10524--10533},
+  year      = {2020},
+  note      = {확인: PMLR 119 서지 페이지. 초기화 시점 Post-LN의 큰 gradient와 warm-up 필요성, Pre-LN의 안정적 gradient}
+}
+
+@inproceedings{jain2019attention,
+  author    = {Jain, Sarthak and Wallace, Byron C.},
+  title     = {Attention is not Explanation},
+  booktitle = {Proceedings of NAACL-HLT 2019},
+  pages     = {3543--3556},
+  year      = {2019},
+  doi       = {10.18653/v1/N19-1357},
+  note      = {확인: ACL Anthology N19-1357. attention 가중치가 gradient 기반 중요도와 자주 상관이 낮고, 다른 attention 분포로 같은 예측이 가능함}
+}
+
+@inproceedings{dao2022flashattention,
+  author    = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
+  title     = {FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness},
+  booktitle = {Advances in Neural Information Processing Systems 35 (NeurIPS 2022)},
+  year      = {2022},
+  eprint    = {2205.14135},
+  note      = {확인: NeurIPS 2022 proceedings 페이지. GPU 메모리 계층 사이 이동을 줄이는 블록 단위의 정확한 attention}
+}
