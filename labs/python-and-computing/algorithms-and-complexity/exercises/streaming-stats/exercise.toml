@@ -1,0 +1,6 @@
+title = "조각 단위로 읽으며 평균·분산 구하기"
+chapter = "python-and-computing/algorithms-and-complexity"
+objective = 2
+exec = "browser"
+entry = "streaming_mean_var"
+timeout_s = 10
