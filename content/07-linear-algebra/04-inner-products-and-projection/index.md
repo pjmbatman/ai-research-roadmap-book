@@ -177,6 +177,8 @@ A^T (b-p) = 0 ? True
 
 $\mathbf{b} = (6, 0, 0)$의 사영은 $(5, 2, -1)$이고, 오차 $(1, -2, 1)$은 두 열 $(1, 1, 1)$, $(0, 1, 2)$와 모두 직교한다.
 
+::widget{name="projection-lstsq"}
+
 ## 최소제곱
 
 **정의.** 과결정 시스템 $\mathbf{A}\mathbf{x} \approx \mathbf{b}$의 **최소제곱 해**(least-squares solution)는 잔차의 제곱합을 최소화하는 $\hat{\mathbf{x}}$이다.
