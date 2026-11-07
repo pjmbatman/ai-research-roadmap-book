@@ -303,8 +303,14 @@ if (PYO || process.env.PYODIDE_CDN === "1") {
 }
 
 console.log("목차 단계의 장");
-await test("본문이 없는 장은 '다룰 내용' 카드를 한 화면에 보인다", async () => {
-  await go("/linear-algebra/vector-spaces/");
+// 목차만 있는 장을 빌드 결과에서 하나 찾는다(모든 장이 채워지면 이 검사는 건너뛴다).
+const outlineUrl = (() => {
+  const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? walk(path.join(d, e.name)) : e.name === "index.html" ? [path.join(d, e.name)] : []);
+  const f = walk(DIST).find((f) => fs.readFileSync(f, "utf8").includes('class="outline-grid'));
+  return f ? "/" + path.relative(DIST, path.dirname(f)).split(path.sep).join("/") + "/" : null;
+})();
+if (outlineUrl) await test("본문이 없는 장은 '다룰 내용' 카드를 한 화면에 보인다", async () => {
+  await go(outlineUrl);
   assert((await page.locator(".outline-grid .ocard").count()) >= 5, "카드 수");
   assert((await page.locator(".q-wrap").count()) === 0, "퀘스트 없음");
   await shot("outline");
