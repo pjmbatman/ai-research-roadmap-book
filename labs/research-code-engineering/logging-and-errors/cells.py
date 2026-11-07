@@ -100,13 +100,17 @@ for i in (13, 57, 91):
     batches[i][0] = 0.0                            # log(0) = -inf가 되는 batch 3개
 
 def mean_log(x):
-    return float(np.mean(np.log(x)))
+    if np.any(x <= 0):                             # NumPy의 log(0) 경고는 플랫폼에 따라 안 나므로 직접 낸다
+        warnings.warn("log of non-positive value", RuntimeWarning)
+    with np.errstate(divide="ignore"):
+        return float(np.mean(np.log(x)))
 
-for action in ["default", "always"]:
-    with warnings.catch_warnings(record=True) as caught:
-        warnings.simplefilter(action)
-        values = [mean_log(b) for b in batches]
-    print(f"{action:7s}: 경고 {len(caught)}개 기록, -inf인 batch {int(np.sum(np.isinf(values)))}개")
+with warnings.catch_warnings(record=True) as caught:
+    warnings.simplefilter("always")                # 모든 경고를 기록
+    values = [mean_log(b) for b in batches]
+places = {(str(w.message), w.lineno) for w in caught}   # 기본 필터는 (메시지, 위치)마다 한 번만 보인다
+print(f"-inf인 batch {int(np.sum(np.isinf(values)))}개, 일어난 경고 {len(caught)}개")
+print(f"기본 필터('default')라면 화면에 보이는 경고 {len(places)}개")
 
 def check_finite(name, value, step):
     if not np.all(np.isfinite(value)):

@@ -72,12 +72,12 @@ def run(tests):                                    # pytest가 하는 일의 최
             first = str(e).strip().splitlines()[0] if str(e).strip() else "assert 실패"
             print(f"FAILED {t.__name__}: {first}")
 
-print("열 평균:", z.mean(axis=0))
+print("열 평균이 정확히 0:", bool(np.all(z.mean(axis=0) == 0)), "/ |열 평균| < 1e-12:", bool(np.all(np.abs(z.mean(axis=0)) < 1e-12)))
 run([test_exact_equality, test_allclose_default_tolerance, test_allclose_with_atol])
 ```
 
 ```output
-열 평균: [ 8.40494341e-16 -1.36002321e-15 -7.09432513e-17 -6.06070749e-16]
+열 평균이 정확히 0: False / |열 평균| < 1e-12: True
 FAILED test_exact_equality: assert 실패
 FAILED test_allclose_default_tolerance: Not equal to tolerance rtol=1e-07, atol=0
 PASSED test_allclose_with_atol

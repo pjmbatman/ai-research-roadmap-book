@@ -30,7 +30,7 @@ def run(tests):                                    # pytest가 하는 일의 최
             first = str(e).strip().splitlines()[0] if str(e).strip() else "assert 실패"
             print(f"FAILED {t.__name__}: {first}")
 
-print("열 평균:", z.mean(axis=0))
+print("열 평균이 정확히 0:", bool(np.all(z.mean(axis=0) == 0)), "/ |열 평균| < 1e-12:", bool(np.all(np.abs(z.mean(axis=0)) < 1e-12)))
 run([test_exact_equality, test_allclose_default_tolerance, test_allclose_with_atol])
 
 # %% cell 2 — 결론을 바꾸는 실패: 분할 누수와 metric 집계

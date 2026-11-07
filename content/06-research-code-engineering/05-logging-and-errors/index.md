@@ -217,7 +217,7 @@ DataValidationError: row 2: temp_k=nan (양수여야 함)
 
 ::quiz{id="nan-equality"}
 
-**NaN 가드.** 학습 중 loss나 gradient가 NaN·무한대가 되면 그 뒤의 모든 step이 의미가 없다. 매 step(또는 몇 step마다) 값이 유한한지 검사해 처음 깨진 step에서 멈추면, 그 step의 batch와 설정이 로그에 남아 원인을 좁힐 수 있다. 다음 절의 코드에 가드의 예가 있다. NumPy는 `np.errstate(divide="raise", invalid="raise")` 블록 안에서 0으로 나누기나 무효 연산을 경고 대신 `FloatingPointError`로 바꿔, 문제가 생긴 연산 자체에서 멈추게 할 수 있다. PyTorch에는 역전파에서 NaN을 만든 연산을 찾아 주는 `torch.autograd.set_detect_anomaly`가 있다. 둘 다 느려지므로 진단할 때 켠다.
+**NaN 가드.** 학습 중 loss나 gradient가 NaN·무한대가 되면 그 뒤의 모든 step이 의미가 없다. 매 step(또는 몇 step마다) 값이 유한한지 검사해 처음 깨진 step에서 멈추면, 그 step의 batch와 설정이 로그에 남아 원인을 좁힐 수 있다. 다음 절의 코드에 가드의 예가 있다. NumPy는 `np.errstate(divide="raise", invalid="raise")` 블록 안에서 0으로 나누기나 무효 연산을 경고 대신 `FloatingPointError`로 바꿔, 문제가 생긴 연산 자체에서 멈추게 할 수 있다. 다만 이 기능은 CPU의 부동소수 예외 플래그에 기대므로 플랫폼에 따라 동작하지 않을 수 있다. 이 책의 브라우저 실행 환경(WebAssembly 위의 Pyodide)에서는 집필 시점에 `np.log(0)`이 경고 없이 `-inf`를 돌려주는 것을 확인했다. 그래서 값을 직접 검사하는 가드가 더 이식성이 높다. PyTorch에는 역전파에서 NaN을 만든 연산을 찾아 주는 `torch.autograd.set_detect_anomaly`가 있다. 학습이 느려지므로 진단할 때만 켠다.
 
 다만 "유한한가"만 검사하는 가드는 발산을 늦게 잡는다. 학습률이 너무 크면 loss가 $10^{6}$, $10^{16}$, $10^{26}$으로 커지면서도 한동안 유한하다(실습의 `logged_train.py`를 `--lr 1e-4 --epochs 20`으로 실행하면 20 epoch 동안 loss가 약 $7 \times 10^{192}$까지 커지지만 끝까지 유한하다). 필요하면 "loss가 초기값의 몇 배를 넘으면 멈춘다" 같은 규칙을 함께 둔다.
 
@@ -242,7 +242,7 @@ DataValidationError: row 2: temp_k=nan (양수여야 함)
 
 경고가 화면에 보일지는 **필터**(filter)가 정한다. 필터의 동작에는 `"default"`(위치마다 한 번), `"always"`(매번), `"once"`(전체에서 한 번), `"ignore"`(무시), `"error"`(예외로 바꿈) 등이 있다. 기본 동작은 대체로 `"default"`다. 즉 **같은 코드 위치에서 난 같은 경고는 한 번만 보인다.** `DeprecationWarning`은 기본적으로 숨겨지고, `__main__`의 코드가 직접 일으킨 경우에만 보인다.
 
-"위치마다 한 번"이 무엇을 숨기는지 확인한다. batch 100개 중 3개에 0이 섞여 `log(0) = -inf`가 된다.
+"위치마다 한 번"이 무엇을 숨기는지 확인한다. batch 100개 중 3개에 0이 섞여 `log(0) = -inf`가 된다. NumPy의 0으로 나누기 경고는 실행 환경에 따라 나지 않을 수 있어서(앞 절), 여기서는 같은 상황에서 직접 `warnings.warn`으로 경고를 낸다. 모든 경고를 기록(`"always"`)한 뒤, 기본 필터라면 몇 개가 보였을지를 (메시지, 코드 위치)의 종류 수로 센다.
 
 ```python {exec="browser" session="log"}
 import warnings
@@ -254,13 +254,17 @@ for i in (13, 57, 91):
     batches[i][0] = 0.0                            # log(0) = -inf가 되는 batch 3개
 
 def mean_log(x):
-    return float(np.mean(np.log(x)))
+    if np.any(x <= 0):                             # NumPy의 log(0) 경고는 플랫폼에 따라 안 나므로 직접 낸다
+        warnings.warn("log of non-positive value", RuntimeWarning)
+    with np.errstate(divide="ignore"):
+        return float(np.mean(np.log(x)))
 
-for action in ["default", "always"]:
-    with warnings.catch_warnings(record=True) as caught:
-        warnings.simplefilter(action)
-        values = [mean_log(b) for b in batches]
-    print(f"{action:7s}: 경고 {len(caught)}개 기록, -inf인 batch {int(np.sum(np.isinf(values)))}개")
+with warnings.catch_warnings(record=True) as caught:
+    warnings.simplefilter("always")                # 모든 경고를 기록
+    values = [mean_log(b) for b in batches]
+places = {(str(w.message), w.lineno) for w in caught}   # 기본 필터는 (메시지, 위치)마다 한 번만 보인다
+print(f"-inf인 batch {int(np.sum(np.isinf(values)))}개, 일어난 경고 {len(caught)}개")
+print(f"기본 필터('default')라면 화면에 보이는 경고 {len(places)}개")
 
 def check_finite(name, value, step):
     if not np.all(np.isfinite(value)):
@@ -276,12 +280,12 @@ with warnings.catch_warnings():
 ```
 
 ```output
-default: 경고 1개 기록, -inf인 batch 3개
-always : 경고 3개 기록, -inf인 batch 3개
+-inf인 batch 3개, 일어난 경고 3개
+기본 필터('default')라면 화면에 보이는 경고 1개
 가드가 멈춤: mean_log=-inf (step 13)
 ```
 
-기본 필터에서는 문제 batch가 3개인데 경고는 1개다. 3개가 아니라 3,000개였어도 1개다. 그래서 로그에 경고가 한 번 찍혔다는 것은 "그 위치에서 최소 한 번 일어났다"는 뜻일 뿐이다. 경고를 모두 꺼 둔 상태에서도 값을 직접 검사하는 가드는 첫 문제 batch(step 13)에서 멈춘다. 경고는 사람에게 보내는 신호이고, 가드는 프로그램이 스스로 멈추는 장치다. 결과의 정확성이 걸린 조건은 가드로 검사한다.
+세 경고가 모두 같은 메시지, 같은 줄에서 났으므로 기본 필터에서는 문제 batch가 3개인데 경고는 1개만 보인다. 3개가 아니라 3,000개였어도 1개다. 그래서 로그에 경고가 한 번 찍혔다는 것은 "그 위치에서 최소 한 번 일어났다"는 뜻일 뿐이다. 경고를 모두 꺼 둔 상태에서도 값을 직접 검사하는 가드는 첫 문제 batch(step 13)에서 멈춘다. 경고는 사람에게 보내는 신호이고, 가드는 프로그램이 스스로 멈추는 장치다. 결과의 정확성이 걸린 조건은 가드로 검사한다.
 
 ::quiz{id="repeated-warning-once"}
 
