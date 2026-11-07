@@ -821,277 +821,6 @@
   year    = {1998},
   doi     = {10.1016/S0004-3702(98)00023-X},
   note    = {확인: DBLP 서지 기록과 초록. MDP와 POMDP, belief 상태 위의 계획}
-@inproceedings{lakshminarayanan2017simple,
-  author    = {Lakshminarayanan, Balaji and Pritzel, Alexander and Blundell, Charles},
-  title     = {Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles},
-  booktitle = {Advances in Neural Information Processing Systems 30 (NIPS 2017)},
-  pages     = {6402--6413},
-  year      = {2017},
-  eprint    = {1612.01474},
-  archivePrefix = {arXiv},
-  note      = {확인: NeurIPS proceedings 초록 페이지와 서지 기록. 무작위 초기값이 다른 신경망 앙상블, 적정 점수로 학습}
-}
-
-@inproceedings{gal2016dropout,
-  author    = {Gal, Yarin and Ghahramani, Zoubin},
-  title     = {Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning},
-  booktitle = {Proceedings of the 33rd International Conference on Machine Learning},
-  series    = {Proceedings of Machine Learning Research},
-  volume    = {48},
-  pages     = {1050--1059},
-  year      = {2016},
-  eprint    = {1506.02142},
-  archivePrefix = {arXiv},
-  note      = {확인: PMLR v48 페이지(gal16)와 초록. dropout 학습을 deep Gaussian process 근사로 해석, MC dropout}
-}
-
-@inproceedings{kendall2017uncertainties,
-  author    = {Kendall, Alex and Gal, Yarin},
-  title     = {What Uncertainties Do We Need in Bayesian Deep Learning for Computer Vision?},
-  booktitle = {Advances in Neural Information Processing Systems 30 (NIPS 2017)},
-  year      = {2017},
-  eprint    = {1703.04977},
-  archivePrefix = {arXiv},
-  note      = {확인: NeurIPS proceedings 초록 페이지와 Oxford ORA 기록. ORA 기록의 쪽수(5574--5584)는 한 출처뿐이라 적지 않음}
-}
-
-@inproceedings{maddox2019simple,
-  author    = {Maddox, Wesley J. and Garipov, Timur and Izmailov, Pavel and Vetrov, Dmitry and Wilson, Andrew Gordon},
-  title     = {A Simple Baseline for Bayesian Uncertainty in Deep Learning},
-  booktitle = {Advances in Neural Information Processing Systems 32 (NeurIPS 2019)},
-  year      = {2019},
-  eprint    = {1902.02476},
-  archivePrefix = {arXiv},
-  note      = {확인: NeurIPS 2019 포스터 페이지와 arXiv 초록. SWAG: SWA 해를 평균으로, SGD 궤적의 저차원+대각 공분산으로 가우시안 근사}
-}
-
-@article{brier1950verification,
-  author  = {Brier, Glenn W.},
-  title   = {Verification of Forecasts Expressed in Terms of Probability},
-  journal = {Monthly Weather Review},
-  volume  = {78},
-  number  = {1},
-  pages   = {1--3},
-  year    = {1950},
-  doi     = {10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2},
-  note    = {확인: 서지 기록(권·호·쪽·DOI). Brier score의 원 논문. 원래 정의는 범주 합으로 0--2 범위}
-}
-
-@article{gneiting2007probabilistic,
-  author  = {Gneiting, Tilmann and Balabdaoui, Fadoua and Raftery, Adrian E.},
-  title   = {Probabilistic Forecasts, Calibration and Sharpness},
-  journal = {Journal of the Royal Statistical Society: Series B (Statistical Methodology)},
-  volume  = {69},
-  number  = {2},
-  pages   = {243--268},
-  year    = {2007},
-  doi     = {10.1111/j.1467-9868.2007.00587.x},
-  note    = {확인: RePEc 서지 기록과 초록. 보정 아래 sharpness 최대화 원칙, PIT 히스토그램, sharpness diagram}
-}
-
-@inproceedings{guo2017calibration,
-  author    = {Guo, Chuan and Pleiss, Geoff and Sun, Yu and Weinberger, Kilian Q.},
-  title     = {On Calibration of Modern Neural Networks},
-  booktitle = {Proceedings of the 34th International Conference on Machine Learning},
-  series    = {Proceedings of Machine Learning Research},
-  volume    = {70},
-  pages     = {1321--1330},
-  year      = {2017},
-  eprint    = {1706.04599},
-  archivePrefix = {arXiv},
-  note      = {확인: PMLR v70 페이지(guo17a)와 초록. 현대 신경망의 과신, ECE, temperature scaling}
-}
-
-@book{vovk2005algorithmic,
-  author    = {Vovk, Vladimir and Gammerman, Alexander and Shafer, Glenn},
-  title     = {Algorithmic Learning in a Random World},
-  publisher = {Springer},
-  year      = {2005},
-  doi       = {10.1007/b106715},
-  isbn      = {978-0-387-00152-4},
-  note      = {확인: Springer 서지 기록과 도서관 목록. conformal prediction의 원전. 2022년 2판이 있음}
-}
-
-@article{lei2018distribution,
-  author  = {Lei, Jing and G'Sell, Max and Rinaldo, Alessandro and Tibshirani, Ryan J. and Wasserman, Larry},
-  title   = {Distribution-Free Predictive Inference for Regression},
-  journal = {Journal of the American Statistical Association},
-  volume  = {113},
-  number  = {523},
-  pages   = {1094--1111},
-  year    = {2018},
-  doi     = {10.1080/01621459.2017.1307116},
-  eprint  = {1604.04173},
-  archivePrefix = {arXiv},
-  note    = {확인: 서지 기록과 초록. full·split conformal, 유한 표본 주변 coverage, jackknife 변형, LOCO 변수 중요도}
-}
-
-@inproceedings{romano2019conformalized,
-  author    = {Romano, Yaniv and Patterson, Evan and Cand{\`e}s, Emmanuel J.},
-  title     = {Conformalized Quantile Regression},
-  booktitle = {Advances in Neural Information Processing Systems 32 (NeurIPS 2019)},
-  year      = {2019},
-  eprint    = {1905.03222},
-  archivePrefix = {arXiv},
-  note      = {확인: NeurIPS 2019 proceedings PDF·포스터 페이지와 arXiv. 쪽수는 한 출처뿐이라 적지 않음}
-}
-
-@inproceedings{tibshirani2019conformal,
-  author    = {Tibshirani, Ryan J. and Foygel Barber, Rina and Cand{\`e}s, Emmanuel and Ramdas, Aaditya},
-  title     = {Conformal Prediction Under Covariate Shift},
-  booktitle = {Advances in Neural Information Processing Systems 32 (NeurIPS 2019)},
-  year      = {2019},
-  eprint    = {1904.06019},
-  archivePrefix = {arXiv},
-  note      = {확인: NeurIPS proceedings 페이지와 초록. 가능도 비를 알 때의 가중 conformal, 가능도 비는 비레이블 시험 입력으로 추정 가능}
-}
-
-@inproceedings{gibbs2021adaptive,
-  author    = {Gibbs, Isaac and Cand{\`e}s, Emmanuel},
-  title     = {Adaptive Conformal Inference Under Distribution Shift},
-  booktitle = {Advances in Neural Information Processing Systems 34 (NeurIPS 2021)},
-  year      = {2021},
-  eprint    = {2106.00170},
-  archivePrefix = {arXiv},
-  note      = {확인: NeurIPS 2021 proceedings 초록과 PDF. alpha_{t+1} = alpha_t + gamma(alpha - err_t) 갱신, 장기 평균 coverage 보장}
-}
-
-@article{shimodaira2000improving,
-  author  = {Shimodaira, Hidetoshi},
-  title   = {Improving Predictive Inference under Covariate Shift by Weighting the Log-Likelihood Function},
-  journal = {Journal of Statistical Planning and Inference},
-  volume  = {90},
-  number  = {2},
-  pages   = {227--244},
-  year    = {2000},
-  doi     = {10.1016/S0378-3758(00)00115-4},
-  note    = {확인: CiNii·MaRDI 서지 기록과 초록. 오지정 모델에서 p_t(x)/p_s(x) 가중이 점근적으로 최적, 잘 지정된 모델에서는 보통 최대우도가 최적}
-}
-
-@inproceedings{lopezpaz2017revisiting,
-  author    = {Lopez-Paz, David and Oquab, Maxime},
-  title     = {Revisiting Classifier Two-Sample Tests},
-  booktitle = {International Conference on Learning Representations (ICLR 2017)},
-  year      = {2017},
-  eprint    = {1610.06545},
-  archivePrefix = {arXiv},
-  note      = {확인: arXiv 초록과 학회 기록. held-out 분류 정확도로 하는 2-표본 검정(C2ST)}
-}
-
-@inproceedings{rabanser2019failing,
-  author    = {Rabanser, Stephan and G{\"u}nnemann, Stephan and Lipton, Zachary C.},
-  title     = {Failing Loudly: An Empirical Study of Methods for Detecting Dataset Shift},
-  booktitle = {Advances in Neural Information Processing Systems 32 (NeurIPS 2019)},
-  year      = {2019},
-  eprint    = {1810.11953},
-  archivePrefix = {arXiv},
-  note      = {확인: NeurIPS proceedings 초록. 사전학습 분류기로 차원 축소 후 2-표본 검정이 가장 좋았다는 실험 결과}
-}
-
-@inproceedings{koh2021wilds,
-  author    = {Koh, Pang Wei and Sagawa, Shiori and Marklund, Henrik and Xie, Sang Michael and Zhang, Marvin and Balsubramani, Akshay and Hu, Weihua and Yasunaga, Michihiro and Phillips, Richard Lanas and Gao, Irena and Lee, Tony and David, Etienne and Stavness, Ian and Guo, Wei and Earnshaw, Berton and Haque, Imran and Beery, Sara M. and Leskovec, Jure and Kundaje, Anshul and Pierson, Emma and Levine, Sergey and Finn, Chelsea and Liang, Percy},
-  title     = {{WILDS}: A Benchmark of in-the-Wild Distribution Shifts},
-  booktitle = {Proceedings of the 38th International Conference on Machine Learning},
-  series    = {Proceedings of Machine Learning Research},
-  volume    = {139},
-  pages     = {5637--5664},
-  year      = {2021},
-  note      = {확인: PMLR v139 페이지(koh21a). 실제 분포 이동 데이터셋 모음, 도메인 내·밖 성능 차이}
-}
-
-@article{zech2018variable,
-  author  = {Zech, John R. and Badgeley, Marcus A. and Liu, Manway and Costa, Anthony B. and Titano, Joseph J. and Oermann, Eric Karl},
-  title   = {Variable Generalization Performance of a Deep Learning Model to Detect Pneumonia in Chest Radiographs: A Cross-Sectional Study},
-  journal = {PLOS Medicine},
-  volume  = {15},
-  number  = {11},
-  pages   = {e1002683},
-  year    = {2018},
-  doi     = {10.1371/journal.pmed.1002683},
-  note    = {확인: DOAJ 서지 기록과 초록 요약. 세 병원 시스템 데이터, CNN이 병원 시스템을 매우 높은 정확도로 구분, 5개 비교 중 3개에서 외부 성능이 내부보다 낮음}
-}
-
-@article{breiman2001random,
-  author  = {Breiman, Leo},
-  title   = {Random Forests},
-  journal = {Machine Learning},
-  volume  = {45},
-  number  = {1},
-  pages   = {5--32},
-  year    = {2001},
-  doi     = {10.1023/A:1010933404324},
-  note    = {확인: 서지 기록(권·호·쪽·DOI). 랜덤 포레스트와 순열 기반 변수 중요도}
-}
-
-@article{friedman2001greedy,
-  author  = {Friedman, Jerome H.},
-  title   = {Greedy Function Approximation: A Gradient Boosting Machine},
-  journal = {The Annals of Statistics},
-  volume  = {29},
-  number  = {5},
-  pages   = {1189--1232},
-  year    = {2001},
-  doi     = {10.1214/aos/1013203451},
-  note    = {확인: Project Euclid 기록과 초록. gradient boosting, 변수 상대 중요도와 부분 의존 그림}
-}
-
-@inproceedings{sundararajan2017axiomatic,
-  author    = {Sundararajan, Mukund and Taly, Ankur and Yan, Qiqi},
-  title     = {Axiomatic Attribution for Deep Networks},
-  booktitle = {Proceedings of the 34th International Conference on Machine Learning},
-  series    = {Proceedings of Machine Learning Research},
-  volume    = {70},
-  pages     = {3319--3328},
-  year      = {2017},
-  eprint    = {1703.01365},
-  archivePrefix = {arXiv},
-  note      = {확인: PMLR v70 페이지(sundararajan17a)와 초록. Sensitivity·Implementation Invariance 공리, integrated gradients}
-}
-
-@inproceedings{lundberg2017unified,
-  author    = {Lundberg, Scott M. and Lee, Su-In},
-  title     = {A Unified Approach to Interpreting Model Predictions},
-  booktitle = {Advances in Neural Information Processing Systems 30 (NIPS 2017)},
-  pages     = {4765--4774},
-  year      = {2017},
-  eprint    = {1705.07874},
-  archivePrefix = {arXiv},
-  note      = {확인: NeurIPS proceedings 메타데이터(쪽수)와 초록. SHAP}
-}
-
-@inproceedings{adebayo2018sanity,
-  author    = {Adebayo, Julius and Gilmer, Justin and Muelly, Michael and Goodfellow, Ian and Hardt, Moritz and Kim, Been},
-  title     = {Sanity Checks for Saliency Maps},
-  booktitle = {Advances in Neural Information Processing Systems 31 (NeurIPS 2018)},
-  year      = {2018},
-  eprint    = {1810.03292},
-  archivePrefix = {arXiv},
-  note      = {확인: NeurIPS proceedings 페이지와 arXiv. 모델·데이터 무작위화 시험. 쪽수는 한 출처뿐이라 적지 않음}
-}
-
-@article{hooker2021unrestricted,
-  author  = {Hooker, Giles and Mentch, Lucas and Zhou, Siyu},
-  title   = {Unrestricted Permutation Forces Extrapolation: Variable Importance Requires at Least One More Model, or There Is No Free Variable Importance},
-  journal = {Statistics and Computing},
-  volume  = {31},
-  number  = {6},
-  pages   = {82},
-  year    = {2021},
-  eprint  = {1905.03151},
-  archivePrefix = {arXiv},
-  note    = {확인: DBLP 기록과 arXiv 초록. 상관된 특징에서 permute-and-predict 방법(순열 중요도·PDP·ICE)이 외삽을 강제함. 82는 논문 번호}
-}
-
-@article{chow1970optimum,
-  author  = {Chow, C. K.},
-  title   = {On Optimum Recognition Error and Reject Tradeoff},
-  journal = {IEEE Transactions on Information Theory},
-  volume  = {16},
-  number  = {1},
-  pages   = {41--46},
-  year    = {1970},
-  doi     = {10.1109/TIT.1970.1054406},
-  note    = {확인: Scilit 등 서지 기록과 초록. 최적 보류 규칙, 오류 확률과 보류 확률의 관계}
 }
 
 @inproceedings{elkan2001foundations,
@@ -1372,6 +1101,87 @@
   note      = {확인: NeurIPS 서지 기록과 초록. 확률적 신경망 동역학 모형의 ensemble과 표집 기반 불확실성 전파로 계획하는 PETS}
 }
 
+@inproceedings{lakshminarayanan2017simple,
+  author    = {Lakshminarayanan, Balaji and Pritzel, Alexander and Blundell, Charles},
+  title     = {Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles},
+  booktitle = {Advances in Neural Information Processing Systems 30 (NIPS 2017)},
+  pages     = {6402--6413},
+  year      = {2017},
+  eprint    = {1612.01474},
+  archivePrefix = {arXiv},
+  note      = {확인: NeurIPS proceedings 초록 페이지와 서지 기록. 무작위 초기값이 다른 신경망 앙상블, 적정 점수로 학습}
+}
+
+@inproceedings{gal2016dropout,
+  author    = {Gal, Yarin and Ghahramani, Zoubin},
+  title     = {Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning},
+  booktitle = {Proceedings of the 33rd International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {48},
+  pages     = {1050--1059},
+  year      = {2016},
+  eprint    = {1506.02142},
+  archivePrefix = {arXiv},
+  note      = {확인: PMLR v48 페이지(gal16)와 초록. dropout 학습을 deep Gaussian process 근사로 해석, MC dropout}
+}
+
+@inproceedings{kendall2017uncertainties,
+  author    = {Kendall, Alex and Gal, Yarin},
+  title     = {What Uncertainties Do We Need in Bayesian Deep Learning for Computer Vision?},
+  booktitle = {Advances in Neural Information Processing Systems 30 (NIPS 2017)},
+  year      = {2017},
+  eprint    = {1703.04977},
+  archivePrefix = {arXiv},
+  note      = {확인: NeurIPS proceedings 초록 페이지와 Oxford ORA 기록. ORA 기록의 쪽수(5574--5584)는 한 출처뿐이라 적지 않음}
+}
+
+@inproceedings{maddox2019simple,
+  author    = {Maddox, Wesley J. and Garipov, Timur and Izmailov, Pavel and Vetrov, Dmitry and Wilson, Andrew Gordon},
+  title     = {A Simple Baseline for Bayesian Uncertainty in Deep Learning},
+  booktitle = {Advances in Neural Information Processing Systems 32 (NeurIPS 2019)},
+  year      = {2019},
+  eprint    = {1902.02476},
+  archivePrefix = {arXiv},
+  note      = {확인: NeurIPS 2019 포스터 페이지와 arXiv 초록. SWAG: SWA 해를 평균으로, SGD 궤적의 저차원+대각 공분산으로 가우시안 근사}
+}
+
+@article{brier1950verification,
+  author  = {Brier, Glenn W.},
+  title   = {Verification of Forecasts Expressed in Terms of Probability},
+  journal = {Monthly Weather Review},
+  volume  = {78},
+  number  = {1},
+  pages   = {1--3},
+  year    = {1950},
+  doi     = {10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2},
+  note    = {확인: 서지 기록(권·호·쪽·DOI). Brier score의 원 논문. 원래 정의는 범주 합으로 0--2 범위}
+}
+
+@article{gneiting2007probabilistic,
+  author  = {Gneiting, Tilmann and Balabdaoui, Fadoua and Raftery, Adrian E.},
+  title   = {Probabilistic Forecasts, Calibration and Sharpness},
+  journal = {Journal of the Royal Statistical Society: Series B (Statistical Methodology)},
+  volume  = {69},
+  number  = {2},
+  pages   = {243--268},
+  year    = {2007},
+  doi     = {10.1111/j.1467-9868.2007.00587.x},
+  note    = {확인: RePEc 서지 기록과 초록. 보정 아래 sharpness 최대화 원칙, PIT 히스토그램, sharpness diagram}
+}
+
+@inproceedings{guo2017calibration,
+  author    = {Guo, Chuan and Pleiss, Geoff and Sun, Yu and Weinberger, Kilian Q.},
+  title     = {On Calibration of Modern Neural Networks},
+  booktitle = {Proceedings of the 34th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {70},
+  pages     = {1321--1330},
+  year      = {2017},
+  eprint    = {1706.04599},
+  archivePrefix = {arXiv},
+  note      = {확인: PMLR v70 페이지(guo17a)와 초록. 현대 신경망의 과신, ECE, temperature scaling}
+}
+
 @article{bengio1994learning,
   author  = {Bengio, Yoshua and Simard, Patrice and Frasconi, Paolo},
   title   = {Learning Long-Term Dependencies with Gradient Descent is Difficult},
@@ -1482,6 +1292,60 @@
   year      = {2022},
   eprint    = {2205.14135},
   note      = {확인: NeurIPS 2022 proceedings 페이지. GPU 메모리 계층 사이 이동을 줄이는 블록 단위의 정확한 attention}
+}
+
+@book{vovk2005algorithmic,
+  author    = {Vovk, Vladimir and Gammerman, Alexander and Shafer, Glenn},
+  title     = {Algorithmic Learning in a Random World},
+  publisher = {Springer},
+  year      = {2005},
+  doi       = {10.1007/b106715},
+  isbn      = {978-0-387-00152-4},
+  note      = {확인: Springer 서지 기록과 도서관 목록. conformal prediction의 원전. 2022년 2판이 있음}
+}
+
+@article{lei2018distribution,
+  author  = {Lei, Jing and G'Sell, Max and Rinaldo, Alessandro and Tibshirani, Ryan J. and Wasserman, Larry},
+  title   = {Distribution-Free Predictive Inference for Regression},
+  journal = {Journal of the American Statistical Association},
+  volume  = {113},
+  number  = {523},
+  pages   = {1094--1111},
+  year    = {2018},
+  doi     = {10.1080/01621459.2017.1307116},
+  eprint  = {1604.04173},
+  archivePrefix = {arXiv},
+  note    = {확인: 서지 기록과 초록. full·split conformal, 유한 표본 주변 coverage, jackknife 변형, LOCO 변수 중요도}
+}
+
+@inproceedings{romano2019conformalized,
+  author    = {Romano, Yaniv and Patterson, Evan and Cand{\`e}s, Emmanuel J.},
+  title     = {Conformalized Quantile Regression},
+  booktitle = {Advances in Neural Information Processing Systems 32 (NeurIPS 2019)},
+  year      = {2019},
+  eprint    = {1905.03222},
+  archivePrefix = {arXiv},
+  note      = {확인: NeurIPS 2019 proceedings PDF·포스터 페이지와 arXiv. 쪽수는 한 출처뿐이라 적지 않음}
+}
+
+@inproceedings{tibshirani2019conformal,
+  author    = {Tibshirani, Ryan J. and Foygel Barber, Rina and Cand{\`e}s, Emmanuel and Ramdas, Aaditya},
+  title     = {Conformal Prediction Under Covariate Shift},
+  booktitle = {Advances in Neural Information Processing Systems 32 (NeurIPS 2019)},
+  year      = {2019},
+  eprint    = {1904.06019},
+  archivePrefix = {arXiv},
+  note      = {확인: NeurIPS proceedings 페이지와 초록. 가능도 비를 알 때의 가중 conformal, 가능도 비는 비레이블 시험 입력으로 추정 가능}
+}
+
+@inproceedings{gibbs2021adaptive,
+  author    = {Gibbs, Isaac and Cand{\`e}s, Emmanuel},
+  title     = {Adaptive Conformal Inference Under Distribution Shift},
+  booktitle = {Advances in Neural Information Processing Systems 34 (NeurIPS 2021)},
+  year      = {2021},
+  eprint    = {2106.00170},
+  archivePrefix = {arXiv},
+  note      = {확인: NeurIPS 2021 proceedings 초록과 PDF. alpha_{t+1} = alpha_t + gamma(alpha - err_t) 갱신, 장기 평균 coverage 보장}
 }
 
 @inproceedings{he2016deep,
@@ -1769,6 +1633,49 @@
   note    = {확인: JMLR 논문 페이지와 초록(웹 검색). normalizing flow의 개관: 표현력과 계산량, 생성 모델링·근사 추론에서의 쓰임}
 }
 
+@article{shimodaira2000improving,
+  author  = {Shimodaira, Hidetoshi},
+  title   = {Improving Predictive Inference under Covariate Shift by Weighting the Log-Likelihood Function},
+  journal = {Journal of Statistical Planning and Inference},
+  volume  = {90},
+  number  = {2},
+  pages   = {227--244},
+  year    = {2000},
+  doi     = {10.1016/S0378-3758(00)00115-4},
+  note    = {확인: CiNii·MaRDI 서지 기록과 초록. 오지정 모델에서 p_t(x)/p_s(x) 가중이 점근적으로 최적, 잘 지정된 모델에서는 보통 최대우도가 최적}
+}
+
+@inproceedings{lopezpaz2017revisiting,
+  author    = {Lopez-Paz, David and Oquab, Maxime},
+  title     = {Revisiting Classifier Two-Sample Tests},
+  booktitle = {International Conference on Learning Representations (ICLR 2017)},
+  year      = {2017},
+  eprint    = {1610.06545},
+  archivePrefix = {arXiv},
+  note      = {확인: arXiv 초록과 학회 기록. held-out 분류 정확도로 하는 2-표본 검정(C2ST)}
+}
+
+@inproceedings{rabanser2019failing,
+  author    = {Rabanser, Stephan and G{\"u}nnemann, Stephan and Lipton, Zachary C.},
+  title     = {Failing Loudly: An Empirical Study of Methods for Detecting Dataset Shift},
+  booktitle = {Advances in Neural Information Processing Systems 32 (NeurIPS 2019)},
+  year      = {2019},
+  eprint    = {1810.11953},
+  archivePrefix = {arXiv},
+  note      = {확인: NeurIPS proceedings 초록. 사전학습 분류기로 차원 축소 후 2-표본 검정이 가장 좋았다는 실험 결과}
+}
+
+@inproceedings{koh2021wilds,
+  author    = {Koh, Pang Wei and Sagawa, Shiori and Marklund, Henrik and Xie, Sang Michael and Zhang, Marvin and Balsubramani, Akshay and Hu, Weihua and Yasunaga, Michihiro and Phillips, Richard Lanas and Gao, Irena and Lee, Tony and David, Etienne and Stavness, Ian and Guo, Wei and Earnshaw, Berton and Haque, Imran and Beery, Sara M. and Leskovec, Jure and Kundaje, Anshul and Pierson, Emma and Levine, Sergey and Finn, Chelsea and Liang, Percy},
+  title     = {{WILDS}: A Benchmark of in-the-Wild Distribution Shifts},
+  booktitle = {Proceedings of the 38th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {139},
+  pages     = {5637--5664},
+  year      = {2021},
+  note      = {확인: PMLR v139 페이지(koh21a). 실제 분포 이동 데이터셋 모음, 도메인 내·밖 성능 차이}
+}
+
 @article{williams2009roofline,
   author  = {Williams, Samuel and Waterman, Andrew and Patterson, David},
   title   = {Roofline: An Insightful Visual Performance Model for Multicore Architectures},
@@ -1788,6 +1695,89 @@
   eprint    = {1710.03740},
   archivePrefix = {arXiv},
   note      = {확인: arXiv 목록(ICLR 2018 게재 표기)과 ICLR 2018 서지 기록. fp16 학습의 loss scaling과 fp32 가중치 사본}
+}
+
+@article{zech2018variable,
+  author  = {Zech, John R. and Badgeley, Marcus A. and Liu, Manway and Costa, Anthony B. and Titano, Joseph J. and Oermann, Eric Karl},
+  title   = {Variable Generalization Performance of a Deep Learning Model to Detect Pneumonia in Chest Radiographs: A Cross-Sectional Study},
+  journal = {PLOS Medicine},
+  volume  = {15},
+  number  = {11},
+  pages   = {e1002683},
+  year    = {2018},
+  doi     = {10.1371/journal.pmed.1002683},
+  note    = {확인: DOAJ 서지 기록과 초록 요약. 세 병원 시스템 데이터, CNN이 병원 시스템을 매우 높은 정확도로 구분, 5개 비교 중 3개에서 외부 성능이 내부보다 낮음}
+}
+
+@article{breiman2001random,
+  author  = {Breiman, Leo},
+  title   = {Random Forests},
+  journal = {Machine Learning},
+  volume  = {45},
+  number  = {1},
+  pages   = {5--32},
+  year    = {2001},
+  doi     = {10.1023/A:1010933404324},
+  note    = {확인: 서지 기록(권·호·쪽·DOI). 랜덤 포레스트와 순열 기반 변수 중요도}
+}
+
+@article{friedman2001greedy,
+  author  = {Friedman, Jerome H.},
+  title   = {Greedy Function Approximation: A Gradient Boosting Machine},
+  journal = {The Annals of Statistics},
+  volume  = {29},
+  number  = {5},
+  pages   = {1189--1232},
+  year    = {2001},
+  doi     = {10.1214/aos/1013203451},
+  note    = {확인: Project Euclid 기록과 초록. gradient boosting, 변수 상대 중요도와 부분 의존 그림}
+}
+
+@inproceedings{sundararajan2017axiomatic,
+  author    = {Sundararajan, Mukund and Taly, Ankur and Yan, Qiqi},
+  title     = {Axiomatic Attribution for Deep Networks},
+  booktitle = {Proceedings of the 34th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {70},
+  pages     = {3319--3328},
+  year      = {2017},
+  eprint    = {1703.01365},
+  archivePrefix = {arXiv},
+  note      = {확인: PMLR v70 페이지(sundararajan17a)와 초록. Sensitivity·Implementation Invariance 공리, integrated gradients}
+}
+
+@inproceedings{lundberg2017unified,
+  author    = {Lundberg, Scott M. and Lee, Su-In},
+  title     = {A Unified Approach to Interpreting Model Predictions},
+  booktitle = {Advances in Neural Information Processing Systems 30 (NIPS 2017)},
+  pages     = {4765--4774},
+  year      = {2017},
+  eprint    = {1705.07874},
+  archivePrefix = {arXiv},
+  note      = {확인: NeurIPS proceedings 메타데이터(쪽수)와 초록. SHAP}
+}
+
+@inproceedings{adebayo2018sanity,
+  author    = {Adebayo, Julius and Gilmer, Justin and Muelly, Michael and Goodfellow, Ian and Hardt, Moritz and Kim, Been},
+  title     = {Sanity Checks for Saliency Maps},
+  booktitle = {Advances in Neural Information Processing Systems 31 (NeurIPS 2018)},
+  year      = {2018},
+  eprint    = {1810.03292},
+  archivePrefix = {arXiv},
+  note      = {확인: NeurIPS proceedings 페이지와 arXiv. 모델·데이터 무작위화 시험. 쪽수는 한 출처뿐이라 적지 않음}
+}
+
+@article{hooker2021unrestricted,
+  author  = {Hooker, Giles and Mentch, Lucas and Zhou, Siyu},
+  title   = {Unrestricted Permutation Forces Extrapolation: Variable Importance Requires at Least One More Model, or There Is No Free Variable Importance},
+  journal = {Statistics and Computing},
+  volume  = {31},
+  number  = {6},
+  pages   = {82},
+  year    = {2021},
+  eprint  = {1905.03151},
+  archivePrefix = {arXiv},
+  note    = {확인: DBLP 기록과 arXiv 초록. 상관된 특징에서 permute-and-predict 방법(순열 중요도·PDP·ICE)이 외삽을 강제함. 82는 논문 번호}
 }
 
 @inproceedings{sohldickstein2015deep,
@@ -1854,9 +1844,18 @@
   eprint        = {2207.12598},
   archivePrefix = {arXiv},
   note          = {확인: arXiv 목록과 초록(웹 검색). 짧은 판은 NeurIPS 2021 Workshop on Deep Generative Models and Downstream Applications. 조건부·무조건 확산 모델을 함께 학습해 score 추정을 결합하는 guidance}
-  publisher = {Morgan Kaufmann},
-  year      = {2001},
-  note      = {확인: DBLP 기록과 초록. 오분류 비용이 다를 때의 최적 결정, 학습 데이터의 음성 비율 조정 정리}
+}
+
+@article{chow1970optimum,
+  author  = {Chow, C. K.},
+  title   = {On Optimum Recognition Error and Reject Tradeoff},
+  journal = {IEEE Transactions on Information Theory},
+  volume  = {16},
+  number  = {1},
+  pages   = {41--46},
+  year    = {1970},
+  doi     = {10.1109/TIT.1970.1054406},
+  note    = {확인: Scilit 등 서지 기록과 초록. 최적 보류 규칙, 오류 확률과 보류 확률의 관계}
 }
 
 @inproceedings{geifman2017selective,

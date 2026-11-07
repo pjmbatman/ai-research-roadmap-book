@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 882문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 916문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -605,23 +605,23 @@ _MDP와 동적계획법, 가치·정책 기반 강화학습, 모델 기반 방�
 
 _불확실성의 종류와 모델링, 예측분포의 평가, conformal prediction, 분포 이동과 OOD, 해석가능성, 위험을 고려한 의사결정을 다룬다._
 
-- **21.1** [불확실성 정량화](content/21-reliability/01-uncertainty-quantification/index.md) · `필수`
-  - 불확실성의 종류 · 확률적 출력 · 앙상블과 근사 베이지안 · 불확실성 전파
+- **21.1** [불확실성 정량화](content/21-reliability/01-uncertainty-quantification/index.md) · `필수` · 퀴즈 5
+  - 불확실성의 종류 · 확률적 출력 · 앙상블과 근사 베이지안 · 불확실성 전파 · 참고 문헌
   - 선수: 12.3 분포 기반 문제 정의, 13.1 베이지안 사고방식
-- **21.2** [예측분포와 구간의 평가](content/21-reliability/02-evaluating-predictive-distributions/index.md) · `필수` · 위젯: Calibration과 reliability diagram
-  - 적정 점수 규칙 · calibration · sharpness · 구간 평가 · 재보정
+- **21.2** [예측분포와 구간의 평가](content/21-reliability/02-evaluating-predictive-distributions/index.md) · `필수` · 퀴즈 6 · 위젯: Calibration과 reliability diagram
+  - 적정 점수 규칙 · calibration · sharpness · 구간 평가 · 재보정 · 참고 문헌
   - 선수: 21.1 불확실성 정량화
-- **21.3** [Conformal Prediction](content/21-reliability/03-conformal-prediction/index.md) · `심화`
-  - 기본 아이디어 · split conformal · 변형 · 시계열과 분포 이동
+- **21.3** [Conformal Prediction](content/21-reliability/03-conformal-prediction/index.md) · `심화` · 퀴즈 5
+  - 기본 아이디어 · split conformal · 변형 · 시계열과 분포 이동 · 참고 문헌
   - 선수: 21.2 예측분포와 구간의 평가
-- **21.4** [분포 이동과 OOD](content/21-reliability/04-distribution-shift/index.md) · `필수`
-  - 분포 이동의 유형 · OOD 탐지와 OOD 일반화 · 일반화 전략 · 조건별 평가 · 강건성 · 운영 중 drift
+- **21.4** [분포 이동과 OOD](content/21-reliability/04-distribution-shift/index.md) · `필수` · 퀴즈 6
+  - 분포 이동의 유형 · OOD 탐지와 OOD 일반화 · 일반화 전략 · 조건별 평가 · 강건성 · 운영 중 drift · 참고 문헌
   - 선수: 21.1 불확실성 정량화, 15.4 데이터 분할과 누수 방지
-- **21.5** [해석가능성](content/21-reliability/05-interpretability/index.md) · `심화`
-  - 특징 기여도 · 방법의 가정 · 설명과 인과 · 민감도 분석과 물리적 타당성 · 기계적 해석 · 해석의 검증
+- **21.5** [해석가능성](content/21-reliability/05-interpretability/index.md) · `심화` · 퀴즈 6
+  - 특징 기여도 · 방법의 가정 · 설명과 인과 · 민감도 분석과 물리적 타당성 · 기계적 해석 · 해석의 검증 · 참고 문헌
   - 선수: 21.1 불확실성 정량화
-- **21.6** [위험을 고려한 의사결정](content/21-reliability/06-decision-making/index.md) · `심화`
-  - 예측에서 결정으로 · 비용 기반 threshold · 선택적 예측 · 적용 범위
+- **21.6** [위험을 고려한 의사결정](content/21-reliability/06-decision-making/index.md) · `심화` · 퀴즈 6
+  - 예측에서 결정으로 · 비용 기반 threshold · 선택적 예측 · 적용 범위 · 참고 문헌
   - 선수: 21.2 예측분포와 구간의 평가
 
 ## `MLS` 머신러닝 시스템 <sub>Machine Learning Systems</sub>
