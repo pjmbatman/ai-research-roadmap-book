@@ -1,0 +1,6 @@
+title = "RBF kernel ridge 회귀"
+chapter = "linear-algebra/function-spaces"
+objective = 3
+exec = "browser"
+entry = "kernel_ridge_predict"
+timeout_s = 10
