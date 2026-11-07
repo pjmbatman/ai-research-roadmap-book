@@ -95,15 +95,12 @@ $$
 ```python {exec="browser" session="mfrl"}
 H, W, START, GOAL = 4, 12, 36, 47            # 4×12 격자, 아래 줄 가운데 10칸이 절벽
 MOVES = [(-1, 0), (0, 1), (1, 0), (0, -1)]
-
 def step(s, a):
     r, c = divmod(s, W)
     r, c = min(max(r + MOVES[a][0], 0), H - 1), min(max(c + MOVES[a][1], 0), W - 1)
-    s2 = r * W + c
     if r == H - 1 and 0 < c < W - 1:         # 절벽: 보상 -100, 출발점으로
         return START, -100.0
-    return s2, -1.0
-
+    return r * W + c, -1.0
 def learn(method, seed, n_ep=300, alpha=0.5, eps=0.1):
     rng, Q, returns = np.random.default_rng(seed), np.zeros((H * W, 4)), []
     pick = lambda s: int(rng.integers(4)) if rng.random() < eps else int(np.argmax(Q[s]))
@@ -118,7 +115,6 @@ def learn(method, seed, n_ep=300, alpha=0.5, eps=0.1):
             s, a, G = s2, a2, G + r
         returns.append(G)
     return Q, np.array(returns)
-
 for method in ["Q", "SARSA"]:
     res = [learn(method, seed) for seed in range(5)]
     online = np.mean([ret[-100:].mean() for _, ret in res])

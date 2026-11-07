@@ -49,7 +49,6 @@ def show(pi):                                # 결정적 정책을 화살표 격
     g = ARROW[pi].copy()
     g[GOAL], g[PIT] = "G", "X"
     print("\n".join(" ".join(row) for row in g.reshape(H, W)))
-
 V, gaps = np.zeros(S), []
 for k in range(1000):                        # 가치 반복: V <- max_a (R + gamma P V)
     V_new = (R + gamma * P @ V).max(axis=1)

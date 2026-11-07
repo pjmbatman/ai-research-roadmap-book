@@ -61,7 +61,6 @@ dt_s = 0.1                                   # 시간 간격 [s]
 A = np.array([[1.0, dt_s], [0.0, 1.0]])      # 상태 x = (위치 [m], 속도 [m/s]), (2, 2)
 B = np.array([[0.5 * dt_s**2], [dt_s]])      # 입력 u = 가속도 [m/s^2], (2, 1)
 Qc, Rc = np.diag([1.0, 0.1]), np.array([[0.1]])   # 상태 비용, 입력 비용
-
 P = Qc.copy()                                # 가치함수 V(x) = x^T P x, 지평 끝에서 출발
 for k in range(500):                         # Riccati 반복 = 이차 가치함수에 대한 DP
     K = np.linalg.solve(Rc + B.T @ P @ B, B.T @ P @ A)    # (1, 2), u = -K x
@@ -72,7 +71,6 @@ for k in range(500):                         # Riccati 반복 = 이차 가치함
 print(f"Riccati {k + 1}번 반복, K = {K.round(3)}")
 print("scipy DARE와 일치:", np.allclose(P, solve_discrete_are(A, B, Qc, Rc)))
 print("폐루프 고윳값 크기:", np.abs(np.linalg.eigvals(A - B @ K)).round(3))
-
 def rollout(policy, x0, T=60):               # 실제 시스템에서 비용과 궤적을 잰다
     x, cost, xs, us = x0.copy(), 0.0, [], []
     for t in range(T):
@@ -81,7 +79,6 @@ def rollout(policy, x0, T=60):               # 실제 시스템에서 비용과 
         xs.append(x); us.append(u)
         x = A @ x + B @ u
     return cost, np.array(xs), np.array(us)
-
 x0 = np.array([1.0, 0.0])                    # 1 m 떨어진 곳에서 정지 상태로 출발
 cost, xs, us = rollout(lambda x, t: -K @ x, x0)
 print(f"LQR 비용 {cost:.3f}  (예측 x0^T P x0 = {x0 @ P @ x0:.3f}),  최대 |u| = {np.abs(us).max():.2f} m/s^2,"
