@@ -91,7 +91,7 @@ status = "prototype"
 name = "training-loop-stepper"
 title = "학습 루프 단계 재생기"
 chapters = ["deep-learning-pytorch/training-loop"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "attention-visualizer"
