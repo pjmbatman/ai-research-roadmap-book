@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 516문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 543문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -391,17 +391,17 @@ _사전·우도·사후·예측분포, 켤레 모델, 계층 모델, 잠재변�
 - **13.4** [잠재변수 모델과 EM](content/13-bayesian-inference/04-latent-variables-and-em/index.md) · `필수`
   - 잠재변수 모델 · Gaussian mixture model · EM 알고리즘 · 결측 데이터
   - 선수: 13.1 베이지안 사고방식
-- **13.5** [근사 추론 I: MCMC](content/13-bayesian-inference/05-mcmc/index.md) · `심화`
-  - 왜 근사가 필요한가 · Metropolis–Hastings · Gibbs sampling · HMC와 NUTS · 수렴 진단
+- **13.5** [근사 추론 I: MCMC](content/13-bayesian-inference/05-mcmc/index.md) · `심화` · 퀴즈 7
+  - 왜 근사가 필요한가 · Metropolis–Hastings · Gibbs sampling · HMC와 NUTS · 수렴 진단 · 참고 문헌
   - 선수: 13.1 베이지안 사고방식, 11.7 확률과정 기초
-- **13.6** [근사 추론 II: 변분추론과 Laplace 근사](content/13-bayesian-inference/06-variational-inference/index.md) · `심화`
-  - 변분추론 · 확률적 변분추론 · amortized inference · Laplace 근사 · 근사의 한계
+- **13.6** [근사 추론 II: 변분추론과 Laplace 근사](content/13-bayesian-inference/06-variational-inference/index.md) · `심화` · 퀴즈 7
+  - 변분추론 · 확률적 변분추론 · amortized inference · Laplace 근사 · 근사의 한계 · 참고 문헌
   - 선수: 13.4 잠재변수 모델과 EM
-- **13.7** [Gaussian Process](content/13-bayesian-inference/07-gaussian-processes/index.md) · `필수` · 위젯: Gaussian process 회귀
-  - 함수에 대한 분포 · GP 회귀 · 커널 · 하이퍼파라미터 · 확장
+- **13.7** [Gaussian Process](content/13-bayesian-inference/07-gaussian-processes/index.md) · `필수` · 퀴즈 7 · 위젯: Gaussian process 회귀
+  - 함수에 대한 분포 · GP 회귀 · 커널 · 하이퍼파라미터 · 확장 · 참고 문헌
   - 선수: 11.4 다변량 가우시안, 7.9 함수공간과 연산자
-- **13.8** [베이지안 워크플로](content/13-bayesian-inference/08-bayesian-workflow/index.md) · `심화`
-  - 모델 구축 · 사전 예측 점검 · 사후 점검 · 모델 비교 · 보고
+- **13.8** [베이지안 워크플로](content/13-bayesian-inference/08-bayesian-workflow/index.md) · `심화` · 퀴즈 6
+  - 모델 구축 · 사전 예측 점검 · 사후 점검 · 모델 비교 · 보고 · 참고 문헌
   - 선수: 13.5 근사 추론 I: MCMC
 
 ### 제14부. 정보이론과 학습이론 <sub>Information Theory and Learning Theory</sub>
