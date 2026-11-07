@@ -1,0 +1,6 @@
+title = "Expected improvement 구현하기"
+chapter = "optimization/special-optimization"
+objective = 2
+exec = "browser"
+entry = "expected_improvement"
+timeout_s = 10
