@@ -1,0 +1,6 @@
+title = "1-RC 등가회로 모델 적분하기"
+chapter = "battery-ai/battery-models"
+objective = 2
+exec = "browser"
+entry = "simulate_1rc"
+timeout_s = 10

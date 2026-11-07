@@ -1,0 +1,6 @@
+title = "쿨롱 카운팅과 오차 누적"
+chapter = "battery-ai/state-and-lifetime-prediction"
+objective = 2
+exec = "browser"
+entry = "soc_coulomb"
+timeout_s = 10
