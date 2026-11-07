@@ -73,7 +73,7 @@ status = "prototype"
 name = "bayesian-update"
 title = "순차적 베이지안 갱신"
 chapters = ["bayesian-inference/bayesian-thinking", "bayesian-inference/conjugate-models"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "gp-regression"
