@@ -9,6 +9,7 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "autodiff-graph": () => import("./autodiff-graph/index"),
   "float-precision": () => import("./float-precision/index"),
   "ode-stability": () => import("./ode-stability/index"),
+  "optimizer-landscape": () => import("./optimizer-landscape/index"),
 };
 
 export function mountWidgets(page: PageData) {

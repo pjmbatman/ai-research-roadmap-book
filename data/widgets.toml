@@ -49,7 +49,7 @@ status = "prototype"
 name = "optimizer-landscape"
 title = "손실 지형 위의 optimizer 궤적"
 chapters = ["optimization/first-order-methods", "optimization/adaptive-methods"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "distribution-explorer"
