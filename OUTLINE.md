@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 722문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 747문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -521,17 +521,17 @@ _신경망의 구성 요소, PyTorch의 tensor·autograd·Module·DataLoader, fo
 
 _귀납적 편향의 관점에서 MLP·CNN·순환·상태공간 모델·Transformer·언어모델·그래프 신경망·시계열 모델을 다루고, 학습된 표현을 분석한다._
 
-- **18.1** [귀납적 편향과 아키텍처 선택](content/18-architectures/01-inductive-bias/index.md) · `필수`
-  - 귀납적 편향 · 대칭성 · MLP · 선택 기준
+- **18.1** [귀납적 편향과 아키텍처 선택](content/18-architectures/01-inductive-bias/index.md) · `필수` · 퀴즈 5
+  - 귀납적 편향 · 대칭성 · MLP · 선택 기준 · 참고 문헌
   - 선수: 17.1 신경망의 구성 요소
-- **18.2** [CNN과 공간 구조](content/18-architectures/02-cnn/index.md) · `필수`
-  - convolution · 귀납적 편향 · receptive field · 대표 구조 · 적용 범위
+- **18.2** [CNN과 공간 구조](content/18-architectures/02-cnn/index.md) · `필수` · 퀴즈 6
+  - convolution · 귀납적 편향 · receptive field · 대표 구조 · 적용 범위 · 참고 문헌
   - 선수: 18.1 귀납적 편향과 아키텍처 선택
-- **18.3** [순환 모델과 상태공간 모델](content/18-architectures/03-recurrent-and-ssm/index.md) · `필수`
-  - RNN · LSTM과 GRU · 시간 convolution · 상태공간 모델 · 학습과 추론 방식 · 불규칙 샘플링
+- **18.3** [순환 모델과 상태공간 모델](content/18-architectures/03-recurrent-and-ssm/index.md) · `필수` · 퀴즈 7
+  - RNN · LSTM과 GRU · 시간 convolution · 상태공간 모델 · 학습과 추론 방식 · 불규칙 샘플링 · 참고 문헌
   - 선수: 18.1 귀납적 편향과 아키텍처 선택, 7.5 고윳값과 대칭행렬
-- **18.4** [Attention과 Transformer](content/18-architectures/04-transformers/index.md) · `필수` · 위젯: Attention 계산
-  - attention · multi-head와 cross-attention · 위치 정보 · mask · Transformer 블록 · 효율 · 해석의 한계
+- **18.4** [Attention과 Transformer](content/18-architectures/04-transformers/index.md) · `필수` · 퀴즈 7 · 위젯: Attention 계산
+  - attention · multi-head와 cross-attention · 위치 정보 · mask · Transformer 블록 · 효율 · 해석의 한계 · 참고 문헌
   - 선수: 18.1 귀납적 편향과 아키텍처 선택, 7.7 텐서와 einsum
 - **18.5** [언어모델과 LLM의 기초](content/18-architectures/05-language-models/index.md) · `심화` · 퀴즈 7
   - 토큰화 · 자기회귀 언어모델 · 사전학습과 후속 학습 · 사용 방식 · 평가 · 과학 연구에서의 LLM · 참고 문헌
