@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 606문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 639문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -408,20 +408,20 @@ _사전·우도·사후·예측분포, 켤레 모델, 계층 모델, 잠재변�
 
 _엔트로피와 KL, 상호정보량, 목적함수 설계의 원리, 일반화 이론, 현대 딥러닝의 일반화와 스케일링을 다룬다._
 
-- **14.1** [엔트로피·교차엔트로피·KL](content/14-information-and-learning-theory/01-entropy-and-kl/index.md) · `필수`
-  - 엔트로피 · 교차엔트로피와 KL · 다른 divergence
+- **14.1** [엔트로피·교차엔트로피·KL](content/14-information-and-learning-theory/01-entropy-and-kl/index.md) · `필수` · 퀴즈 6
+  - 엔트로피 · 교차엔트로피와 KL · forward KL과 reverse KL · 다른 divergence · 참고 문헌
   - 선수: 11.2 주요 분포와 지수족
-- **14.2** [상호정보량과 표현](content/14-information-and-learning-theory/02-mutual-information/index.md) · `심화`
-  - 상호정보량 · 추정의 어려움 · 정보 병목
+- **14.2** [상호정보량과 표현](content/14-information-and-learning-theory/02-mutual-information/index.md) · `심화` · 퀴즈 6
+  - 상호정보량 · 추정의 어려움 · 정보 병목 · 참고 문헌
   - 선수: 14.1 엔트로피·교차엔트로피·KL
-- **14.3** [목적함수 설계의 원리](content/14-information-and-learning-theory/03-objective-design/index.md) · `필수`
-  - 손실 = 음의 로그우도 · divergence 최소화로서의 학습 · ELBO · 대조적 목적함수 · 다중 손실의 결합 · 집계 방식
+- **14.3** [목적함수 설계의 원리](content/14-information-and-learning-theory/03-objective-design/index.md) · `필수` · 퀴즈 7
+  - 손실 = 음의 로그우도 · divergence 최소화로서의 학습 · ELBO · 대조적 목적함수 · 다중 손실의 결합 · 집계 방식 · 참고 문헌
   - 선수: 14.1 엔트로피·교차엔트로피·KL, 12.2 우도와 최대우도
-- **14.4** [일반화의 기초](content/14-information-and-learning-theory/04-generalization-basics/index.md) · `필수`
-  - 위험 · 오차 분해 · bias–variance · 용량과 bound · 귀납적 편향과 정규화 · 이론과 실험의 간극
+- **14.4** [일반화의 기초](content/14-information-and-learning-theory/04-generalization-basics/index.md) · `필수` · 퀴즈 7
+  - 위험 · 오차 분해 · bias–variance · 용량과 bound · 귀납적 편향과 정규화 · 이론과 실험의 간극 · 참고 문헌
   - 선수: 11.5 기댓값·부등식·극한정리
-- **14.5** [현대 딥러닝의 일반화와 스케일링](content/14-information-and-learning-theory/05-modern-generalization/index.md) · `심화`
-  - 과매개변수화 · 암묵적 정규화 · 이론적 관점 · 스케일링 법칙 · 보간과 외삽
+- **14.5** [현대 딥러닝의 일반화와 스케일링](content/14-information-and-learning-theory/05-modern-generalization/index.md) · `심화` · 퀴즈 7
+  - 과매개변수화 · 암묵적 정규화 · 이론적 관점 · 스케일링 법칙 · 보간과 외삽 · 참고 문헌
   - 선수: 14.4 일반화의 기초
 
 ## `MLC` 머신러닝 핵심 <sub>Machine Learning Core</sub>
