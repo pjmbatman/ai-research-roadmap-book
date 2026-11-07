@@ -1,0 +1,6 @@
+title = "Soft thresholding과 proximal gradient로 Lasso 풀기"
+chapter = "optimization/constrained-optimization"
+objective = 2
+exec = "browser"
+entry = "ista"
+timeout_s = 15

@@ -1,0 +1,146 @@
+# 10.2 제약 최적화와 쌍대성 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "lagrange-gradient-parallel"
+type = "single"
+objective = 1
+prompt = '''등식 제약 문제 $\min f(\mathbf{x})$ s.t. $h(\mathbf{x}) = 0$의 최적해 $\mathbf{x}^\star$($\nabla h(\mathbf{x}^\star) \neq \mathbf{0}$)에서 항상 성립하는 것은?'''
+explanation = '''최적해에서는 $f$의 등고선이 제약 곡선 $h = 0$에 접한다. 그래서 $\nabla f(\mathbf{x}^\star)$는 제약 곡선의 법선 $\nabla h(\mathbf{x}^\star)$와 평행하고, $\nabla f + \nu \nabla h = \mathbf{0}$인 승수 $\nu$가 존재한다. $\nabla f$ 자체는 0일 필요가 없다. 본문의 예에서 최적해 $(2/3, 1/3)$의 $\nabla f$는 $(4/3, 4/3)$이다. 등식 제약의 승수는 부호 제한이 없다.'''
+
+[[questions.choices]]
+text = '''$\nabla f(\mathbf{x}^\star) = \mathbf{0}$'''
+feedback = "제약이 없는 문제의 조건이다. 제약이 있으면 제약 곡선을 따라 움직이는 방향의 기울기만 0이면 된다."
+
+[[questions.choices]]
+text = '''$\nabla f(\mathbf{x}^\star)$와 $\nabla h(\mathbf{x}^\star)$가 평행하다.'''
+correct = true
+
+[[questions.choices]]
+text = '''$\nabla f(\mathbf{x}^\star)$와 $\nabla h(\mathbf{x}^\star)$가 수직이다.'''
+feedback = "수직인 것은 ∇f와 제약 곡선의 접선이다. ∇h는 접선에 수직이므로 ∇f와 ∇h는 평행하다."
+
+[[questions.choices]]
+text = '''$\nabla f + \nu\nabla h = \mathbf{0}$인 $\nu$가 존재하고, 반드시 $\nu \ge 0$이다.'''
+feedback = "ν ≥ 0은 부등식 제약의 승수에만 붙는 조건이다. 등식 제약 h = 0은 -h = 0으로 써도 같으므로 승수의 부호가 정해지지 않는다."
+
+[[questions]]
+id = "multiplier-value"
+type = "numeric"
+objective = 1
+prompt = '''$\min \lVert \mathbf{x} - \mathbf{p} \rVert^2$ s.t. $\mathbf{a}^\top\mathbf{x} \le c$에서 $\mathbf{p} = (2, 1)$, $\mathbf{a} = (1, 1)$, $c = 0.5$일 때 KKT 승수 $\mu$의 값은?'''
+answer = 2.5
+tolerance = 0.01
+slider = { min = 0, max = 5, step = 0.5 }
+explanation = '''$\mathbf{a}^\top\mathbf{p} = 3 > 0.5$이므로 제약이 활성이다. stationarity $2(\mathbf{x} - \mathbf{p}) + \mu\mathbf{a} = \mathbf{0}$에서 $\mathbf{x} = \mathbf{p} - \frac{\mu}{2}\mathbf{a}$이고, 활성 조건 $\mathbf{a}^\top\mathbf{x} = c$에 넣으면 $3 - \mu = 0.5$, 즉 $\mu = 2.5$다. 최적값은 $f^\star(c) = (3 - c)^2/2$이므로 $df^\star/dc = -(3 - c) = -2.5 = -\mu$로, 승수가 제약을 조금 풀었을 때 최적값이 줄어드는 비율과 같다.'''
+
+[[questions]]
+id = "inactive-constraint"
+type = "multiple"
+objective = 1
+prompt = '''같은 문제에서 $c = 4$로 바꾸었다($\mathbf{p} = (2, 1)$, $\mathbf{a} = (1, 1)$). 최적해에서 성립하는 것을 모두 고르시오.'''
+explanation = '''$\mathbf{a}^\top\mathbf{p} = 3 \le 4$이므로 $\mathbf{p}$ 자체가 feasible이고 최적해다. 제약이 비활성이므로 여유 $c - \mathbf{a}^\top\mathbf{x}^\star = 1 > 0$이고, 상보적 여유 $\mu(c - \mathbf{a}^\top\mathbf{x}^\star) = 0$ 때문에 $\mu = 0$이다. 제약이 있다고 승수가 양수인 것은 아니다. 승수는 제약이 해를 실제로 밀어내고 있을 때만 양수다.'''
+
+[[questions.choices]]
+text = '''$\mu = 0$이다.'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathbf{x}^\star = \mathbf{p}$이다.'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathbf{a}^\top\mathbf{x}^\star = c$이다.'''
+feedback = "최적해에서 제약이 항상 등호로 성립하는 것은 아니다. 여기서는 a^T x* = 3 < 4로 여유가 있다."
+
+[[questions.choices]]
+text = '''제약이 있으므로 $\mu > 0$이다.'''
+feedback = "상보적 여유 때문에, 여유가 0보다 큰(비활성) 제약의 승수는 0이다."
+
+[[questions]]
+id = "weak-duality"
+type = "single"
+objective = 1
+prompt = '''원 문제(최소화)의 최적값을 $p^\star$, 쌍대 함수를 $g(\boldsymbol{\lambda}, \boldsymbol{\nu}) = \min_{\mathbf{x}} L(\mathbf{x}, \boldsymbol{\lambda}, \boldsymbol{\nu})$라 하자. $\boldsymbol{\lambda} \ge \mathbf{0}$인 모든 승수에 대해 옳은 것은?'''
+explanation = '''약쌍대성(weak duality)은 문제가 볼록이든 아니든 항상 성립한다: $g(\boldsymbol{\lambda}, \boldsymbol{\nu}) \le p^\star$. feasible point $\mathbf{x}$에서는 $\lambda_i g_i(\mathbf{x}) \le 0$, $\nu_j h_j(\mathbf{x}) = 0$이므로 $L(\mathbf{x}, \boldsymbol{\lambda}, \boldsymbol{\nu}) \le f(\mathbf{x})$이고, $g$는 그보다 작거나 같은 최솟값이기 때문이다. 등호 $\max g = p^\star$(강쌍대성)는 볼록 문제에서 Slater 조건 같은 추가 조건이 있을 때 보장된다.'''
+
+[[questions.choices]]
+text = '''$g(\boldsymbol{\lambda}, \boldsymbol{\nu}) \le p^\star$'''
+correct = true
+
+[[questions.choices]]
+text = '''$g(\boldsymbol{\lambda}, \boldsymbol{\nu}) \ge p^\star$'''
+feedback = "부등호 방향이 반대다. 쌍대 함수는 최소화 문제의 하한을 준다."
+
+[[questions.choices]]
+text = '''$g(\boldsymbol{\lambda}, \boldsymbol{\nu}) = p^\star$'''
+feedback = "모든 승수에서 같아지는 것이 아니다. 강쌍대성이 성립해도 등호는 최적 승수에서만 성립한다."
+
+[[questions.choices]]
+text = '''문제가 볼록일 때만 $g(\boldsymbol{\lambda}, \boldsymbol{\nu}) \le p^\star$가 성립한다.'''
+feedback = "약쌍대성은 볼록성과 무관하게 성립한다. 볼록성이 필요한 것은 등호(강쌍대성) 쪽이다."
+
+[[questions]]
+id = "penalty-not-exact"
+type = "single"
+objective = 2
+prompt = '''등식 제약 $h(\mathbf{x}) = 0$을 이차 penalty $\frac{\rho}{2}h(\mathbf{x})^2$로 바꾸어 무제약 문제로 풀었다. $\rho$를 키울 때 일어나는 일로 옳은 것은?'''
+explanation = '''이차 penalty 문제의 해는 유한한 $\rho$에서 제약을 정확히 만족하지 않는다. 본문의 예에서 위반은 $-4/(4 + 3\rho)$로, 약 $1/\rho$의 속도로 줄 뿐 0이 되지 않는다. 동시에 penalty 항이 Hessian에 $\rho$ 크기의 곡률을 더하므로 조건수가 $\rho$에 비례해 커지고, 경사하강의 수렴이 느려진다. augmented Lagrangian은 승수 추정을 갱신해 유한한 $\rho$로도 위반을 0으로 보낸다.'''
+
+[[questions.choices]]
+text = '''충분히 큰 $\rho$(예: $10^6$)에서는 제약을 정확히 만족한다.'''
+feedback = "유한한 ρ에서는 위반이 약 1/ρ로 남는다. ρ = 10⁶에서도 위반은 10⁻⁶ 수준이지 0이 아니다."
+
+[[questions.choices]]
+text = '''위반은 약 $1/\rho$로 줄지만 0이 되지 않고, Hessian의 조건수가 $\rho$에 비례해 커진다.'''
+correct = true
+
+[[questions.choices]]
+text = '''$\rho$가 클수록 문제가 더 볼록해지므로 경사하강이 더 빨리 수렴한다.'''
+feedback = "곡률이 한 방향(제약의 법선)으로만 커져 조건수가 나빠진다. 안정한 학습률이 1/ρ 수준으로 작아져 수렴은 느려진다."
+
+[[questions.choices]]
+text = '''augmented Lagrangian을 써도 위반을 0으로 만들려면 $\rho \to \infty$가 필요하다.'''
+feedback = "augmented Lagrangian은 승수 ν를 갱신하므로 고정된 ρ에서도 위반이 0으로 수렴한다. 본문의 예에서 ρ = 10으로 5번 반복해 위반이 10⁻⁵ 수준이 된다."
+
+[[questions]]
+id = "ridge-radius"
+type = "single"
+objective = 2
+prompt = '''Ridge 회귀 $\min_{\mathbf{w}} L(\mathbf{w}) + \frac{\lambda}{2}\lVert \mathbf{w} \rVert^2$의 해 $\mathbf{w}_\lambda$는 노름 제약 문제 $\min L(\mathbf{w})$ s.t. $\lVert \mathbf{w} \rVert \le r$의 해와 같다($r = \lVert \mathbf{w}_\lambda \rVert$). $\lambda$를 키우면 대응하는 $r$은?'''
+explanation = '''$\lambda$가 커질수록 노름에 대한 벌점이 커지므로 $\lVert \mathbf{w}_\lambda \rVert$는 줄어든다. 즉 큰 $\lambda$는 작은 반지름 $r$의 공 제약에 대응한다. KKT로 보면 제약 문제의 stationarity $\nabla L + \mu\mathbf{w} = \mathbf{0}$이 Ridge의 1계 조건 $\nabla L + \lambda\mathbf{w} = \mathbf{0}$과 같아지는 승수가 $\mu = \lambda$다. 실습에서 수치로 확인한다.'''
+
+[[questions.choices]]
+text = "줄어든다. 큰 λ는 작은 공 제약에 대응한다."
+correct = true
+
+[[questions.choices]]
+text = "커진다. λ가 크면 제약이 강해지므로 r도 커진다."
+feedback = "제약이 강하다는 것은 허용 영역이 작다는 뜻이다. 강한 제약은 작은 r이다."
+
+[[questions.choices]]
+text = "변하지 않는다. 두 문제는 λ와 무관하게 같은 해를 준다."
+feedback = "동치는 λ와 r의 특정한 짝 사이에서만 성립한다. λ가 바뀌면 대응하는 r도 바뀐다."
+
+[[questions]]
+id = "l1-exact-zeros"
+type = "single"
+objective = 2
+prompt = '''L1 정규화(Lasso)의 해에는 정확히 0인 계수가 생기지만, L2 정규화(Ridge)의 해에는 거의 생기지 않는다. 근위 연산으로 본 이유는?'''
+explanation = '''$t\lVert\cdot\rVert_1$의 근위 연산은 soft thresholding $\operatorname{sign}(v)\max(\lvert v \rvert - t, 0)$이므로 $\lvert v \rvert \le t$인 성분을 정확히 0으로 보낸다. $\frac{t}{2}\lVert\cdot\rVert_2^2$의 근위 연산은 $v/(1 + t)$로, 모든 성분을 같은 비율로 줄일 뿐 0으로 보내지 않는다. 두 정규화 모두 볼록이다.'''
+
+[[questions.choices]]
+text = '''L1의 근위 연산은 $\lvert v \rvert \le t$인 성분을 정확히 0으로 보내고, L2의 근위 연산은 $v/(1+t)$로 비율만 줄인다.'''
+correct = true
+
+[[questions.choices]]
+text = "보통 Lasso에 더 큰 λ를 쓰기 때문이다."
+feedback = "λ를 아무리 키워도 Ridge 해는 0에 다가갈 뿐 정확히 0이 되지 않는다. 차이는 λ의 크기가 아니라 근위 연산의 모양이다."
+
+[[questions.choices]]
+text = "부동소수점 반올림으로 작은 값이 0이 되기 때문이다."
+feedback = "Lasso의 0은 근사가 아니라 최적성 조건(|r_i| ≤ λ)에서 나오는 정확한 0이다."
+
+[[questions.choices]]
+text = "L1 노름은 볼록이 아니어서 해가 꼭짓점에 걸리기 때문이다."
+feedback = "L1 노름은 볼록이다. 0에서 미분 불가능한(꺾인) 점이 있다는 것이 핵심이다."

@@ -1,0 +1,6 @@
+title = "반공간으로의 투영과 KKT 승수"
+chapter = "optimization/constrained-optimization"
+objective = 1
+exec = "browser"
+entry = "project_halfspace"
+timeout_s = 10
