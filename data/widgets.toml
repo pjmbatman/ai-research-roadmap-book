@@ -55,7 +55,7 @@ status = "planned"
 name = "distribution-explorer"
 title = "분포 탐색기"
 chapters = ["probability/distributions", "probability/random-variables"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "gaussian-conditioning"
