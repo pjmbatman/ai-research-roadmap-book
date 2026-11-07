@@ -85,7 +85,7 @@ status = "planned"
 name = "split-leakage"
 title = "데이터 분할과 누수"
 chapters = ["data/splitting-and-leakage"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "training-loop-stepper"
