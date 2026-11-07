@@ -6,6 +6,7 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "relu-regions": () => import("./relu-regions/index"),
   "loss-to-estimator": () => import("./loss-to-estimator/index"),
   "distribution-explorer": () => import("./distribution-explorer/index"),
+  "gaussian-conditioning": () => import("./gaussian-conditioning/index"),
 };
 
 export function mountWidgets(page: PageData) {

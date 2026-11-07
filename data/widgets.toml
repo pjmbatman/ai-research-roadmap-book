@@ -61,7 +61,7 @@ status = "prototype"
 name = "gaussian-conditioning"
 title = "다변량 가우시안의 조건부분포"
 chapters = ["probability/multivariate-gaussian"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "loss-to-estimator"
