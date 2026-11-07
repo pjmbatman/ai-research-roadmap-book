@@ -7,6 +7,7 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "loss-to-estimator": () => import("./loss-to-estimator/index"),
   "svd-explorer": () => import("./svd-explorer/index"),
   "autodiff-graph": () => import("./autodiff-graph/index"),
+  "float-precision": () => import("./float-precision/index"),
 };
 
 export function mountWidgets(page: PageData) {

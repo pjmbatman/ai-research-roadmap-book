@@ -37,7 +37,7 @@ status = "prototype"
 name = "float-precision"
 title = "부동소수점 비트 구조"
 chapters = ["numerical-methods/floating-point"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "ode-stability"
