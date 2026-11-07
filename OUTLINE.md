@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 543문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 568문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -379,17 +379,17 @@ _추정량의 성질, 우도와 최대우도, 분포 기반 문제 정의, 구�
 
 _사전·우도·사후·예측분포, 켤레 모델, 계층 모델, 잠재변수와 EM, MCMC, 변분추론, Gaussian process, 베이지안 워크플로를 다룬다._
 
-- **13.1** [베이지안 사고방식](content/13-bayesian-inference/01-bayesian-thinking/index.md) · `필수` · 위젯: 순차적 베이지안 갱신
-  - 구성 요소 · 순차적 갱신 · 점추정과의 관계 · 해석의 차이
+- **13.1** [베이지안 사고방식](content/13-bayesian-inference/01-bayesian-thinking/index.md) · `필수` · 퀴즈 6 · 위젯: 순차적 베이지안 갱신
+  - 구성 요소 · 순차적 갱신 · 점추정과의 관계 · 해석의 차이 · 참고 문헌
   - 선수: 11.3 결합·주변·조건부분포와 독립성, 12.2 우도와 최대우도
-- **13.2** [켤레 모델과 베이지안 선형회귀](content/13-bayesian-inference/02-conjugate-models/index.md) · `필수` · 위젯: 순차적 베이지안 갱신
-  - 켤레성 · 베이지안 선형회귀 · evidence와 모델 선택
+- **13.2** [켤레 모델과 베이지안 선형회귀](content/13-bayesian-inference/02-conjugate-models/index.md) · `필수` · 퀴즈 6 · 위젯: 순차적 베이지안 갱신
+  - 켤레성 · 베이지안 선형회귀 · evidence와 모델 선택 · 참고 문헌
   - 선수: 13.1 베이지안 사고방식, 11.4 다변량 가우시안
-- **13.3** [계층 모델](content/13-bayesian-inference/03-hierarchical-models/index.md) · `심화`
-  - 그룹 구조의 데이터 · pooling의 세 가지 · 계층 모델의 구성 · 계산 문제
+- **13.3** [계층 모델](content/13-bayesian-inference/03-hierarchical-models/index.md) · `심화` · 퀴즈 6
+  - 그룹 구조의 데이터 · pooling의 세 가지 · 계층 모델의 구성 · 계산 문제 · 참고 문헌
   - 선수: 13.2 켤레 모델과 베이지안 선형회귀
-- **13.4** [잠재변수 모델과 EM](content/13-bayesian-inference/04-latent-variables-and-em/index.md) · `필수`
-  - 잠재변수 모델 · Gaussian mixture model · EM 알고리즘 · 결측 데이터
+- **13.4** [잠재변수 모델과 EM](content/13-bayesian-inference/04-latent-variables-and-em/index.md) · `필수` · 퀴즈 7
+  - 잠재변수 모델 · Gaussian mixture model · EM 알고리즘 · 결측 데이터 · 참고 문헌
   - 선수: 13.1 베이지안 사고방식
 - **13.5** [근사 추론 I: MCMC](content/13-bayesian-inference/05-mcmc/index.md) · `심화` · 퀴즈 7
   - 왜 근사가 필요한가 · Metropolis–Hastings · Gibbs sampling · HMC와 NUTS · 수렴 진단 · 참고 문헌
