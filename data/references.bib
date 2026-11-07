@@ -1887,81 +1887,6 @@
   eprint    = {1705.08500},
   archivePrefix = {arXiv},
   note      = {확인: NeurIPS 2017 포스터 페이지와 arXiv. 쪽수는 한 출처뿐이라 적지 않음}
-@article{karniadakis2021physics,
-  author  = {Karniadakis, George Em and Kevrekidis, Ioannis G. and Lu, Lu and Perdikaris, Paris and Wang, Sifan and Yang, Liu},
-  title   = {Physics-Informed Machine Learning},
-  journal = {Nature Reviews Physics},
-  volume  = {3},
-  pages   = {422--440},
-  year    = {2021},
-  doi     = {10.1038/s42254-021-00314-5},
-  note    = {확인: ADS·출판사 서지 기록. 물리 지식을 관측·학습·귀납 편향으로 학습에 넣는 방법의 개관}
-}
-
-@inproceedings{greydanus2019hamiltonian,
-  author    = {Greydanus, Sam and Dzamba, Misko and Yosinski, Jason},
-  title     = {Hamiltonian Neural Networks},
-  booktitle = {Advances in Neural Information Processing Systems 32},
-  year      = {2019},
-  eprint    = {1906.01563},
-  archivePrefix = {arXiv},
-  note      = {확인: NeurIPS 논문집 초록. Hamiltonian 구조로 보존 법칙을 모델에 넣음}
-}
-
-@article{lagaris1998artificial,
-  author  = {Lagaris, Isaac E. and Likas, Aristidis and Fotiadis, Dimitrios I.},
-  title   = {Artificial Neural Networks for Solving Ordinary and Partial Differential Equations},
-  journal = {IEEE Transactions on Neural Networks},
-  volume  = {9},
-  number  = {5},
-  pages   = {987--1000},
-  year    = {1998},
-  doi     = {10.1109/72.712178},
-  note    = {확인: 도서관 서지 기록과 저자 사본. 경계 조건을 만족하는 시험 해와 신경망 항의 합으로 미분방정식을 푸는 방법}
-}
-
-@article{raissi2019physics,
-  author  = {Raissi, Maziar and Perdikaris, Paris and Karniadakis, George Em},
-  title   = {Physics-Informed Neural Networks: A Deep Learning Framework for Solving Forward and Inverse Problems Involving Nonlinear Partial Differential Equations},
-  journal = {Journal of Computational Physics},
-  volume  = {378},
-  pages   = {686--707},
-  year    = {2019},
-  doi     = {10.1016/j.jcp.2018.10.045},
-  note    = {확인: 도서관 서지 기록. PINN의 정식화와 forward·inverse 문제}
-}
-
-@inproceedings{rahaman2019spectral,
-  author    = {Rahaman, Nasim and Baratin, Aristide and Arpit, Devansh and Draxler, Felix and Lin, Min and Hamprecht, Fred and Bengio, Yoshua and Courville, Aaron},
-  title     = {On the Spectral Bias of Neural Networks},
-  booktitle = {Proceedings of the 36th International Conference on Machine Learning},
-  series    = {PMLR},
-  volume    = {97},
-  pages     = {5301--5310},
-  year      = {2019},
-  note      = {확인: PMLR 서지 기록. 신경망이 저주파 성분을 먼저 학습하는 spectral bias}
-}
-
-@article{wang2021understanding,
-  author  = {Wang, Sifan and Teng, Yujun and Perdikaris, Paris},
-  title   = {Understanding and Mitigating Gradient Flow Pathologies in Physics-Informed Neural Networks},
-  journal = {SIAM Journal on Scientific Computing},
-  volume  = {43},
-  number  = {5},
-  pages   = {A3055--A3081},
-  year    = {2021},
-  doi     = {10.1137/20M1318043},
-  note    = {확인: 서지 데이터베이스(x-mol) 기록과 arXiv 2001.04536 초록. 손실 항 사이 gradient 불균형과 적응적 가중치. 학술지 페이지는 직접 열람하지 못함}
-}
-
-@inproceedings{krishnapriyan2021characterizing,
-  author    = {Krishnapriyan, Aditi S. and Gholami, Amir and Zhe, Shandian and Kirby, Robert M. and Mahoney, Michael W.},
-  title     = {Characterizing Possible Failure Modes in Physics-Informed Neural Networks},
-  booktitle = {Advances in Neural Information Processing Systems 34},
-  year      = {2021},
-  eprint    = {2109.01050},
-  archivePrefix = {arXiv},
-  note      = {확인: NeurIPS 논문 페이지 초록. 이류·반응 문제에서 PINN 실패의 원인이 표현력이 아니라 최적화임, 커리큘럼 정규화}
 }
 
 @inproceedings{chen2018neural,
@@ -2507,7 +2432,83 @@
   eprint    = {2010.03409},
   archivePrefix = {arXiv},
   note      = {확인: arXiv 목록·ICLR 2021 포스터 페이지와 초록(웹 검색). 메시 그래프 위 message passing으로 시뮬레이션을 학습하는 MeshGraphNets, 학습에 쓴 시뮬레이터보다 1–2 자릿수 빠름}
-  note      = {확인: NeurIPS 논문집 초록. 은닉 상태의 미분을 신경망으로 두고 ODE solver로 계산, adjoint로 일정한 메모리 학습}
+}
+
+@article{karniadakis2021physics,
+  author  = {Karniadakis, George Em and Kevrekidis, Ioannis G. and Lu, Lu and Perdikaris, Paris and Wang, Sifan and Yang, Liu},
+  title   = {Physics-Informed Machine Learning},
+  journal = {Nature Reviews Physics},
+  volume  = {3},
+  pages   = {422--440},
+  year    = {2021},
+  doi     = {10.1038/s42254-021-00314-5},
+  note    = {확인: ADS·출판사 서지 기록. 물리 지식을 관측·학습·귀납 편향으로 학습에 넣는 방법의 개관}
+}
+
+@inproceedings{greydanus2019hamiltonian,
+  author    = {Greydanus, Sam and Dzamba, Misko and Yosinski, Jason},
+  title     = {Hamiltonian Neural Networks},
+  booktitle = {Advances in Neural Information Processing Systems 32},
+  year      = {2019},
+  eprint    = {1906.01563},
+  archivePrefix = {arXiv},
+  note      = {확인: NeurIPS 논문집 초록. Hamiltonian 구조로 보존 법칙을 모델에 넣음}
+}
+
+@article{lagaris1998artificial,
+  author  = {Lagaris, Isaac E. and Likas, Aristidis and Fotiadis, Dimitrios I.},
+  title   = {Artificial Neural Networks for Solving Ordinary and Partial Differential Equations},
+  journal = {IEEE Transactions on Neural Networks},
+  volume  = {9},
+  number  = {5},
+  pages   = {987--1000},
+  year    = {1998},
+  doi     = {10.1109/72.712178},
+  note    = {확인: 도서관 서지 기록과 저자 사본. 경계 조건을 만족하는 시험 해와 신경망 항의 합으로 미분방정식을 푸는 방법}
+}
+
+@article{raissi2019physics,
+  author  = {Raissi, Maziar and Perdikaris, Paris and Karniadakis, George Em},
+  title   = {Physics-Informed Neural Networks: A Deep Learning Framework for Solving Forward and Inverse Problems Involving Nonlinear Partial Differential Equations},
+  journal = {Journal of Computational Physics},
+  volume  = {378},
+  pages   = {686--707},
+  year    = {2019},
+  doi     = {10.1016/j.jcp.2018.10.045},
+  note    = {확인: 도서관 서지 기록. PINN의 정식화와 forward·inverse 문제}
+}
+
+@inproceedings{rahaman2019spectral,
+  author    = {Rahaman, Nasim and Baratin, Aristide and Arpit, Devansh and Draxler, Felix and Lin, Min and Hamprecht, Fred and Bengio, Yoshua and Courville, Aaron},
+  title     = {On the Spectral Bias of Neural Networks},
+  booktitle = {Proceedings of the 36th International Conference on Machine Learning},
+  series    = {PMLR},
+  volume    = {97},
+  pages     = {5301--5310},
+  year      = {2019},
+  note      = {확인: PMLR 서지 기록. 신경망이 저주파 성분을 먼저 학습하는 spectral bias}
+}
+
+@article{wang2021understanding,
+  author  = {Wang, Sifan and Teng, Yujun and Perdikaris, Paris},
+  title   = {Understanding and Mitigating Gradient Flow Pathologies in Physics-Informed Neural Networks},
+  journal = {SIAM Journal on Scientific Computing},
+  volume  = {43},
+  number  = {5},
+  pages   = {A3055--A3081},
+  year    = {2021},
+  doi     = {10.1137/20M1318043},
+  note    = {확인: 서지 데이터베이스(x-mol) 기록과 arXiv 2001.04536 초록. 손실 항 사이 gradient 불균형과 적응적 가중치. 학술지 페이지는 직접 열람하지 못함}
+}
+
+@inproceedings{krishnapriyan2021characterizing,
+  author    = {Krishnapriyan, Aditi S. and Gholami, Amir and Zhe, Shandian and Kirby, Robert M. and Mahoney, Michael W.},
+  title     = {Characterizing Possible Failure Modes in Physics-Informed Neural Networks},
+  booktitle = {Advances in Neural Information Processing Systems 34},
+  year      = {2021},
+  eprint    = {2109.01050},
+  archivePrefix = {arXiv},
+  note      = {확인: NeurIPS 논문 페이지 초록. 이류·반응 문제에서 PINN 실패의 원인이 표현력이 아니라 최적화임, 커리큘럼 정규화}
 }
 
 @misc{rackauckas2020universal,

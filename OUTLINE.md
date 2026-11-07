@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1057문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1082문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -713,17 +713,17 @@ _문헌 탐색, 논문 읽기와 재현, 연구 질문과 가설, 실험 설계,
 
 _물리 모델과 학습 문제의 대응, PINN, Neural ODE와 미분가능 시뮬레이션, neural operator, 하이브리드·대리모델, 시스템 식별과 상태 추정, 역문제와 불확실성 정량화, 대칭성을 반영한 모델을 다룬다._
 
-- **24.1** [물리 모델과 학습 문제](content/24-scientific-ml/01-physics-and-learning/index.md) · `필수`
-  - 물리 모델의 구성 · 변수의 역할 · 문제의 종류 · 단위와 무차원화 · 물리적 제약 · 오차의 분해
+- **24.1** [물리 모델과 학습 문제](content/24-scientific-ml/01-physics-and-learning/index.md) · `필수` · 퀴즈 6
+  - 물리 모델의 구성 · 변수의 역할 · 문제의 종류 · 단위와 무차원화 · 물리적 제약 · 오차의 분해 · 참고 문헌
   - 선수: 9.6 ODE 수치해법, 1.3 문제를 수학적으로 정의하기
-- **24.2** [물리 정보 신경망(PINN)](content/24-scientific-ml/02-pinn/index.md) · `심화`
-  - 목적함수 · 도함수 계산 · 제약의 부과 · 학습의 어려움 · 개선 기법 · 평가
+- **24.2** [물리 정보 신경망(PINN)](content/24-scientific-ml/02-pinn/index.md) · `심화` · 퀴즈 7
+  - 목적함수 · 도함수 계산 · 제약의 부과 · 학습의 어려움 · 개선 기법 · 평가 · 참고 문헌
   - 선수: 24.1 물리 모델과 학습 문제, 8.4 자동미분과 역전파
-- **24.3** [Neural ODE와 미분가능 시뮬레이션](content/24-scientific-ml/03-neural-ode-and-differentiable-simulation/index.md) · `심화`
-  - Neural ODE · solver를 통한 미분 · universal differential equation · 미분가능 시뮬레이터 · 수치적 주의점
+- **24.3** [Neural ODE와 미분가능 시뮬레이션](content/24-scientific-ml/03-neural-ode-and-differentiable-simulation/index.md) · `심화` · 퀴즈 6
+  - Neural ODE · solver를 통한 미분 · universal differential equation · 미분가능 시뮬레이터 · 수치적 주의점 · 참고 문헌
   - 선수: 24.1 물리 모델과 학습 문제, 9.6 ODE 수치해법
-- **24.4** [Neural Operator와 동역학 학습](content/24-scientific-ml/04-neural-operators/index.md) · `심화`
-  - operator learning · DeepONet · FNO · 다른 계열 · 일반화 · 시간 동역학 · 제약
+- **24.4** [Neural Operator와 동역학 학습](content/24-scientific-ml/04-neural-operators/index.md) · `심화` · 퀴즈 6
+  - operator learning · DeepONet · FNO · 다른 계열 · 일반화 · 시간 동역학 · 제약 · 참고 문헌
   - 선수: 24.1 물리 모델과 학습 문제, 7.9 함수공간과 연산자
 - **24.5** [하이브리드 모델과 대리모델](content/24-scientific-ml/05-hybrid-and-surrogate-models/index.md) · `필수` · 퀴즈 6
   - 결합 방식 · 대리모델 · 다중 충실도 · 능동 학습 · 공정한 비교 · 참고 문헌
