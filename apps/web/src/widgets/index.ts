@@ -24,6 +24,7 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "scaffold-split-explorer": () => import("./scaffold-split-explorer/index"),
   "md-energy-conservation": () => import("./md-energy-conservation/index"),
   "predictor-exploitation": () => import("./predictor-exploitation/index"),
+  "leakage-threshold": () => import("./leakage-threshold/index"),
 };
 
 export function mountWidgets(page: PageData) {

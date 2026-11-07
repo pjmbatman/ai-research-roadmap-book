@@ -145,4 +145,4 @@ status = "prototype"
 name = "leakage-threshold"
 title = "근접 중복 누수 임계 탐색"
 chapters = ["chemistry-and-materials/chemistry-evaluation"]
-status = "planned"
+status = "prototype"
