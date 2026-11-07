@@ -1,0 +1,127 @@
+# 7.5 고윳값과 대칭행렬 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "repeated-application"
+type = "numeric"
+objective = 1
+prompt = '''행렬 $\mathbf{A}$의 고윳값이 $\lambda_1 = 0.5$, $\lambda_2 = 2$이고 고유벡터가 $\mathbf{v}_1, \mathbf{v}_2$이다. $\mathbf{x}_0 = 4\mathbf{v}_1 + \mathbf{v}_2$일 때 $\mathbf{A}^3\mathbf{x}_0 = a\mathbf{v}_1 + b\mathbf{v}_2$이다. $b$는?'''
+answer = 8
+tolerance = 0
+explanation = '''$\mathbf{A}^3\mathbf{x}_0 = 4 \cdot 0.5^3\,\mathbf{v}_1 + 1 \cdot 2^3\,\mathbf{v}_2 = 0.5\,\mathbf{v}_1 + 8\,\mathbf{v}_2$이다. 각 성분은 자기 고윳값의 거듭제곱으로 독립적으로 변한다. 처음에는 $\mathbf{v}_1$ 성분이 4배 컸지만 세 번 만에 $\mathbf{v}_2$ 성분이 16배 커졌다. 반복할수록 지배 고윳값의 방향이 나머지를 압도한다.'''
+
+[[questions]]
+id = "power-iteration-rate"
+type = "single"
+objective = 1
+prompt = '''대칭행렬의 고윳값이 $1.0,\ 0.95,\ 0.1$이다. 거듭제곱법으로 지배 고유벡터를 구할 때 옳은 것은?'''
+explanation = '''거듭제곱법의 오차는 대략 $|\lambda_2/\lambda_1|^k$로 줄어든다. 여기서는 $0.95^k$이므로 오차를 $10^{-6}$으로 줄이는 데 약 270번이 필요하다($\log 10^{-6} / \log 0.95 \approx 269$). 가장 작은 고윳값 0.1은 수렴 속도와 거의 무관하다. 지배 고윳값이 1이어도 다른 고윳값보다 크기만 하면 정규화 덕분에 수렴한다.'''
+
+[[questions.choices]]
+text = "둘째 고윳값이 지배 고윳값과 가까워 수렴이 느리다."
+correct = true
+
+[[questions.choices]]
+text = "가장 작은 고윳값 0.1이 작으므로 수렴이 빠르다."
+feedback = "수렴 속도를 정하는 것은 지배 고윳값에 대한 둘째 고윳값의 비 |λ2/λ1|이다. 가장 작은 고윳값의 성분은 처음 몇 번 만에 사라진다."
+
+[[questions.choices]]
+text = "지배 고윳값이 1이므로 벡터가 커지지 않아 수렴하지 않는다."
+feedback = "거듭제곱법은 매번 길이를 1로 정규화하므로 크기가 커질 필요가 없다. 다른 성분이 상대적으로 줄어드는 것이 핵심이다."
+
+[[questions]]
+id = "symmetric-guarantees"
+type = "single"
+objective = 2
+prompt = '''실대칭행렬에서는 항상 성립하지만, 일반 실행렬에서는 성립하지 않을 수 있는 것은?'''
+explanation = '''스펙트럴 정리에 의해 실대칭행렬은 고윳값이 모두 실수이고 정규직교 고유벡터로 대각화된다. 일반 실행렬은 회전처럼 복소 고윳값을 갖거나, 고유벡터가 서로 비스듬하거나, 대각화가 불가능할 수 있다. 대칭행렬이라도 고윳값이 음수이거나 0일 수 있다(양의 정부호는 별도의 조건이다).'''
+
+[[questions.choices]]
+text = "고윳값이 모두 실수이고, 정규직교인 고유벡터들로 대각화된다."
+correct = true
+
+[[questions.choices]]
+text = "고윳값이 모두 양수다."
+feedback = "대칭행렬도 음수나 0 고윳값을 가질 수 있다. 예: [[1, 2], [2, 1]]의 고윳값은 3과 −1이다. 모두 양수인 것은 양의 정부호 행렬이다."
+
+[[questions.choices]]
+text = "고윳값이 모두 서로 다르다."
+feedback = "단위행렬처럼 고윳값이 겹치는 대칭행렬도 많다. 겹쳐도 정규직교 고유벡터를 고를 수 있다는 것이 스펙트럴 정리의 내용이다."
+
+[[questions.choices]]
+text = "가역이다."
+feedback = "고윳값 0을 가지면 가역이 아니다. 예: [[1, 1], [1, 1]]은 대칭이지만 rank가 1이다."
+
+[[questions]]
+id = "psd-test"
+type = "multiple"
+objective = 3
+prompt = '''다음 대칭행렬 중 양의 준정부호(PSD)인 것을 모두 고르시오.'''
+explanation = '''PSD 판정은 고윳값으로 한다. $\mathbf{A}^\top\mathbf{A}$는 $\mathbf{x}^\top\mathbf{A}^\top\mathbf{A}\mathbf{x} = \lVert\mathbf{A}\mathbf{x}\rVert^2 \ge 0$이므로 항상 PSD다. $\begin{bmatrix} 2 & -1 \\ -1 & 2 \end{bmatrix}$의 고윳값은 1, 3이다(음수 성분이 있어도 PD). $\operatorname{diag}(1, 0)$의 고윳값은 1, 0이므로 PSD(PD는 아님)다. $\begin{bmatrix} 1 & 2 \\ 2 & 1 \end{bmatrix}$의 고윳값은 3, $-1$이므로 성분이 모두 양수인데도 PSD가 아니다.'''
+
+[[questions.choices]]
+text = '''임의의 행렬 $\mathbf{A}$에 대한 $\mathbf{A}^\top\mathbf{A}$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\begin{bmatrix} 2 & -1 \\ -1 & 2 \end{bmatrix}$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\begin{bmatrix} 1 & 2 \\ 2 & 1 \end{bmatrix}$'''
+feedback = "성분이 모두 양수여도 x = (1, −1)에서 x^T S x = −2다. 고윳값 −1이 있어 PSD가 아니다."
+
+[[questions]]
+id = "ellipse-axis"
+type = "numeric"
+objective = 3
+prompt = '''$\mathbf{S} = \begin{bmatrix} 4 & 0 \\ 0 & 0.25 \end{bmatrix}$일 때 $\mathbf{x}^\top\mathbf{S}\mathbf{x} = 1$인 타원의 **가장 긴** 반축의 길이는?'''
+answer = 2
+tolerance = 0.001
+explanation = '''$4x_1^2 + 0.25x_2^2 = 1$이므로 $x_1$축 방향 반축은 $1/\sqrt{4} = 0.5$, $x_2$축 방향 반축은 $1/\sqrt{0.25} = 2$이다. 반축의 길이는 $1/\sqrt{\lambda_i}$이므로 고윳값이 **작은** 방향으로 타원이 길다. 큰 고윳값 4의 방향이 가장 길다고 생각하기 쉽지만 반대다. 최적화에서는 곡률(고윳값)이 작은 방향이 길고 완만한 골짜기가 된다.'''
+
+[[questions]]
+id = "stability-spectral-radius"
+type = "single"
+objective = 1
+prompt = '''$\mathbf{x}_{t+1} = \mathbf{A}\mathbf{x}_t$에서 $\mathbf{A}$의 고윳값이 $0.9$와 $-1.1$이다. 일반적인 초기 상태에서 $\mathbf{x}_t$는 어떻게 되는가?'''
+explanation = '''$\mathbf{x}_t = c_1 0.9^t\mathbf{v}_1 + c_2(-1.1)^t\mathbf{v}_2$이다. 첫 성분은 줄어들지만 둘째 성분은 크기가 $1.1^t$로 커지고 부호가 매 step 바뀐다. 스펙트럼 반지름 $\rho = 1.1 > 1$이므로 불안정하다. 고윳값의 평균이나 부호가 아니라 **절댓값의 최댓값**이 안정성을 정한다. $c_2 = 0$인 특별한 초기 상태에서만 0으로 수렴한다.'''
+
+[[questions.choices]]
+text = "부호가 번갈아 바뀌며 크기가 커져 발산한다."
+correct = true
+
+[[questions.choices]]
+text = "고윳값의 평균이 −0.1로 절댓값이 1보다 작으므로 0으로 수렴한다."
+feedback = "성분마다 자기 고윳값의 거듭제곱으로 변한다. 평균이 아니라 가장 큰 |λ|가 장기 거동을 정한다."
+
+[[questions.choices]]
+text = "음수 고윳값은 감쇠를 뜻하므로 0으로 수렴한다."
+feedback = "음수 고윳값은 부호가 매 step 바뀌는 진동을 뜻한다. 감쇠 여부는 |λ| < 1인지로 정해진다. |−1.1| > 1이다."
+
+[[questions.choices]]
+text = "한 고윳값은 1보다 작고 다른 하나는 크므로 일정한 크기를 유지한다."
+feedback = "두 성분은 서로 상쇄되지 않고 독립적으로 변한다. 1.1^t로 커지는 성분이 결국 지배한다."
+
+[[questions]]
+id = "eigen-vs-singular"
+type = "single"
+objective = 2
+prompt = '''$\mathbf{A} = \begin{bmatrix} 1 & 10 \\ 0 & 1 \end{bmatrix}$의 고윳값은 둘 다 1이다. 옳은 것은?'''
+explanation = '''$\mathbf{A}(0, 1)^\top = (10, 1)^\top$이므로 길이 1인 벡터가 약 10.05배로 늘어난다. 한 번 곱할 때의 최대 증폭률은 최대 특이값(약 10.1)이고, 고윳값은 이를 알려 주지 않는다. 고윳값과 특이값의 절댓값이 일치하는 것은 대칭행렬(더 일반적으로 정규 행렬)일 때다. 이 행렬은 비대칭이라 고유벡터도 $(1, 0)$ 한 방향뿐이다.'''
+
+[[questions.choices]]
+text = '''어떤 단위 벡터 $\mathbf{x}$는 $\lVert\mathbf{A}\mathbf{x}\rVert \approx 10$으로 늘어난다. 최대 증폭률은 고윳값이 아니라 최대 특이값이 정한다.'''
+correct = true
+
+[[questions.choices]]
+text = '''고윳값이 모두 1이므로 모든 $\mathbf{x}$에 대해 $\lVert\mathbf{A}\mathbf{x}\rVert = \lVert\mathbf{x}\rVert$이다.'''
+feedback = "x = (0, 1)을 넣어 본다. Ax = (10, 1)로 길이가 약 10배다. 고윳값은 고유벡터 방향에서의 배율일 뿐이다."
+
+[[questions.choices]]
+text = "스펙트럴 정리에 의해 직교행렬로 대각화되므로 길이를 보존한다."
+feedback = "스펙트럴 정리는 대칭행렬에만 적용된다. 이 행렬은 대칭이 아니고 대각화도 불가능하다."

@@ -1,0 +1,6 @@
+title = "이차형식의 타원 축"
+chapter = "linear-algebra/eigen-and-symmetric"
+objective = 3
+exec = "browser"
+entry = "ellipse_axes"
+timeout_s = 10
