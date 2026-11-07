@@ -1,0 +1,137 @@
+# 22.6 다중 GPU와 분산 학습 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "allreduce-equal-shards"
+type = "single"
+objective = 2
+prompt = '''batch 64를 GPU 4개에 나누어 각 GPU가 자기 표본의 **평균** 손실로 gradient를 구하고, all-reduce로 더한 뒤 4로 나눈다. 이 값이 batch 64 전체의 평균 손실 gradient와 같아지는 조건은?'''
+explanation = '''전체 gradient는 $\frac{1}{64}\sum_i \nabla\ell_i$다. GPU $r$의 평균 gradient는 $\frac{1}{n_r}\sum_{i\in\mathcal{D}_r}\nabla\ell_i$이므로, 이를 단순 평균한 값이 전체와 같으려면 모든 $n_r$이 같아야 한다($n_r = 16$). 표본 수가 다르면 작은 몫을 가진 GPU에 과도한 가중치가 간다. optimizer 종류나 모델 구조와는 무관하다. DistributedSampler가 rank마다 표본 수를 똑같이 맞추는 이유다.'''
+
+[[questions.choices]]
+text = "조건 없이 항상 같다. 평균의 평균은 전체 평균이다."
+feedback = "평균의 평균이 전체 평균이 되는 것은 각 묶음의 크기가 같을 때뿐이다. 40·8·8·8로 나누면 달라진다."
+
+[[questions.choices]]
+text = "모든 GPU가 같은 수의 표본을 맡을 때"
+correct = true
+
+[[questions.choices]]
+text = "optimizer가 SGD일 때만. Adam이면 달라진다."
+feedback = "이 질문은 gradient 자체에 대한 것이다. optimizer는 gradient를 받은 뒤의 갱신 규칙이라 등식과 무관하다."
+
+[[questions.choices]]
+text = "모든 GPU가 같은 표본을 볼 때"
+feedback = "모든 GPU가 같은 표본을 보면 gradient는 batch 16의 gradient가 되고, GPU를 늘린 의미가 없다."
+
+[[questions]]
+id = "which-parallelism"
+type = "single"
+objective = 1
+prompt = '''GPU 8대가 있다. 학습할 모델은 fp32 + Adam으로 파라미터·gradient·optimizer 상태만 GPU 하나의 메모리를 넘지만, 층 하나는 충분히 작다. 연구실 규모에서 가장 먼저 시도할 방식은?'''
+explanation = '''DDP는 모든 GPU가 모델 전체와 optimizer 상태를 복제하므로, 한 GPU에 들어가지 않는 모델은 GPU를 늘려도 들어가지 않는다. FSDP(ZeRO-3)는 파라미터·gradient·optimizer 상태를 GPU 수로 나누어 GPU당 정적 메모리를 약 1/8로 줄이고, 계산할 때 층 하나 분량만 모아 온다. 층이 작으므로 텐서 병렬이 필요하지 않다. 파이프라인 병렬도 가능하지만 bubble과 구현 부담이 커서 FSDP 다음에 검토한다.'''
+
+[[questions.choices]]
+text = "DDP. GPU가 8대이므로 GPU당 메모리가 1/8이 된다."
+feedback = "DDP는 데이터를 나누고 모델 상태는 복제한다. GPU당 정적 메모리는 그대로다."
+
+[[questions.choices]]
+text = "FSDP(ZeRO-3 방식)로 파라미터·gradient·optimizer 상태를 나눈다."
+correct = true
+
+[[questions.choices]]
+text = "텐서 병렬로 층마다 행렬을 나눈다."
+feedback = "텐서 병렬은 층 하나가 너무 클 때의 방법이고 층마다 통신이 많다. 이 경우 층은 작다."
+
+[[questions.choices]]
+text = "batch를 1로 줄이고 DDP를 쓴다."
+feedback = "batch는 활성값만 줄인다. 정적 메모리(16 byte/파라미터)가 넘치는 문제는 그대로다."
+
+[[questions]]
+id = "fsdp-memory"
+type = "numeric"
+objective = 1
+prompt = '''파라미터 10억($10^9$)개 모델을 fp32 + Adam(파라미터당 16 byte)으로 GPU 8대에서 학습한다. 파라미터·gradient·optimizer 상태를 모두 8등분하는 FSDP(ZeRO-3)를 쓰면, GPU 하나가 상시 들고 있는 정적 메모리는 몇 GB($10^9$ byte)인가? 계산 중 잠깐 모아 오는 파라미터와 활성값은 제외한다.'''
+answer = 2.0
+tolerance = 0.01
+slider = { min = 0.0, max = 16.0, step = 0.5, unit = "GB" }
+explanation = '''$10^9 \times 16 / 8 = 2 \times 10^9$ byte = 2 GB다. DDP라면 GPU마다 16 GB, optimizer 상태만 나누는 ZeRO-1이면 $4 + 4 + 8/8 = 9$ byte/파라미터로 9 GB다.'''
+
+[[questions]]
+id = "set-epoch"
+type = "single"
+objective = 2
+prompt = '''DDP 학습 루프에서 `DistributedSampler(dataset, shuffle=True)`를 쓰면서 `sampler.set_epoch(epoch)`를 부르지 않았다. 어떤 일이 생기는가?'''
+explanation = '''DistributedSampler는 `seed + epoch`으로 순서를 섞는다. `set_epoch`를 부르지 않으면 epoch 값이 그대로라 매 epoch 같은 순서가 나온다. 오류나 경고는 없다. rank마다 겹치지 않는 몫을 받는 것은 그대로이므로 표본이 중복되지는 않는다.'''
+
+[[questions.choices]]
+text = "rank들이 같은 표본을 중복해서 본다."
+feedback = "rank별 분배(r, r+W, ...)는 set_epoch와 무관하게 겹치지 않는다. 바뀌는 것은 epoch 사이의 순서다."
+
+[[questions.choices]]
+text = "매 epoch 같은 순서로 표본을 본다. 오류는 나지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "첫 epoch에서 오류가 난다."
+feedback = "set_epoch는 선택 호출이라 오류가 나지 않는다. 그래서 발견이 늦다."
+
+[[questions.choices]]
+text = "shuffle=True이므로 매 epoch 무작위 순서가 된다."
+feedback = "섞는 시드가 seed + epoch이다. epoch을 알려 주지 않으면 매번 같은 시드로 같은 순서를 만든다."
+
+[[questions]]
+id = "effective-batch"
+type = "numeric"
+objective = 2
+prompt = '''GPU 8대에서 GPU당 batch 32, gradient accumulation 2회로 학습한다. optimizer step 한 번에 쓰이는 유효 batch 크기는?'''
+answer = 512
+tolerance = 0
+slider = { min = 0, max = 1024, step = 32, unit = "개" }
+explanation = '''유효 batch는 GPU당 batch × GPU 수 × 누적 횟수 = $32 \times 8 \times 2 = 512$다. 단일 GPU에서 batch 32로 튜닝한 학습률을 그대로 쓰면 다른 학습이 된다. 256은 누적을, 64는 GPU 수를 빠뜨린 값이다.'''
+
+[[questions]]
+id = "rank0-metric"
+type = "single"
+objective = 3
+prompt = '''검증 데이터를 DistributedSampler로 4개 rank에 나누어 평가했다. 논문 표에 넣을 정확도를 계산하는 올바른 방법은?'''
+explanation = '''정확도는 전체 맞힌 수 / 전체 표본 수다. rank마다 (맞힌 수, 표본 수)를 구해 all-reduce로 더한 뒤 나눈다. rank 0의 값은 데이터의 1/4만 본 값이다. rank별 정확도를 단순 평균하면 rank마다 표본 수가 다를 때 틀린다. DistributedSampler가 W의 배수로 맞추려고 넣은 중복 표본은 최종 평가에서 제거한다.'''
+
+[[questions.choices]]
+text = "rank 0의 정확도를 보고한다. 모든 rank의 모델이 같기 때문이다."
+feedback = "모델은 같아도 데이터가 다르다. rank 0은 검증 데이터의 1/4만 보았다."
+
+[[questions.choices]]
+text = "rank별 정확도 네 개를 단순 평균한다."
+feedback = "rank마다 표본 수가 같을 때만 맞다. 일반적으로는 개수로 가중해야 한다."
+
+[[questions.choices]]
+text = "rank마다 (맞힌 수, 표본 수)를 all-reduce로 더해 나누고, sampler가 채운 중복 표본은 제거한다."
+correct = true
+
+[[questions.choices]]
+text = "가장 높은 rank의 정확도를 보고한다."
+feedback = "rank 사이의 차이는 표집 변동이다. 최댓값을 고르면 체계적으로 높게 보고된다."
+
+[[questions]]
+id = "ddp-checkpoint"
+type = "multiple"
+objective = 3
+prompt = '''DDP 학습에서 checkpoint 저장에 대한 설명으로 옳은 것을 모두 고르시오.'''
+explanation = '''DDP의 모든 rank는 같은 파라미터를 가지므로 rank 0 하나만 저장하면 된다. `model.state_dict()`의 키에는 `module.` 접두사가 붙으므로 단일 GPU 모델에서 쓰려면 `model.module.state_dict()`를 저장한다. 저장이 끝나기 전에 다른 rank가 파일을 읽지 않도록 `dist.barrier()`로 기다린다. 모든 rank가 같은 경로에 동시에 쓰면 파일이 깨질 수 있다. FSDP처럼 상태를 나눈 경우에는 각 rank가 자기 몫을 저장하는 sharded checkpoint를 쓴다.'''
+
+[[questions.choices]]
+text = "rank 0만 `model.module.state_dict()`를 저장하고, 모든 rank가 `dist.barrier()`로 기다린다."
+correct = true
+
+[[questions.choices]]
+text = "모든 rank가 같은 경로에 저장해야 안전하다."
+feedback = "같은 파일에 동시에 쓰면 내용이 섞이거나 깨질 수 있다. 저장은 한 rank만 한다."
+
+[[questions.choices]]
+text = "FSDP에서는 각 rank가 자기 몫을 저장하는 sharded checkpoint를 쓸 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "DDP로 감싼 `model.state_dict()`는 단일 GPU 모델에 그대로 불러올 수 있다."
+feedback = "키에 `module.` 접두사가 붙어 있어 그대로는 맞지 않는다. 감싸기 전 모듈(`model.module`)의 state_dict를 저장한다."
