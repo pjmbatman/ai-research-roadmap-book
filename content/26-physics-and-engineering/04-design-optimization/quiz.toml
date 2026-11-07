@@ -1,0 +1,109 @@
+# 26.4 형상·설계 최적화와 역설계 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "pareto-on-bounds"
+type = "single"
+objective = 1
+prompt = '''외팔보의 질량–처짐 Pareto front를 구했더니, front 위 설계의 대부분이 "높이 상한 10 cm"에 붙어 있었다. 이 결과를 보고 가장 먼저 할 일은?'''
+explanation = '''최적해가 설계 범위의 경계에 붙어 있으면, 그 경계를 넓히는 순간 설계가 그쪽으로 더 간다. 높고 얇은 보는 이 모델에 없는 횡비틀림 좌굴에 약하므로, 높이 상한이 실제로는 좌굴·제조·공간 같은 다른 제약을 대신하고 있었는지 확인하고 그 제약을 명시적으로 넣어야 한다. 상한을 그냥 넓히면 모델링하지 않은 실패 모드 쪽으로 설계가 밀린다.'''
+
+[[questions.choices]]
+text = "높이 상한이 실제로 어떤 제약(좌굴, 제조, 설치 공간)을 대신하는지 확인하고, 그 제약을 모델에 명시적으로 넣는다."
+correct = true
+
+[[questions.choices]]
+text = "상한이 최적화를 막고 있으므로 높이 상한을 20 cm로 넓혀 다시 최적화한다."
+feedback = "더 높고 얇은 설계가 나올 뿐이다. 그 설계가 좌굴처럼 모델에 없는 방식으로 실패하는지 모르는 채로 범위를 넓히는 것이다."
+
+[[questions.choices]]
+text = "경계에 붙은 설계는 수치 오류이므로 front에서 제외한다."
+feedback = "경계 위의 Pareto 최적해는 수치 오류가 아니라 문제 정의의 결과다. 굽힘 강성이 h³에 비례하므로 높이를 키우는 쪽이 효율적인 것이 정상이다."
+
+[[questions.choices]]
+text = "가중합 하나로 바꿔 최적해 하나만 고르면 경계 문제가 사라진다."
+feedback = "목적을 합쳐도 최적해는 같은 경계로 간다. 문제는 목적의 개수가 아니라 빠진 제약이다."
+
+[[questions]]
+id = "adjoint-cost"
+type = "numeric"
+objective = 2
+prompt = '''설계 변수 10000개, 목적 1개와 제약 2개가 있는 위상 최적화 문제다. 상태 방정식이 선형일 때, adjoint 방법으로 목적과 두 제약의 기울기를 모두 구하려면 선형계를 몇 번 풀어야 하는가(상태 해석 포함)?'''
+answer = 4
+tolerance = 0
+slider = { min = 1, max = 12, step = 1, unit = "회" }
+explanation = '''상태 해석 1회로 $\mathbf{u}$를 구하고, 기울기가 필요한 출력(목적 1 + 제약 2)마다 adjoint 해석 $\mathbf{K}^\top\boldsymbol{\lambda} = \partial(\cdot)/\partial\mathbf{u}$를 1회씩 풀어 모두 4회다. 설계 변수의 수는 횟수에 들어가지 않는다. 같은 기울기를 전진 유한차분으로 구하면 10001회가 필요하다.'''
+
+[[questions]]
+id = "fd-central-count"
+type = "numeric"
+objective = 2
+prompt = '''설계 변수 100개인 문제에서 중심 유한차분 $\big(J(\mathbf{p} + \epsilon\mathbf{e}_i) - J(\mathbf{p} - \epsilon\mathbf{e}_i)\big)/2\epsilon$으로 기울기를 구한다. 기준점 $J(\mathbf{p})$의 해석을 빼고, 기울기에만 필요한 시뮬레이션은 몇 번인가?'''
+answer = 200
+tolerance = 0
+explanation = '''변수마다 $+\epsilon$과 $-\epsilon$ 두 번씩, $2 \times 100 = 200$번이다. 중심 차분은 전진 차분(100번)보다 정확하지만 두 배 비싸다. 반복 한 번마다 이 비용이 들기 때문에, 변수가 많은 설계 문제에서 유한차분은 adjoint 구현을 검증하는 용도로만 쓴다.'''
+
+[[questions]]
+id = "adjoint-not-always"
+type = "single"
+objective = 2
+prompt = '''설계 변수는 3개인데, 시뮬레이션 출력 500개(센서 위치의 온도) 각각의 기울기가 모두 필요하다. 선형 상태 방정식에서 가장 싼 방법은?'''
+explanation = '''adjoint 해석은 기울기가 필요한 **출력마다** 1회 든다. 출력 500개면 500회다. 반대로 설계 변수마다 상태의 민감도 $\partial\mathbf{u}/\partial p_i$를 푸는 전진 민감도 해석은 변수당 1회, 즉 3회(+ 상태 해석 1회)로 모든 출력의 기울기를 준다. 자동미분의 forward mode와 reverse mode의 선택과 같은 원리다. adjoint는 "변수는 많고 출력은 적은" 문제에 유리하다.'''
+
+[[questions.choices]]
+text = "설계 변수마다 전진 민감도(또는 유한차분)를 구한다. 해석 약 4회면 된다."
+correct = true
+
+[[questions.choices]]
+text = "adjoint 방법을 쓴다. adjoint는 항상 해석 2회로 모든 기울기를 준다."
+feedback = "해석 2회는 출력이 하나일 때다. adjoint는 출력마다 1회씩 들어 500개 출력이면 500회가 필요하다."
+
+[[questions.choices]]
+text = "어느 방법이든 비용은 같다."
+feedback = "전진 민감도는 변수 수에, adjoint는 출력 수에 비례한다. 3과 500은 크게 다르다."
+
+[[questions]]
+id = "fake-optimum"
+type = "single"
+objective = 3
+prompt = '''대리모델로 최적화한 설계의 예측 성능이 기존 설계보다 15% 좋고, 그 값이 이 문제의 알려진 이론적 한계보다도 좋다. 보고하기 전에 해야 할 일은?'''
+explanation = '''이론적 한계를 넘는 예측은 그 자체로 대리모델 오차의 증거다. 최적화는 대리모델이 성능을 과대 예측한 곳을 찾아가므로, 최적해에서의 예측은 체계적으로 낙관적이다. 고충실도로 재계산한 값을 보고하고, 그 점을 데이터에 넣어 대리모델을 갱신하는 루프를 돌린다. 대리모델의 시험 오차가 작다는 것은 최적해 근처의 정확도를 보장하지 않는다.'''
+
+[[questions.choices]]
+text = "최적 설계를 고충실도 시뮬레이션으로 재계산하고, 그 값과 예측값의 차이를 함께 보고한다."
+correct = true
+
+[[questions.choices]]
+text = "대리모델의 시험 오차가 2%였으므로 15% 개선을 그대로 보고한다."
+feedback = "시험 오차는 무작위 시험점의 평균적 오차다. 최적화는 오차가 유리한 쪽으로 큰 점을 골라내므로 최적해의 오차는 평균보다 크고 낙관적이다."
+
+[[questions.choices]]
+text = "이론적 한계를 넘었으므로 새로운 물리를 발견한 것으로 보고 논문을 쓴다."
+feedback = "대리모델은 학습 데이터를 만든 시뮬레이션의 물리를 넘어설 수 없다. 한계를 넘는 예측은 발견이 아니라 오차다."
+
+[[questions.choices]]
+text = "대리모델의 하이퍼파라미터를 바꿔 같은 최적해가 다시 나오면 신뢰한다."
+feedback = "같은 데이터로 만든 비슷한 대리모델은 같은 영역에서 비슷하게 틀릴 수 있다. 독립적인 확인은 고충실도 재계산뿐이다."
+
+[[questions]]
+id = "generative-design-report"
+type = "multiple"
+objective = 3
+prompt = '''목표 양력을 조건으로 날개 단면을 생성하는 조건부 생성모델을 만들었다. 결과 보고에 반드시 들어가야 할 것을 모두 고르시오.'''
+explanation = '''생성된 설계의 성능은 고충실도 시뮬레이션으로 다시 계산한 값이어야 한다. 생성모델이 조건으로 받은 목표 양력은 그 설계가 실제로 내는 양력이 아니다. 또 생성 후보 가운데 제약을 만족하고 목표를 달성한 비율(깔때기)을 보고해야 방법의 실제 효율을 알 수 있다.'''
+
+[[questions.choices]]
+text = "생성된 설계를 고충실도 시뮬레이션으로 다시 계산한 양력"
+correct = true
+
+[[questions.choices]]
+text = "생성 후보 가운데 제약(최소 두께 등)을 만족한 비율과 목표를 달성한 비율"
+correct = true
+
+[[questions.choices]]
+text = "생성모델에 조건으로 준 목표 양력 값(설계의 성능으로)"
+feedback = "조건으로 준 값은 요청이지 결과가 아니다. 생성된 설계가 그 값을 내는지는 따로 계산해야 한다."
+
+[[questions.choices]]
+text = "생성모델 학습 손실의 최종값"
+feedback = "학습 손실은 학습 데이터 분포를 얼마나 잘 흉내 내는지를 말할 뿐, 생성된 설계가 목표 성능을 내는지는 말하지 않는다."
