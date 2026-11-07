@@ -230,6 +230,8 @@ tmux kill-session -t exp42   # 세션 끝내기
 
 둘 다 재부팅이나 OOM에서는 프로세스를 지켜 주지 못한다. 장기 실험은 checkpoint와 재시작 절차가 따로 필요하다(2.5장).
 
+::widget{name="tmux-anatomy"}
+
 ::quiz{id="nohup-vs-tmux"}
 
 **로그 파일로 출력 남기기.** tmux 화면의 스크롤 기록은 길이 제한이 있고 세션과 함께 사라진다. 학습 출력은 tmux 안에서도 항상 파일로 남긴다. 2.1장의 리다이렉션 규칙대로 stderr까지 함께 남겨야 traceback이 보존된다.

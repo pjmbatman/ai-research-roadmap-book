@@ -151,6 +151,8 @@ python -c "import torch; print(torch.backends.cudnn.version(), torch.cuda.get_ar
 
 이때 toolkit의 CUDA major 버전은 PyTorch의 `torch.version.cuda`와 맞춰야 한다. PyTorch의 extension 빌드 도구는 두 버전을 비교해, major가 다르면 빌드를 멈추고 오류를 낸다. 컴파일할 대상 GPU 아키텍처는 `TORCH_CUDA_ARCH_LIST` 환경변수로 지정할 수 있다.
 
+::widget{name="cuda-version-stack"}
+
 ::quiz{id="torch-wheel-needs-toolkit"}
 
 :::note[분야 예시]

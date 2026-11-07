@@ -267,6 +267,8 @@ for seed in range(5):
 
 검증 RMSE가 0.0232 s에서 0.0307 s까지 흔들린다. 앞의 표에 쓴 MLP의 숫자는 그중 **가장 좋은** seed 0의 결과였다. 다섯 번 중 가장 좋은 것만 보고하면 MLP를 과대평가하게 된다. 분할의 seed를 바꿔도 비슷한 흔들림이 생긴다(실습 참고). 이 흔들림보다 작은 차이로 "모델 A가 B보다 낫다"고 말할 수는 없다.
 
+::widget{name="seed-variance"}
+
 ::quiz{id="suspicious-results"}
 
 ::quiz{id="where-next"}
