@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 429문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 448문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -202,14 +202,14 @@ _디렉터리 구조, 네이밍, 설정 파일, CLI, 로깅, 테스트, 문서�
 - **6.4** [CLI 설계](content/06-research-code-engineering/04-cli-design/index.md) · `필수` · 퀴즈 6
   - argparse · subcommand · 다른 도구 · 설정과 CLI의 병합 · 진입점 등록
   - 선수: 6.3 설정 관리
-- **6.5** [로깅과 오류 처리](content/06-research-code-engineering/05-logging-and-errors/index.md) · `필수`
-  - logging · 무엇을 기록하는가 · 오류 처리 원칙 · 경고의 관리
+- **6.5** [로깅과 오류 처리](content/06-research-code-engineering/05-logging-and-errors/index.md) · `필수` · 퀴즈 7
+  - logging · 무엇을 기록하는가 · 오류 처리 원칙 · 경고의 관리 · 참고 문헌
   - 선수: 6.4 CLI 설계
-- **6.6** [테스트와 디버깅](content/06-research-code-engineering/06-testing-and-debugging/index.md) · `필수`
-  - 테스트의 종류 · 연구 코드에서 테스트할 것 · 디버깅 · 체계적 디버깅 · CI
+- **6.6** [테스트와 디버깅](content/06-research-code-engineering/06-testing-and-debugging/index.md) · `필수` · 퀴즈 6
+  - 테스트의 종류 · 연구 코드에서 테스트할 것 · 디버깅 · 체계적 디버깅 · CI · 참고 문헌
   - 선수: 6.5 로깅과 오류 처리, 4.2 GitHub 협업과 저장소 관리
-- **6.7** [연구 코드 문서화](content/06-research-code-engineering/07-documentation/index.md) · `필수`
-  - README · docstring · 설계 문서 · 변경 기록
+- **6.7** [연구 코드 문서화](content/06-research-code-engineering/07-documentation/index.md) · `필수` · 퀴즈 6
+  - README · docstring · 설계 문서 · 변경 기록 · 참고 문헌
   - 선수: 6.1 연구 프로젝트 구조
 
 ## `MTH` 수리 기초 <sub>Mathematical Foundations</sub>
