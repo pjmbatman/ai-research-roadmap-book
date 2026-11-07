@@ -1,0 +1,6 @@
+title = "partial pooling과 그룹 간 표준편차의 추정"
+chapter = "bayesian-inference/hierarchical-models"
+objective = 2
+exec = "browser"
+entry = "partial_pool"
+timeout_s = 10
