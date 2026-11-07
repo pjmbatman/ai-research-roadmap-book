@@ -160,6 +160,8 @@ for m in range(1, 301):
 - **무작위성.** 각 단계에서 학습 데이터의 일부만 쓰는 subsampling(stochastic gradient boosting)과 특징 부분집합은 분산을 줄인다.
 - **정규화.** 잎의 최소 샘플 수, 잎 값에 대한 L2 벌점 등.
 
+::widget{name="tree-boosting-overfit"}
+
 **구현.** 실무에서는 대규모 데이터에 최적화된 라이브러리를 쓴다. XGBoost는 2차 미분 정보와 정규화된 목적함수, 희소 데이터 처리를 갖춘 확장 가능한 구현이다(Chen & Guestrin, 2016). LightGBM은 특징값을 히스토그램 구간으로 묶어 분할 탐색을 빠르게 하고, CatBoost는 범주형 변수 처리를 강조한다. scikit-learn의 `HistGradientBoostingRegressor`도 히스토그램 기반이며 결측값과 범주형 특징을 직접 지원한다. 라이브러리마다 기본값과 이름이 다르므로, 버전과 설정을 기록하고 공식 문서에서 확인한다(집필 시점 기준의 설명이다).
 
 ## 표 데이터에서의 위치
