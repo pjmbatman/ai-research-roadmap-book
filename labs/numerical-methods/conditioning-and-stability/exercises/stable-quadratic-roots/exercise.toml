@@ -1,0 +1,6 @@
+title = "이차방정식의 안정한 근"
+chapter = "numerical-methods/conditioning-and-stability"
+objective = 1
+exec = "browser"
+entry = "quadratic_roots"
+timeout_s = 10
