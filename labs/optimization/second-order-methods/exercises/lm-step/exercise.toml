@@ -1,0 +1,6 @@
+title = "Levenberg–Marquardt step 구현하기"
+chapter = "optimization/second-order-methods"
+objective = 2
+exec = "browser"
+entry = "lm_step"
+timeout_s = 10
