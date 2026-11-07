@@ -1,0 +1,6 @@
+title = "합성 Simpson 규칙"
+chapter = "numerical-methods/interpolation-and-quadrature"
+objective = 3
+exec = "browser"
+entry = "composite_simpson"
+timeout_s = 10
