@@ -1,0 +1,6 @@
+title = "인용 그래프의 PageRank"
+chapter = "research-practice/literature-search"
+objective = 1
+exec = "browser"
+entry = "pagerank"
+timeout_s = 15

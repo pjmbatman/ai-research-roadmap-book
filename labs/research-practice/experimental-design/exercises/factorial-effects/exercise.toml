@@ -1,0 +1,6 @@
+title = "2^k 요인 설계의 주효과와 교호작용"
+chapter = "research-practice/experimental-design"
+objective = 3
+exec = "browser"
+entry = "factorial_effects"
+timeout_s = 15

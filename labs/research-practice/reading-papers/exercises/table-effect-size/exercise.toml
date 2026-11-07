@@ -1,0 +1,6 @@
+title = "논문 표의 수치로 차이의 구간과 효과 크기 계산하기"
+chapter = "research-practice/reading-papers"
+objective = 2
+exec = "browser"
+entry = "welch_ci"
+timeout_s = 15
