@@ -242,6 +242,8 @@ EKF 초기 추정 θ=1.0: RMSE 처음 2 s 0.410, 나머지 0.055 rad | 95% 구�
 
 **잡음 공분산 튜닝.** $\mathbf{Q}$와 $\mathbf{R}$은 필터의 성능을 크게 좌우하지만 대개 정확히 모른다. $\mathbf{R}$은 센서 사양이나 정지 상태 측정으로 정할 수 있고, $\mathbf{Q}$는 모델이 놓친 모든 것을 대신하는 손잡이다. $\mathbf{Q}$가 너무 작으면 필터가 모델을 과신해 측정을 무시하다가 발산하고, 너무 크면 측정 잡음을 그대로 따라간다. 필터가 일관된지는 혁신으로 검사한다. 모델이 맞으면 정규화 혁신 제곱 $\epsilon_k = \mathbf{e}_k^\top\mathbf{S}_k^{-1}\mathbf{e}_k$($\mathbf{e}_k$는 혁신)는 자유도가 측정 차원인 $\chi^2$ 분포를 따르므로, 그 평균이 측정 차원과 크게 다르면 공분산 설정이 틀린 것이다. 혁신의 로그우도 $\sum_k \log\mathcal{N}(\mathbf{e}_k; \mathbf{0}, \mathbf{S}_k)$를 최대화해 $\mathbf{Q}$, $\mathbf{R}$을 추정할 수도 있다.
 
+::widget{name="kalman-1d"}
+
 ## particle filter
 
 **왜 필요한가.** 사후분포가 여러 봉우리를 가지거나 심하게 비대칭이면 가우시안 하나로는 표현할 수 없다. **particle filter**는 사후분포를 가중치가 있는 표본(입자) $\{(\mathbf{x}^{(i)}, w^{(i)})\}_{i=1}^n$으로 표현한다. Gordon, Salmond, Smith(1993)의 bootstrap filter가 가장 기본적인 형태다.
