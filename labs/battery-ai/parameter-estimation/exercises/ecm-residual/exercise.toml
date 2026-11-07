@@ -1,0 +1,6 @@
+title = "1-RC 등가회로 모델의 잔차 함수"
+chapter = "battery-ai/parameter-estimation"
+objective = 1
+exec = "browser"
+entry = "residual"
+timeout_s = 10
