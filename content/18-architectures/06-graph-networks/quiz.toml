@@ -1,0 +1,113 @@
+# 18.6 그래프 신경망과 기하학적 딥러닝 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "gcn-normalized-weight"
+type = "numeric"
+objective = 1
+prompt = '''self-loop를 더한 GCN 정규화 $\hat{A}_{ij} = \tilde{A}_{ij}/\sqrt{\tilde{d}_i\tilde{d}_j}$에서, 원래 그래프의 차수가 3인 노드 $i$와 차수가 2인 노드 $j$가 연결되어 있다. $\hat{A}_{ij}$는? (소수 셋째 자리까지)'''
+explanation = '''self-loop를 더하면 차수가 하나씩 늘어 $\tilde{d}_i = 4$, $\tilde{d}_j = 3$이다. 따라서 $\hat{A}_{ij} = 1/\sqrt{4 \cdot 3} = 1/\sqrt{12} \approx 0.289$다. self-loop를 빼먹고 $1/\sqrt{3 \cdot 2} \approx 0.408$로 계산하는 실수가 흔하다. 본문 cell 1의 `A_norm[2, 6]`이 바로 이 경우다.'''
+answer = 0.289
+tolerance = 0.001
+
+[[questions]]
+id = "receptive-field-hops"
+type = "numeric"
+objective = 1
+prompt = '''노드 10개가 한 줄로 이어진 경로 그래프(1–2–3–…–10)에서, 노드 1의 표현이 노드 10의 특징 정보를 담으려면 message passing 층이 최소 몇 개 필요한가?'''
+explanation = '''층 하나는 정보를 간선 하나만큼 전달한다. $k$층을 지나면 노드는 $k$-hop 이내의 정보를 담으므로, 거리가 9인 두 노드 사이에는 최소 9개 층이 필요하다. 그만큼 깊게 쌓으면 over-smoothing이 생기고, 긴 경로를 지나는 정보는 over-squashing으로 약해진다. 먼 노드 사이의 상호작용이 중요하면 층을 늘리기보다 그래프 구성을 다시 본다.'''
+answer = 9
+tolerance = 0
+slider = { min = 1, max = 12, step = 1, unit = "층" }
+
+[[questions]]
+id = "mean-cannot-count"
+type = "single"
+objective = 2
+prompt = '''모든 노드 특징이 같은(모두 탄소) 두 그래프에서, 중심 노드의 이웃이 하나는 1개, 다른 하나는 2개다. 이웃 특징을 모으는 집계 함수 중 두 경우를 **구별하는** 것은?'''
+explanation = '''합은 이웃의 개수만큼 커지므로 1개와 2개를 구별한다. 평균은 둘 다 "탄소"이고, 최댓값도 둘 다 "탄소"라 구별하지 못한다. 평균은 이웃 특징의 분포만, 최댓값은 어떤 특징이 있는지만 남긴다. 그래서 GIN은 합 집계와 MLP를 쓴다. 다만 차수가 크게 다른 그래프에서는 합의 크기가 불안정해질 수 있어, 이웃 수가 의미 있는 정보인지 먼저 따진다.'''
+
+[[questions.choices]]
+text = "합(sum)"
+correct = true
+
+[[questions.choices]]
+text = "평균(mean)"
+feedback = "탄소 1개의 평균과 탄소 2개의 평균은 똑같이 탄소다. 평균은 개수를 잃는다."
+
+[[questions.choices]]
+text = "최댓값(max)"
+feedback = "최댓값은 이웃에 어떤 특징이 있는지만 남긴다. 1개든 2개든 결과는 탄소다."
+
+[[questions.choices]]
+text = "셋 다 구별한다. 이웃이 다르면 집계 결과도 반드시 다르다."
+feedback = "집계 함수는 이웃 다중집합을 벡터 하나로 줄이며 정보를 잃는다. 무엇을 잃는지가 집계 함수마다 다르다."
+
+[[questions]]
+id = "node-vs-graph-target"
+type = "single"
+objective = 2
+prompt = '''분자 그래프로 (가) 원자마다의 부분 전하와 (나) 분자 전체의 에너지를 예측한다. 원자 번호를 바꾸는 순열 $\mathbf{P}$에 대해 모델이 만족해야 할 성질로 옳은 것은?'''
+explanation = '''원자마다의 출력은 원자 번호와 함께 자리가 바뀌어야 하므로 $f(\mathbf{P}\mathbf{A}\mathbf{P}^\top, \mathbf{P}\mathbf{X}) = \mathbf{P}f(\mathbf{A}, \mathbf{X})$, 즉 등변이다. 분자 전체의 에너지는 번호를 어떻게 붙여도 같아야 하므로 불변이다. 등변 층을 쌓고 노드에 대한 합(readout)을 붙이면 불변 출력을 얻는다.'''
+
+[[questions.choices]]
+text = "(가)는 순열 등변, (나)는 순열 불변이어야 한다."
+correct = true
+
+[[questions.choices]]
+text = "둘 다 순열 불변이어야 한다."
+feedback = "원자마다의 출력이 불변이면 번호를 바꿔도 출력 순서가 그대로여서, 바뀐 번호의 원자에 엉뚱한 전하가 붙는다."
+
+[[questions.choices]]
+text = "(가)는 순열 불변, (나)는 순열 등변이어야 한다."
+feedback = "반대다. 노드마다의 출력이 번호와 함께 움직이는 것이 등변, 그래프 전체의 스칼라가 그대로인 것이 불변이다."
+
+[[questions.choices]]
+text = "원자 순서는 데이터 파일에 고정되어 있으므로 어느 성질도 필요 없다."
+feedback = "같은 분자를 다른 프로그램이나 다른 순서로 기록하면 번호가 바뀐다. 순서에 의존하는 모델은 같은 분자에 다른 예측을 낸다."
+
+[[questions]]
+id = "complete-graph-mean"
+type = "single"
+objective = 3
+prompt = '''센서 30개를 모두 서로 연결한 완전 그래프에서 이웃 평균으로 각 센서 값을 예측했더니, 무작위 그래프와 비슷하게 나빴다. 가장 직접적인 이유는?'''
+explanation = '''완전 그래프에서 각 노드의 이웃 평균은 자기 자신을 뺀 모든 노드의 평균, 즉 거의 같은 전역 평균이다. 어느 센서든 비슷한 값을 받으므로 위치에 따른 차이를 예측할 수 없다. 이웃 집계가 국소성을 쓰려면 그래프가 국소적이어야 한다. 정보가 부족해서가 아니라 구조 가정이 사라져서 나빠진 것이다.'''
+
+[[questions.choices]]
+text = "각 노드의 이웃 평균이 거의 같은 전역 평균이 되어, 위치에 따른 차이(국소성)가 사라진다."
+correct = true
+
+[[questions.choices]]
+text = "연결이 많을수록 over-squashing이 심해진다."
+feedback = "over-squashing은 먼 노드의 정보가 좁은 경로를 지나며 눌리는 문제다. 완전 그래프에서는 모든 노드가 1-hop이라 경로가 짧다."
+
+[[questions.choices]]
+text = "센서 수 30개는 GNN을 쓰기에 너무 적다."
+feedback = "같은 30개 센서에서 물리적 kNN 그래프는 훨씬 좋았다. 문제는 노드 수가 아니라 그래프 구성이다."
+
+[[questions.choices]]
+text = "완전 그래프에서는 순열 등변성이 깨진다."
+feedback = "완전 그래프 위의 이웃 평균은 7.10장의 등변 층과 같은 구조로, 순열 등변이다. 등변성과 예측 성능은 다른 문제다."
+
+[[questions]]
+id = "oversmoothing-vs-squashing"
+type = "single"
+objective = 3
+prompt = '''GNN의 층을 2개에서 16개로 늘렸더니 검증 성능이 떨어졌고, 층별로 잰 노드 표현 사이의 평균 거리(Dirichlet 에너지)가 0에 가깝게 줄었다. 가장 그럴듯한 진단은?'''
+explanation = '''층마다 이웃 평균을 반복하면 연결된 노드의 표현이 같은 방향으로 수렴한다. 노드 표현 사이의 차이를 재는 Dirichlet 에너지가 0으로 떨어지는 것이 over-smoothing의 신호다. over-squashing은 먼 노드의 정보가 도착하지 않는 문제라 노드 표현이 서로 같아지는 것으로 나타나지는 않는다.'''
+
+[[questions.choices]]
+text = "over-smoothing: 반복된 이웃 평균으로 노드 표현이 서로 같아졌다."
+correct = true
+
+[[questions.choices]]
+text = "over-squashing: 먼 노드의 정보가 병목을 지나며 눌렸다."
+feedback = "over-squashing은 먼 정보가 도착하지 않는 문제다. 노드 표현 사이의 거리가 0으로 줄어드는 것은 over-smoothing의 특징이다."
+
+[[questions.choices]]
+text = "과소적합: 층이 16개로는 부족하니 더 늘려야 한다."
+feedback = "층을 늘리면 평균이 더 반복되어 표현이 더 같아진다. 대응은 층 수를 줄이거나 잔차 연결 등을 쓰는 것이다."
+
+[[questions.choices]]
+text = "순열 등변성이 깨졌다."
+feedback = "층을 쌓아도 각 층이 등변이면 전체가 등변이다. 등변성은 이 증상과 관계없다."

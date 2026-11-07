@@ -1,0 +1,6 @@
+title = "Dirichlet 에너지로 over-smoothing 진단하기"
+chapter = "architectures/graph-networks"
+objective = 3
+exec = "browser"
+entry = "dirichlet_energy"
+timeout_s = 10

@@ -1,0 +1,126 @@
+# 18.8 표현 분석 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "probe-random-baseline"
+type = "single"
+objective = 2
+prompt = '''학습한 모델의 층 2 표현에서 물리량 $\omega$의 linear probe $R^2$가 0.95였다. 같은 구조를 무작위로 초기화한 망의 층 2에서도 $R^2$가 0.94였다. 옳은 해석은?'''
+explanation = '''무작위 초기화 망은 구조만으로 얻는 점수의 기준선이다. 본문 실험에서도 학습하지 않은 무작위 ReLU 층 하나가 $\omega$ probe $R^2$ 0.968을 냈다. 비선형 특징을 많이 만들면 입력에 있던 정보가 선형으로 읽히게 되기 때문이다. 학습의 기여는 기준선과의 차이(0.01)로 보고하고, 0.95라는 절대값만으로 학습이 $\omega$를 표현했다고 말하지 않는다.'''
+
+[[questions.choices]]
+text = "학습이 ω의 선형 표현에 더한 몫은 작다. 높은 점수의 대부분은 구조(무작위 비선형 특징)만으로 얻어진다."
+correct = true
+
+[[questions.choices]]
+text = "R² 0.95는 매우 높으므로 학습된 모델이 ω를 표현으로 만들었다는 강한 증거다."
+feedback = "같은 구조의 무작위 망이 이미 0.94다. 기준선과 비교하지 않은 절대값은 학습의 효과를 말해 주지 않는다."
+
+[[questions.choices]]
+text = "무작위 망의 점수가 높은 것은 probe가 test 자료를 외웠기 때문이다."
+feedback = "probe는 held-out 자료에서 평가했다. 섞은 정답 대조군에서 R²가 0 아래라면 외운 것이 아니라 표현에서 실제로 읽힌 것이다."
+
+[[questions.choices]]
+text = "무작위 망은 정보를 담을 수 없으므로 이 대조군 결과는 계산 오류다."
+feedback = "무작위 층도 입력의 비선형 함수다. 입력에 있던 정보는 사라지지 않고, 오히려 선형으로 더 잘 읽히게 될 수 있다."
+
+[[questions]]
+id = "probe-not-usage"
+type = "single"
+objective = 2
+prompt = '''어떤 층의 표현에서 실험실 ID를 linear probe로 99% 정확도로 읽어 낼 수 있었다. 모델의 예측이 실험실 ID에 **의존하는지** 확인하는 방법으로 가장 알맞은 것은?'''
+explanation = '''probe는 정보가 표현에 있다는 것만 보여 준다. 모델이 그 정보를 쓰는지는 개입으로 확인한다. 표현에서 실험실을 구별하는 방향을 제거하거나, 입력의 실험실 특성을 바꾼 뒤 예측이 달라지는지 본다. probe의 정확도를 더 올리거나 다른 층에서 다시 재는 것은 같은 질문(정보가 있는가)을 반복할 뿐이다.'''
+
+[[questions.choices]]
+text = "표현에서 실험실을 구별하는 방향을 제거하거나 바꾼 뒤, 모델의 예측이 달라지는지 본다."
+correct = true
+
+[[questions.choices]]
+text = "probe 정확도가 99%이므로 모델은 이미 실험실 ID에 의존한다."
+feedback = "정보가 표현에 있다는 것과 출력이 그 정보에 의존한다는 것은 다르다. 모델이 그 방향을 출력에 쓰지 않을 수도 있다."
+
+[[questions.choices]]
+text = "더 큰 MLP probe로 다시 학습해 정확도가 더 오르는지 본다."
+feedback = "probe의 용량을 키우면 정보가 있는지에 대한 답만 (덜 선택적으로) 반복된다. 의존 여부는 개입이 필요하다."
+
+[[questions.choices]]
+text = "2차원 UMAP 그림에서 실험실별로 군집이 나뉘는지 본다."
+feedback = "그림도 정보의 존재를 보여 줄 뿐이고, 저차원 투영은 그마저 왜곡할 수 있다. 출력에 대한 의존은 개입으로 확인한다."
+
+[[questions]]
+id = "cka-invariances"
+type = "multiple"
+objective = 1
+prompt = '''linear CKA에 대해 옳은 것을 모두 고르시오.'''
+explanation = '''linear CKA는 표현에 직교행렬을 곱하거나 전체에 같은 상수를 곱해도 값이 같다. 일반적인 가역 선형변환에는 불변이 아니다(본문에서 0.978). 또 분산이 큰 방향에 가중치를 많이 두므로, 나머지가 무관한 두 표현도 큰 분산 방향 하나를 공유하면 CKA가 높게 나온다(본문에서 0.973). 서로 무관한 표현도 유한 표본에서는 0이 아니다(본문의 표본 500개에서 0.337).'''
+
+[[questions.choices]]
+text = "표현에 직교행렬을 곱해도 CKA는 변하지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "두 표현이 분산이 큰 방향 하나를 공유하면, 나머지가 무관해도 CKA가 높게 나올 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "임의의 가역 선형변환을 적용해도 CKA는 정확히 1을 유지한다."
+feedback = "CKA는 직교 변환과 등방 스케일에만 불변이다. 일반 가역 선형변환에서는 값이 바뀐다. 그 불변성까지 갖는 것은 CCA 계열 지표다."
+
+[[questions.choices]]
+text = "서로 무관한 두 표현의 CKA는 표본 수와 상관없이 항상 0이다."
+feedback = "유한 표본에서는 우연한 상관이 남아 0보다 크다. 본문에서 무관한 256차원 표현 두 개의 CKA는 표본 500개에서 0.337이었다. 이 값이 기준선이다."
+
+[[questions]]
+id = "nn-unscaled-feature"
+type = "single"
+objective = 1
+prompt = '''256차원 표현(값의 크기 1 안팎)에 센서 온도를 mK 단위(약 298,000)로 한 열 붙인 뒤 유클리드 거리로 최근접 이웃을 찾았더니, 이웃의 물리량이 무작위 이웃과 비슷하게 달랐다. 가장 직접적인 원인은?'''
+explanation = '''유클리드 거리는 열마다의 차이 제곱을 더한다. 센서 온도 열의 차이(수천 mK)가 다른 열의 차이(1 안팎)를 압도하므로, 이웃이 사실상 센서 온도만으로 정해진다. 거리 기반 분석에서는 어떤 특징이 거리를 지배하는지 확인하고, 분석 목적과 무관한 메타데이터는 빼거나 척도를 맞춘다.'''
+
+[[questions.choices]]
+text = "수치 범위가 큰 한 열이 거리를 지배해, 이웃이 센서 온도로 정해졌다."
+correct = true
+
+[[questions.choices]]
+text = "열이 257개로 늘어 차원의 저주가 생겼다."
+feedback = "열 하나를 더한 것으로 차원이 의미 있게 바뀌지 않는다. 표준화하자 바로 회복된 것이 척도 문제라는 증거다."
+
+[[questions.choices]]
+text = "센서 온도가 물리량과 상관이 있어 정보가 섞였다."
+feedback = "센서 온도는 무관한 메타데이터로 만들었다. 상관이 없어도 척도가 크면 거리를 지배한다."
+
+[[questions.choices]]
+text = "유클리드 거리 대신 cosine 유사도를 쓰면 언제나 해결된다."
+feedback = "cosine도 벡터 방향을 큰 성분이 지배하므로 같은 문제가 생긴다. 척도를 맞추거나 무관한 열을 빼야 한다."
+
+[[questions]]
+id = "pca-explained-variance"
+type = "numeric"
+objective = 2
+prompt = '''표현의 공분산 고윳값이 6, 2, 1, 1(나머지는 0)이다. 주성분 2개로 그린 산점도가 보존하는 분산의 비율은? (0과 1 사이 소수)'''
+explanation = '''설명 분산 비율은 $(6 + 2)/(6 + 2 + 1 + 1) = 0.8$이다. 그러나 80%의 분산을 보존한다고 해서 관심 있는 구별을 보존하는 것은 아니다. 본문 실험에서 주성분 2개는 분산의 29%를 담았고 빠른 진동 판별은 우연 수준이었지만, 표현 전체로는 0.994였다. 구별에 필요한 정보는 분산이 작은 나머지 방향(여기서는 고윳값 1인 두 방향)에 있을 수 있다.'''
+answer = 0.8
+tolerance = 0.001
+
+[[questions]]
+id = "probe-capacity"
+type = "single"
+objective = 2
+prompt = '''같은 표현에 linear probe와 은닉층이 큰 MLP probe를 적용했다. 실제 과제 정확도는 MLP가 조금 높았고, 정답을 무작위로 바꾼 대조 과제(학습 자료 안에서 단어 종류마다 무작위 레이블을 고정해 붙인 과제)에서도 MLP가 훨씬 높았다. 옳은 해석은?'''
+explanation = '''대조 과제는 표현에 담긴 의미와 무관하므로, 거기서 높은 정확도는 probe가 자신의 용량으로 입력–레이블 대응을 외운 결과다. 실제 과제 정확도와 대조 과제 정확도의 차이(selectivity)가 MLP에서 작다면, MLP probe의 높은 실제 과제 정확도 중 상당 부분도 외운 몫일 수 있다. Hewitt, Liang(2019)은 이런 이유로 linear probe가 selectivity가 높다고 보고했다.'''
+
+[[questions.choices]]
+text = "MLP probe는 selectivity가 낮다. 실제 과제의 높은 점수 일부도 probe가 스스로 외운 몫일 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "MLP probe가 두 과제 모두 높으므로 표현에 더 많은 정보가 있음을 보여 준다."
+feedback = "대조 과제의 레이블은 표현의 의미와 무관하다. 거기서의 높은 점수는 표현이 아니라 probe의 암기 능력을 보여 준다."
+
+[[questions.choices]]
+text = "대조 과제 점수는 probe 평가와 무관하므로 실제 과제 점수만 보고하면 된다."
+feedback = "대조 과제는 probe가 외워서 낼 수 있는 점수의 기준선이다. 이것 없이는 표현의 정보와 probe의 용량을 구별할 수 없다."
+
+[[questions.choices]]
+text = "linear probe는 표현의 정보를 과소평가하므로 항상 MLP probe를 써야 한다."
+feedback = "linear probe가 놓치는 비선형 정보가 있을 수 있지만, 용량을 키우면 외운 몫도 커진다. 두 probe를 대조 과제와 함께 보고한다."
