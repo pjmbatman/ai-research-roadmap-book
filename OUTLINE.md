@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 48문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 76문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -256,16 +256,16 @@ _데이터와 모델을 공간과 변환의 관점에서 이해한다. 선형·�
 
 _다변수 미분, 행렬 미분, 적분과 변수변환, 자동미분과 역전파를 직접 유도하고 구현한다._
 
-- **8.1** [다변수 미분](content/08-calculus-and-autodiff/01-multivariable-calculus/index.md) · `필수`
+- **8.1** [다변수 미분](content/08-calculus-and-autodiff/01-multivariable-calculus/index.md) · `필수` · 퀴즈 7
   - 극한·연속·미분 가능성 · 편미분과 방향미분 · Jacobian과 Hessian · chain rule · Taylor 전개
   - 선수: 7.1 벡터공간과 선형사상
-- **8.2** [행렬 미분](content/08-calculus-and-autodiff/02-matrix-calculus/index.md) · `필수`
+- **8.2** [행렬 미분](content/08-calculus-and-autodiff/02-matrix-calculus/index.md) · `필수` · 퀴즈 7
   - layout 규약 · 미분형(differential) 접근 · 자주 쓰는 항등식 · 신경망의 gradient
   - 선수: 8.1 다변수 미분
-- **8.3** [적분과 변수변환](content/08-calculus-and-autodiff/03-integration/index.md) · `필수`
+- **8.3** [적분과 변수변환](content/08-calculus-and-autodiff/03-integration/index.md) · `필수` · 퀴즈 7
   - 다중적분 · 변수변환 · 가우시안 적분 · 확률밀도의 변환
   - 선수: 8.1 다변수 미분
-- **8.4** [자동미분과 역전파](content/08-calculus-and-autodiff/04-automatic-differentiation/index.md) · `필수` · 위젯: 계산 그래프와 역전파
+- **8.4** [자동미분과 역전파](content/08-calculus-and-autodiff/04-automatic-differentiation/index.md) · `필수` · 퀴즈 7 · 위젯: 계산 그래프와 역전파
   - 미분 계산의 세 방법 · 계산 그래프 · forward mode와 reverse mode · 역전파 · 메모리와 고차미분 · gradient 검증 · gradient 소실·폭발
   - 선수: 8.2 행렬 미분
 
