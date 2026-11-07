@@ -1,0 +1,6 @@
+title = "순열 중요도 구현하기"
+chapter = "reliability/interpretability"
+objective = 1
+exec = "browser"
+entry = "permutation_importance"
+timeout_s = 10

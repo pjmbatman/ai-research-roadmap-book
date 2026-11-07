@@ -1,0 +1,6 @@
+title = "앙상블 예측의 분산 분해"
+chapter = "reliability/uncertainty-quantification"
+objective = 1
+exec = "browser"
+entry = "decompose"
+timeout_s = 10

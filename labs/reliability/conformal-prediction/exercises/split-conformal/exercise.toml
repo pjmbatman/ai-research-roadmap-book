@@ -1,0 +1,6 @@
+title = "split conformal 구간"
+chapter = "reliability/conformal-prediction"
+objective = 2
+exec = "browser"
+entry = "conformal_interval"
+timeout_s = 10
