@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1166문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1196문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -825,20 +825,20 @@ _분자와 결정의 표현, 물성 예측, 기계학습 원자간 퍼텐셜, �
 
 _ML 연구자를 위한 분자생물학 기초, 생물 서열 모델, 단백질 구조 예측과 설계, 유전체·단일세포 데이터, 평가와 누수를 다룬다._
 
-- **29.1** [ML 연구자를 위한 분자생물학 기초](content/29-life-sciences/01-biology-for-ml/index.md) · `필수`
-  - 생명의 분자 · 데이터의 종류 · 실험과 측정 · 공개 데이터베이스
+- **29.1** [ML 연구자를 위한 분자생물학 기초](content/29-life-sciences/01-biology-for-ml/index.md) · `필수` · 퀴즈 6
+  - 생명의 분자 · 데이터의 종류 · 실험과 측정 · 공개 데이터베이스 · 참고 문헌
   - 선수: 1.2 AI for Science의 지형
-- **29.2** [생물 서열 모델](content/29-life-sciences/02-sequence-models/index.md) · `심화`
-  - 서열의 표현 · 서열 모델 · 사전학습 언어모델 · 진화 정보
+- **29.2** [생물 서열 모델](content/29-life-sciences/02-sequence-models/index.md) · `심화` · 퀴즈 6
+  - 서열의 표현 · 서열 모델 · 사전학습 언어모델 · 진화 정보 · 참고 문헌
   - 선수: 29.1 ML 연구자를 위한 분자생물학 기초, 18.5 언어모델과 LLM의 기초
-- **29.3** [단백질 구조 예측과 설계](content/29-life-sciences/03-protein-structure/index.md) · `심화`
-  - 구조 예측 문제 · 평가 지표 · 설계 · 한계
+- **29.3** [단백질 구조 예측과 설계](content/29-life-sciences/03-protein-structure/index.md) · `심화` · 퀴즈 6
+  - 구조 예측 문제 · 평가 지표 · 설계 · 한계 · 참고 문헌
   - 선수: 29.2 생물 서열 모델, 24.8 대칭성을 반영한 과학 모델
-- **29.4** [유전체·단일세포 데이터](content/29-life-sciences/04-omics-and-single-cell/index.md) · `심화`
-  - 데이터의 특성 · 차원 축소와 군집 · 배치 효과 · 모델링
+- **29.4** [유전체·단일세포 데이터](content/29-life-sciences/04-omics-and-single-cell/index.md) · `심화` · 퀴즈 6
+  - 데이터의 특성 · 차원 축소와 군집 · 배치 효과 · 모델링 · 참고 문헌
   - 선수: 29.1 ML 연구자를 위한 분자생물학 기초, 16.5 비지도학습과 표현 탐색
-- **29.5** [생명과학 AI의 평가와 누수](content/29-life-sciences/05-bio-evaluation/index.md) · `필수`
-  - 유사성 기반 누수 · 벤치마크의 함정 · 실험 검증 · 재현성
+- **29.5** [생명과학 AI의 평가와 누수](content/29-life-sciences/05-bio-evaluation/index.md) · `필수` · 퀴즈 6
+  - 유사성 기반 누수 · 벤치마크의 함정 · 실험 검증 · 재현성 · 참고 문헌
   - 선수: 29.2 생물 서열 모델, 15.4 데이터 분할과 누수 방지
 
 ### 제30부. 에너지·배터리 <sub>AI for Battery Research</sub>
