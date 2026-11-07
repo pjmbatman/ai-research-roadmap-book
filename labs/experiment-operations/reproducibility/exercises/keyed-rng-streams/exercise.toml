@@ -1,0 +1,6 @@
+title = "이름으로 정해지는 난수 스트림"
+chapter = "experiment-operations/reproducibility"
+objective = 1
+exec = "browser"
+entry = "make_streams"
+timeout_s = 10

@@ -1,0 +1,6 @@
+title = "successive halving 구현하기"
+chapter = "experiment-operations/experiment-automation"
+objective = 2
+exec = "browser"
+entry = "successive_halving"
+timeout_s = 10

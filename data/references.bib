@@ -851,6 +851,29 @@
   pages   = {2079--2107},
   year    = {2010},
   note    = {확인: JMLR 논문 페이지와 초록. 모델 선택 기준의 분산이 선택 과정의 과적합과 평가의 선택 편향을 낳음}
+@article{sandve2013ten,
+  author  = {Sandve, Geir Kjetil and Nekrutenko, Anton and Taylor, James and Hovig, Eivind},
+  title   = {Ten Simple Rules for Reproducible Computational Research},
+  journal = {PLoS Computational Biology},
+  volume  = {9},
+  number  = {10},
+  pages   = {e1003285},
+  year    = {2013},
+  doi     = {10.1371/journal.pcbi.1003285},
+  note    = {확인: PubMed Central 기록(PMC3812051)과 규칙 목록. 결과 출처 추적, 수작업 단계 배제, 외부 프로그램 버전 보관, 난수 seed 기록 등 열 가지 규칙}
+}
+
+@inproceedings{henderson2018deep,
+  author    = {Henderson, Peter and Islam, Riashat and Bachman, Philip and Pineau, Joelle and Precup, Doina and Meger, David},
+  title     = {Deep Reinforcement Learning That Matters},
+  booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume    = {32},
+  number    = {1},
+  year      = {2018},
+  doi       = {10.1609/aaai.v32i1.11694},
+  eprint    = {1709.06560},
+  archivePrefix = {arXiv},
+  note      = {확인: AAAI 논문집 기록(DOI)과 arXiv 목록. seed·구현 차이에 따른 심층 강화학습 결과의 변동과 재현 가능한 보고 권고}
 }
 
 @article{bergstra2012random,
@@ -1318,4 +1341,93 @@
   pages     = {22--31},
   year      = {2017},
   note      = {확인: PMLR 서지 기록. 정책 갱신마다 제약 만족을 보장하는 trust region 계열 방법}
+  note    = {확인: JMLR 논문 페이지와 서지 기록. 같은 계산 예산에서 random search가 grid search보다 좋은 모델을 찾으며, 중요한 축이 소수인 경우가 많다는 논거}
+}
+
+@inproceedings{jamieson2016nonstochastic,
+  author    = {Jamieson, Kevin and Talwalkar, Ameet},
+  title     = {Non-stochastic Best Arm Identification and Hyperparameter Optimization},
+  booktitle = {Proceedings of the 19th International Conference on Artificial Intelligence and Statistics (AISTATS)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {51},
+  pages     = {240--248},
+  year      = {2016},
+  eprint    = {1502.07943},
+  archivePrefix = {arXiv},
+  note      = {확인: PMLR 51 논문 페이지와 arXiv 목록. successive halving을 하이퍼파라미터 탐색에 적용}
+}
+
+@article{li2018hyperband,
+  author  = {Li, Lisha and Jamieson, Kevin and DeSalvo, Giulia and Rostamizadeh, Afshin and Talwalkar, Ameet},
+  title   = {Hyperband: A Novel Bandit-Based Approach to Hyperparameter Optimization},
+  journal = {Journal of Machine Learning Research},
+  volume  = {18},
+  number  = {185},
+  pages   = {1--52},
+  year    = {2018},
+  eprint  = {1603.06560},
+  archivePrefix = {arXiv},
+  note    = {확인: JMLR 논문 페이지(18(185):1-52)와 arXiv 목록}
+}
+
+@inproceedings{li2020system,
+  author    = {Li, Liam and Jamieson, Kevin and Rostamizadeh, Afshin and Gonina, Ekaterina and Ben-tzur, Jonathan and Hardt, Moritz and Recht, Benjamin and Talwalkar, Ameet},
+  title     = {A System for Massively Parallel Hyperparameter Tuning},
+  booktitle = {Proceedings of Machine Learning and Systems 2 (MLSys 2020)},
+  year      = {2020},
+  eprint    = {1810.05934},
+  archivePrefix = {arXiv},
+  note      = {확인: MLSys 2020 논문집 초록과 arXiv 목록. 비동기 successive halving(ASHA)}
+}
+
+@inproceedings{akiba2019optuna,
+  author    = {Akiba, Takuya and Sano, Shotaro and Yanase, Toshihiko and Ohta, Takeru and Koyama, Masanori},
+  title     = {Optuna: A Next-generation Hyperparameter Optimization Framework},
+  booktitle = {Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (KDD)},
+  pages     = {2623--2631},
+  year      = {2019},
+  eprint    = {1907.10902},
+  archivePrefix = {arXiv},
+  note      = {확인: arXiv 목록과 Optuna 저장소의 인용 정보. ACM DOI는 확인하지 못해 적지 않음}
+}
+
+@inproceedings{melis2018state,
+  author    = {Melis, G{\'a}bor and Dyer, Chris and Blunsom, Phil},
+  title     = {On the State of the Art of Evaluation in Neural Language Models},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2018},
+  eprint    = {1707.05589},
+  archivePrefix = {arXiv},
+  note      = {확인: ICLR 2018 포스터 페이지와 arXiv 초록. 대규모 자동 탐색으로 다시 튜닝하면 잘 정규화한 표준 LSTM이 새 구조를 앞섬}
+}
+
+@inproceedings{lucic2018gans,
+  author    = {Lucic, Mario and Kurach, Karol and Michalski, Marcin and Gelly, Sylvain and Bousquet, Olivier},
+  title     = {Are {GAN}s Created Equal? A Large-Scale Study},
+  booktitle = {Advances in Neural Information Processing Systems 31 (NeurIPS 2018)},
+  year      = {2018},
+  eprint    = {1711.10337},
+  archivePrefix = {arXiv},
+  note      = {확인: arXiv 초록과 NeurIPS 2018 리뷰 페이지. 충분한 계산 예산과 하이퍼파라미터 탐색에서 대부분의 GAN이 비슷한 FID에 이름. 쪽수는 확인하지 못해 적지 않음}
+}
+
+@article{williams2009roofline,
+  author  = {Williams, Samuel and Waterman, Andrew and Patterson, David},
+  title   = {Roofline: An Insightful Visual Performance Model for Multicore Architectures},
+  journal = {Communications of the ACM},
+  volume  = {52},
+  number  = {4},
+  year    = {2009},
+  doi     = {10.1145/1498765.1498785},
+  note    = {확인: OSTI 서지 기록(DOI)과 Berkeley 기술 보고서 UCB/EECS-2008-134. 성능 상한 = min(최대 연산 속도, 메모리 대역폭 × 연산 강도). 쪽수는 확인하지 못해 적지 않음}
+}
+
+@inproceedings{micikevicius2018mixed,
+  author    = {Micikevicius, Paulius and Narang, Sharan and Alben, Jonah and Diamos, Gregory and Elsen, Erich and Garcia, David and Ginsburg, Boris and Houston, Michael and Kuchaiev, Oleksii and Venkatesh, Ganesh and Wu, Hao},
+  title     = {Mixed Precision Training},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2018},
+  eprint    = {1710.03740},
+  archivePrefix = {arXiv},
+  note      = {확인: arXiv 목록(ICLR 2018 게재 표기)과 ICLR 2018 서지 기록. fp16 학습의 loss scaling과 fp32 가중치 사본}
 }

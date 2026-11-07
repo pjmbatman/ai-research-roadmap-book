@@ -1,0 +1,6 @@
+title = "run 기록에서 결과 표 만들기"
+chapter = "experiment-operations/experiment-tracking"
+objective = 2
+exec = "browser"
+entry = "summarize"
+timeout_s = 10
