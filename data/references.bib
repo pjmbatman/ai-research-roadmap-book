@@ -1501,3 +1501,53 @@
   doi       = {10.1109/CVPR52729.2023.01499},
   note      = {확인: CVF open access 페이지. 문맥 블록의 표현으로 목표 블록의 표현을 예측, 손으로 설계한 증강 없이 학습}
 }
+
+@misc{bommasani2021opportunities,
+  author        = {Bommasani, Rishi and others},
+  title         = {On the Opportunities and Risks of Foundation Models},
+  year          = {2021},
+  eprint        = {2108.07258},
+  archivePrefix = {arXiv},
+  note          = {확인: arXiv 초록. 넓은 데이터로 학습해 폭넓은 하위 과제에 적응할 수 있는 모델을 foundation model로 정의, 동질화로 결함이 하위 모델에 물려지는 위험}
+}
+
+@inproceedings{houlsby2019parameter,
+  author    = {Houlsby, Neil and Giurgiu, Andrei and Jastrzebski, Stanislaw and others},
+  title     = {Parameter-Efficient Transfer Learning for {NLP}},
+  booktitle = {Proceedings of the 36th International Conference on Machine Learning},
+  series    = {PMLR},
+  volume    = {97},
+  pages     = {2790--2799},
+  year      = {2019},
+  note      = {확인: ICML 2019 발표 페이지와 서지 기록. adapter 모듈; GLUE에서 과제당 약 3.6% 파라미터로 full fine-tuning의 0.8% 이내}
+}
+
+@inproceedings{hu2022lora,
+  author    = {Hu, Edward J. and Shen, Yelong and Wallis, Phillip and Allen-Zhu, Zeyuan and Li, Yuanzhi and Wang, Shean and Wang, Lu and Chen, Weizhu},
+  title     = {{LoRA}: Low-Rank Adaptation of Large Language Models},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2022},
+  eprint    = {2106.09685},
+  archivePrefix = {arXiv},
+  note      = {확인: ICLR 2022 서지 기록과 초록. 사전학습 가중치를 고정하고 저랭크 분해 행렬만 학습; GPT-3 175B 대비 학습 파라미터 약 1만 분의 1, GPU 메모리 약 3분의 1, 추가 추론 지연 없음}
+}
+
+@inproceedings{gururangan2020dont,
+  author    = {Gururangan, Suchin and Marasovi{\'c}, Ana and Swayamdipta, Swabha and Lo, Kyle and Beltagy, Iz and Downey, Doug and Smith, Noah A.},
+  title     = {Don't Stop Pretraining: Adapt Language Models to Domains and Tasks},
+  booktitle = {Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics},
+  pages     = {8342--8360},
+  year      = {2020},
+  doi       = {10.18653/v1/2020.acl-main.740},
+  note      = {확인: ACL Anthology 서지 기록. 도메인·과제 자료로 사전학습을 이어 하는 효과}
+}
+
+@inproceedings{kumar2022finetuning,
+  author    = {Kumar, Ananya and Raghunathan, Aditi and Jones, Robbie and Ma, Tengyu and Liang, Percy},
+  title     = {Fine-Tuning can Distort Pretrained Features and Underperform Out-of-Distribution},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2022},
+  eprint    = {2202.10054},
+  archivePrefix = {arXiv},
+  note      = {확인: arXiv 초록과 ICLR 2022 서지 기록. 좋은 사전학습 특징과 큰 분포 이동에서 full fine-tuning이 OOD에서 linear probe보다 나쁠 수 있음, LP-FT 제안}
+}
