@@ -15,7 +15,7 @@ const pageData = {
   </div>
   <div class="widget-gallery prose">
     {widgets.map((w) => (
-      <section class="tile" id={`w-${w.name}`}>
+      <section class="tile" id={`w-${w.name}`} data-status={w.status}>
         <div class="widget" data-widget={w.name} data-attrs="{}"></div>
         <p class="muted" style="font-size:13px;margin:10px 0 0"><code>{w.name}</code> · {w.status} · {w.chapters.join(", ")}</p>
       </section>

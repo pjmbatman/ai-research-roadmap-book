@@ -350,6 +350,18 @@ await test("트랙 로드맵: 노드 서랍에서 상태를 고르면 노드와 
   await page.keyboard.press("Escape");
   await shot("roadmap");
 });
+await test("위젯 모음: 구현된 위젯이 모두 뜨고 그림이 그려진다", async () => {
+  await go("/widgets/");
+  const names = await page.$$eval('section[data-status]:not([data-status="planned"]) .widget', (ns) => ns.map((n) => n.dataset.widget));
+  assert(names.length >= 3, `구현된 위젯 ${names.length}개`);
+  for (const name of names) {
+    const w = page.locator(`.widget[data-widget="${name}"]`);
+    await w.scrollIntoViewIfNeeded();
+    await page.waitForSelector(`.widget[data-widget="${name}"][data-ready="true"]`, { timeout: 8000 }).catch(() => { throw new Error(`${name} 준비 안 됨`); });
+    const box = await w.locator("canvas").first().boundingBox();
+    assert(box && box.width > 100 && box.height > 80, `${name} 캔버스 크기 ${JSON.stringify(box)}`);
+  }
+});
 await test("모바일 폭에서 메인·퀘스트·실습실이 가로로 넘치지 않는다", async () => {
   await page.setViewportSize({ width: 390, height: 844 });
   for (const u of ["/", CH123, CH72 + "lab/"]) {
