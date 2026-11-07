@@ -232,6 +232,8 @@ step   W1(1차 흐름 v_θ)   W1(reflow)
 
 **최적 수송과의 관계.** 1차원에서 ODE 궤적은 서로 추월할 수 없으므로 흐름이 만드는 짝은 순서를 보존하고, 순서를 보존하는 짝은 볼록 비용(예: $\lvert x_1 - x_0 \rvert^2$)에 대한 최적 수송(optimal transport) 짝이다. 그래서 1차원의 reflow 짝은 곧바로 최적 수송 짝이고, 그 짝의 직선들은 교차하지 않는다. 위에서 손실 바닥이 거의 0이 된 이유다. 고차원에서는 한 번의 reflow로 최적 수송 짝이 되지 않으며, 경로를 곧게 하는 것과 최적 수송을 푸는 것은 일반적으로 다른 문제다.
 
+::widget{name="flow-paths"}
+
 ## 확산 모델과의 관계
 
 **같은 틀.** 19.5장의 확산 모델이 만드는 중간 분포도 $\mathbf{x}_t = \alpha_t\,\mathbf{x}_1 + \sigma_t\,\boldsymbol{\varepsilon}$, $\boldsymbol{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ 꼴의 **가우시안 경로**다. flow matching의 직선 경로는 $\alpha_t = t$, $\sigma_t = 1 - t$인 특수한 경우다. 가우시안 경로에서는 네 가지 예측 대상이 서로 바뀐다.
