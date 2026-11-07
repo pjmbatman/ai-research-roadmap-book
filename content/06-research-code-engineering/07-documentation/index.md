@@ -41,7 +41,7 @@ README는 저장소의 첫 화면이다. GitHub 같은 호스팅 서비스는 �
 평판 열전달 시뮬레이션을 대신하는 신경망 surrogate 모델. 논문 "..."(2026)의 코드다.
 논문 제출본은 태그 `v1.0`에 고정되어 있다.
 
-## 설치
+### 설치
 Python 3.12, uv가 필요하다(집필 시점 예시: `uv --version`으로 확인).
 ```bash
 git clone <저장소 주소> && cd thermal-surrogate
@@ -49,24 +49,24 @@ uv sync --locked                 # uv.lock 그대로 설치
 uv run python -m thermal_surrogate.check_env   # 환경 확인: "ok"가 출력되어야 한다
 ```
 
-## 데이터 준비
+### 데이터 준비
 ```bash
 uv run python scripts/download_data.py --out data/raw   # 약 2.1 GB, sha256 검사 포함
 ```
 `data/raw/sim_*.h5` 파일 48개가 생긴다. 데이터 설명서: docs/data.md
 
-## 실행
+### 실행
 ```bash
 uv run python scripts/train.py --config configs/base.yaml --seed 0
 uv run python scripts/eval.py --run outputs/<run-id>
 ```
 
-## 결과 재현
+### 결과 재현
 | 결과 | 명령 | 기대 결과 | 시간 |
 |---|---|---|---|
 | 표 2, 1행 | `bash scripts/reproduce_table2.sh` | test MAE 0.031 ± 0.002 K | GPU 1장 약 20분 |
 
-## 인용
+### 인용
 CITATION.cff를 참고한다. 라이선스: MIT
 ````
 
@@ -90,7 +90,7 @@ parser.add_argument("--learning-rate", type=float, default=1e-3)
 parser.add_argument("--seed", type=int, default=0)
 
 readme = """
-## 결과 재현
+### 결과 재현
 ~~~bash
 python scripts/train.py --config configs/base.yaml --seed 1
 python scripts/train.py --config configs/base.yaml --lr 3e-4 --seed 2
@@ -244,17 +244,17 @@ docstring에서 하지 않을 것도 있다. 코드를 문장으로 옮겨 적�
 - 상태: 채택
 - 날짜: 2026-10-12
 
-## 맥락
+### 맥락
 시료 120개를 각각 5–20회 측정했다. 행 단위로 나누면 같은 시료가 train과 test에 함께 들어간다.
 
-## 결정
+### 결정
 sample_id 단위로 train/val/test = 80/20/20 시료로 나눈다. 시드는 configs/split.yaml에 고정한다.
 
-## 검토한 대안
+### 검토한 대안
 - 행 단위 무작위 분할: 데이터를 더 쓰지만 test 점수가 새 시료 성능을 과대평가한다(실험 E-07에서 MAE 차이 약 2배).
 - 측정 날짜 단위 분할: 장비 상태 변화를 반영하지만 날짜별 시료 수가 고르지 않다.
 
-## 결과
+### 결과
 - 보고하는 test 점수는 "처음 보는 시료"에 대한 성능이다.
 - train 데이터가 행 단위 분할보다 적다.
 ```
@@ -274,13 +274,13 @@ git의 커밋 기록은 모든 변경을 담지만, 사람이 읽기에는 너�
 연구 코드의 변경 기록에서 가장 중요한 것은 **결과에 영향을 준 변경을 따로 표시하는 것**이다. 소프트웨어의 기준으로는 작은 수정(상수 하나, 버그 하나)이 연구 결과를 바꿀 수 있다. 앞의 열전도도 기본값 변경은 모든 열유속을 약 3% 줄인다. metric 집계 버그를 고치면(6.6장) 이전 표의 숫자가 모두 바뀐다.
 
 ```markdown
-## [0.4.0] - 2026-11-02
+### [0.4.0] - 2026-11-02
 
-### Changed
+#### Changed
 - **[결과 영향]** 기본 열전도도를 0.6에서 0.58 W/(m K)로 고쳤다(측정값 반영, ADR 0005).
   모든 열유속 출력이 약 3% 줄어든다. v0.3.x로 만든 그림 3, 표 2를 다시 계산해야 한다.
 
-### Fixed
+#### Fixed
 - **[결과 영향]** 평가 MAE를 batch 평균의 평균으로 계산하던 버그를 고쳤다(#42).
   마지막 batch가 작을 때 MAE가 달라졌다. 영향받는 run: 2026-10-01 이후 batch_size=32인 평가 전부.
 - README의 학습 명령에서 옛 인자 `--lr`을 `--learning-rate`로 고쳤다.

@@ -13,7 +13,7 @@ parser.add_argument("--learning-rate", type=float, default=1e-3)
 parser.add_argument("--seed", type=int, default=0)
 
 readme = """
-## 결과 재현
+### 결과 재현
 ~~~bash
 python scripts/train.py --config configs/base.yaml --seed 1
 python scripts/train.py --config configs/base.yaml --lr 3e-4 --seed 2
