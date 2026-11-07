@@ -1,0 +1,6 @@
+title = "broadcasting의 gradient 되돌리기"
+chapter = "deep-learning-pytorch/tensors-and-autograd"
+objective = 2
+exec = "browser"
+entry = "unbroadcast"
+timeout_s = 10
