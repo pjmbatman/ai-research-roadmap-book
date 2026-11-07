@@ -1,0 +1,6 @@
+title = "RBF 커널의 random Fourier features"
+chapter = "classical-ml/kernels-and-neighbors"
+objective = 3
+exec = "browser"
+entry = "random_fourier_features"
+timeout_s = 10

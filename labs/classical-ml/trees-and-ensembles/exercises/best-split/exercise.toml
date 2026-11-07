@@ -1,0 +1,6 @@
+title = "회귀 트리의 최적 분할 찾기"
+chapter = "classical-ml/trees-and-ensembles"
+objective = 1
+exec = "browser"
+entry = "best_split"
+timeout_s = 10

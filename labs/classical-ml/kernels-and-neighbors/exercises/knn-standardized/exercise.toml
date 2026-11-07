@@ -1,0 +1,6 @@
+title = "표준화를 포함한 kNN 회귀"
+chapter = "classical-ml/kernels-and-neighbors"
+objective = 1
+exec = "browser"
+entry = "knn_predict"
+timeout_s = 10

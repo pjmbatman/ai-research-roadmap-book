@@ -1,0 +1,6 @@
+title = "표준화와 벌점 없는 절편을 포함한 Ridge 회귀"
+chapter = "classical-ml/linear-models"
+objective = 1
+exec = "browser"
+entry = "fit_ridge"
+timeout_s = 10
