@@ -1,0 +1,6 @@
+title = "미분 연산자의 행렬"
+chapter = "linear-algebra/vector-spaces"
+objective = 3
+exec = "browser"
+entry = "derivative_matrix"
+timeout_s = 10
