@@ -229,6 +229,8 @@ for k in [1, 2, 4, 6, 8, 16, 48]:
 
 48층에서 구간 길이 6–8이면 저장량이 48에서 14로 3분의 1 아래로 준다. 구간을 너무 길게 잡으면(48) 경계는 하나뿐이지만 backward 때 구간 전체를 다시 만들어야 해서 오히려 절약이 없다. 이 표는 모든 층이 같은 크기라는 단순화이고, 실제로는 활성값이 큰 층(attention, 큰 합성곱) 주변을 구간으로 묶는 것이 효과적이다. PyTorch에서는 `torch.utils.checkpoint.checkpoint`로 구간(보통 transformer block 하나)을 감싼다. 앞의 측정 셀에서 본 것처럼, checkpointing은 저장하는 텐서만 바꾸고 계산 결과는 바꾸지 않는다.
 
+::widget{name="checkpoint-tradeoff"}
+
 ::quiz{id="checkpoint-segment"}
 
 **gradient accumulation.** micro-batch $b$로 $k$번 forward·backward를 하고 gradient를 모아 한 번 갱신하면 유효 batch는 $bk$다(10.4장, 17.5장). 메모리 관점에서 중요한 것은 **활성값이 micro-batch에 비례**하고 정적 메모리는 그대로라는 점이다. 그래서 정적 메모리가 GPU를 거의 다 차지한 경우에는 accumulation으로 해결되지 않는다. 대가는 step당 시간이다. 작은 micro-batch는 GPU의 연산 강도를 낮춰(5.5장) 같은 표본 수를 처리하는 데 더 오래 걸릴 수 있다. BatchNorm이 있는 모델은 통계를 micro-batch에서 계산하므로 큰 batch와 같은 학습이 아니다.
