@@ -1,0 +1,6 @@
+title = "Latin hypercube 표본 만들기"
+chapter = "data/synthetic-data"
+objective = 2
+exec = "browser"
+entry = "latin_hypercube"
+timeout_s = 10
