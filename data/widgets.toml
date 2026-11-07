@@ -547,37 +547,37 @@ status = "prototype"
 name = "cost-threshold"
 title = "비용 비율과 임계값"
 chapters = ["reliability/decision-making"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "checkpoint-tradeoff"
 title = "gradient checkpointing"
 chapters = ["experiment-operations/memory-management"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "ring-allreduce"
 title = "ring all-reduce"
 chapters = ["experiment-operations/distributed-training"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "batching-latency"
 title = "배치 크기와 지연·처리량"
 chapters = ["experiment-operations/inference-and-deployment"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "citation-pagerank"
 title = "인용 그래프 PageRank"
 chapters = ["research-practice/literature-search"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "power-vs-seeds"
 title = "검정력과 seed 수"
 chapters = ["research-practice/experimental-design"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "factorial-effects"
