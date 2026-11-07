@@ -181,6 +181,8 @@ print("좌표가 같은가 :", np.allclose(R_ang, R2), "  고윳값 차이 < 1e-
 좌표가 같은가 : False   고윳값 차이 < 1e-8: True
 ```
 
+::widget{name="coulomb-matrix-invariance"}
+
 **거울상.** 거리는 반사에도 불변이다. 그래서 거리만 쓰는 표현은 거울상 관계인 두 분자, 즉 **거울상 이성질체**(enantiomer)를 구별하지 못한다. 탄소 하나에 H, F, Cl, Br이 붙은 키랄 분자로 확인한다. 반사에 부호가 바뀌는 양(세 결합 벡터가 만드는 부호 있는 부피)은 둘을 구별한다.
 
 ```python {exec="browser" session="rep"}

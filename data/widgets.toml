@@ -116,3 +116,33 @@ name = "battery-ecm"
 title = "등가회로 모델 시뮬레이터"
 chapters = ["battery-ai/battery-models", "battery-ai/battery-fundamentals"]
 status = "prototype"
+
+[[widgets]]
+name = "coulomb-matrix-invariance"
+title = "Coulomb 행렬 고윳값의 불변성"
+chapters = ["chemistry-and-materials/molecular-representations"]
+status = "planned"
+
+[[widgets]]
+name = "scaffold-split-explorer"
+title = "무작위 분할 vs scaffold 분할"
+chapters = ["chemistry-and-materials/property-prediction"]
+status = "planned"
+
+[[widgets]]
+name = "md-energy-conservation"
+title = "분자동역학 에너지 보존"
+chapters = ["chemistry-and-materials/interatomic-potentials"]
+status = "planned"
+
+[[widgets]]
+name = "predictor-exploitation"
+title = "예측 모델 착취와 적용 영역"
+chapters = ["chemistry-and-materials/molecular-design"]
+status = "planned"
+
+[[widgets]]
+name = "leakage-threshold"
+title = "근접 중복 누수 임계 탐색"
+chapters = ["chemistry-and-materials/chemistry-evaluation"]
+status = "planned"
