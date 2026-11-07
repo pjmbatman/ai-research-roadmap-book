@@ -82,6 +82,8 @@ C order strides: (8000, 8)  Fortran order strides: (8, 8000)
 
 **배열의 메모리 배치.** 5.3장의 strides가 여기서 성능의 문제가 된다. NumPy의 기본 C order(row-major)에서는 마지막 축이 연속이다. `(1000, 1000)` 배열에서 `A[i, j]`의 `j`를 한 칸 옮기면 8 byte, `i`를 한 칸 옮기면 8000 byte를 건너뛴다. Fortran order(column-major, Fortran·MATLAB·Julia의 기본)는 반대다. 반복문이나 컴파일된 kernel이 배열을 훑을 때는 **가장 안쪽 반복이 연속된 축을 돌게** 한다. NumPy의 내장 연산은 대개 이를 알아서 처리하지만, 전치한 view(`A.T`)처럼 연속이 아닌 배열을 C 확장이나 GPU로 넘길 때는 `np.ascontiguousarray`로 복사가 일어나거나, 복사가 필요하다는 오류가 날 수 있다.
 
+::widget{name="strides-cache"}
+
 ::quiz{id="row-major-traversal"}
 
 ## GPU의 계산 모델
