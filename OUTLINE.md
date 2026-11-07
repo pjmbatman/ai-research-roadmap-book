@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 408문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 429문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -342,14 +342,14 @@ _확률변수와 분포, 조건부확률, 다변량 가우시안, 기댓값과 �
 - **11.4** [다변량 가우시안](content/11-probability/04-multivariate-gaussian/index.md) · `필수` · 위젯: 다변량 가우시안의 조건부분포
   - 정의와 기하 · 주변화와 조건부 · 선형 변환과 선형-가우시안 모델 · 정밀도 행렬 · 활용
   - 선수: 11.3 결합·주변·조건부분포와 독립성, 7.5 고윳값과 대칭행렬
-- **11.5** [기댓값·부등식·극한정리](content/11-probability/05-expectation-and-limits/index.md) · `필수`
-  - 기댓값과 모멘트 · 부등식 · 집중 부등식 · 극한정리
+- **11.5** [기댓값·부등식·극한정리](content/11-probability/05-expectation-and-limits/index.md) · `필수` · 퀴즈 7
+  - 기댓값과 모멘트 · 부등식 · 집중 부등식 · 극한정리 · 참고 문헌
   - 선수: 11.2 주요 분포와 지수족
-- **11.6** [Monte Carlo와 샘플링](content/11-probability/06-sampling/index.md) · `필수`
-  - Monte Carlo 추정 · 기본 샘플링 · importance sampling · 분산 감소 · 재매개변수화
+- **11.6** [Monte Carlo와 샘플링](content/11-probability/06-sampling/index.md) · `필수` · 퀴즈 7
+  - Monte Carlo 추정 · 기본 샘플링 · importance sampling · 분산 감소 · 재매개변수화 · 참고 문헌
   - 선수: 11.5 기댓값·부등식·극한정리
-- **11.7** [확률과정 기초](content/11-probability/07-stochastic-processes/index.md) · `심화`
-  - Markov chain · Gaussian process · random walk와 Brownian motion · SDE의 직관 · 시계열 확률모형
+- **11.7** [확률과정 기초](content/11-probability/07-stochastic-processes/index.md) · `심화` · 퀴즈 7
+  - Markov chain · Gaussian process · random walk와 Brownian motion · SDE의 직관 · 시계열 확률모형 · 참고 문헌
   - 선수: 11.6 Monte Carlo와 샘플링
 
 ### 제12부. 통계적 추론 <sub>Statistical Inference</sub>
