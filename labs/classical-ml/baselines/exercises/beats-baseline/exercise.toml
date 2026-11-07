@@ -1,0 +1,6 @@
+title = "새 모델은 baseline을 이기는가: 짝지은 부트스트랩 판정"
+chapter = "classical-ml/baselines"
+objective = 3
+exec = "browser"
+entry = "paired_verdict"
+timeout_s = 10

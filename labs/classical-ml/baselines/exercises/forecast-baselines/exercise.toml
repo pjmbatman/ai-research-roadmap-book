@@ -1,0 +1,6 @@
+title = "시계열의 단순 baseline 네 개"
+chapter = "classical-ml/baselines"
+objective = 1
+exec = "browser"
+entry = "forecast_baselines"
+timeout_s = 10
