@@ -25,6 +25,8 @@ _freeze/
 
 # Labs outputs and data (데이터·결과는 커밋하지 않는다)
 labs/**/data/
+# 15부(데이터) 실습 폴더 자체는 labs/data/ 이므로 위 규칙에서 뺀다(그 안의 data/ 폴더는 여전히 무시).
+!labs/data/
 labs/**/outputs/
 labs/**/runs/
 *.ckpt

@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 568문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 606문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -434,23 +434,23 @@ _엔트로피와 KL, 상호정보량, 목적함수 설계의 원리, 일반화 �
 
 _데이터의 의미와 저장 형식, 전처리와 탐색적 분석, 분할과 누수 방지, 버전·문서화, 합성·시뮬레이션 데이터를 다룬다._
 
-- **15.1** [데이터의 의미와 구조](content/15-data/01-data-semantics/index.md) · `필수`
-  - 데이터의 단위 · label의 생성 과정 · schema와 metadata · 원본 보존
+- **15.1** [데이터의 의미와 구조](content/15-data/01-data-semantics/index.md) · `필수` · 퀴즈 6
+  - 데이터의 단위 · label의 생성 과정 · schema와 metadata · 원본 보존 · 참고 문헌
   - 선수: 1.3 문제를 수학적으로 정의하기
-- **15.2** [저장 형식과 대용량 데이터](content/15-data/02-storage-formats/index.md) · `필수`
+- **15.2** [저장 형식과 대용량 데이터](content/15-data/02-storage-formats/index.md) · `필수` · 퀴즈 6
   - 형식 비교 · 열 지향 저장과 압축 · 대용량 처리 · 데이터 접근 패턴
   - 선수: 15.1 데이터의 의미와 구조
-- **15.3** [전처리와 탐색적 분석](content/15-data/03-preprocessing-and-eda/index.md) · `필수`
-  - 품질 문제 · 정규화와 스케일링 · 시계열 전처리 · 특징 추출 · 탐색적 분석과 시각화
+- **15.3** [전처리와 탐색적 분석](content/15-data/03-preprocessing-and-eda/index.md) · `필수` · 퀴즈 6
+  - 품질 문제 · 정규화와 스케일링 · 시계열 전처리 · 특징 추출 · 탐색적 분석과 시각화 · 참고 문헌
   - 선수: 15.1 데이터의 의미와 구조
-- **15.4** [데이터 분할과 누수 방지](content/15-data/04-splitting-and-leakage/index.md) · `필수` · 위젯: 데이터 분할과 누수
-  - 분할 전략 · 독립성의 단위 · 누수의 유형 · fit은 학습 데이터에서만 · validation과 test의 역할 · 사전학습 데이터와의 중복 · 외부 검증
+- **15.4** [데이터 분할과 누수 방지](content/15-data/04-splitting-and-leakage/index.md) · `필수` · 퀴즈 7 · 위젯: 데이터 분할과 누수
+  - 분할 전략 · 독립성의 단위 · 누수의 유형 · fit은 학습 데이터에서만 · validation과 test의 역할 · 사전학습 데이터와의 중복 · 외부 검증 · 참고 문헌
   - 선수: 15.3 전처리와 탐색적 분석
-- **15.5** [데이터셋 버전·문서화·라이선스](content/15-data/05-dataset-versioning/index.md) · `필수`
-  - 버전 관리 · 데이터 통합 · 데이터셋 문서 · 라이선스와 이용 조건 · 민감정보 · 업데이트와 재실험
+- **15.5** [데이터셋 버전·문서화·라이선스](content/15-data/05-dataset-versioning/index.md) · `필수` · 퀴즈 7
+  - 버전 관리 · 데이터 통합 · 데이터셋 문서 · 라이선스와 이용 조건 · 민감정보 · 업데이트와 재실험 · 참고 문헌
   - 선수: 15.4 데이터 분할과 누수 방지
-- **15.6** [합성 데이터와 시뮬레이션 데이터](content/15-data/06-synthetic-data/index.md) · `심화`
-  - 시뮬레이션 데이터의 생성 · 실험 설계 · 합성 데이터의 위험 · sim-to-real
+- **15.6** [합성 데이터와 시뮬레이션 데이터](content/15-data/06-synthetic-data/index.md) · `심화` · 퀴즈 6
+  - 시뮬레이션 데이터의 생성 · 실험 설계 · 합성 데이터의 위험 · sim-to-real · 참고 문헌
   - 선수: 15.5 데이터셋 버전·문서화·라이선스, 9.6 ODE 수치해법
 
 ### 제16부. 고전 머신러닝과 통계 모델링 <sub>Classical Machine Learning and Statistical Modeling</sub>
