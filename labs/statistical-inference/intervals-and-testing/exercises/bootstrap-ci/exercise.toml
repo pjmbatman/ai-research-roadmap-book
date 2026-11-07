@@ -1,0 +1,6 @@
+title = "부트스트랩 신뢰구간: 샘플 단위와 그룹 단위"
+chapter = "statistical-inference/intervals-and-testing"
+objective = 2
+exec = "browser"
+entry = "group_bootstrap_ci"
+timeout_s = 20

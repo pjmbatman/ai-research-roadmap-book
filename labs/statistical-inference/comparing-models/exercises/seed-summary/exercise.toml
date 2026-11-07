@@ -1,0 +1,6 @@
+title = "seed 결과 요약: 표준편차, 표준오차, 짝지은 차이"
+chapter = "statistical-inference/comparing-models"
+objective = 1
+exec = "browser"
+entry = "paired_summary"
+timeout_s = 10

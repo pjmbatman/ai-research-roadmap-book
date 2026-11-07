@@ -1,0 +1,6 @@
+title = "여러 데이터셋에서의 평균 순위와 critical difference"
+chapter = "statistical-inference/comparing-models"
+objective = 2
+exec = "browser"
+entry = "average_ranks"
+timeout_s = 10

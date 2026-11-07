@@ -36,3 +36,139 @@
   doi     = {10.1198/016214506000001437},
   note    = {확인: 서지 기록과 초록. 적정 점수 규칙의 이론, CRPS, 분위수 추정과 interval score}
 }
+
+@article{efron1979bootstrap,
+  author  = {Efron, Bradley},
+  title   = {Bootstrap Methods: Another Look at the Jackknife},
+  journal = {The Annals of Statistics},
+  volume  = {7},
+  number  = {1},
+  pages   = {1--26},
+  year    = {1979},
+  doi     = {10.1214/aos/1176344552},
+  note    = {확인: Project Euclid 서지 기록과 초록. 미지 분포에서 통계량의 표본분포를 재표본화로 추정하는 부트스트랩의 원 논문}
+}
+
+@article{efron1987better,
+  author  = {Efron, Bradley},
+  title   = {Better Bootstrap Confidence Intervals},
+  journal = {Journal of the American Statistical Association},
+  volume  = {82},
+  number  = {397},
+  year    = {1987},
+  doi     = {10.1080/01621459.1987.10478410},
+  note    = {확인: 서지 기록과 초록. BCa(bias-corrected and accelerated) 부트스트랩 구간. 쪽수는 토론 포함 여부에 따라 출처마다 달라 생략}
+}
+
+@article{benjamini1995controlling,
+  author  = {Benjamini, Yoav and Hochberg, Yosef},
+  title   = {Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing},
+  journal = {Journal of the Royal Statistical Society: Series B (Methodological)},
+  volume  = {57},
+  number  = {1},
+  pages   = {289--300},
+  year    = {1995},
+  doi     = {10.1111/j.2517-6161.1995.tb02031.x},
+  note    = {확인: 서지 기록과 초록. FDR을 기각된 가설 중 거짓 기각 비율의 기댓값으로 정의하고, 독립 검정통계량에서 FDR을 제어하는 순차적 절차를 제시}
+}
+
+@article{gelman2014statistical,
+  author  = {Gelman, Andrew and Loken, Eric},
+  title   = {The Statistical Crisis in Science},
+  journal = {American Scientist},
+  volume  = {102},
+  number  = {6},
+  pages   = {460},
+  year    = {2014},
+  doi     = {10.1511/2014.111.460},
+  note    = {확인: 서지 기록과 초록. 데이터에 따라 달라지는 분석(garden of forking paths)이 의도적 p-hacking 없이도 다중 비교 문제를 만든다는 주장}
+}
+
+@article{wasserstein2016asa,
+  author  = {Wasserstein, Ronald L. and Lazar, Nicole A.},
+  title   = {The ASA's Statement on p-Values: Context, Process, and Purpose},
+  journal = {The American Statistician},
+  volume  = {70},
+  number  = {2},
+  pages   = {129--133},
+  year    = {2016},
+  doi     = {10.1080/00031305.2016.1154108},
+  note    = {확인: 서지 기록과 원문 PDF 목록. p-value는 가설이 참일 확률이나 효과의 크기를 재지 않는다는 원칙 등}
+}
+
+@article{dietterich1998approximate,
+  author  = {Dietterich, Thomas G.},
+  title   = {Approximate Statistical Tests for Comparing Supervised Classification Learning Algorithms},
+  journal = {Neural Computation},
+  volume  = {10},
+  number  = {7},
+  pages   = {1895--1923},
+  year    = {1998},
+  doi     = {10.1162/089976698300017197},
+  note    = {확인: 서지 기록과 저자 사본 초록. 반복 무작위 분할 t 검정의 높은 1종 오류, 10-fold CV t 검정의 다소 높은 1종 오류, McNemar 검정과 5x2 CV 검정 권장}
+}
+
+@article{nadeau2003inference,
+  author  = {Nadeau, Claude and Bengio, Yoshua},
+  title   = {Inference for the Generalization Error},
+  journal = {Machine Learning},
+  volume  = {52},
+  pages   = {239--281},
+  year    = {2003},
+  doi     = {10.1023/A:1024068626366},
+  note    = {확인: 서지 기록과 초록. 학습 세트 선택의 변동을 반영하는 교차검증 분산 추정량과 그에 기반한 검정}
+}
+
+@article{bengio2004unbiased,
+  author  = {Bengio, Yoshua and Grandvalet, Yves},
+  title   = {No Unbiased Estimator of the Variance of K-Fold Cross-Validation},
+  journal = {Journal of Machine Learning Research},
+  volume  = {5},
+  pages   = {1089--1105},
+  year    = {2004},
+  note    = {확인: JMLR 논문 페이지 초록. 모든 분포에서 성립하는 k-fold CV 분산의 불편 추정량이 없음, 오차 상관을 무시한 순진한 추정량은 분산을 크게 과소평가할 수 있음}
+}
+
+@article{demsar2006statistical,
+  author  = {Dem{\v{s}}ar, Janez},
+  title   = {Statistical Comparisons of Classifiers over Multiple Data Sets},
+  journal = {Journal of Machine Learning Research},
+  volume  = {7},
+  pages   = {1--30},
+  year    = {2006},
+  note    = {확인: JMLR 논문 페이지 초록. 두 분류기에는 Wilcoxon signed-rank, 여러 분류기에는 Friedman 검정과 사후 검정 권장, critical difference 그림 제안}
+}
+
+@inproceedings{bouthillier2021accounting,
+  author    = {Bouthillier, Xavier and others},
+  title     = {Accounting for Variance in Machine Learning Benchmarks},
+  booktitle = {Proceedings of Machine Learning and Systems 3 (MLSys 2021)},
+  year      = {2021},
+  eprint    = {2103.03098},
+  archivePrefix = {arXiv},
+  note      = {확인: MLSys 2021 논문집 초록과 arXiv 목록. 데이터 샘플링·초기화·하이퍼파라미터 선택의 변동이 벤치마크 결과에 미치는 영향과 비교 방법 권고}
+}
+
+@article{nelder1972generalized,
+  author  = {Nelder, John A. and Wedderburn, Robert W. M.},
+  title   = {Generalized Linear Models},
+  journal = {Journal of the Royal Statistical Society: Series A (General)},
+  volume  = {135},
+  number  = {3},
+  pages   = {370--384},
+  year    = {1972},
+  doi     = {10.2307/2344614},
+  note    = {확인: 서지 기록(Rothamsted 저장소 등)과 초록. 지수족 관측에 대한 선형·로지스틱·Poisson 회귀의 통합, 반복 가중 선형회귀로 최대우도 추정}
+}
+
+@article{hurlbert1984pseudoreplication,
+  author  = {Hurlbert, Stuart H.},
+  title   = {Pseudoreplication and the Design of Ecological Field Experiments},
+  journal = {Ecological Monographs},
+  volume  = {54},
+  number  = {2},
+  pages   = {187--211},
+  year    = {1984},
+  doi     = {10.2307/1942661},
+  note    = {확인: 서지 기록과 초록. 처리가 반복되지 않았거나 반복이 통계적으로 독립이 아닌 실험에서 추론 통계로 처리 효과를 검정하는 오류(pseudoreplication)의 정의}
+}
