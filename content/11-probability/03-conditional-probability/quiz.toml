@@ -1,0 +1,110 @@
+# 11.3 결합·주변·조건부분포와 독립성 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "marginal-from-joint"
+type = "numeric"
+objective = 1
+prompt = '''이진 확률변수 $X, Y$의 결합분포가 $p(0, 0) = 0.3$, $p(0, 1) = 0.1$, $p(1, 0) = 0.2$, $p(1, 1) = 0.4$이다. $P(Y = 1)$은?'''
+answer = 0.5
+tolerance = 0.001
+explanation = '''주변화(합의 법칙): $P(Y = 1) = \sum_x p(x, 1) = p(0, 1) + p(1, 1) = 0.1 + 0.4 = 0.5$. 표로 보면 $Y = 1$ 열의 합이다.'''
+
+[[questions]]
+id = "conditional-from-joint"
+type = "numeric"
+objective = 1
+prompt = '''같은 결합분포($p(0, 0) = 0.3$, $p(0, 1) = 0.1$, $p(1, 0) = 0.2$, $p(1, 1) = 0.4$)에서 $P(X = 1 \mid Y = 1)$은?'''
+answer = 0.8
+tolerance = 0.001
+explanation = '''조건부확률은 결합확률을 조건의 주변확률로 나눈 것이다: $P(X = 1 \mid Y = 1) = p(1, 1)/P(Y = 1) = 0.4/0.5 = 0.8$. 표에서 $Y = 1$ 열만 남기고 그 열의 합이 1이 되도록 다시 정규화한 것과 같다. 결합확률 0.4를 그대로 답으로 쓰는 실수가 흔하다.'''
+
+[[questions]]
+id = "base-rate-posterior"
+type = "numeric"
+objective = 2
+prompt = '''어떤 질환의 유병률이 1%다. 검사의 민감도 $P(+ \mid \text{병}) = 0.9$, 위양성률 $P(+ \mid \text{정상}) = 0.09$이다. 검사가 양성일 때 실제로 병이 있을 확률 $P(\text{병} \mid +)$는 몇 %인가? (소수 첫째 자리까지)'''
+answer = 9.2
+tolerance = 0.3
+slider = { min = 0, max = 100, step = 0.1, unit = "%" }
+explanation = '''$P(\text{병} \mid +) = \frac{0.9 \times 0.01}{0.9 \times 0.01 + 0.09 \times 0.99} = \frac{0.009}{0.0981} \approx 0.0917$, 약 9.2%다. 10,000명으로 생각하면 환자 100명 중 90명이 양성, 정상인 9,900명 중 891명이 위양성이다. 양성 981명 중 환자는 90명뿐이다. 검사가 꽤 정확해도 유병률이 낮으면 양성의 대부분은 위양성이다.'''
+
+[[questions]]
+id = "inverse-conditional"
+type = "single"
+objective = 2
+prompt = '''"이 결함 탐지 모델은 실제 결함의 99%를 잡아낸다. 방금 모델이 결함이라고 판정했으니, 이 부품이 결함일 확률은 99%다." 이 추론의 문제는?'''
+explanation = '''99%는 재현율(recall), 즉 $P(\text{판정} \mid \text{결함})$이다. 알고 싶은 것은 $P(\text{결함} \mid \text{판정})$이고, 베이즈 정리로 두 값은 결함의 기저율과 정상 부품의 오판정률을 통해 연결된다. 결함이 드물면 두 값은 크게 다르다. 그래서 분류기는 재현율과 함께 정밀도(precision)를 보고하고, 정밀도는 배치 환경의 기저율에 따라 달라진다.'''
+
+[[questions.choices]]
+text = '''$P(\text{판정} \mid \text{결함})$과 $P(\text{결함} \mid \text{판정})$을 혼동했다. 후자는 결함의 기저율과 정상 부품의 오판정률에도 의존한다.'''
+correct = true
+
+[[questions.choices]]
+text = "문제없다. 모델의 정확도가 99%면 판정이 맞을 확률도 99%다."
+feedback = "'결함을 잡는 비율'과 '판정이 맞는 비율'은 서로 다른 조건부확률이다. 결함이 1000개 중 1개라면 정상 부품의 1%만 잘못 판정해도 판정의 대부분은 오판이다."
+
+[[questions.choices]]
+text = "표본 수가 적어서 99%라는 추정이 불확실하다는 것이 유일한 문제다."
+feedback = "추정의 불확실성도 문제일 수 있지만, 99%가 정확한 값이라도 추론 자체가 틀렸다. 조건의 방향이 뒤집혀 있다."
+
+[[questions]]
+id = "uncorrelated-not-independent"
+type = "single"
+objective = 3
+prompt = '''$X \sim \mathrm{Unif}(-1, 1)$이고 $Y = X^2$이다. 두 변수의 상관계수는 0이다. 옳은 것은?'''
+explanation = '''상관계수는 **선형** 관계의 세기만 잰다. $Y = X^2$는 대칭이라 선형 경향이 상쇄되어 상관이 0이지만, $X$를 알면 $Y$가 완전히 정해지므로 독립과는 거리가 멀다. 독립이면 상관이 0이지만, 그 역은 일반적으로 성립하지 않는다(결합분포가 다변량 가우시안이면 예외적으로 성립한다, 11.4장).'''
+
+[[questions.choices]]
+text = "상관이 0이므로 X와 Y는 독립이다."
+feedback = "독립 ⇒ 상관 0은 맞지만 역은 아니다. 본문 실행에서 P(Y > 0.5)는 0.29였지만 |X| > 0.8을 알면 1이 되었다."
+
+[[questions.choices]]
+text = "X와 Y는 독립이 아니다. 상관계수는 선형 관계만 잰다."
+correct = true
+
+[[questions.choices]]
+text = "표본이 충분히 많으면 상관계수가 0이 아니게 나타나 의존성이 드러난다."
+feedback = "모집단 상관계수가 정확히 0이므로 표본을 늘리면 표본 상관은 0으로 수렴한다. 의존성을 보려면 상관 대신 조건부분포를 비교해야 한다."
+
+[[questions]]
+id = "collider-explaining-away"
+type = "single"
+objective = 3
+prompt = '''서로 독립인 두 원인 "누설"과 "센서 drift"가 각각 압력 경보를 일으킨다(누설 → 경보 ← drift). 경보가 울린 상황에서 drift가 있었다는 것을 알게 되었다. 누설일 확률은 어떻게 되는가?'''
+explanation = '''경보는 두 원인의 공통 결과(collider)다. 조건 없이는 두 원인이 독립이지만, 결과를 조건으로 하면 의존하게 된다. 경보가 울렸다는 사실이 누설 확률을 높이는데, drift라는 다른 설명이 확인되면 누설 확률은 다시 내려간다(explaining away). 본문 시뮬레이션에서는 P(누설 | 경보) = 0.344가 P(누설 | 경보, drift) = 0.050으로 떨어졌다.'''
+
+[[questions.choices]]
+text = "변하지 않는다. 누설과 drift는 독립이기 때문이다."
+feedback = "두 원인은 경보를 조건으로 하지 않을 때만 독립이다. 공통 결과를 조건으로 하면 의존성이 생긴다."
+
+[[questions.choices]]
+text = "내려간다. drift가 경보를 이미 설명하기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "올라간다. 문제가 하나 확인되었으니 다른 문제도 있을 가능성이 크다."
+feedback = "두 원인이 함께 일어나는 경향이 있다면 그럴 수 있지만, 여기서는 두 원인이 독립이다. 경보가 이미 drift로 설명되므로 누설에 대한 증거는 줄어든다."
+
+[[questions]]
+id = "chain-factorization"
+type = "single"
+objective = 3
+prompt = '''방향 그래프 $A \to B \to C$(예: 외기 온도 → 장비 온도 → 센서 판독값)가 나타내는 결합분포의 인수분해와 조건부 독립 관계로 옳은 것은?'''
+explanation = '''베이지안 네트워크에서 결합분포는 각 노드의 "부모가 주어졌을 때의 조건부분포"의 곱이다: $p(a, b, c) = p(a)\,p(b \mid a)\,p(c \mid b)$. $C$의 부모는 $B$뿐이므로 $B$를 알면 $A$는 $C$에 대해 더 알려 주는 것이 없다: $A \perp C \mid B$. 하지만 $B$를 모를 때는 $A$가 $B$를 통해 $C$에 영향을 주므로 $A$와 $C$는 일반적으로 독립이 아니다.'''
+
+[[questions.choices]]
+text = '''$p(a)\,p(b \mid a)\,p(c \mid b)$이고, $A \perp C \mid B$가 성립한다.'''
+correct = true
+
+[[questions.choices]]
+text = '''$p(a)\,p(b)\,p(c)$이고, 세 변수가 모두 독립이다.'''
+feedback = "화살표가 있다는 것은 의존성을 허용한다는 뜻이다. 완전 독립은 화살표가 하나도 없는 그래프다."
+
+[[questions.choices]]
+text = '''$p(a)\,p(b \mid a)\,p(c \mid b)$이고, $A$와 $C$는 조건 없이도 독립이다.'''
+feedback = "A는 B를 거쳐 C에 영향을 준다. B를 조건으로 할 때만 그 경로가 막힌다."
+
+[[questions.choices]]
+text = '''$p(a)\,p(b \mid a)\,p(c \mid a, b)$이고, 조건부 독립 관계는 없다.'''
+feedback = "이 인수분해는 어떤 분포에도 성립하는 연쇄 법칙이다. 그래프에 A → C 화살표가 없다는 것이 p(c | a, b) = p(c | b)라는 추가 가정이다."
