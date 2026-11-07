@@ -1,0 +1,128 @@
+# 24.1 물리 모델과 학습 문제 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+# 계산으로 확인할 수 있는 정답은 labs/scientific-ml/physics-and-learning/test_quiz.py가 검증한다.
+
+[[questions]]
+id = "problem-kind"
+type = "single"
+objective = 1
+prompt = '''열전달 시뮬레이터를 초기 온도 분포와 열전도도를 바꾸어 10000번 실행하고, 그 결과로 "(초기 온도 분포, 열전도도) → 1시간 뒤 온도 분포"를 내는 신경망을 학습했다. 설계 최적화 루프에서 시뮬레이터 대신 이 신경망을 호출할 계획이다. 이 신경망이 푸는 문제는?'''
+explanation = '''여러 조건에 걸친 시뮬레이터의 입력–출력 사상을 배워 시뮬레이터를 대신하므로 **대리모델**이다. forward 문제는 주어진 하나의 조건에서 방정식을 푸는 것이고, 대리모델은 그 forward 사상을 조건의 분포 전체에 걸쳐 근사한다. 그래서 대리모델은 학습 분포 밖의 조건(더 큰 열전도도, 처음 보는 초기 분포)에서는 보장이 없고, 학습 비용(시뮬레이션 10000번)을 설계 루프의 호출 수로 회수해야 의미가 있다.'''
+
+[[questions.choices]]
+text = "forward 문제: 열방정식을 신경망으로 푼다."
+feedback = "출력은 forward 해가 맞지만, 신경망은 방정식을 직접 풀지 않고 시뮬레이터 실행 결과를 흉내 낸다. 조건의 분포에 걸친 사상을 배우는 것이 대리모델의 특징이다."
+
+[[questions.choices]]
+text = "inverse 문제: 온도 분포로 열전도도를 추정한다."
+feedback = "열전도도는 이 신경망의 입력이다. 관측에서 열전도도를 거꾸로 추정하는 것이 inverse 문제다."
+
+[[questions.choices]]
+text = "대리모델: 시뮬레이터의 입력–출력 사상을 빠른 근사로 대신한다."
+correct = true
+
+[[questions.choices]]
+text = "발견: 데이터에서 열방정식을 찾아낸다."
+feedback = "방정식의 형태는 이미 시뮬레이터에 들어 있고, 신경망은 그 형태를 출력하지 않는다. 발견은 관측에서 방정식의 형태 자체를 구하는 문제다."
+
+[[questions]]
+id = "length-scale-time"
+type = "numeric"
+objective = 1
+prompt = '''진자 방정식 $\ddot{\theta} = -(g/L)\sin\theta$를 시간 척도 $T_0 = \sqrt{L/g}$로 무차원화했다. 무차원 시뮬레이션에서 $\tau = 5$까지 계산한 결과는, 길이 $L = 4$ m인 진자($g = 9.81$ m/s²)에서 실제 몇 초까지의 운동에 해당하는가? (소수 둘째 자리까지)'''
+answer = 3.19
+tolerance = 0.02
+slider = { min = 0, max = 10, step = 0.01, unit = "s" }
+explanation = '''$T_0 = \sqrt{4/9.81} \approx 0.639$ s이므로 $t = \tau T_0 = 5 \times 0.639 \approx 3.19$ s다. 무차원 궤적 하나가 길이와 중력이 다른 모든 진자의 궤적을 대표하고, 실제 시각은 $T_0$만 곱하면 얻는다. $\tau$를 그대로 초로 읽거나($5$ s), $g/L$을 곱하는 실수($\tau \cdot g/L$)가 흔하다.'''
+
+[[questions]]
+id = "scaling-gradient-descent"
+type = "single"
+objective = 1
+prompt = '''온도(약 300 K)와 농도(약 $10^{-3}$ mol/L)를 원 단위 그대로 입력해 선형 회귀를 경사하강으로 5000 step 학습했더니, 손실은 줄었지만 농도 계수가 거의 0이었다. 표준화하자 농도 계수가 최소제곱 해와 같아졌다. 원 단위에서 실패한 가장 직접적인 이유는?'''
+explanation = '''원 단위에서는 손실의 Hessian 조건수가 $10^{11}$ 수준이다. 학습률은 가장 큰 곡률(온도 축)에 맞춰야 발산하지 않는데, 그 학습률로는 곡률이 아주 작은 농도 축 방향의 오차가 한 step에 거의 줄지 않는다. 농도 효과는 데이터에 있고(최소제곱 해 805.7), 문제는 최적화의 조건이다. 표준화나 물리적 무차원화로 축의 크기를 맞추면 조건수가 1 근처로 떨어진다.'''
+
+[[questions.choices]]
+text = "농도는 반응 속도에 실제로 영향을 주지 않는다."
+feedback = "같은 데이터의 최소제곱 해와 표준화 후 경사하강 모두 농도 계수가 805.7로 크다. 효과가 없는 것이 아니라 경사하강이 그 방향으로 움직이지 못한 것이다."
+
+[[questions.choices]]
+text = "입력 크기가 달라 손실의 조건수가 극단적으로 커졌고, 안정한 학습률로는 농도 축 방향으로 거의 움직이지 못했다."
+correct = true
+
+[[questions.choices]]
+text = "학습률이 너무 커서 농도 계수가 발산했다."
+feedback = "발산했다면 계수가 0 근처에 머물지 않고 커졌을 것이다. 학습률은 가장 큰 곡률에 맞춘 안정한 값이었고, 문제는 작은 곡률 방향의 수렴이 극도로 느리다는 것이다."
+
+[[questions.choices]]
+text = "데이터 200개로는 계수 3개를 추정할 수 없다."
+feedback = "최소제곱 해가 같은 데이터에서 안정적으로 나온다. 데이터 양이 아니라 최적화의 조건이 문제다."
+
+[[questions]]
+id = "error-sources"
+type = "multiple"
+objective = 2
+prompt = '''진자 예측의 오차 중, **같은 종류의 측정 데이터를 더 많이 모아도 줄지 않는** 것을 모두 고르시오. (측정 잡음은 무작위이고 편향이 없다고 가정한다.)'''
+explanation = '''무작위 측정 잡음 때문에 생긴 파라미터 추정 오차는 측정을 늘리면 대략 $1/\sqrt{n}$로 준다. 선형화 같은 모델 오차는 방정식의 형태에서 오고, 고정된 step의 이산화 오차는 solver 설정에서 오므로 데이터 양과 무관하다. 시뮬레이터로 만든 학습 label에 들어 있는 이산화 오차도 같은 시뮬레이터로 데이터를 더 만들어서는 줄지 않는다. 체계적 오차다.'''
+
+[[questions.choices]]
+text = "주기 측정의 무작위 잡음 때문에 길이 $L$을 잘못 추정해서 생긴 오차"
+feedback = "편향 없는 무작위 잡음의 영향은 측정을 평균할수록 줄어든다(대략 1/√n). 장비의 체계적 편향이라면 줄지 않는다."
+
+[[questions.choices]]
+text = '''$\sin\theta \approx \theta$ 선형화에서 생긴 오차'''
+correct = true
+
+[[questions.choices]]
+text = "explicit Euler를 고정 step 0.01 s로 쓴 이산화 오차"
+correct = true
+
+[[questions.choices]]
+text = "한 격자의 시뮬레이터로 만든 학습 label에 들어 있는 이산화 오차"
+correct = true
+
+[[questions]]
+id = "conservation-structure"
+type = "single"
+objective = 3
+prompt = '''본문 셀 3에서 "힘이 위치에만 의존한다"는 구조를 넣고 Störmer–Verlet로 적분한 모델은 10000 step 동안 에너지 오차가 0.0035에 머물렀고, 다음 상태를 직접 회귀한 모델은 오차가 6%까지 자랐다. 구조 있는 모델의 에너지 오차가 자라지 않은 이유는?'''
+explanation = '''1차원에서 위치만의 함수인 힘 $g(\theta)$는 언제나 퍼텐셜 $V = -\int g\,d\theta$를 가진 보존력이다. symplectic 적분법인 Verlet은 그 학습된 퍼텐셜의 에너지를 장기간 거의 보존한다. 그래서 참 에너지와의 차이는 학습된 퍼텐셜과 참 퍼텐셜의 차이만큼으로 유계이고, step이 쌓여도 자라지 않는다. 학습된 계수는 $-\sin\theta$의 Taylor 계수와 정확히 같지 않았으므로, 힘을 정확히 배워서가 아니다.'''
+
+[[questions.choices]]
+text = "힘을 정확히 학습해서 모델 오차가 0이기 때문이다."
+feedback = "학습된 계수(θ³ 계수 0.176)는 참값(0.167)과 다르고, 에너지 오차도 0이 아니라 0.0035다. 오차가 0이 아니라 유계라는 것이 핵심이다."
+
+[[questions.choices]]
+text = "모델 형태가 보존력을 보장하고 symplectic 적분이 그 에너지를 장기간 보존하므로, 오차가 퍼텐셜 차이만큼으로 유계이기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "손실 함수에 에너지 보존 벌점을 넣었기 때문이다."
+feedback = "두 모델 모두 에너지 벌점 없이 최소제곱으로 학습했다. 차이는 손실이 아니라 모델 구조와 적분 방법에서 온다."
+
+[[questions.choices]]
+text = "구조 있는 모델이 더 많은 데이터로 학습했기 때문이다."
+feedback = "두 모델은 같은 궤적 20개로 학습했다."
+
+[[questions]]
+id = "physics-injection-routes"
+type = "single"
+objective = 3
+prompt = '''질량 보존을 지키게 하려고 손실에 $\lambda\,\big(\sum_i y_i(t) - \sum_i y_i(0)\big)^2$ 벌점을 학습 데이터의 시각들에서 더했다. 이 방법에 대한 설명으로 옳은 것은?'''
+explanation = '''이것은 **손실 경로**(soft constraint)다. 벌점은 학습에 쓴 시각과 입력에서 위반을 줄이도록 권장할 뿐, 다른 입력이나 긴 rollout에서 보존을 보장하지 않는다. 보존을 보장하려면 구조 경로가 필요하다. 예를 들어 반응 네트워크라면 모델이 반응 속도 $\mathbf{r}$만 출력하고 $d\mathbf{y}/dt = \mathbf{N}\mathbf{r}$로 조립하면, 화학량론이 정하는 보존량은 어떤 $\mathbf{r}$에서도 정확히 지켜진다.'''
+
+[[questions.choices]]
+text = "구조 경로이므로 모든 입력에서 질량 보존이 정확히 보장된다."
+feedback = "벌점은 모델의 형태를 바꾸지 않는다. 학습점에서 위반이 작아지도록 권장할 뿐이다."
+
+[[questions.choices]]
+text = "손실 경로이므로 학습에 쓴 점 근처에서 위반이 줄도록 권장할 뿐, 다른 입력이나 긴 rollout에서는 보장되지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "λ를 충분히 크게 하면 구조 경로와 똑같은 보장을 얻는다."
+feedback = "λ를 키워도 보장은 학습점에서만이고, 너무 크면 데이터 손실과의 균형이 깨져 최적화가 어려워진다(24.2장의 손실 균형 문제)."
+
+[[questions.choices]]
+text = "데이터 경로이므로 데이터를 더 모으면 보장된다."
+feedback = "데이터를 더하는 것이 아니라 손실에 항을 더했다. 그리고 데이터 경로도 데이터가 덮는 범위에서만 권장한다."
