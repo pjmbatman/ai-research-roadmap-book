@@ -1,0 +1,6 @@
+title = "EGNN의 좌표 갱신 구현하기"
+chapter = "scientific-ml/geometric-models"
+objective = 2
+exec = "browser"
+entry = "egnn_coords"
+timeout_s = 10
