@@ -63,6 +63,8 @@ n = 20  등간격  5.98e+01  Chebyshev 1.53e-02  spline 3.18e-03
 
 등간격 보간의 최대 오차는 $n = 20$에서 60에 이른다. 같은 수의 Chebyshev 노드는 오차를 꾸준히 줄이고, 등간격 노드 그대로의 cubic spline은 더 빨리 줄인다. 여기서 다항식 계산에 쓴 `BarycentricInterpolator`는 보간 다항식을 계수로 펼치지 않고 무게중심(barycentric) 공식으로 계산해 반올림 오차에 강하다. 즉 위의 60은 반올림 탓이 아니라 등간격 보간 다항식 자체의 오차다.
 
+::widget{name="runge-interpolation"}
+
 ::quiz{id="runge-more-nodes"}
 
 **보간 안과 밖.** 같은 다항식이라도 노드 범위 안과 밖에서의 성질은 전혀 다르다. $[0, 1]$에서 잡음(표준편차 0.01)이 섞인 측정값 11개를 10차 다항식과 cubic spline으로 보간하고, 구간 안팎에서 참값과 비교한다.
