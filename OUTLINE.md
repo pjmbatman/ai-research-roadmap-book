@@ -135,7 +135,7 @@ _OS부터 GPU 드라이버, CUDA, Python, 패키지, 컨테이너까지 실행 �
   - 기본 개념 · Dockerfile · 데이터와 결과 · GPU 사용 · 실무 이슈 · 개발 컨테이너와 HPC · 재현 가능한 빌드
   - 선수: 3.4 의존성과 패키징
 - **3.6** [환경 진단·재현·유지보수](content/03-environments/06-environment-diagnosis/index.md) · `필수` · 퀴즈 6
-  - 증상별 진단 · 환경 정보 수집 · 최소 재현 예제 · 변경 관리 · 검증 · 시나리오 N
+  - 증상별 진단 · 환경 정보 수집 · 최소 재현 예제 · 변경 관리 · 검증
   - 선수: 3.5 Docker와 컨테이너
 
 ### 제4부. Git·협업·AI 에이전트 <sub>Git, Collaboration, and AI Agents</sub>
@@ -152,7 +152,7 @@ _Git과 GitHub로 변경을 추적·협업하고, AI 코딩 도구와 에이전�
   - 도구의 형태 · 잘 맡길 수 있는 일 · 검증해야 하는 것 · 작업 단위와 프롬프트
   - 선수: 4.1 Git의 모델과 기본 작업
 - **4.4** [에이전트 지침: AGENTS.md·CLAUDE.md·SKILL.md](content/04-git-and-agents/04-agent-instructions/index.md) · `필수` · 퀴즈 5
-  - 프로젝트 지침 파일 · 무엇을 쓰는가 · Skill · 준비 · 검증 · 지침의 유지보수 · 참고 문헌
+  - 프로젝트 지침 파일 · 무엇을 쓰는가 · Skill · 지침의 유지보수 · 참고 문헌
   - 선수: 4.3 AI 코딩 도구의 활용과 검증
 - **4.5** [MCP와 도구 연결](content/04-git-and-agents/05-mcp-and-tools/index.md) · `심화` · 퀴즈 6
   - MCP의 구조 · 연결 방식 · 등록과 인증 · 연구에 쓰는 도구 연결 · 보안과 신뢰 · 참고 문헌
