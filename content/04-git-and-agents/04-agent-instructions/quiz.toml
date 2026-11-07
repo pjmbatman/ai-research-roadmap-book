@@ -1,0 +1,117 @@
+# 4.4 에이전트 지침 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "instructions-are-not-permissions"
+type = "single"
+objective = 1
+prompt = '''연구실 저장소의 `AGENTS.md`에 "main branch에 push하지 않는다"라고 적었다. 에이전트가 main에 push하는 일을 **확실히** 막으려면 무엇이 더 필요한가?'''
+explanation = '''지침 파일은 에이전트가 읽는 맥락(context)이다. 대부분의 경우 따르지만, 긴 작업 중에 다른 맥락에 밀리거나, 오해하거나, 외부에서 들어온 텍스트에 휘둘릴 수 있다. "반드시 일어나면 안 되는 일"은 지침이 아니라 **강제 장치**로 막는다. 에이전트 도구의 권한 설정(어떤 명령을 승인 없이 허용할지), 저장소의 branch 보호(PR 없는 push 금지), 에이전트에게 주는 자격 증명의 범위(push 권한이 없는 토큰)다. 지침에는 그 규칙을 함께 적어 에이전트가 시도하지 않게 한다.'''
+
+[[questions.choices]]
+text = "도구의 권한 설정, branch 보호, 권한이 제한된 자격 증명 같은 강제 장치로 막는다."
+correct = true
+
+[[questions.choices]]
+text = "더 필요 없다. 지침 파일에 적힌 금지사항은 에이전트가 기술적으로 실행할 수 없게 된다."
+feedback = "지침 파일은 텍스트일 뿐 실행을 막는 장치가 아니다. 모델이 읽고 따르려고 할 뿐이다."
+
+[[questions.choices]]
+text = "금지 문장을 대문자와 느낌표로 여러 번 반복해 적는다."
+feedback = "강조는 따를 가능성을 높일 수는 있어도 보장하지 않는다. 그리고 반복된 강조는 다른 핵심 규칙을 묻는다."
+
+[[questions.choices]]
+text = "`CLAUDE.md`에도 같은 문장을 복사해 두 파일에 적는다."
+feedback = "파일이 둘이어도 성격은 같다. 오히려 두 곳을 따로 고치다 어긋나기 쉽다. 한 원천을 두고 다른 파일은 그것을 불러온다."
+
+[[questions]]
+id = "nearest-agents-md"
+type = "single"
+objective = 1
+prompt = '''저장소 루트의 `AGENTS.md`는 "테스트: `pytest -q`"라고 하고, `services/sim/AGENTS.md`는 "테스트: `make test-sim`"이라고 한다. 에이전트가 `services/sim/solver.py`를 고칠 때, AGENTS.md 형식이 제안하는 관례에 따르면 어느 지침이 우선하는가? (사용자가 대화에서 따로 지시하지 않았다고 가정한다.)'''
+explanation = '''AGENTS.md 형식의 관례는 "고치는 파일에 가장 가까운 AGENTS.md가 우선하고, 사용자가 대화에서 명시한 지시가 모든 것에 우선한다"이다. 그래서 하위 프로젝트마다 다른 빌드·테스트 명령을 그 디렉터리의 지침에 둘 수 있다. 다만 도구마다 지침 파일을 찾고 합치는 방식이 다를 수 있으므로, 쓰는 도구의 문서에서 확인한다.'''
+
+[[questions.choices]]
+text = "`services/sim/AGENTS.md` — 고치는 파일에 가장 가까운 지침"
+correct = true
+
+[[questions.choices]]
+text = "루트의 `AGENTS.md` — 저장소 전체의 기준이므로 항상 우선"
+feedback = "루트 지침은 공통 규칙을 담고, 더 구체적인 하위 지침이 그 디렉터리에서 우선하는 것이 관례다. 그래야 하위 프로젝트별 명령을 둘 수 있다."
+
+[[questions.choices]]
+text = "두 지침이 충돌하므로 에이전트는 오류를 내고 멈춘다."
+feedback = "충돌을 해소하는 관례(가장 가까운 것이 우선)가 있다. 그래도 사람이 보기에 헷갈리는 충돌은 지침을 고쳐 없애는 것이 좋다."
+
+[[questions.choices]]
+text = "나중에 수정된 파일이 우선한다."
+feedback = "수정 시각은 적용 범위와 무관하다. 우선순위는 위치(범위)로 정해진다."
+
+[[questions]]
+id = "what-goes-in-agents-md"
+type = "multiple"
+objective = 1
+prompt = "연구 프로젝트의 `AGENTS.md`에 들어가기에 적절한 것을 모두 고르시오."
+explanation = '''지침 파일에는 에이전트가 매번 필요로 하지만 코드만 봐서는 알기 어려운 것을 짧게 쓴다. 정확한 설치·테스트 명령, 하지 말아야 할 일, 데이터 취급 규칙(원본 데이터는 읽기 전용, 개인정보 외부 전송 금지)이 그렇다. 비밀값은 지침 파일에 쓰지 않는다. 지침 파일은 commit되어 공유되고 모델의 맥락에 그대로 들어간다. 배경 이론 같은 긴 설명은 핵심 규칙을 묻으므로, 필요하면 별도 문서에 두고 경로만 가리킨다.'''
+
+[[questions.choices]]
+text = "작업을 마쳤는지 확인하는 정확한 테스트 명령과 smoke test 명령"
+correct = true
+
+[[questions.choices]]
+text = "`data/raw/`는 읽기 전용이고, 그 안의 환자 정보는 외부로 보내지 않는다는 규칙"
+correct = true
+
+[[questions.choices]]
+text = "에이전트가 실험 추적 서비스에 접속할 수 있도록 API key 값"
+feedback = "지침 파일은 저장소에 commit되고 모델 맥락에 그대로 들어간다. 비밀은 환경변수나 도구의 비밀 관리 기능으로 주입하고, 지침에는 변수 이름만 쓴다."
+
+[[questions.choices]]
+text = "프로젝트의 이론적 배경을 설명한 논문 서론 전체"
+feedback = "길고 매번 필요하지 않은 내용은 핵심 규칙을 묻는다. 별도 문서로 두고 지침에는 경로와 언제 읽을지만 쓴다."
+
+[[questions]]
+id = "skill-description"
+type = "single"
+objective = 2
+prompt = '''반복 작업 하나를 skill로 만들었다. `SKILL.md` frontmatter의 `description`으로 가장 좋은 것은?'''
+explanation = '''`description`은 에이전트가 skill 본문을 열기 전에 보는 요약으로, 이 skill을 **언제** 쓸지 판단하는 근거가 된다. 그래서 무엇을 하는지와 어떤 요청·상황에서 쓰는지를 함께 구체적으로 쓴다. 이 책 저장소의 `add-quiz` skill도 "장의 학습 목표에 맞는 개념 퀴즈 문항을 quiz.toml에 추가한다. 사용자가 퀴즈·객관식 문제·문제집 작성을 요청할 때 사용한다."라고 쓴다. 절차 자체는 본문에 쓴다.'''
+
+[[questions.choices]]
+text = "실험 결과 CSV를 논문용 표(LaTeX)로 변환한다. 사용자가 결과 표 작성, 표 갱신, 논문용 표 형식 변환을 요청할 때 사용한다."
+correct = true
+
+[[questions.choices]]
+text = "유용한 표 도구"
+feedback = "무엇을 하는지도, 언제 쓰는지도 알 수 없다. 에이전트가 이 skill을 골라야 할 상황을 알아보지 못한다."
+
+[[questions.choices]]
+text = "1. results/*.csv를 읽는다. 2. 소수점 셋째 자리로 반올림한다. 3. booktabs 형식으로 쓴다. 4. paper/tables/에 저장한다."
+feedback = "절차는 본문에 쓴다. description에는 무엇을 하는지와 언제 쓰는지를 요약한다."
+
+[[questions.choices]]
+text = "비워 둔다. 에이전트가 skill 이름을 보고 알아서 판단한다."
+feedback = "description은 필수 항목이다. 이름만으로는 언제 써야 하는지 판단할 근거가 부족하다."
+
+[[questions]]
+id = "stale-instructions"
+type = "single"
+objective = 3
+prompt = '''`scripts/run_smoke.sh`를 `python -m project.smoke`로 바꾸는 PR을 올렸다. `AGENTS.md`에는 아직 옛 명령이 적혀 있다. 가장 좋은 처리 방법은?'''
+explanation = '''지침도 코드다. 명령을 바꾸는 PR에서 지침을 함께 고쳐 같은 리뷰를 받게 하고, 가능하면 CI가 지침에 적힌 명령을 실제로 실행하게 해 어긋남을 자동으로 잡는다(이 장 실습의 `check_instructions.py`가 그런 점검이다). 에이전트는 옛 명령이 실패하면 다른 방법을 추측하거나, 실패를 무시하고 진행하거나, 옛 스크립트를 다시 만들 수 있다.'''
+
+[[questions.choices]]
+text = "같은 PR에서 `AGENTS.md`의 명령도 고치고, 지침의 명령을 실행해 보는 검사를 CI에 둔다."
+correct = true
+
+[[questions.choices]]
+text = "에이전트가 실패를 보고 새 명령을 스스로 찾아낼 것이므로 지침은 그대로 둔다."
+feedback = "찾아낼 수도 있지만, 매번 시간을 쓰고, 틀린 명령을 추측하거나 옛 스크립트를 다시 만들 수도 있다. 지침의 목적은 이런 추측을 없애는 것이다."
+
+[[questions.choices]]
+text = "호환성을 위해 지침에 옛 명령과 새 명령을 모두 남겨 둔다."
+feedback = "실행되지 않는 명령이 지침에 남으면 어느 것이 맞는지 에이전트도 사람도 알 수 없다. 지침에는 지금 동작하는 명령만 둔다."
+
+[[questions.choices]]
+text = "지침은 자주 바뀌므로 저장소가 아니라 각자의 개인 설정에 둔다."
+feedback = "개인 설정에 두면 리뷰도 버전 관리도 되지 않고, 사람마다 다른 지침으로 작업하게 된다. 프로젝트 규칙은 저장소에 commit한다."
