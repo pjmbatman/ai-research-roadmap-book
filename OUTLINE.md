@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 235문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 266문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -100,18 +100,18 @@ _AI 연구가 어떤 단계와 결정으로 이루어지는지 전체 지도를 
 
 _연구 서버를 안정적으로 다루기 위한 Linux, 자원 모니터링, SSH, 원격·클라우드 실행 구조를 익힌다._
 
-- **2.1** [Linux와 셸의 기초](content/02-linux-and-remote/01-linux-shell/index.md) · `필수`
+- **2.1** [Linux와 셸의 기초](content/02-linux-and-remote/01-linux-shell/index.md) · `필수` · 퀴즈 7
   - 파일시스템과 경로 · 사용자·그룹·권한 · 셸과 환경 · 파일 탐색과 텍스트 처리 · 파이프와 리다이렉션 · 압축·동기화 · Bash 스크립트
-- **2.2** [프로세스·세션·자원 모니터링](content/02-linux-and-remote/02-processes-and-monitoring/index.md) · `필수`
+- **2.2** [프로세스·세션·자원 모니터링](content/02-linux-and-remote/02-processes-and-monitoring/index.md) · `필수` · 퀴즈 6
   - 프로세스와 시그널 · 자원 모니터링 도구 · GPU 모니터링 · 작업 세션 유지 · 장애 진단
   - 선수: 2.1 Linux와 셸의 기초
-- **2.3** [SSH와 원격 접속](content/02-linux-and-remote/03-ssh/index.md) · `필수`
+- **2.3** [SSH와 원격 접속](content/02-linux-and-remote/03-ssh/index.md) · `필수` · 퀴즈 7
   - 인증과 키 · ~/.ssh/config · 포트 포워딩 · 파일 전송 · 원격 편집 · 연결 유지와 복구
   - 선수: 2.1 Linux와 셸의 기초
-- **2.4** [실행 위치의 지도: 로컬·원격·클라우드](content/02-linux-and-remote/04-execution-topology/index.md) · `필수`
+- **2.4** [실행 위치의 지도: 로컬·원격·클라우드](content/02-linux-and-remote/04-execution-topology/index.md) · `필수` · 퀴즈 5
   - 다섯 가지 질문 · 대표적인 실행 구조 · 비교 기준 · SSH 접속과 원격 제어의 차이
   - 선수: 2.3 SSH와 원격 접속
-- **2.5** [공유 서버와 클러스터 사용](content/02-linux-and-remote/05-shared-servers/index.md) · `필수`
+- **2.5** [공유 서버와 클러스터 사용](content/02-linux-and-remote/05-shared-servers/index.md) · `필수` · 퀴즈 6
   - 공유 서버 예절 · Job scheduler · 저장소 계층 · 장기 실험 운영
   - 선수: 2.2 프로세스·세션·자원 모니터링
 
