@@ -1,0 +1,6 @@
+title = "epoch별 batch 인덱스와 worker 배분"
+chapter = "deep-learning-pytorch/datasets-and-dataloaders"
+objective = 3
+exec = "browser"
+entry = "epoch_batches"
+timeout_s = 10
