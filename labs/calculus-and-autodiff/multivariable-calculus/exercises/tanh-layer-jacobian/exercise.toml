@@ -1,0 +1,6 @@
+title = "chain rule로 2층 신경망의 Jacobian 유도하기"
+chapter = "calculus-and-autodiff/multivariable-calculus"
+objective = 2
+exec = "browser"
+entry = "mlp_jacobian"
+timeout_s = 10

@@ -1,0 +1,136 @@
+# 8.1 다변수 미분 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "partials-not-differentiable"
+type = "single"
+objective = 1
+prompt = '''$f(x, y) = \dfrac{xy}{x^2 + y^2}$ ($(x, y) \neq (0, 0)$), $f(0, 0) = 0$으로 정의한 함수에 대해 원점에서 옳은 것은?'''
+explanation = '''두 축 위에서 $f$는 항상 0이므로 $\partial f/\partial x(0,0) = \partial f/\partial y(0,0) = 0$으로 편미분은 존재한다. 그러나 대각선 $y = x$를 따라 원점에 다가가면 $f(t, t) = 1/2$이므로 $f$는 원점에서 연속도 아니다. 미분 가능하면 연속이어야 하므로 $f$는 원점에서 미분 가능하지 않다. 편미분은 축 방향 두 개만 보는 반면, 미분 가능성은 모든 방향에서 하나의 선형 근사가 맞을 것을 요구한다.'''
+
+[[questions.choices]]
+text = "두 편미분이 모두 존재하므로 원점에서 미분 가능하다."
+feedback = "편미분은 축 방향 두 개만 본다. 대각선 방향에서 함수값은 1/2로 남아 원점의 값 0과 다르다. 편미분의 존재는 미분 가능성을 보장하지 않는다."
+
+[[questions.choices]]
+text = "두 편미분은 0으로 존재하지만, 원점에서 연속이 아니므로 미분 가능하지 않다."
+correct = true
+
+[[questions.choices]]
+text = "원점에서 분모가 0이 되므로 편미분이 존재하지 않는다."
+feedback = "편미분은 축 위의 값만으로 계산한다. 축 위에서 f는 항상 0이므로 두 편미분은 0이다."
+
+[[questions.choices]]
+text = "대각선 방향의 극한이 1/2이므로, f(0, 0)을 1/2로 다시 정의하면 미분 가능해진다."
+feedback = "축 방향으로 다가가면 극한이 0이다. 방향마다 극한이 다르므로 어떤 값을 정의해도 연속이 되지 않는다."
+
+[[questions]]
+id = "gradient-steepest-direction"
+type = "single"
+objective = 1
+prompt = '''$f(x, y) = x^2 + 3y^2$의 등고선은 원점을 중심으로 한 타원이다. 점 $(1, 1)$에서 $f$가 가장 빠르게 증가하는 단위 방향은?'''
+explanation = '''가장 빠르게 증가하는 방향은 gradient 방향이다. $\nabla f(1, 1) = (2x, 6y) = (2, 6)$이므로 단위 방향은 $(1, 3)/\sqrt{10} \approx (0.316, 0.949)$다. 등고선이 원이 아니면 gradient는 원점 반대 방향(동경 방향)과 다르고, 등고선에 수직이다. 이 방향의 방향미분은 $\lVert \nabla f \rVert = \sqrt{40} \approx 6.32$다.'''
+
+[[questions.choices]]
+text = '''$(1, 3)/\sqrt{10}$'''
+correct = true
+
+[[questions.choices]]
+text = '''$(1, 1)/\sqrt{2}$, 즉 원점에서 멀어지는 방향'''
+feedback = "등고선이 원일 때만 맞다. 이 타원에서는 y 방향으로 함수가 세 배 빨리 커지므로 gradient가 y축 쪽으로 기운다. 등고선에 수직인 방향을 찾아야 한다."
+
+[[questions.choices]]
+text = '''$(-3, 1)/\sqrt{10}$'''
+feedback = "이 방향은 gradient에 수직, 즉 등고선의 접선 방향이다. 이 방향의 방향미분은 0이다."
+
+[[questions.choices]]
+text = '''$(0, 1)$, 계수가 가장 큰 변수 방향'''
+feedback = "y 방향 편미분(6)이 x 방향(2)보다 크지만, x 방향 성분도 증가에 기여한다. 두 편미분을 성분으로 하는 벡터 방향이 가장 가파르다."
+
+[[questions]]
+id = "hessian-curvature"
+type = "single"
+objective = 1
+prompt = '''gradient가 0인 점에서 Hessian의 고윳값이 $0.4$와 $100$이다. 이 점 근처에 대해 옳은 것은?'''
+explanation = '''두 고윳값이 모두 양수이므로 Hessian은 양의 정부호이고, 이 점은 국소 최소점이다. 2차 근사 $f \approx f(\mathbf{a}) + \tfrac{1}{2}\mathbf{h}^\top\mathbf{H}\mathbf{h}$에서 등고선 $f = f(\mathbf{a}) + c$는 고유벡터 $\mathbf{v}_i$ 방향의 반지름이 $\sqrt{2c/\lambda_i}$인 타원이다. 곡률이 작은(고윳값 0.4) 방향으로 타원이 길게 늘어지고, 그 비는 $\sqrt{100/0.4} \approx 15.8$이다. 이런 지형에서 경사하강이 느려지는 이유는 10장에서 다룬다.'''
+
+[[questions.choices]]
+text = "국소 최소점이며, 등고선은 고윳값 0.4의 고유벡터 방향으로 길게 늘어진 타원이다."
+correct = true
+
+[[questions.choices]]
+text = "국소 최소점이며, 등고선은 고윳값 100의 고유벡터 방향으로 길게 늘어진 타원이다."
+feedback = "곡률이 큰 방향은 조금만 움직여도 함수값이 크게 변하므로 등고선 간격이 좁다. 타원은 곡률이 작은 방향으로 늘어진다."
+
+[[questions.choices]]
+text = "고윳값의 크기가 크게 다르므로 안장점이다."
+feedback = "안장점은 고윳값의 부호가 다를 때다. 두 고윳값이 모두 양수이면 크기 차이와 관계없이 국소 최소점이다."
+
+[[questions.choices]]
+text = "gradient가 0이므로 Hessian과 관계없이 국소 최소점이다."
+feedback = "gradient가 0인 점은 최소점·최대점·안장점이 모두 될 수 있다. 어느 것인지는 Hessian의 고윳값 부호가 정한다."
+
+[[questions]]
+id = "chain-rule-order"
+type = "single"
+objective = 2
+prompt = '''$f: \mathbb{R}^3 \to \mathbb{R}^4$, $g: \mathbb{R}^4 \to \mathbb{R}^2$이고 $h(\mathbf{x}) = g(f(\mathbf{x}))$이다. 이 책의 규약(Jacobian은 출력 차원 × 입력 차원)에서 $\mathbf{J}_h(\mathbf{x})$는?'''
+explanation = '''chain rule은 $\mathbf{J}_h(\mathbf{x}) = \mathbf{J}_g(f(\mathbf{x}))\,\mathbf{J}_f(\mathbf{x})$다. 바깥 함수의 Jacobian $(2 \times 4)$이 왼쪽, 안쪽 함수의 Jacobian $(4 \times 3)$이 오른쪽에 오고, 곱은 $h$의 Jacobian 크기인 $(2 \times 3)$이다. 바깥 함수의 Jacobian은 안쪽 함수의 출력 $f(\mathbf{x})$에서 계산한다.'''
+
+[[questions.choices]]
+text = '''$\mathbf{J}_g(f(\mathbf{x}))\,\mathbf{J}_f(\mathbf{x})$, 크기 $2 \times 3$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathbf{J}_f(\mathbf{x})\,\mathbf{J}_g(f(\mathbf{x}))$'''
+feedback = "(4 × 3) 행렬 뒤에 (2 × 4) 행렬을 곱할 수 없다. shape을 맞춰 보면 곱의 순서가 정해진다. 바깥 함수가 왼쪽이다."
+
+[[questions.choices]]
+text = '''$\mathbf{J}_g(\mathbf{x})\,\mathbf{J}_f(\mathbf{x})$'''
+feedback = "g는 R^4에서 정의되므로 3차원 x에서 계산할 수 없다. 바깥 함수의 Jacobian은 안쪽 함수의 출력 f(x)에서 계산한다."
+
+[[questions.choices]]
+text = '''$\mathbf{J}_f(\mathbf{x})^\top\,\mathbf{J}_g(f(\mathbf{x}))^\top$, 크기 $3 \times 2$'''
+feedback = "이 행렬은 J_h의 전치다. gradient를 열벡터로 모으는 denominator layout의 공식이다. 규약을 섞으면 shape이 전치된 결과가 나온다."
+
+[[questions]]
+id = "chain-rule-two-paths"
+type = "numeric"
+objective = 2
+prompt = '''$u = xy$이고 $x = s + t$, $y = s - t$다. $(s, t) = (2, 1)$에서 $\partial u / \partial s$는?'''
+answer = 4
+tolerance = 0
+slider = { min = 0, max = 8, step = 1 }
+explanation = '''$s$는 $x$와 $y$ 두 경로로 $u$에 영향을 준다. $\partial u/\partial s = \dfrac{\partial u}{\partial x}\dfrac{\partial x}{\partial s} + \dfrac{\partial u}{\partial y}\dfrac{\partial y}{\partial s} = y \cdot 1 + x \cdot 1$이다. $(s, t) = (2, 1)$에서 $x = 3$, $y = 1$이므로 $1 + 3 = 4$다. 직접 전개해도 $u = s^2 - t^2$이므로 $\partial u/\partial s = 2s = 4$다. 한 경로만 따라가면 1이나 3을 얻는다.'''
+
+[[questions]]
+id = "taylor-quadratic-model"
+type = "single"
+objective = 3
+prompt = '''점 $\mathbf{a}$에서 gradient가 $\mathbf{g}$, Hessian이 양의 정부호 $\mathbf{H}$일 때, 2차 Taylor 근사 $f(\mathbf{a}) + \mathbf{g}^\top\mathbf{h} + \tfrac{1}{2}\mathbf{h}^\top\mathbf{H}\mathbf{h}$를 최소로 만드는 이동 $\mathbf{h}$는?'''
+explanation = '''2차 근사를 $\mathbf{h}$로 미분하면 $\mathbf{g} + \mathbf{H}\mathbf{h}$이고, 이를 0으로 두면 $\mathbf{h} = -\mathbf{H}^{-1}\mathbf{g}$다. $\mathbf{H}$가 양의 정부호이므로 이 점이 최소다. 이것이 Newton 방법의 한 걸음이다(10.5장). $-\mathbf{g}$는 1차 근사가 가리키는 방향일 뿐이고, 곡률이 방향마다 다르면 2차 근사의 최소점과 다르다.'''
+
+[[questions.choices]]
+text = '''$-\mathbf{H}^{-1}\mathbf{g}$'''
+correct = true
+
+[[questions.choices]]
+text = '''$-\mathbf{g}$'''
+feedback = "1차 근사가 가리키는 내려가는 방향이다. H = I일 때만 2차 근사의 최소점과 같다. 곡률이 방향마다 다르면 곡률이 큰 방향은 덜, 작은 방향은 더 움직여야 한다."
+
+[[questions.choices]]
+text = '''$-\mathbf{H}\mathbf{g}$'''
+feedback = "곡률이 큰 방향으로 오히려 더 크게 움직이게 된다. 최소점 조건 g + Hh = 0을 h에 대해 풀어 본다."
+
+[[questions.choices]]
+text = '''$\mathbf{0}$, gradient가 0이 아니어도 Taylor 근사의 최소점은 현재 위치다.'''
+feedback = "g가 0이 아니면 h = 0에서 2차 근사의 기울기가 g이므로 최소가 아니다."
+
+[[questions]]
+id = "taylor-error-scaling"
+type = "numeric"
+objective = 3
+prompt = '''매끄러운 함수 $f$를 점 $\mathbf{a}$에서 1차 Taylor 근사했다. 어떤 방향으로 거리 $0.1$만큼 떨어진 점에서 근사 오차가 $0.02$였다. 그 방향의 2계 방향미분 $\mathbf{u}^\top\mathbf{H}\mathbf{u}$가 0이 아닐 때, 같은 방향으로 거리 $0.05$인 점에서 오차는 대략 얼마인가?'''
+answer = 0.005
+tolerance = 0.001
+explanation = '''1차 근사의 오차는 $\tfrac{1}{2}\mathbf{h}^\top\mathbf{H}\mathbf{h} + O(\lVert\mathbf{h}\rVert^3)$이므로 거리의 제곱에 비례한다. 거리를 절반으로 줄이면 오차는 약 $1/4$로 줄어 $0.02/4 = 0.005$다. 오차가 거리에 비례한다고 생각하면 0.01을 답하게 된다. 2계 방향미분이 0인 방향에서는 오차가 거리의 세제곱 이상으로 더 빨리 줄어든다.'''
