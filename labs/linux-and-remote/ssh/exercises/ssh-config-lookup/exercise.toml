@@ -1,0 +1,6 @@
+title = "~/.ssh/config가 실제로 적용하는 값 찾기"
+chapter = "linux-and-remote/ssh"
+objective = 1
+exec = "browser"
+entry = "resolve"
+timeout_s = 10

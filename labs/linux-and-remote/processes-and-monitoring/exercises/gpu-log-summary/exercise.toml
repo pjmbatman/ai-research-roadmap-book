@@ -1,0 +1,6 @@
+title = "nvidia-smi 기록 요약하기"
+chapter = "linux-and-remote/processes-and-monitoring"
+objective = 2
+exec = "browser"
+entry = "summarize"
+timeout_s = 10

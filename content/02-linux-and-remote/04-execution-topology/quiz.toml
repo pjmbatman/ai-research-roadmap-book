@@ -1,0 +1,103 @@
+# 2.4 실행 위치의 지도 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "edited-wrong-copy"
+type = "single"
+objective = 1
+prompt = '''노트북에서 `train.py`의 learning rate를 고치고 저장한 뒤, 터미널에서 `ssh gpu1` 후 `python train.py`를 실행했다. 로그에는 예전 learning rate가 찍힌다. 가장 먼저 의심할 것은?'''
+explanation = '''다섯 질문 중 "코드는 어디에 있는가"를 확인하지 않은 경우다. 고친 것은 노트북의 사본이고, 실행한 것은 gpu1의 사본이다. 둘 사이를 잇는 동기화(git push/pull, rsync, Remote-SSH로 원격 파일을 직접 편집)가 없으면 수정은 반영되지 않는다. 실행 직전에 `git log -1`이나 `git diff`, 또는 실행 스크립트가 쓰는 설정 값을 로그 첫 줄에 기록하는 습관이 이 혼동을 바로 드러낸다.'''
+
+[[questions.choices]]
+text = "노트북에서 고친 파일과 gpu1에서 실행한 파일이 서로 다른 사본이다."
+correct = true
+
+[[questions.choices]]
+text = "Python이 이전 실행의 .pyc 캐시를 쓰고 있다."
+feedback = "Python은 소스가 바뀌면 캐시를 다시 만든다. 여기서는 gpu1의 소스 자체가 바뀌지 않았다."
+
+[[questions.choices]]
+text = "GPU 메모리에 이전 모델이 남아 있다."
+feedback = "새 프로세스는 새로 시작한다. 설정 값이 예전 그대로라는 것은 실행된 코드가 예전 것이라는 뜻이다."
+
+[[questions.choices]]
+text = "SSH가 노트북의 파일을 자동으로 동기화하는 데 시간이 걸린다."
+feedback = "ssh는 파일을 동기화하지 않는다. 터미널을 원격에 여는 것뿐이다. 동기화는 git이나 rsync로 직접 해야 한다."
+
+[[questions]]
+id = "remote-control-vs-ssh"
+type = "single"
+objective = 1
+prompt = '''연구실 데스크톱에서 실행 중인 코딩 에이전트 세션을 휴대폰 앱으로 원격 제어(remote control)하며 지시를 보내고 있다. 휴대폰을 끄면 어떻게 되는가? (원격 제어 기능은 세션을 다른 기기에서 조종하게 해 주는 일반적인 구조를 가정한다.)'''
+explanation = '''원격 제어에서 세션(에이전트 프로세스, 그 작업 디렉터리, 그 기계의 자격 증명)은 **데스크톱에** 있다. 휴대폰은 그 세션에 메시지를 보내고 결과를 보는 창이다. 그래서 휴대폰을 꺼도 데스크톱의 세션은 계속 돌 수 있고, 에이전트가 실행하는 명령은 데스크톱의 파일과 권한으로 실행된다. 반대로 데스크톱이 잠자기에 들어가거나 꺼지면 세션도 멈춘다. SSH가 "내 터미널을 원격에 여는 것"이라면, 원격 제어는 "원격에서 이미 돌고 있는 세션을 조종하는 것"이다.'''
+
+[[questions.choices]]
+text = "세션은 데스크톱에서 계속 돌 수 있다. 휴대폰은 조종하는 창일 뿐이고, 명령은 데스크톱의 파일·권한으로 실행된다."
+correct = true
+
+[[questions.choices]]
+text = "세션이 휴대폰에서 돌고 있었으므로 함께 종료된다."
+feedback = "연산과 세션은 데스크톱에 있다. 휴대폰에는 화면과 입력만 있다."
+
+[[questions.choices]]
+text = "SSH와 같으므로, 연결이 끊기면 SIGHUP으로 세션이 종료된다."
+feedback = "SSH 터미널에서 직접 띄운 프로세스와 달리, 원격 제어되는 세션은 조종하는 기기의 연결에 묶여 있지 않은 구조다. 둘을 구분하는 것이 이 절의 핵심이다."
+
+[[questions.choices]]
+text = "에이전트가 실행한 명령은 휴대폰 계정의 권한으로 실행되었다."
+feedback = "명령은 세션이 있는 기계에서, 그 세션을 띄운 계정의 권한으로 실행된다. 휴대폰 계정은 세션에 접근할 자격만 확인한다."
+
+[[questions]]
+id = "transfer-time-hours"
+type = "numeric"
+objective = 2
+prompt = '''1 TB(= $10^{12}$ bytes) 데이터셋을 1 Gbps(= $10^9$ bits/s) 회선으로 클라우드에 올린다. 회선 대역폭을 100% 쓴다고 해도 최소 몇 시간이 걸리는가? (소수 첫째 자리까지)'''
+answer = 2.2
+tolerance = 0.05
+explanation = '''bytes를 bits로 바꾸는 8배를 잊지 않는다. $10^{12} \times 8 = 8 \times 10^{12}$ bits, $8 \times 10^{12} / 10^9 = 8000$ 초, $8000 / 3600 \approx 2.2$ 시간이다. 실제로는 프로토콜 부가 비용, 공유 회선, 작은 파일의 파일당 비용 때문에 더 걸린다. 이 하한만으로도 "데이터를 연산 쪽으로 옮길지, 코드를 데이터 쪽으로 옮길지"를 판단할 수 있다. 코드 저장소는 보통 MB 단위라 1초도 걸리지 않는다.'''
+
+[[questions]]
+id = "sensitive-data-location"
+type = "single"
+objective = 2
+prompt = '''병원과 공동 연구로 받은 비식별 환자 영상 데이터가 병원 내부 GPU 서버에만 저장되어 있고, 데이터 사용 협약에는 "기관 밖 반출 금지"가 있다. 학습 코드를 개발할 실행 구조로 가장 알맞은 것은?'''
+explanation = '''이 작업의 결정적 제약은 다섯 질문 중 "데이터는 어디에 있는가"와 "누구의 자격으로 접근하는가"다. 데이터가 기관 밖으로 나갈 수 없으므로 연산이 데이터 쪽으로 가야 한다. 코드는 git으로 옮기거나 원격 IDE로 서버에서 직접 편집하고, 실행은 그 서버에서 한다. 관리형 notebook이나 클라우드 에이전트에 샘플을 올리는 일, 내 노트북으로 일부를 복사하는 일은 모두 반출이다. 로그·출력에 원본 데이터가 섞여 밖으로 나가지 않는지도 확인한다.'''
+
+[[questions.choices]]
+text = "로컬(또는 원격 IDE)에서 코드를 편집하고, 학습은 병원 내부 서버에서 SSH로 실행한다."
+correct = true
+
+[[questions.choices]]
+text = "편의를 위해 데이터 일부를 관리형 클라우드 notebook에 올려 개발하고, 완성된 코드만 병원 서버에서 돌린다."
+feedback = "일부라도 기관 밖 클라우드에 올리면 반출이다. 비식별이라도 협약의 범위를 지켜야 한다."
+
+[[questions.choices]]
+text = "데이터 일부를 내 노트북으로 rsync해 로컬에서 개발한다."
+feedback = "개인 노트북으로의 복사도 기관 밖 반출이다. 분실·도난 위험까지 더해진다."
+
+[[questions.choices]]
+text = "클라우드 코딩 에이전트에게 병원 서버의 데이터 경로를 알려 주고 직접 읽게 한다."
+feedback = "클라우드에서 실행되는 에이전트가 데이터를 읽으면 데이터가 그 클라우드로 흘러간다. 에이전트가 어디서 실행되고 무엇을 어디로 보내는지가 다섯 질문의 대상이다."
+
+[[questions]]
+id = "session-survives"
+type = "multiple"
+objective = 1
+prompt = '''내 노트북을 덮어도(네트워크가 끊겨도) **계속 실행되는** 것을 모두 고르시오.'''
+explanation = '''"무엇이 세션을 유지하는가"의 답이 내 노트북의 연결이 아닌 것들이다. gpu1의 tmux 세션 안에서 돈 학습과 클러스터 scheduler에 제출한 job은 내 연결과 무관하게 돈다. SSH 터미널에서 직접 실행한 학습은 연결과 함께 SIGHUP을 받고, 노트북의 로컬 Jupyter 커널은 노트북이 잠들면 함께 멈춘다.'''
+
+[[questions.choices]]
+text = "gpu1의 tmux 세션 안에서 실행한 학습"
+correct = true
+
+[[questions.choices]]
+text = "클러스터 scheduler에 sbatch로 제출한 job"
+correct = true
+
+[[questions.choices]]
+text = "`ssh gpu1` 터미널에서 바로 `python train.py`로 실행한 학습"
+feedback = "그 프로세스의 세션은 SSH 연결이다. 연결이 끊기면 SIGHUP을 받아 대개 함께 종료된다(2.2장)."
+
+[[questions.choices]]
+text = "노트북의 로컬 Jupyter 커널에서 돌던 학습"
+feedback = "연산이 노트북에서 일어나므로 노트북이 잠들면 멈춘다."
