@@ -1,0 +1,6 @@
+title = "심사자 간 일치도: Cohen kappa"
+chapter = "research-practice/peer-review"
+objective = 2
+exec = "browser"
+entry = "cohen_kappa"
+timeout_s = 10
