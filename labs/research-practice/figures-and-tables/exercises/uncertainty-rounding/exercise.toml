@@ -1,0 +1,6 @@
+title = "불확실성에 맞춰 반올림하기"
+chapter = "research-practice/figures-and-tables"
+objective = 2
+exec = "browser"
+entry = "format_pm"
+timeout_s = 10

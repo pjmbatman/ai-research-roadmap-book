@@ -1,0 +1,124 @@
+# 23.7 연구 기록과 연구 노트 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "write-notes-during"
+type = "single"
+objective = 1
+prompt = '''한 연구자는 실험 중에는 바빠서 노트를 쓰지 않고, 매주 금요일 오후에 결과 파일과 git 기록을 보며 한 주의 노트를 정리한다. 이 방식으로 가장 확실하게 잃는 정보는?'''
+explanation = '''결과를 알고 난 뒤에는 "결과를 보기 전에 무엇을 예상했는가"를 정확히 되살릴 수 없다. 기억은 결과에 맞춰 다시 쓰이고(사후 확증 편향), 실패한 시도와 버린 아이디어는 결과 파일에 흔적이 적어 빠지기 쉽다. 숫자와 커밋은 결과 파일과 git에 남아 있으므로 나중에도 복원할 수 있다. 노트가 남겨야 하는 것은 바로 복원할 수 없는 쪽이다.'''
+
+[[questions.choices]]
+text = "실험의 정확한 숫자 결과"
+feedback = "숫자는 결과 파일과 실험 추적 도구에 남아 있어 금요일에도 정확히 옮길 수 있다."
+
+[[questions.choices]]
+text = "실행한 코드의 커밋 hash"
+feedback = "커밋은 git 기록에 남는다. 다만 커밋하지 않은 변경으로 돌렸다면 그 사실은 사라진다."
+
+[[questions.choices]]
+text = "결과를 보기 전의 가설과 예상, 그리고 중간에 버린 시도와 그 이유"
+correct = true
+
+[[questions.choices]]
+text = "잃는 것은 없다. 결과 파일과 git 기록이 있으면 노트는 언제 써도 같다."
+feedback = "결과 파일과 git은 무엇을 했는지를 남기지만 왜 했는지와 무엇을 예상했는지는 남기지 않는다. 그것이 노트의 몫이다."
+
+[[questions]]
+id = "decision-rejected-alternatives"
+type = "single"
+objective = 2
+prompt = '''석 달 뒤 리뷰어가 "왜 Transformer baseline을 비교하지 않았는가"라고 물었다. 다음 결정 기록 중 이 질문에 답할 수 있는 것은?'''
+explanation = '''리뷰어의 질문은 "하지 않은 선택"에 대한 것이다. 결정 기록이 채택한 선택만 적으면 이 질문에 답할 수 없다. 기각한 대안과 그 이유, 그리고 근거로 연결된 노트·run이 있어야 한다. 되돌릴 조건까지 있으면, 리뷰어의 요구가 그 조건에 해당하는지도 바로 판단할 수 있다.'''
+
+[[questions.choices]]
+text = "\"10-02: baseline은 GRU와 TCN으로 정했다.\""
+feedback = "채택한 것만 적혀 있다. Transformer를 검토했는지, 왜 뺐는지 알 수 없다."
+
+[[questions.choices]]
+text = "\"10-02: baseline은 GRU와 TCN. Transformer는 검토했으나 시퀀스 길이 20에서 사전 실험(run-1001-t*) 결과 GRU와 구간이 겹치고 학습 비용이 4배라 제외. 시퀀스 길이 200 이상 데이터를 추가하면 다시 검토.\""
+correct = true
+
+[[questions.choices]]
+text = "\"10-02: baseline 선정 완료. 자세한 내용은 회의에서 논의함.\""
+feedback = "회의의 내용은 기록이 아니다. 석 달 뒤에는 누가 무엇을 말했는지 남아 있지 않다."
+
+[[questions]]
+id = "config-hash-key-order"
+type = "single"
+objective = 1
+prompt = '''설정 hash를 "키를 정렬하고 공백을 없앤 JSON의 SHA-256"으로 만든다. 설정 파일 A는 `batch_size = 32`, `lr = 0.001` 순서로, 파일 B는 `lr = 0.001`, `batch_size = 32` 순서로 쓰여 있고, 파일 C는 A와 같지만 `lr = 0.0010001`이다. 세 hash의 관계로 옳은 것은?'''
+explanation = '''정규화(키 정렬, 공백 제거)를 거치면 A와 B는 같은 문자열이 되어 같은 hash를 갖는다. C는 값이 다르므로 정규화한 문자열이 달라지고, SHA-256은 입력이 한 글자만 달라도 전혀 다른 값을 낸다. 설정 hash가 "파일 이름"이 아니라 "설정의 내용"을 가리키게 하려는 설계다. 파일의 바이트를 그대로 hash하면 A와 B가 달라져, 같은 설정을 다른 실험으로 오인한다.'''
+
+[[questions.choices]]
+text = "A와 B는 같고, C는 다르다."
+correct = true
+
+[[questions.choices]]
+text = "셋 다 다르다. 파일 내용의 글자 순서가 다르기 때문이다."
+feedback = "그것은 파일 바이트를 그대로 hash할 때의 결과다. 키를 정렬해 정규화하면 순서만 다른 A와 B는 같은 문자열이 된다."
+
+[[questions.choices]]
+text = "셋 다 같다. 값의 차이 0.0000001은 무시할 만큼 작다."
+feedback = "hash는 값의 크기를 알지 못한다. 문자열이 한 글자라도 다르면 hash가 완전히 달라진다. 그래야 설정의 아주 작은 변경도 기록에 드러난다."
+
+[[questions]]
+id = "uncommitted-run"
+type = "multiple"
+objective = 1
+prompt = '''`git status`에 수정된 파일이 있는 상태에서 학습을 돌렸고, 노트에는 `git rev-parse HEAD`의 커밋 hash만 적었다. 옳은 것을 모두 고르시오.'''
+explanation = '''커밋 hash는 마지막 커밋의 코드를 가리킨다. 커밋하지 않은 수정이 있었다면 실제로 실행한 코드는 그 커밋과 다르고, 수정 내용이 나중에 바뀌거나 사라지면 그 실행은 재현할 수 없다. 해결책은 실행 전에 커밋하거나, 작업 트리가 깨끗하지 않다는 사실과 diff를 실행 결과와 함께 저장하는 것이다. 수정이 작다고 결과에 영향이 없다고 가정할 수 없다(상수 하나가 결과를 바꾼다).'''
+
+[[questions.choices]]
+text = "기록한 커밋 hash는 실제로 실행한 코드를 가리키지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "실행 전에 커밋하거나, 작업 트리가 깨끗하지 않았다는 사실과 diff를 실행 결과와 함께 남겨야 한다."
+correct = true
+
+[[questions.choices]]
+text = "커밋 hash가 있으므로 그 커밋을 checkout하면 이 실행을 정확히 재현할 수 있다."
+feedback = "커밋에는 수정 전 코드가 들어 있다. 수정한 부분이 결과에 영향을 줬다면 checkout으로는 같은 결과가 나오지 않는다."
+
+[[questions.choices]]
+text = "수정이 주석이나 작은 상수뿐이면 결과에 영향이 없으므로 기록하지 않아도 된다."
+feedback = "작은 상수 하나가 결과를 바꿀 수 있다. 영향이 없다는 판단 자체를 검증할 기록이 남지 않는다."
+
+[[questions]]
+id = "weekly-report-blocker"
+type = "single"
+objective = 1
+prompt = '''이번 주에 데이터 전처리 문제로 실험이 하나도 진행되지 않았다. 주간 보고를 어떻게 쓰는 것이 가장 좋은가?'''
+explanation = '''주간 보고의 목적은 진행 과시가 아니라 도움을 받는 것이다. 막힌 점을 구체적으로(무엇이, 왜, 무엇을 시도했는지) 쓰고, 필요한 도움을 누구에게 무엇으로 요청해야 문제가 일찍 풀린다. 보고를 건너뛰거나 모호하게 쓰면 같은 문제로 몇 주를 더 잃는다. 시도한 내용과 그 결과는 노트에서 가져온다.'''
+
+[[questions.choices]]
+text = "보고할 진행이 없으므로 이번 주는 보고를 건너뛰고 다음 주에 두 주 분을 함께 보고한다."
+feedback = "막힌 주의 보고가 가장 가치 있다. 미루면 도움을 받을 기회를 한 주 잃는다."
+
+[[questions.choices]]
+text = "\"전처리 작업 진행 중\"이라고만 쓴다."
+feedback = "읽는 사람은 문제가 있다는 것도, 무엇을 도와야 하는지도 알 수 없다."
+
+[[questions.choices]]
+text = "막힌 점(어떤 데이터에서 무엇이 왜 실패하는지), 시도한 것과 결과, 필요한 도움(누구에게 무엇을)을 구체적으로 쓴다."
+correct = true
+
+[[questions]]
+id = "record-stopping"
+type = "single"
+objective = 2
+prompt = '''여러 결정 중 결정 기록으로 남길 우선순위가 가장 높은 것은?'''
+explanation = '''하지 않기로 한 결정(실험 중단, 데이터 제외, baseline 제외)은 결과 파일에 아무 흔적도 남기지 않는다. 기록이 없으면 "불리한 결과를 보고 뺐다"는 의심에 답할 수 없고, 같은 실험을 다시 시작하게 된다. 반대로 자주 바뀌고 결과 해석에 영향이 없는 선택(로그 출력 형식, 변수 이름)은 기록할 필요가 낮다.'''
+
+[[questions.choices]]
+text = "학습 로그를 출력하는 간격을 100 step에서 50 step으로 바꾼 것"
+feedback = "결과의 해석을 바꾸지 않고 되돌리기도 쉽다. 커밋 메시지로 충분하다."
+
+[[questions.choices]]
+text = "측정 오류가 의심되는 셀 7개를 평가 데이터에서 제외하기로 한 것"
+correct = true
+
+[[questions.choices]]
+text = "실험 스크립트의 함수 이름을 더 읽기 쉽게 바꾼 것"
+feedback = "코드의 가독성 변경은 결과에 영향을 주지 않는다. 커밋 기록으로 충분하다."

@@ -1,0 +1,3 @@
+# note_stamp.py 예시용 설정
+batch_size = 32
+lr = 0.001
