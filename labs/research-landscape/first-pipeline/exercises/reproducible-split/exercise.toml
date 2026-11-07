@@ -1,0 +1,6 @@
+title = "다시 실행해도 같은 분할"
+chapter = "research-landscape/first-pipeline"
+objective = 1
+exec = "browser"
+entry = "split_indices"
+timeout_s = 10
