@@ -28,7 +28,7 @@ const theme = EditorView.theme({
   ".cm-matchingBracket": { backgroundColor: "var(--muted)", outline: "none" },
 });
 
-export function createEditor(parent: HTMLElement, doc: string, opts: { onRun?: () => void; onChange?: (s: string) => void; label?: string } = {}) {
+export function createEditor(parent: HTMLElement, doc: string, opts: { onRun?: () => void; onChange?: (s: string) => void; label?: string; readOnly?: boolean } = {}) {
   const ext: Extension[] = [
     lineNumbers(), history(), drawSelection(), highlightActiveLine(), bracketMatching(), indentUnit.of("    "),
     python(), syntaxHighlighting(style), theme,
@@ -39,6 +39,7 @@ export function createEditor(parent: HTMLElement, doc: string, opts: { onRun?: (
     ]),
     EditorView.contentAttributes.of({ "aria-label": opts.label ?? "Python 코드 편집기" }),
   ];
+  if (opts.readOnly) ext.push(EditorState.readOnly.of(true), EditorView.editable.of(false));
   if (opts.onChange) ext.push(EditorView.updateListener.of((u) => { if (u.docChanged) opts.onChange!(u.state.doc.toString()); }));
   const view = new EditorView({ state: EditorState.create({ doc, extensions: ext }), parent });
   return {

@@ -1,7 +1,6 @@
-// 모든 페이지 공통: 테마, ⌘K 검색, 목차 추적, 진도 표시. 장 페이지에서는 퀴즈·코드 셀·연습문제·위젯을 붙인다.
+// 모든 페이지 공통: 테마, ⌘K 검색, 진도 표시. 장 페이지에서는 퀘스트·코드 셀·위젯을, 실습실에서는 데스크톱을 붙인다.
 // 무거운 모듈(CodeMirror, 위젯)은 그 요소가 있는 페이지에서만 동적으로 불러온다.
-import { progress, chapterScore, chapterState } from "./store";
-import { mountSteps } from "./steps";
+import { progress, chapterState } from "./store";
 
 const base = document.body.dataset.base || "/";
 export const url = (p: string) => base + p;
@@ -158,20 +157,15 @@ function trackProgress() {
 markVisited();
 window.addEventListener("progress-change", markVisited);
 
-/* ---------- 장 페이지 ---------- */
+/* ---------- 장 페이지(퀘스트) · 실습실 ---------- */
 if (page) {
   progress.update(page.chapterId, (p) => { p.visited = Date.now(); });
-  mountSteps();
   setupPassChecks(page.chapterId);
-  updateMeter(page);
-  window.addEventListener("progress-change", () => updateMeter(page));
-
-  if (page.quiz.length) import("./quiz").then((m) => m.mountQuizzes(page));
+  if (document.querySelector("[data-quest]")) import("./quest").then((m) => m.mountQuest(page));
+  if (document.querySelector("[data-lab]")) import("./lab").then((m) => m.mountLab(page));
   if (document.querySelector(".cell")) import("./cells").then((m) => m.mountCells());
-  if (document.querySelector(".exercise")) import("./exercise").then((m) => m.mountExercises(page));
   if (document.querySelector(".widget")) import("../widgets/index").then((m) => m.mountWidgets(page));
-
-  if (document.querySelector(".cell[data-exec=browser], .exercise")) {
+  if (document.querySelector('.cell[data-exec="browser"], [data-lab]')) {
     import("./runtime").then(({ onRuntimeState }) =>
       onRuntimeState((st) => (st === "loading" || st === "running" ? loading.start("py") : loading.stop("py"))),
     );
@@ -192,15 +186,6 @@ function setupPassChecks(id: string) {
     while (li.firstChild) span.append(li.firstChild);
     li.append(box, span);
   });
-}
-
-function updateMeter(p: PageData) {
-  const totals = { quiz: p.quiz.length, exercises: Object.keys(p.exercises).length, checks: document.querySelectorAll(".box-pass > ul > li").length };
-  const s = chapterScore(p.chapterId, totals);
-  const meter = document.querySelector<HTMLElement>("[data-chapter-meter]");
-  if (meter) meter.style.width = `${Math.round(s.ratio * 100)}%`;
-  const pct = document.querySelector<HTMLElement>("[data-chapter-pct]");
-  if (pct) pct.textContent = `${Math.round(s.ratio * 100)}%`;
 }
 
 /* ---------- 탭 바 ---------- */

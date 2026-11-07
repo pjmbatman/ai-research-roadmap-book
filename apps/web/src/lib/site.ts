@@ -1,5 +1,7 @@
 // 여러 페이지가 함께 쓰는 원고 요약: 장의 학습 목표·항목 수, 트랙 사이의 의존 관계.
-import { loadBook, allChapters, str, type Chapter } from "./book";
+import { loadBook, allChapters, str, partOf, trackOfChapter, type Chapter } from "./book";
+import { questOf } from "./quest";
+import { renderInline } from "./markdown";
 
 const section = (body: string, title: string) =>
   (new RegExp(`^## ${title}\\s*\\n([\\s\\S]*?)(?=^## |$(?![\\s\\S]))`, "m").exec(body)?.[1] ?? "")
@@ -17,6 +19,12 @@ export function chapterSummary(c: Chapter) {
     id: c.id, label: c.label, title: str(c.meta.title), url: c.url, ready: isReady(c), tier: str(c.meta.tier),
     track: trackKeyOf(c), code: trackCodeOf(trackKeyOf(c)), goals: goalsOf(c), pre: (c.meta.prerequisites as string[]) || [],
     quiz: c.quiz.length, ex: Object.keys(c.exercises).length, checks: passCount(c),
+    exIds: Object.keys(c.exercises),
+    /** 본문이 있는 장의 퀘스트 노드(홈의 진행 점) */
+    nodes: isReady(c) ? questOf(c).nodes.map((n) => ({ id: n.id, kind: n.kind, quiz: n.quiz, name: n.name })) : [],
+    /** 본문이 있는 장의 도입 문단(홈 히어로) */
+    lead: isReady(c) ? leadOf(c) : "",
+    crumb: `${trackOfChapter(c)?.name ?? "부록"} › ${str(partOf(c).meta.title)}`,
   };
 }
 export type ChapterSummary = ReturnType<typeof chapterSummary>;
@@ -33,4 +41,11 @@ export function trackEdges(): [string, string][] {
     }
   }
   return [...edges].map((e) => e.split(">") as [string, string]);
+}
+
+/** 첫 절 앞의 도입 문단 첫 단락(HTML) */
+export function leadOf(c: Chapter): string {
+  const body = c.body.replace(/^# .+\n/m, "");
+  const lead = body.split(/^## /m)[0].trim().split(/\n\s*\n/)[0] ?? "";
+  return lead ? renderInline(lead) : "";
 }

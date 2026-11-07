@@ -16,12 +16,12 @@ const u = (p: string) => import.meta.env.BASE_URL + p;
   <div style="max-width:860px;margin:0 auto">
     <div class="page-head">
       <nav class="crumbs">
-        {track && <a href={u(`tracks/${track.key}/`)}>{track.code} {track.name}</a>}
+        {track && <a href={u(`tracks/${track.key}/`)}>{`${track.code} ${track.name}`}</a>}
       </nav>
       <h1>{part.label === "부록" ? "부록" : `${part.label}부`} {str(part.meta.title)}</h1>
       {part.meta.summary && <p>{str(part.meta.summary)}</p>}
     </div>
-    <div class="card" style="overflow:hidden">
+    <div class="tile" style="padding:6px">
       <ul class="ch-list">
         {part.chapters.map((c) => (
           <li><a href={u(c.url)} data-chapter-link={c.id}>

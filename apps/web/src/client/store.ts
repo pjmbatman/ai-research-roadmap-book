@@ -6,6 +6,8 @@ export interface ChapterProgress {
   quiz?: Record<string, { correct: boolean; tries: number }>;
   exercises?: Record<string, { passed: boolean; code?: string }>;
   checks?: Record<string, boolean>;
+  /** 퀘스트에서 마친 읽기 단계(노드 id → true). 퀴즈·실습 노드는 quiz·exercises에서 판정한다. */
+  steps?: Record<string, boolean>;
   /** 로드맵에서 직접 고른 상태(roadmap.sh). 자동 판정보다 우선한다. */
   mark?: "learning" | "done" | "skipped";
 }
