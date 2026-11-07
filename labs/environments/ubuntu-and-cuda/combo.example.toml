@@ -1,0 +1,40 @@
+# 연구실 표준 OS·드라이버·CUDA 조합 기록 (예시)
+# 값은 형식을 보이기 위한 집필 시점 예시다. 실제 값은 각 source의 공식 문서에서 확인해 채우고,
+# 확인한 날짜를 checked에 적는다. source나 checked가 빈 항목은 check_combo.py가 '근거 없음'으로 표시한다.
+
+project_end = "2029-12"
+
+[os]
+name = "Ubuntu 24.04 LTS"
+standard_support_until = "2029-04"
+source = "Ubuntu 릴리스 주기 공식 페이지"
+checked = "2026-11-07"
+
+[gpu]
+model = "(서버의 GPU 모델)"
+compute_capability = "8.0"
+source = "nvidia-smi --query-gpu=name,compute_cap --format=csv"
+checked = "2026-11-07"
+
+[driver]
+version = "570.124.06"
+max_cuda = "12.8"
+source = "nvidia-smi 출력"
+checked = "2026-11-07"
+
+[toolkit]
+version = "12.8"
+min_driver = "570.124.06"
+max_gcc_major = ""            # CUDA 설치 가이드의 지원 컴파일러 표에서 확인해 채운다
+source = "CUDA Toolkit release notes: toolkit과 드라이버 버전 표"
+checked = "2026-11-07"
+
+[compiler]
+gcc = "13.3.0"
+source = "gcc -dumpfullversion"
+checked = "2026-11-07"
+
+[framework]
+torch_cuda = "12.8"
+source = ""                   # PyTorch 설치 페이지에서 이 CUDA 빌드가 제공되는지 확인해 채운다
+checked = ""

@@ -1,0 +1,6 @@
+title = "버전 제약 검사기"
+chapter = "environments/dependencies-and-packaging"
+objective = 1
+exec = "browser"
+entry = "satisfies"
+timeout_s = 10

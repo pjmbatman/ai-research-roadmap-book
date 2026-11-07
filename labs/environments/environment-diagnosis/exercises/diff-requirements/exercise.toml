@@ -1,0 +1,6 @@
+title = "업그레이드 전후 패키지 목록 비교하기"
+chapter = "environments/environment-diagnosis"
+objective = 3
+exec = "browser"
+entry = "diff_requirements"
+timeout_s = 10

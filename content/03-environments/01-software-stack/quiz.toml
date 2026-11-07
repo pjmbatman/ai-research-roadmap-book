@@ -57,3 +57,59 @@ feedback = "runtime이 드라이버 위에서 동작한다."
 [[questions.choices]]
 text = "GPU → PyTorch → cuDNN → NVIDIA 드라이버"
 feedback = "PyTorch가 가장 위층이다."
+
+[[questions]]
+id = "three-versions-scenario"
+type = "multiple"
+objective = 2
+prompt = "한 서버에서 `nvidia-smi`의 `CUDA Version`은 12.4, `nvcc --version`은 11.8, `torch.version.cuda`는 12.1이다. 옳은 설명을 모두 고르시오."
+explanation = "세 숫자는 서로 다른 계층의 정보다. 드라이버는 CUDA 12.4까지 지원하므로 PyTorch wheel에 들어 있는 CUDA 12.1 runtime이 문제없이 동작한다. 시스템 toolkit 11.8은 PyTorch 실행에 쓰이지 않고, custom CUDA extension을 컴파일할 때만 쓰인다. 이때 toolkit과 PyTorch의 CUDA major가 다르면 PyTorch의 extension 빌드 도구가 오류를 낸다."
+
+[[questions.choices]]
+text = "PyTorch의 GPU 연산은 wheel과 함께 설치된 CUDA 12.1 runtime으로 실행된다."
+correct = true
+
+[[questions.choices]]
+text = "이 상태에서 custom CUDA extension을 빌드하면 nvcc 11.8과 PyTorch의 CUDA 12.1이 맞지 않아 문제가 된다."
+correct = true
+
+[[questions.choices]]
+text = "PyTorch는 시스템에 설치된 toolkit 11.8로 실행되므로 12.1 기능을 쓸 수 없다."
+feedback = "PyTorch wheel은 자기 CUDA runtime을 함께 가져온다. 시스템 toolkit은 실행 경로에 끼어들지 않는다."
+
+[[questions.choices]]
+text = "드라이버가 12.4를 보고하므로 PyTorch를 쓰려면 드라이버를 12.1용으로 낮춰야 한다."
+feedback = "드라이버는 하위 호환이다. 12.4까지 지원하는 드라이버는 12.1 runtime을 그대로 실행한다."
+
+[[questions]]
+id = "runtime-count"
+type = "numeric"
+objective = 2
+prompt = "`nvidia-smi`의 `CUDA Version`이 12.4인 서버가 있다. CUDA 11.8, 12.1, 12.4, 12.6, 13.0으로 빌드된 PyTorch 다섯 가지 중, minor version compatibility 같은 예외 규칙에 기대지 않고 '드라이버가 지원하는 버전 이하'라는 기본 규칙만으로 실행이 보장되는 것은 몇 개인가?"
+answer = 3
+tolerance = 0
+slider = { min = 0, max = 5, step = 1, unit = "개" }
+explanation = "드라이버는 자기가 지원하는 최대 CUDA 버전 이하로 빌드된 프로그램을 실행한다. 11.8, 12.1, 12.4의 세 개가 여기에 해당한다. 12.6은 같은 major(12)라서 minor version compatibility로 대부분 동작하지만, 일부 기능이 제한되는 예외 규칙에 기댄다. 13.0은 major가 높아 드라이버 업그레이드가 필요하다."
+
+[[questions]]
+id = "abi-undefined-symbol"
+type = "single"
+objective = 1
+prompt = "직접 작성한 C++/CUDA extension이 빌드는 성공했는데, 다른 환경에서 `import`하자 `undefined symbol: _ZN...` 오류가 났다. 가장 먼저 의심할 원인은?"
+explanation = "`undefined symbol`은 동적 링크 단계의 오류다. 확장 모듈이 기대하는 C++ 심볼이 실제로 불러온 라이브러리(대개 PyTorch의 libtorch)에 없다는 뜻이고, 빌드에 쓴 PyTorch 버전이나 C++ ABI 설정(`_GLIBCXX_USE_CXX11_ABI`)이 실행 환경과 다를 때 흔히 생긴다. 드라이버나 GPU 메모리 문제는 import가 아니라 CUDA를 호출하는 시점의 CUDA error로 나타난다."
+
+[[questions.choices]]
+text = "extension을 빌드한 PyTorch 버전 또는 C++ ABI가 import하는 환경과 다르다."
+correct = true
+
+[[questions.choices]]
+text = "NVIDIA 드라이버가 너무 오래되었다."
+feedback = "드라이버 문제는 import 시점의 심볼 오류가 아니라, CUDA를 처음 호출할 때 CUDA error나 GPU 인식 실패로 나타난다."
+
+[[questions.choices]]
+text = "CUDA toolkit이 설치되어 있지 않다."
+feedback = "빌드가 성공했다는 것은 컴파일러가 있었다는 뜻이다. 실행 시점에는 toolkit이 아니라 링크된 라이브러리의 심볼이 맞아야 한다."
+
+[[questions.choices]]
+text = "GPU 메모리가 부족하다."
+feedback = "메모리 부족은 텐서를 GPU에 올릴 때 out of memory 오류로 나타난다. import 단계와는 관계가 없다."

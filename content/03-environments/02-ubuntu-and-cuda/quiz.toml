@@ -1,0 +1,132 @@
+# 3.2 Ubuntu·드라이버·CUDA 설치와 버전 전략 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "os-choice-for-lab"
+type = "single"
+objective = 1
+prompt = "3년 동안 쓸 연구실 공용 GPU 서버의 OS를 정하려 한다. 가장 타당한 기준은?"
+explanation = "공용 서버는 오래 쓰고, 한 번 정한 OS를 바꾸는 비용이 크다. 그래서 지원 기간이 긴 LTS 릴리스 중에서 프로젝트 기간 동안 보안 업데이트를 받을 수 있고, 쓰려는 CUDA 버전의 설치 가이드가 지원 OS로 명시한 것을 고른다. 가장 새로운 중간 릴리스는 지원 기간이 짧고, 가장 오래된 LTS는 지원이 곧 끝나거나 새 드라이버·CUDA의 지원 목록에서 빠진다."
+
+[[questions.choices]]
+text = "프로젝트 기간 동안 지원되는 LTS 중, 쓰려는 CUDA 버전의 공식 설치 가이드가 지원 OS로 명시한 것"
+correct = true
+
+[[questions.choices]]
+text = "가장 최신 기능이 들어 있는 최신 중간(non-LTS) 릴리스"
+feedback = "중간 릴리스는 지원 기간이 짧아 공용 서버에서는 곧 업그레이드 압박을 받는다. CUDA 지원 목록에 늦게 오르는 경우도 있다."
+
+[[questions.choices]]
+text = "오래 검증되어 안정적인, 가장 오래된 LTS 릴리스"
+feedback = "오래된 LTS는 표준 지원이 곧 끝나거나 이미 끝났을 수 있고, 새 드라이버·CUDA의 지원 목록에서 빠지기 시작한다."
+
+[[questions.choices]]
+text = "따라 할 설치 블로그 글이 가장 많은 버전"
+feedback = "블로그 글은 쓰인 시점의 상황을 반영할 뿐이다. 기준은 지원 기간과 공식 호환성 문서다."
+
+[[questions]]
+id = "driver-version-compare"
+type = "single"
+objective = 2
+prompt = "공식 문서에 CUDA 12.x의 최소 드라이버가 525.60.13으로 적혀 있다. 서버의 드라이버는 525.105.17이다. 요구 조건을 만족하는가?"
+explanation = "드라이버 버전은 점으로 구분한 정수를 앞에서부터 비교한다. 525는 같고, 두 번째 자리에서 105 > 60이므로 525.105.17이 더 새 버전이다. 문자열로 비교하면 '1' < '6'이라 반대 결론이 나오는데, 이것이 스크립트에서 흔한 버그다."
+
+[[questions.choices]]
+text = "만족한다. 두 번째 자리에서 105가 60보다 크다."
+correct = true
+
+[[questions.choices]]
+text = "만족하지 않는다. '525.105...'는 '525.60...'보다 사전순으로 앞선다."
+feedback = "사전순(문자열) 비교는 버전 비교가 아니다. 점으로 나눈 각 자리를 정수로 비교해야 한다."
+
+[[questions.choices]]
+text = "판단할 수 없다. 세 번째 자리(17과 13)까지 모두 커야 한다."
+feedback = "버전은 앞자리부터 비교해 처음 다른 자리에서 결정된다. 두 번째 자리에서 이미 결정된다."
+
+[[questions]]
+id = "official-sources"
+type = "multiple"
+objective = 2
+prompt = "새 서버의 드라이버·CUDA 조합을 정할 때 근거로 삼을 자료를 모두 고르시오."
+explanation = "호환성은 공식 문서의 표로 확인한다. 프레임워크 설치 페이지는 어떤 CUDA 빌드가 제공되는지, CUDA toolkit release notes는 그 CUDA에 필요한 최소 드라이버를, CUDA 설치 가이드는 지원 OS·kernel·컴파일러를 알려 준다. 블로그 글과 다른 서버의 출력은 그 시점·그 서버의 사례일 뿐이다."
+
+[[questions.choices]]
+text = "사용할 PyTorch 버전의 공식 설치 페이지(제공되는 CUDA 빌드 목록)"
+correct = true
+
+[[questions.choices]]
+text = "CUDA toolkit release notes의 toolkit과 드라이버 버전 표"
+correct = true
+
+[[questions.choices]]
+text = "CUDA 설치 가이드의 지원 OS·컴파일러 목록"
+correct = true
+
+[[questions.choices]]
+text = "검색 상위에 나온 블로그의 설치 명령"
+feedback = "블로그는 쓰인 시점의 버전 조합을 전제로 한다. 저장소 주소·패키지 이름·버전이 이미 바뀌었을 수 있다."
+
+[[questions.choices]]
+text = "옆 연구실 서버의 nvidia-smi 출력"
+feedback = "다른 서버에서 동작한다는 것은 사례일 뿐, 이 서버의 GPU·kernel·OS 조합에 대한 근거가 아니다."
+
+[[questions]]
+id = "nvml-mismatch"
+type = "single"
+objective = 1
+prompt = "자동 업데이트가 돈 다음 날부터 `nvidia-smi`가 `Failed to initialize NVML: Driver/library version mismatch`를 출력한다. 가장 가능성 높은 원인과 첫 조치는?"
+explanation = "드라이버 패키지가 업데이트되면 사용자 공간 라이브러리는 새 버전으로 바뀌지만, 메모리에 올라가 있는 kernel 모듈은 재부팅(또는 모듈 재적재) 전까지 이전 버전이다. 두 버전이 달라 이 메시지가 나온다. 재부팅이 첫 조치이고, 공유 서버에서는 드라이버 패키지를 `apt-mark hold`로 고정해 계획된 시점에만 업그레이드한다."
+
+[[questions.choices]]
+text = "드라이버의 사용자 공간 라이브러리만 새 버전이 되고 kernel 모듈은 이전 버전으로 남았다. 재부팅한다."
+correct = true
+
+[[questions.choices]]
+text = "CUDA toolkit이 망가졌다. toolkit을 다시 설치한다."
+feedback = "nvidia-smi와 NVML은 드라이버의 일부이고 toolkit과 무관하다. toolkit이 없어도 nvidia-smi는 동작한다."
+
+[[questions.choices]]
+text = "PyTorch 버전이 드라이버와 맞지 않는다. PyTorch를 다시 설치한다."
+feedback = "PyTorch를 실행하지 않아도 nvidia-smi 자체가 실패한다. 문제는 PyTorch보다 아래층이다."
+
+[[questions.choices]]
+text = "GPU 하드웨어 고장이다. 장비를 교체한다."
+feedback = "메시지가 드라이버와 라이브러리의 버전 불일치를 직접 말하고 있다. 하드웨어를 의심하기 전에 소프트웨어 층을 확인한다."
+
+[[questions]]
+id = "which-nvcc-runs"
+type = "single"
+objective = 3
+prompt = "`/usr/local/cuda`는 `/usr/local/cuda-12.4`를 가리키는 심볼릭 링크이고, `PATH=/usr/local/cuda-12.1/bin:/usr/local/cuda/bin:/usr/bin`이다. `nvcc --version`은 어느 버전을 보고하는가?"
+explanation = "셸은 `PATH`의 디렉터리를 앞에서부터 찾고 처음 찾은 파일을 실행한다. 첫 항목 `/usr/local/cuda-12.1/bin`에 `nvcc`가 있으므로 12.1이 실행된다. `/usr/local/cuda` 링크가 무엇을 가리키는지는 두 번째 항목이라 영향이 없다. 확인은 `which nvcc`와 `readlink -f $(which nvcc)`로 한다."
+
+[[questions.choices]]
+text = "12.1"
+correct = true
+
+[[questions.choices]]
+text = "12.4"
+feedback = "/usr/local/cuda 링크는 PATH의 두 번째 항목이다. 첫 항목에서 이미 nvcc를 찾았다."
+
+[[questions.choices]]
+text = "두 버전이 섞여 실행되어 예측할 수 없다."
+feedback = "PATH 검색은 결정적이다. 앞에서부터 처음 찾은 파일 하나만 실행된다."
+
+[[questions]]
+id = "toolkit-only-package"
+type = "single"
+objective = 3
+prompt = "드라이버는 그대로 두고 CUDA 12.4 toolkit을 기존 toolkit 옆에 추가하려 한다. NVIDIA 저장소의 apt 패키지를 쓸 때 알맞은 선택은?"
+explanation = "NVIDIA 저장소의 `cuda` 같은 메타패키지는 드라이버까지 함께 설치·업그레이드할 수 있다. toolkit만 필요하면 `cuda-toolkit-12-4`처럼 버전이 붙은 toolkit 패키지를 설치한다. 그러면 `/usr/local/cuda-12.4`에 설치되어 다른 버전과 공존하고, 쓸 버전은 `PATH`·`CUDA_HOME`으로 고른다. 패키지 이름은 집필 시점 예시이므로 설치 가이드에서 확인한다."
+
+[[questions.choices]]
+text = "버전이 붙은 toolkit 전용 패키지(예: `cuda-toolkit-12-4`)를 설치한다."
+correct = true
+
+[[questions.choices]]
+text = "`cuda` 메타패키지를 설치한다."
+feedback = "메타패키지는 드라이버까지 끌어와 공유 서버의 드라이버를 바꿀 수 있다."
+
+[[questions.choices]]
+text = "기존 toolkit을 지워야만 새 버전을 설치할 수 있다."
+feedback = "toolkit은 /usr/local/cuda-X.Y처럼 버전별 디렉터리에 설치되어 공존할 수 있다."

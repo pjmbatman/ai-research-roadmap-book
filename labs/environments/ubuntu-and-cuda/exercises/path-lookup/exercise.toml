@@ -1,0 +1,6 @@
+title = "PATH에서 실행될 파일 찾기"
+chapter = "environments/ubuntu-and-cuda"
+objective = 3
+exec = "browser"
+entry = "lookup"
+timeout_s = 10
