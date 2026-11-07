@@ -102,8 +102,6 @@ $$
 
 더 일반적으로, 다양체 $\mathcal{M}$에서 $\mathcal{N}$으로 가는 매끄러운 사상 $f$의 Jacobian은 **접공간 사이의 선형사상** $T_{\mathbf{p}}\mathcal{M} \to T_{f(\mathbf{p})}\mathcal{N}$이다. 곡선의 속도를 상(image) 곡선의 속도로 보낸다. 신경망 한 층 $f: \mathbb{R}^n \to \mathbb{R}^k$의 Jacobian도 같은 방식으로 읽을 수 있다. 입력이 어떤 다양체 위에 있으면, 그 접방향을 Jacobian에 넣어 출력에서 어느 방향으로 얼마나 늘어나는지 본다(Jacobian의 일반적인 계산은 8.1장).
 
-::quiz{id="jacobian-tangent-plane"}
-
 **회전군의 접공간과 지수사상.** $SO(3)$의 항등원 $\mathbf{I}$를 지나는 회전 곡선 $\mathbf{R}(t)$, $\mathbf{R}(0) = \mathbf{I}$를 생각한다. $\mathbf{R}(t)^\top\mathbf{R}(t) = \mathbf{I}$를 $t = 0$에서 미분하면 $\mathbf{R}'(0)^\top + \mathbf{R}'(0) = \mathbf{0}$이다. 즉 항등원에서의 접공간은 **반대칭 행렬**($\mathbf{A}^\top = -\mathbf{A}$)의 공간이다. $3 \times 3$ 반대칭 행렬은 성분 3개로 정해지므로, 벡터 $\boldsymbol{\omega} \in \mathbb{R}^3$와 일대일로 대응한다.
 
 $$
@@ -212,8 +210,6 @@ print("국소 PCA 분산 비율 평균:", np.round(np.mean(local, axis=0), 3))
 
 전역 PCA는 세 방향에 분산을 고르게 나눠, 데이터를 담는 선형 부분공간이 3차원이라고 말한다. 12개 이웃 안에서는 셋째 방향의 분산이 0.2%뿐이다. 국소적으로 데이터는 2차원 시트다.
 
-::quiz{id="pca-on-swiss-roll"}
-
 추정치는 **척도에 의존한다**. 이웃이 너무 작으면 잡음의 차원(측정 잡음은 모든 방향으로 퍼진다)이 보이고, 너무 크면 휘어짐 때문에 차원이 커 보인다. 내재 차원은 하나의 숫자라기보다 "어떤 척도에서의 차원"으로 보고, 이웃 크기를 바꿔 가며 보고한다(실습).
 
 ## 표현의 기하
@@ -246,8 +242,6 @@ t = 0.75  |lerp| = 0.791  |slerp| = 1.000
 ```
 
 직선 보간은 구면 안쪽을 가로질러 중점에서 노름이 $1/\sqrt{2}$로 줄어든다. 정규화된 embedding(예: cosine similarity로 학습한 표현)을 직선으로 보간하면 학습 중에 한 번도 본 적 없는 노름의 벡터가 만들어진다. 고차원 표준 가우시안에서 뽑은 잠재 벡터도 비슷하다. $d$차원 표준 가우시안 표본의 노름은 $\sqrt{d}$ 근처에 몰리는데, 독립인 두 표본의 중점은 노름이 약 $\sqrt{d/2}$로, 사전분포에서 거의 나오지 않는 영역에 놓인다.
-
-::quiz{id="lerp-midpoint-norm"}
 
 **잠재 공간 거리의 함정.** 잠재 공간이 평평한 $\mathbb{R}^d$라고 해서 그 위의 유클리드 거리가 데이터 사이의 의미 있는 거리라는 보장은 없다. decoder $g: \mathbb{R}^d \to \mathbb{R}^n$이 비선형이면, 잠재 공간의 같은 길이 $\lVert\Delta\mathbf{z}\rVert$가 데이터 공간에서는 $\lVert\mathbf{J}_g(\mathbf{z})\Delta\mathbf{z}\rVert$만큼의 변화를 만들고, 이 값은 위치와 방향에 따라 크게 다르다. 데이터 공간에서 측정한 길이로 잠재 공간의 경로를 재려면 $\mathbf{J}_g^\top\mathbf{J}_g$를 국소 내적으로 쓰는 방법(잠재 공간에 decoder가 유도하는 Riemann 계량을 주는 것)이 있다. 이 장에서는 "잠재 거리는 decoder의 Jacobian을 거쳐야 데이터 거리가 된다"는 점만 기억한다.
 

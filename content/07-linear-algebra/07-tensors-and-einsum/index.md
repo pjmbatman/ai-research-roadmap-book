@@ -134,8 +134,6 @@ einsum 문자열 `"btd,bsd->bts"`를 읽으면 계산의 의미가 드러난다.
 
 **축약 순서와 비용.** 피연산자가 셋 이상이면 결과는 같아도 어떤 순서로 축약하느냐에 따라 비용이 크게 달라진다. $1000 \times 1000$ 행렬 $\mathbf{A}, \mathbf{B}$와 벡터 $\mathbf{x}$에 대해 $(\mathbf{A}\mathbf{B})\mathbf{x}$는 약 $10^9$번, $\mathbf{A}(\mathbf{B}\mathbf{x})$는 약 $2 \times 10^6$번 곱한다. NumPy의 `np.einsum`은 기본값(`optimize=False`)에서 순서를 최적화하지 않는다. 피연산자가 셋 이상이면 `optimize=True`를 주거나 `np.einsum_path`로 축약 순서와 예상 비용을 확인한다. 함수의 기본값은 버전마다 바뀔 수 있으므로 쓰는 버전의 문서에서 확인한다.
 
-::quiz{id="contraction-order"}
-
 ## 주요 연산
 
 인덱스로 쓰면 이름이 다른 여러 연산이 같은 틀 안에 들어온다.
