@@ -1,0 +1,106 @@
+# 0.4 자가 진단과 역량 지도 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "explain-before-rating"
+type = "single"
+objective = 1
+prompt = "역량 지도에 '확률: 베이즈 정리 — 2 설명'이라고 적었다. 그런데 자료 없이 설명을 써 보니 사전분포와 우도의 역할을 문장으로 쓰지 못하고 막혔다. 가장 적절한 조치는?"
+explanation = "설명(2) 수준의 근거는 자료 없이 쓴 설명이다. 설명을 쓰다 막혔다면 그 칸은 인지(1)다. 수준을 낮춰 적는 것은 진단이 제대로 동작한 결과이고, 그 칸이 경로에서 채워야 할 빈칸이 된다."
+
+[[questions.choices]]
+text = "수준을 1(인지)로 고치고, 막힌 지점을 기록해 해당 장(13.1장)을 경로에 넣는다."
+correct = true
+
+[[questions.choices]]
+text = "여러 번 들어 본 개념이므로 2를 유지한다."
+feedback = "여러 번 들어 익숙한 것과 설명할 수 있는 것은 다르다. 수준은 근거로 매긴다."
+
+[[questions.choices]]
+text = "자료를 보면서 설명을 완성한 뒤 2로 유지한다."
+feedback = "자료를 보며 쓴 설명은 자료 없이 설명할 수 있다는 근거가 아니다. 장을 공부한 뒤 자료 없이 다시 써서 확인한다."
+
+[[questions]]
+id = "low-rank-product"
+type = "numeric"
+objective = 1
+prompt = '''$\mathbf{U}$는 `(5, 2)`, $\mathbf{V}$는 `(2, 4)` 행렬이고 두 행렬의 원소는 무작위 정규분포에서 뽑았다. $\mathbf{A} = \mathbf{U}\mathbf{V}$의 rank는?'''
+answer = 2
+tolerance = 0
+slider = { min = 0, max = 5, step = 1 }
+explanation = '''$\mathbf{A}$의 모든 열은 $\mathbf{U}$의 두 열의 선형결합이므로 열공간의 차원은 2 이하다: $\operatorname{rank}(\mathbf{U}\mathbf{V}) \le \min(\operatorname{rank}\mathbf{U}, \operatorname{rank}\mathbf{V}) = 2$. 무작위 원소면 확률 1로 정확히 2가 된다. shape `(5, 4)`만 보고 4를 답하기 쉽지만, rank는 shape이 아니라 열들이 실제로 펼치는 공간의 차원이다.'''
+
+[[questions]]
+id = "standard-error"
+type = "numeric"
+objective = 1
+prompt = '''표준편차가 $\sigma = 2$인 분포에서 독립 표본 $n = 25$개를 뽑아 평균을 낸다. 이 실험을 무수히 반복할 때, 표본 평균들의 표준편차(표준오차)는?'''
+answer = 0.4
+tolerance = 0.01
+slider = { min = 0.0, max = 2.0, step = 0.05 }
+explanation = '''독립인 확률변수의 합의 분산은 분산의 합이므로 $\operatorname{Var}[\bar{X}] = \sigma^2/n$이고, 표준오차는 $\sigma/\sqrt{n} = 2/5 = 0.4$다. 2를 답했다면 개별 측정의 흩어짐(표준편차)과 평균의 불확실성(표준오차)을 혼동한 것이다. $\sigma/n = 0.08$은 분산과 표준편차의 제곱근 관계를 놓친 것이다.'''
+
+[[questions]]
+id = "evidence-for-verify"
+type = "single"
+objective = 1
+prompt = "이론 축의 '역전파' 칸에 4(검증)를 적으려 한다. 근거로 가장 적절한 것은?"
+explanation = "검증(4)은 구현과 결과가 맞는지 독립적인 방법으로 확인한 것이다. 직접 구현한 gradient를 수치미분과 비교해 오차를 보고한 기록이 바로 그 근거다. 강의 수강, 라이브러리 사용, 좋은 정확도는 각각 인지, 라이브러리 사용 경험, 결과일 뿐 구현이 맞다는 독립적 확인이 아니다."
+
+[[questions.choices]]
+text = "직접 구현한 2층 MLP의 gradient를 수치미분과 비교하고, 상대 오차를 기록한 노트와 코드"
+correct = true
+
+[[questions.choices]]
+text = "역전파를 설명하는 강의를 끝까지 들은 수료 기록"
+feedback = "강의를 들은 것은 인지의 근거다. 설명, 구현, 검증은 모두 자신이 만든 것으로 보인다."
+
+[[questions.choices]]
+text = "PyTorch의 `loss.backward()`로 모델을 학습시켜 높은 정확도를 얻은 경험"
+feedback = "라이브러리가 계산한 gradient를 쓴 것이다. 자신이 구현한 것이 맞는지 확인한 것이 아니다."
+
+[[questions.choices]]
+text = "역전파에 관한 블로그 글을 세 편 읽고 요약한 노트"
+feedback = "읽고 요약한 것은 많아야 설명 수준의 근거다. 그것도 자료 없이 쓴 설명이어야 한다."
+
+[[questions]]
+id = "lowest-cells"
+type = "single"
+objective = 2
+prompt = "역량 지도를 채웠더니 이론(선형대수) 4, 구현(학습 파이프라인) 3, 연구(실험 설계) 2, 운영(환경과 재현성) 1이었다. 모두 자기 연구에 필요한 칸이다. 다음 3개월 경로에 먼저 넣을 것은?"
+explanation = "연구를 막는 것은 대개 가장 낮은 칸이다. 운영 1과 연구 2를 채울 장(3.3–3.6장, 22.1–22.2장, 23.4–23.6장)을 먼저 넣는다. 이론이 4여도 운영이 1이면 결과가 환경 때문에 달라질 때 원인을 찾지 못하고, 실험 설계가 2면 얻은 결과가 무엇을 지지하는지 판단하지 못한다."
+
+[[questions.choices]]
+text = "가장 낮은 두 칸인 운영(환경과 재현성)과 연구(실험 설계)를 채우는 장"
+correct = true
+
+[[questions.choices]]
+text = "가장 잘하는 선형대수를 5(확장)로 끌어올리는 심화 장"
+feedback = "잘하는 칸을 더 높이는 것은 즐겁지만, 연구를 막는 것은 가장 낮은 칸이다."
+
+[[questions.choices]]
+text = "모든 칸을 고르게 올리기 위해 다섯 단계를 처음부터 다시 따른다."
+feedback = "이미 채워진 칸을 다시 공부하는 데 시간을 쓰게 된다. 진단의 목적은 빈칸을 골라내는 것이다."
+
+[[questions]]
+id = "rediagnosis"
+type = "multiple"
+objective = 2
+prompt = "진단 결과를 학습 경로에 반영하는 방법으로 적절한 것을 모두 고르시오."
+explanation = "역량 지도는 한 번 쓰고 끝나는 문서가 아니다. 단계를 마치거나 일정 기간이 지나면 다시 채우고, 이전 지도와 비교할 수 있게 날짜와 근거를 남긴다. 칸이 오래 움직이지 않으면 경로나 학습 방식을 바꾼다. 이전 지도를 덮어쓰면 무엇이 바뀌었는지 비교할 수 없다."
+
+[[questions.choices]]
+text = "학습 경로의 단계를 마칠 때마다 역량 지도를 다시 채운다."
+correct = true
+
+[[questions.choices]]
+text = "칸이 바뀔 때마다 날짜·이전 수준·새 수준·근거를 성장 기록에 한 줄씩 남긴다."
+correct = true
+
+[[questions.choices]]
+text = "3개월 동안 수준이 움직이지 않은 칸이 있으면 그 칸의 경로나 학습 방식을 바꾼다."
+correct = true
+
+[[questions.choices]]
+text = "새로 진단할 때 이전 지도를 지우고 새 지도로 덮어쓴다."
+feedback = "이전 지도가 없으면 무엇이 바뀌었는지 비교할 수 없다. 날짜를 붙여 남긴다."
