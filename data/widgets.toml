@@ -475,37 +475,37 @@ status = "prototype"
 name = "probe-vs-pca"
 title = "PCA 시각화 vs 선형 프로브"
 chapters = ["architectures/representation-analysis"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "gan-dynamics"
 title = "GAN 학습 동역학"
 chapters = ["generative-and-foundation-models/gan-and-flows"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "coupling-flow"
 title = "affine coupling 흐름"
 chapters = ["generative-and-foundation-models/gan-and-flows"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "vae-collapse"
 title = "VAE posterior collapse"
 chapters = ["generative-and-foundation-models/vae"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "flow-paths"
 title = "flow matching 경로"
 chapters = ["generative-and-foundation-models/flow-matching"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "gen-metric-failures"
 title = "생성 지표의 실패"
 chapters = ["generative-and-foundation-models/evaluating-generative-models"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "contrastive-collapse"
