@@ -1,0 +1,6 @@
+title = "permutation importance 직접 구현하기"
+chapter = "classical-ml/trees-and-ensembles"
+objective = 3
+exec = "browser"
+entry = "permutation_importance"
+timeout_s = 10
