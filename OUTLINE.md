@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1225문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1248문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -845,16 +845,16 @@ _ML 연구자를 위한 분자생물학 기초, 생물 서열 모델, 단백질 
 
 _ML 연구자를 위한 배터리 기초, 배터리 모델 계층, 데이터셋과 함정, 상태·수명 예측, 파라미터 추정, 충전 최적화, 배터리 foundation model을 사례 중심으로 다룬다._
 
-- **30.1** [ML 연구자를 위한 배터리 기초](content/30-battery-ai/01-battery-fundamentals/index.md) · `필수` · 위젯: 등가회로 모델 시뮬레이터
-  - 셀의 구조와 화학 · 상태 지표 · 시험 프로토콜 · 열화 메커니즘 · 측정 데이터
-- **30.2** [배터리 모델의 계층](content/30-battery-ai/02-battery-models/index.md) · `필수` · 위젯: 등가회로 모델 시뮬레이터
-  - 등가회로 모델(ECM) · 전기화학 모델 · 열 모델과 열화 모델 · DAE 구조 · 시뮬레이션 도구
+- **30.1** [ML 연구자를 위한 배터리 기초](content/30-battery-ai/01-battery-fundamentals/index.md) · `필수` · 퀴즈 6 · 위젯: 등가회로 모델 시뮬레이터
+  - 셀의 구조와 화학 · 상태 지표 · 시험 프로토콜 · 열화 메커니즘 · 측정 데이터 · 참고 문헌
+- **30.2** [배터리 모델의 계층](content/30-battery-ai/02-battery-models/index.md) · `필수` · 퀴즈 6 · 위젯: 등가회로 모델 시뮬레이터
+  - 등가회로 모델(ECM) · 전기화학 모델 · 열 모델과 열화 모델 · DAE 구조 · 시뮬레이션 도구 · 참고 문헌
   - 선수: 30.1 ML 연구자를 위한 배터리 기초, 9.7 PDE·DAE와 시뮬레이터 검증
-- **30.3** [배터리 데이터셋과 데이터 함정](content/30-battery-ai/03-battery-data/index.md) · `필수`
-  - 공개 데이터셋 · 이질성 · 분할 · censoring과 중단 · 품질 문제
+- **30.3** [배터리 데이터셋과 데이터 함정](content/30-battery-ai/03-battery-data/index.md) · `필수` · 퀴즈 5
+  - 공개 데이터셋 · 이질성 · 분할 · censoring과 중단 · 품질 문제 · 참고 문헌
   - 선수: 30.1 ML 연구자를 위한 배터리 기초, 15.4 데이터 분할과 누수 방지
-- **30.4** [상태 추정과 수명 예측](content/30-battery-ai/04-state-and-lifetime-prediction/index.md) · `필수`
-  - 문제 정의 · SOC·SOH 추정 · 수명 예측 · 불확실성 · 평가
+- **30.4** [상태 추정과 수명 예측](content/30-battery-ai/04-state-and-lifetime-prediction/index.md) · `필수` · 퀴즈 6
+  - 문제 정의 · SOC·SOH 추정 · 수명 예측 · 불확실성 · 평가 · 참고 문헌
   - 선수: 30.3 배터리 데이터셋과 데이터 함정, 21.1 불확실성 정량화
 - **30.5** [파라미터 추정과 하이브리드 모델링](content/30-battery-ai/05-parameter-estimation/index.md) · `심화`
   - 파라미터 추정 · 대리모델 · 하이브리드 모델 · 평가
