@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 353문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 384문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -171,19 +171,19 @@ _Git과 GitHub로 변경을 추적·협업하고, AI 코딩 도구와 에이전�
 
 _수식을 정확하고 효율적인 코드로 옮기기 위한 Python 언어, 과학 계산 라이브러리, 계산 비용과 컴퓨터 구조를 익힌다._
 
-- **5.1** [Python 언어의 핵심](content/05-python-and-computing/01-python-language/index.md) · `필수`
-  - 객체와 참조 · 함수 · 예외와 자원 관리 · 반복과 지연 계산 · 클래스 · 타입 · 데코레이터
-- **5.2** [모듈·패키지·import 시스템](content/05-python-and-computing/02-modules-and-imports/index.md) · `필수`
-  - import의 동작 · 패키지 구성 · 실행 방식 · 진입점 · 순환 import와 import 비용
+- **5.1** [Python 언어의 핵심](content/05-python-and-computing/01-python-language/index.md) · `필수` · 퀴즈 7
+  - 객체와 참조 · 함수 · 예외와 자원 관리 · 반복과 지연 계산 · 클래스 · 타입 · 데코레이터 · 참고 문헌
+- **5.2** [모듈·패키지·import 시스템](content/05-python-and-computing/02-modules-and-imports/index.md) · `필수` · 퀴즈 6
+  - import의 동작 · 패키지 구성 · 실행 방식 · 진입점 · 순환 import와 import 비용 · 참고 문헌
   - 선수: 5.1 Python 언어의 핵심
-- **5.3** [NumPy·pandas·SciPy](content/05-python-and-computing/03-scientific-python/index.md) · `필수`
-  - NumPy 배열 · indexing · broadcasting과 벡터화 · pandas · 대안 도구 · SciPy
+- **5.3** [NumPy·pandas·SciPy](content/05-python-and-computing/03-scientific-python/index.md) · `필수` · 퀴즈 6
+  - NumPy 배열 · indexing · broadcasting과 벡터화 · pandas · 대안 도구 · SciPy · 참고 문헌
   - 선수: 5.1 Python 언어의 핵심
-- **5.4** [자료구조·알고리즘·계산 비용](content/05-python-and-computing/04-algorithms-and-complexity/index.md) · `필수`
-  - 자료구조 · 복잡도 · 대용량 처리 패턴 · 희소와 밀집 · profiling 기초
+- **5.4** [자료구조·알고리즘·계산 비용](content/05-python-and-computing/04-algorithms-and-complexity/index.md) · `필수` · 퀴즈 6
+  - 자료구조 · 복잡도 · 대용량 처리 패턴 · 희소와 밀집 · profiling 기초 · 참고 문헌
   - 선수: 5.1 Python 언어의 핵심
-- **5.5** [컴퓨터 구조와 병렬 계산](content/05-python-and-computing/05-computer-architecture/index.md) · `필수`
-  - 하드웨어 구성 · GPU의 계산 모델 · 병렬성과 동시성 · 병목의 종류 · 수의 표현
+- **5.5** [컴퓨터 구조와 병렬 계산](content/05-python-and-computing/05-computer-architecture/index.md) · `필수` · 퀴즈 6
+  - 하드웨어 구성 · GPU의 계산 모델 · 병렬성과 동시성 · 병목의 종류 · 수의 표현 · 참고 문헌
   - 선수: 5.4 자료구조·알고리즘·계산 비용
 
 ### 제6부. 연구 코드 엔지니어링 <sub>Research Code Engineering</sub>
