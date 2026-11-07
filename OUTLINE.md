@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 170문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 203문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -119,23 +119,23 @@ _연구 서버를 안정적으로 다루기 위한 Linux, 자원 모니터링, S
 
 _OS부터 GPU 드라이버, CUDA, Python, 패키지, 컨테이너까지 실행 환경을 계층별로 이해하고 재현 가능하게 만든다._
 
-- **3.1** [AI 소프트웨어 스택의 계층](content/03-environments/01-software-stack/index.md) · `필수` · 퀴즈 3
+- **3.1** [AI 소프트웨어 스택의 계층](content/03-environments/01-software-stack/index.md) · `필수` · 퀴즈 6
   - 계층 구조 · 버전 정보 읽기 · PyTorch 바이너리와 CUDA · 컴파일러와 ABI
   - 선수: 2.1 Linux와 셸의 기초
-- **3.2** [Ubuntu·드라이버·CUDA 설치와 버전 전략](content/03-environments/02-ubuntu-and-cuda/index.md) · `필수`
+- **3.2** [Ubuntu·드라이버·CUDA 설치와 버전 전략](content/03-environments/02-ubuntu-and-cuda/index.md) · `필수` · 퀴즈 6
   - OS 버전 선택 · 드라이버 설치 · CUDA toolkit 설치 · 호환성 확인 절차 · 설치 기록
   - 선수: 3.1 AI 소프트웨어 스택의 계층
-- **3.3** [Python 환경 관리: venv·pip·uv·conda](content/03-environments/03-python-environments/index.md) · `필수`
+- **3.3** [Python 환경 관리: venv·pip·uv·conda](content/03-environments/03-python-environments/index.md) · `필수` · 퀴즈 6
   - 왜 격리 환경인가 · 도구별 역할 · 일상 작업 · 도구 혼용의 문제 · 연구실 표준 정하기
   - 선수: 3.1 AI 소프트웨어 스택의 계층
-- **3.4** [의존성과 패키징](content/03-environments/04-dependencies-and-packaging/index.md) · `필수`
+- **3.4** [의존성과 패키징](content/03-environments/04-dependencies-and-packaging/index.md) · `필수` · 퀴즈 6
   - 의존성의 구조 · pyproject.toml · lockfile과 재현 · 배포 형식 · PyTorch 설치의 특수성 · 설치와 개발 모드 · 충돌 해결
   - 선수: 3.3 Python 환경 관리: venv·pip·uv·conda
-- **3.5** [Docker와 컨테이너](content/03-environments/05-docker/index.md) · `필수`
+- **3.5** [Docker와 컨테이너](content/03-environments/05-docker/index.md) · `필수` · 퀴즈 6
   - 기본 개념 · Dockerfile · 데이터와 결과 · GPU 사용 · 실무 이슈 · 개발 컨테이너와 HPC · 재현 가능한 빌드
   - 선수: 3.4 의존성과 패키징
-- **3.6** [환경 진단·재현·유지보수](content/03-environments/06-environment-diagnosis/index.md) · `필수`
-  - 증상별 진단 · 환경 정보 수집 · 최소 재현 예제 · 변경 관리 · 검증
+- **3.6** [환경 진단·재현·유지보수](content/03-environments/06-environment-diagnosis/index.md) · `필수` · 퀴즈 6
+  - 증상별 진단 · 환경 정보 수집 · 최소 재현 예제 · 변경 관리 · 검증 · 시나리오 N
   - 선수: 3.5 Docker와 컨테이너
 
 ### 제4부. Git·협업·AI 에이전트 <sub>Git, Collaboration, and AI Agents</sub>
