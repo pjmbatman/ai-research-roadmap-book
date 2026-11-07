@@ -1,0 +1,99 @@
+# 7.6 SVD·PCA·저랭크 근사 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "svd-geometry"
+type = "single"
+objective = 1
+prompt = '''$2 \times 2$ 행렬 $\mathbf{A} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^\top$이 단위원을 보내는 곳은?'''
+explanation = '''$\mathbf{V}^\top$은 단위원을 회전(또는 반사)할 뿐이므로 단위원은 그대로다. $\boldsymbol{\Sigma}$가 축마다 $\sigma_1, \sigma_2$배로 늘여 축에 나란한 타원을 만들고, $\mathbf{U}$가 그 축을 $\mathbf{u}_1, \mathbf{u}_2$ 방향으로 돌린다. 결과는 반축이 $\sigma_1\mathbf{u}_1$, $\sigma_2\mathbf{u}_2$인 타원이다. 축 방향은 입력 쪽의 $\mathbf{v}_i$가 아니라 출력 쪽의 $\mathbf{u}_i$다.'''
+
+[[questions.choices]]
+text = '''반축이 $\sigma_1\mathbf{u}_1$, $\sigma_2\mathbf{u}_2$인 타원'''
+correct = true
+
+[[questions.choices]]
+text = '''반축이 $\sigma_1\mathbf{v}_1$, $\sigma_2\mathbf{v}_2$인 타원'''
+feedback = "v_i는 입력 공간의 축이다. A v_i = σ_i u_i이므로 출력 타원의 축은 u_i 방향이다."
+
+[[questions.choices]]
+text = "반지름이 σ1인 원"
+feedback = "두 축의 배율 σ1, σ2가 다르면 원이 아니라 타원이 된다. 원이 되는 것은 σ1 = σ2일 때뿐이다."
+
+[[questions.choices]]
+text = "고윳값이 반축인 타원"
+feedback = "비대칭 행렬에서 고윳값은 늘이는 배율과 다르다(예: [[1, 10], [0, 1]]의 고윳값은 1이지만 최대 배율은 약 10.1). 반축은 특이값이다."
+
+[[questions]]
+id = "largest-singular-value"
+type = "numeric"
+objective = 1
+prompt = '''$\mathbf{A} = \begin{bmatrix} 2 & 0 \\ 0 & -3 \end{bmatrix}$의 가장 큰 특이값은?'''
+answer = 3
+tolerance = 0
+explanation = '''$\mathbf{A}^\top\mathbf{A} = \operatorname{diag}(4, 9)$이므로 특이값은 $\sqrt{9} = 3$과 $\sqrt{4} = 2$이다. 특이값은 늘이는 배율이라 항상 0 이상이다. 음수 고윳값 $-3$의 부호는 반사를 뜻하고, 그 반사는 $\mathbf{U}$나 $\mathbf{V}$에 들어간다. 고윳값 중 큰 값 2를 답으로 고르면 부호를 잘못 다룬 것이다.'''
+
+[[questions]]
+id = "eckart-young-error"
+type = "numeric"
+objective = 2
+prompt = '''행렬의 특이값이 $5, 3, 2, 1$이다. 최적의 rank-2 근사 $\mathbf{A}_2$의 Frobenius 오차 $\lVert\mathbf{A} - \mathbf{A}_2\rVert_F$는? (소수 둘째 자리까지)'''
+answer = 2.236
+tolerance = 0.01
+explanation = '''Eckart–Young 정리에 의해 최적 rank-2 근사는 앞의 두 항을 남긴 truncated SVD이고, Frobenius 오차는 버린 특이값의 제곱합의 제곱근 $\sqrt{2^2 + 1^2} = \sqrt{5} \approx 2.236$이다. spectral 노름 오차라면 $\sigma_3 = 2$이다. 버린 특이값을 그냥 더한 $3$은 nuclear 노름 오차다.'''
+
+[[questions]]
+id = "energy-ratio"
+type = "numeric"
+objective = 2
+prompt = '''같은 행렬(특이값 $5, 3, 2, 1$)에서 rank-2 근사가 담는 에너지 비율 $\sum_{i \le 2}\sigma_i^2 / \sum_i \sigma_i^2$은? (소수 셋째 자리까지)'''
+answer = 0.872
+tolerance = 0.002
+explanation = '''$(25 + 9)/(25 + 9 + 4 + 1) = 34/39 \approx 0.872$이다. 특이값 자체의 비 $(5 + 3)/11 \approx 0.727$로 계산하기 쉽지만, Frobenius 노름의 제곱이 $\sum\sigma_i^2$이므로 에너지는 제곱으로 잰다. 중심화한 데이터에서는 이 값이 PCA의 설명 분산 비율이다.'''
+
+[[questions]]
+id = "pca-centering"
+type = "single"
+objective = 3
+prompt = '''평균이 원점에서 멀리 떨어진 데이터 행렬 $\mathbf{X}$에 중심화 없이 `np.linalg.svd(X)`를 적용했다. 첫 오른쪽 특이벡터는 무엇에 가까운가?'''
+explanation = '''중심화하지 않으면 $\mathbf{X}^\top\mathbf{X}/(N-1)$은 공분산이 아니라 원점에 대한 2차 모멘트다. 평균이 멀리 있으면 이 행렬은 평균 벡터의 바깥곱 $\boldsymbol{\mu}\boldsymbol{\mu}^\top$이 지배하므로, 첫 특이벡터는 평균 방향을 가리키고 그 방향이 "분산"의 대부분을 설명하는 것처럼 보인다. 실제 변동의 주축과는 관계가 없다.'''
+
+[[questions.choices]]
+text = "데이터 평균 벡터의 방향"
+correct = true
+
+[[questions.choices]]
+text = "분산이 가장 큰 방향(제1주성분)"
+feedback = "그것은 평균을 뺀 뒤의 SVD가 주는 방향이다. 평균을 빼지 않으면 원점에서 데이터 중심까지의 방향이 지배한다."
+
+[[questions.choices]]
+text = "SVD는 평균에 영향을 받지 않으므로 중심화 여부와 무관하게 같다."
+feedback = "SVD는 원점을 기준으로 행렬을 분해한다. 데이터를 평행이동하면 행렬이 바뀌고 특이벡터도 바뀐다."
+
+[[questions]]
+id = "pca-standardize"
+type = "single"
+objective = 3
+prompt = '''온도(K, 표준편차 약 5)와 압력(Pa, 표준편차 약 2000)을 특징으로 PCA를 했더니 제1주성분이 분산의 99.99%를 설명하고 방향이 거의 압력 축이었다. 옳은 해석은?'''
+explanation = '''PCA는 분산을 최대화하므로 숫자 크기가 큰 특징을 고른다. 압력을 kPa로 바꾸기만 해도 결과가 뒤집힌다. 단위가 다른 특징은 표준화한 뒤(상관행렬로) PCA를 한다. 표준화하면 두 특징의 무게가 같아지고, 설명 분산 비율은 두 특징의 상관 정도를 반영한다.'''
+
+[[questions.choices]]
+text = "단위 선택 때문에 압력의 분산이 커 보인 것이다. 표준화한 뒤 다시 분석한다."
+correct = true
+
+[[questions.choices]]
+text = "압력이 이 계의 변동을 거의 전부 결정하는 물리적 요인이다."
+feedback = "분산의 크기는 단위에 따라 바뀐다. Pa 대신 MPa를 쓰면 같은 데이터에서 온도가 제1주성분이 된다."
+
+[[questions.choices]]
+text = "제1주성분이 99.99%를 설명하므로 데이터는 사실상 1차원이고 온도는 버려도 된다."
+feedback = "그 99.99%는 압력의 숫자가 크다는 사실을 다시 말한 것일 뿐이다. 온도의 정보는 비교할 기준이 없어 묻혔다."
+
+[[questions]]
+id = "pca-variance"
+type = "numeric"
+objective = 3
+prompt = '''샘플 101개인 데이터를 중심화한 행렬의 가장 큰 특이값이 $\sigma_1 = 20$이다. 제1주성분 방향으로 사영한 데이터의 표본 분산($N - 1$로 나눈 값)은?'''
+answer = 4
+tolerance = 0.001
+explanation = '''$\mathbf{C} = \mathbf{X}_c^\top\mathbf{X}_c/(N-1) = \mathbf{V}\boldsymbol{\Sigma}^2\mathbf{V}^\top/(N-1)$이므로 제1주성분 방향의 분산은 $\sigma_1^2/(N-1) = 400/100 = 4$이다. 특이값 20을 그대로 분산으로 읽거나, 제곱만 하고 $N - 1$로 나누지 않는 실수가 흔하다.'''
