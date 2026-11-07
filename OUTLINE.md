@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 326문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 353문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -239,16 +239,16 @@ _데이터와 모델을 공간과 변환의 관점에서 이해한다. 선형·�
 - **7.6** [SVD·PCA·저랭크 근사](content/07-linear-algebra/06-svd-and-pca/index.md) · `필수` · 퀴즈 7 · 위젯: SVD: 회전–스케일–회전
   - SVD · 저랭크 근사 · PCA · 계산 · 활용
   - 선수: 7.5 고윳값과 대칭행렬
-- **7.7** [텐서와 einsum](content/07-linear-algebra/07-tensors-and-einsum/index.md) · `필수`
+- **7.7** [텐서와 einsum](content/07-linear-algebra/07-tensors-and-einsum/index.md) · `필수` · 퀴즈 6
   - 다차원 배열로서의 텐서 · 인덱스 표기와 einsum · 주요 연산 · shape 대수 · 텐서 분해 개요
   - 선수: 7.6 SVD·PCA·저랭크 근사
-- **7.8** [다양체와 표현의 기하](content/07-linear-algebra/08-manifolds-and-geometry/index.md) · `심화`
+- **7.8** [다양체와 표현의 기하](content/07-linear-algebra/08-manifolds-and-geometry/index.md) · `심화` · 퀴즈 7
   - 거리공간과 위상의 직관 · 다양체 · 접공간과 Jacobian · 데이터 다양체 가설 · 표현의 기하 · 차원 개념의 구분
   - 선수: 7.2 아핀 구조와 비선형성
-- **7.9** [함수공간과 연산자](content/07-linear-algebra/09-function-spaces/index.md) · `심화`
+- **7.9** [함수공간과 연산자](content/07-linear-algebra/09-function-spaces/index.md) · `심화` · 퀴즈 7
   - 함수를 벡터로 · Hilbert 공간과 Banach 공간 · 연산자 · 이산화 · 커널과 RKHS
   - 선수: 7.4 내적·노름·직교성·사영
-- **7.10** [대칭과 군 표현](content/07-linear-algebra/10-symmetry-and-groups/index.md) · `심화`
+- **7.10** [대칭과 군 표현](content/07-linear-algebra/10-symmetry-and-groups/index.md) · `심화` · 퀴즈 7
   - 대칭과 군 · 군의 표현 · 불변성과 등변성 · 대칭을 모델에 넣는 방법 · 과학에서의 대칭
   - 선수: 7.5 고윳값과 대칭행렬
 
