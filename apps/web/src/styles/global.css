@@ -558,6 +558,9 @@ kbd { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; b
 .readout.ok { background: var(--green-soft); color: var(--green-ink); }
 .wcap { margin: 0; font-size: 14px; color: var(--mute); }
 
+.widget-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr)); gap: 16px; font-size: 15px; }
+.widget-gallery .widget { margin: 0; }
+
 /* ---------- 3. 실습실 (데스크톱) ---------- */
 body.lab-body { overflow: hidden; background: #0b0d12; }
 .lab { position: fixed; inset: 0; color: #e8e8ed; --line: #2c2d33; --mute: #8e8e93; --surface: #1c1d22; --surface-2: #15161a; --soft: #26272d; --ink: #e8e8ed; color-scheme: dark;

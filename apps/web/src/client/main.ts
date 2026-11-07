@@ -159,7 +159,7 @@ window.addEventListener("progress-change", markVisited);
 
 /* ---------- 장 페이지(퀘스트) · 실습실 ---------- */
 if (page) {
-  progress.update(page.chapterId, (p) => { p.visited = Date.now(); });
+  if (!page.chapterId.startsWith("_")) progress.update(page.chapterId, (p) => { p.visited = Date.now(); });
   setupPassChecks(page.chapterId);
   if (document.querySelector("[data-quest]")) import("./quest").then((m) => m.mountQuest(page));
   if (document.querySelector("[data-lab]")) import("./lab").then((m) => m.mountLab(page));
