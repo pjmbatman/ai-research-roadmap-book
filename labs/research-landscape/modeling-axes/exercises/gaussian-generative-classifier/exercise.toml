@@ -1,0 +1,6 @@
+title = "1차원 가우시안 생성 분류기"
+chapter = "research-landscape/modeling-axes"
+objective = 2
+exec = "browser"
+entry = "fit_predict_proba"
+timeout_s = 10
