@@ -98,6 +98,23 @@ def parse_value(raw: str):
     return raw
 
 
+def strip_fences(body: str) -> str:
+    """코드 펜스(``` 또는 ~~~) 안의 줄을 비운다. 예시 코드 속 '## '가 절 제목으로 잡히지 않게 한다."""
+    out, fence = [], None
+    for line in body.split("\n"):
+        m = re.match(r"^\s{0,3}(`{3,}|~{3,})", line)
+        if fence is None and m:
+            fence = m.group(1)
+            out.append("")
+        elif fence is not None:
+            if re.match(r"^\s{0,3}" + re.escape(fence[0]) + "{" + str(len(fence)) + r",}\s*$", line):
+                fence = None
+            out.append("")
+        else:
+            out.append(line)
+    return "\n".join(out)
+
+
 def read_doc(path: Path) -> tuple[dict, str]:
     text = path.read_text(encoding="utf-8")
     if not text.startswith("---\n"):
@@ -157,7 +174,7 @@ def load_book(errors: Errors) -> list[Part]:
                 continue
             order = m.group(1)
             clabel = order.upper() if slug == APPENDIX_PART else f"{label}.{int(order)}"
-            headings = re.findall(r"^## (.+?)\s*$", body, flags=re.M)
+            headings = re.findall(r"^## (.+?)\s*$", strip_fences(body), flags=re.M)
             ch = Chapter(cindex, clabel, order, m.group(2), cmeta, headings, body)
             qpath = cdir / QUIZ_FILE
             if qpath.exists():
