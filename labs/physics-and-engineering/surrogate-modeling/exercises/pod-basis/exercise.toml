@@ -1,0 +1,6 @@
+title = "POD 기저를 에너지 기준으로 고르기"
+chapter = "physics-and-engineering/surrogate-modeling"
+objective = 1
+exec = "browser"
+entry = "pod_basis"
+timeout_s = 10
