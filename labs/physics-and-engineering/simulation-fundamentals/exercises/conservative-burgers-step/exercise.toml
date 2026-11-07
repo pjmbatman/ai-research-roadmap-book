@@ -1,0 +1,6 @@
+title = "보존형 유한체적 step으로 Burgers 방정식 풀기"
+chapter = "physics-and-engineering/simulation-fundamentals"
+objective = 1
+exec = "browser"
+entry = "burgers_fv_step"
+timeout_s = 10
