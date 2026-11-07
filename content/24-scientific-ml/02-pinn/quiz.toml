@@ -1,0 +1,143 @@
+# 24.2 물리 정보 신경망(PINN) — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+# 계산으로 확인할 수 있는 정답은 labs/scientific-ml/pinn/test_quiz.py가 검증한다.
+
+[[questions]]
+id = "pinn-loss-terms"
+type = "multiple"
+objective = 1
+prompt = '''관측 데이터 없이 1차원 열방정식 $u_t = \alpha u_{xx}$ ($0 < x < 1$, $0 < t \le 1$, 초기 조건 $u(x, 0) = \sin\pi x$, 경계 조건 $u(0, t) = u(1, t) = 0$)을 PINN으로 풀려고 한다. 손실에 **반드시** 들어가야 하는 항을 모두 고르시오. (경계·초기 조건을 모델 구조로 강제하지 않는다고 가정한다.)'''
+explanation = '''방정식 잔차만으로는 해가 정해지지 않는다. $u = 0$, $u = e^{-\alpha\pi^2 t}\sin\pi x$, $u = x$ 모두 잔차가 0이다. 초기 조건과 경계 조건이 함께 있어야 해가 하나로 정해진다. 정확해와의 MSE는 정확해를 모르는 실제 문제에서 계산할 수 없으므로 목적함수에 넣을 수 없다. 관측 데이터가 있다면 데이터 손실 항이 추가된다.'''
+
+[[questions.choices]]
+text = '''collocation 점에서의 방정식 잔차 $\big(u_t - \alpha u_{xx}\big)^2$의 평균'''
+correct = true
+
+[[questions.choices]]
+text = '''$t = 0$에서 $\big(u(x, 0) - \sin\pi x\big)^2$의 평균'''
+correct = true
+
+[[questions.choices]]
+text = '''$x = 0, 1$에서 $u^2$의 평균'''
+correct = true
+
+[[questions.choices]]
+text = "정확해와 신경망 출력의 차이 제곱 평균"
+feedback = "실제 문제에서는 정확해를 모른다. 정확해와의 오차는 학습이 끝난 뒤 검증할 때만 쓸 수 있다(이 장의 실험처럼 정확해가 있는 시험 문제에서)."
+
+[[questions]]
+id = "hard-constraint-ansatz"
+type = "single"
+objective = 1
+prompt = '''Poisson 문제 $-u'' = f$, $u(0) = u(1) = 0$에서 신경망 $N(x)$로 $u(x) = x(1 - x)\,N(x)$라는 꼴의 해를 쓰기로 했다. 이 설계에 대한 설명으로 옳은 것은?'''
+explanation = '''$x(1-x)$는 $x = 0, 1$에서 0이므로, $N$이 무엇이든 $u(0) = u(1) = 0$이 정확히 성립한다. 이것이 hard constraint이고, 경계 손실 항과 그 가중치를 정할 필요가 없어진다. 대신 방정식 잔차는 여전히 학습으로 줄여야 하고, 복잡한 영역이나 Neumann 조건에서는 이런 꼴을 설계하기 어렵다.'''
+
+[[questions.choices]]
+text = "경계 조건이 모든 N에 대해 정확히 성립하므로 경계 손실 항이 필요 없다."
+correct = true
+
+[[questions.choices]]
+text = "방정식 잔차도 자동으로 0이 된다."
+feedback = "x(1-x) 인자는 경계값만 정한다. 내부에서 -u'' = f가 성립하는지는 N을 학습해야 정해진다."
+
+[[questions.choices]]
+text = "경계 조건이 학습점에서만 근사적으로 성립하는 soft constraint다."
+feedback = "손실 벌점이 soft constraint다. 해의 꼴에 조건을 넣으면 어떤 N에 대해서도 정확히 성립한다."
+
+[[questions.choices]]
+text = "x(1-x)를 곱하면 표현할 수 있는 해가 줄어들어 정확해를 표현할 수 없다."
+feedback = "경계에서 0인 매끄러운 해는 x(1-x)와 매끄러운 함수의 곱으로 쓸 수 있다(예: sin πx = x(1-x)·[sin πx / (x(1-x))], 괄호 안은 경계에서도 유한하다)."
+
+[[questions]]
+id = "residual-frequency-ratio"
+type = "numeric"
+objective = 3
+prompt = '''$-u'' = f$의 정확해 $u^*$에 오차 $e(x) = \varepsilon\sin(k\pi x)$가 더해진 후보 해의 잔차는 $-e''$다. $k = 10$일 때, (잔차의 RMS) ÷ (해 오차의 RMS)는 얼마인가? (정수로 반올림)'''
+answer = 987
+tolerance = 3
+slider = { min = 0, max = 2000, step = 1 }
+explanation = '''$-e'' = \varepsilon (k\pi)^2 \sin(k\pi x)$이므로 비율은 $(k\pi)^2 = (10\pi)^2 \approx 987$이다. 같은 크기의 오차라도 고주파 오차는 잔차를 크게 만들고, 저주파 오차($k = 1$이면 비율 $\pi^2 \approx 9.87$)는 잔차를 거의 키우지 않는다. 본문 셀 1에서 해 오차가 둘 다 0.01인 두 후보의 잔차 RMS가 0.07과 6.96으로 100배 달랐던 이유다. 그래서 잔차의 크기는 해 오차의 크기를 직접 말해 주지 않는다.'''
+
+[[questions]]
+id = "zero-residual-wrong-solution"
+type = "single"
+objective = 3
+prompt = '''본문 셀 1의 후보 $u^* + 0.5x$는 모든 내부 점에서 방정식 잔차가 정확히 0인데, 최대 해 오차는 0.5다. 그 이유는?'''
+explanation = '''$0.5x$는 2계 도함수가 0이므로 잔차를 바꾸지 않는다. 즉 $-u'' = f$를 만족하는 함수는 하나가 아니라 선형 함수만큼의 자유도가 남아 있고, 그 자유도를 경계 조건이 없앤다. 이 후보는 $u(1) = 0.5$로 경계 조건을 어긴다. 잔차는 방정식만 검사하고, 해가 유일하게 정해지려면 경계·초기 조건이 함께 있어야 한다. 그래서 잔차가 0이어도 경계 위반이 있으면 해는 틀릴 수 있다.'''
+
+[[questions.choices]]
+text = "잔차를 계산하는 점이 너무 적어서 오차를 놓쳤다."
+feedback = "201개 점 모두에서 잔차가 정확히 0이다. 점을 늘려도 0이다. 0.5x는 2계 도함수가 0이라 잔차가 보지 못하는 방향이다."
+
+[[questions.choices]]
+text = "방정식은 경계 조건 없이는 해를 하나로 정하지 못하고, 이 후보는 경계 조건을 어긴다."
+correct = true
+
+[[questions.choices]]
+text = "부동소수점 반올림 때문에 잔차가 0으로 보일 뿐이다."
+feedback = "0.5x의 2계 도함수는 정확히 0이므로 잔차는 수학적으로 0이다. 반올림 문제가 아니다."
+
+[[questions]]
+id = "collocation-overfit"
+type = "single"
+objective = 2
+prompt = '''뉴런 40개짜리 모델을 collocation 점 8개로 학습했더니 학습점의 residual은 $10^{-8}$ 미만인데, 새 점에서 잰 residual은 25, 해 오차는 1.3이었다. 가장 적절한 진단은?'''
+explanation = '''미지수(40개)가 방정식 개수(collocation 8개 + 경계 2개)보다 많아, 학습점에서는 잔차를 정확히 0으로 만들면서 점 사이에서는 방정식을 어기는 해가 무수히 많다. 데이터가 적은 회귀의 과적합과 같은 현상이다. 학습점의 residual은 학습 손실일 뿐이므로, 학습에 쓰지 않은 점에서 residual을 따로 재야 한다. collocation 점을 늘리거나 학습 중에 다시 뽑으면 점 사이의 방정식도 강제된다.'''
+
+[[questions.choices]]
+text = "collocation 점이 미지수에 비해 너무 적어 점 사이에서 방정식을 어기는 해에 과적합했다."
+correct = true
+
+[[questions.choices]]
+text = "학습률이 너무 커서 최적화가 실패했다."
+feedback = "학습점 residual이 10^-8 미만이므로 최적화는 손실을 거의 0으로 만드는 데 성공했다. 문제는 손실이 해를 충분히 제약하지 못한다는 것이다."
+
+[[questions.choices]]
+text = "신경망이 너무 작아 해를 표현하지 못한다."
+feedback = "같은 모델을 점 100개로 학습하면 해 오차가 10^-7 수준으로 떨어진다. 표현력이 아니라 제약의 부족이 문제다."
+
+[[questions.choices]]
+text = "학습점 residual이 거의 0이므로 해는 맞고, 새 점에서의 평가가 잘못되었다."
+feedback = "학습점 residual이 작다는 것은 학습 손실이 작다는 뜻일 뿐이다. 새 점의 residual과 해 오차가 모두 크므로 해가 틀렸다."
+
+[[questions]]
+id = "bc-weight-imbalance"
+type = "single"
+objective = 2
+prompt = '''본문 셀 3에서 경계 손실 가중치를 $\lambda_{\text{bc}} = 10^4$으로 크게 했더니 경계 위반은 $5 \times 10^{-4}$로 작았지만, 같은 step 수에서 해 오차는 0.51로 $\lambda_{\text{bc}} = 100$일 때(0.016)보다 훨씬 컸다. 가장 적절한 설명은?'''
+explanation = '''경사하강의 안정한 학습률은 손실의 가장 큰 곡률이 정한다. 경계 항의 가중치가 크면 그 곡률이 학습률을 작게 묶고, 그 학습률로는 곡률이 작은 방향, 여기서는 잔차가 약하게 벌하는 저주파 오차가 거의 줄지 않는다. 경계 조건은 빨리 맞지만 내부 해가 수렴하지 못한다. 가중치를 키우는 것은 조건을 더 잘 지키게 하는 것이 아니라 최적화의 조건수를 바꾸는 일이다. 반대로 가중치가 너무 작으면($\lambda_{\text{bc}} = 1$) 경계 위반이 해 오차를 지배한다.'''
+
+[[questions.choices]]
+text = "큰 경계 가중치가 학습률을 작게 묶어, 잔차가 약하게 벌하는 저주파 오차가 거의 줄지 않았다."
+correct = true
+
+[[questions.choices]]
+text = "경계 조건을 강하게 맞추면 방정식을 만족하는 해가 존재하지 않게 된다."
+feedback = "경계 조건과 방정식을 동시에 만족하는 정확해가 있다. 문제는 해의 존재가 아니라, 그 해까지 가는 최적화가 느려진 것이다."
+
+[[questions.choices]]
+text = "경계 위반이 작으므로 해 오차도 작아야 하고, 0.51은 평가 오류다."
+feedback = "경계 위반이 작아도 내부에서 방정식이 덜 만족되면 해 오차가 크다. 실제로 이 경우 residual RMS가 6.4로 다른 가중치(1.4)보다 크다."
+
+[[questions.choices]]
+text = "가중치가 클수록 언제나 정확해지므로 step 수가 부족했을 뿐이다."
+feedback = "step을 늘리면 결국 수렴하겠지만, 가중치를 키울수록 필요한 step 수가 커진다. 언제나 정확해지는 것이 아니라 같은 예산에서 더 나빠진다."
+
+[[questions]]
+id = "pinn-vs-solver"
+type = "single"
+objective = 3
+prompt = '''1차원 열방정식에서 PINN(Adam 3000 step + L-BFGS)의 상대 L2 오차가 $1 \times 10^{-4}$였고, 중심차분 50칸 격자와 정확한 시간 적분의 오차는 $3 \times 10^{-4}$였다. 공정한 결론은?'''
+explanation = '''두 방법의 정확도는 같은 수준이지만, 비용이 크게 다르다. 중심차분은 미지수 49개의 선형 ODE이고 격자를 늘리면 오차가 $\Delta x^2$으로 예측 가능하게 준다. PINN은 수천 번의 신경망 순전파·역전파와 2계 자동미분이 필요하다. 이런 forward 문제에서 PINN을 쓰는 이유는 속도가 아니라 다른 데서 찾아야 한다. 관측 데이터와 방정식을 함께 쓰는 inverse 문제, 격자를 만들기 어려운 영역, 미분 가능한 해 표현이 필요한 경우가 그 예다. 비교 보고서에는 정확도와 함께 계산 비용(시간, 함수 평가 수)과 각 방법의 수렴 특성을 적는다.'''
+
+[[questions.choices]]
+text = "PINN의 오차가 더 작으므로 PINN이 고전 solver보다 우수하다."
+feedback = "오차만 비교했다. 격자를 조금만 늘리면 중심차분의 오차는 Δx²에 비례해 더 작아지고, 계산 비용은 PINN보다 훨씬 작다."
+
+[[questions.choices]]
+text = "정확도는 비슷하지만 PINN의 계산 비용이 훨씬 크므로, 이 forward 문제에서 PINN을 쓸 이유는 정확도나 속도가 아닌 다른 데서 찾아야 한다."
+correct = true
+
+[[questions.choices]]
+text = "PINN은 격자가 없으므로 언제나 고전 solver보다 빠르다."
+feedback = "격자가 없다는 것과 빠르다는 것은 다르다. 학습은 수천 step의 순전파·역전파와 2계 자동미분이 필요하다."

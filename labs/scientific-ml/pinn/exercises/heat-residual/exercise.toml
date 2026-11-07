@@ -1,0 +1,6 @@
+title = "격자 위의 열방정식 잔차"
+chapter = "scientific-ml/pinn"
+objective = 3
+exec = "browser"
+entry = "heat_residual"
+timeout_s = 10
