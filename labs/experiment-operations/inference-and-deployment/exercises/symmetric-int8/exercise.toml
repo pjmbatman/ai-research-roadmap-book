@@ -1,0 +1,6 @@
+title = "대칭 int8 양자화"
+chapter = "experiment-operations/inference-and-deployment"
+objective = 2
+exec = "browser"
+entry = "quantize"
+timeout_s = 10

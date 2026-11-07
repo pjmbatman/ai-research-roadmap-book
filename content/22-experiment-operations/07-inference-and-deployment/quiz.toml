@@ -1,0 +1,119 @@
+# 22.7 추론 최적화와 배포 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "export-eval-mode"
+type = "single"
+objective = 1
+prompt = '''BatchNorm과 Dropout이 있는 모델을 `model.eval()` 없이 `torch.export.export`로 내보냈다. 내보내기는 오류 없이 끝났고 출력 shape도 맞다. 무엇이 문제인가?'''
+explanation = '''내보내기는 예시 입력으로 forward를 녹화하므로, 녹화할 때의 모드가 그래프에 들어간다. train 모드에서는 BatchNorm이 이동 평균 대신 현재 batch의 통계를 쓰고 Dropout이 일부 값을 0으로 만든다. 그래서 내보낸 모델의 출력은 평가 모드 원본과 다르다. 오류도 경고도 없고 shape도 맞으므로, 고정된 입력으로 원본과 숫자를 비교해야만 드러난다.'''
+
+[[questions.choices]]
+text = "문제없다. 가중치가 같으므로 출력도 같다."
+feedback = "가중치가 같아도 BatchNorm·Dropout의 동작이 모드에 따라 다르다. 녹화된 것은 train 모드의 계산이다."
+
+[[questions.choices]]
+text = "train 모드의 계산(batch 통계를 쓰는 BatchNorm, 켜진 Dropout)이 그래프에 녹화되어 출력이 원본의 평가 결과와 다르다."
+correct = true
+
+[[questions.choices]]
+text = "불러올 때 `.eval()`을 부르면 자동으로 고쳐진다."
+feedback = "녹화된 그래프는 원래 모듈의 train/eval 전환을 따르지 않는다. 집필 시점 PyTorch에서는 내보낸 모듈에 .eval()을 부르면 지원하지 않는다는 오류가 난다. 내보내기 전에 eval()을 부르고 출력을 비교한다."
+
+[[questions.choices]]
+text = "batch 크기가 고정되는 문제만 생긴다."
+feedback = "batch 축 고정은 동적 shape을 지정하지 않았을 때의 별개 문제다. 여기서는 모드가 문제다."
+
+[[questions]]
+id = "export-speed"
+type = "single"
+objective = 1
+prompt = '''`torch.export`로 내보낸 모델을 Python에서 다시 불러와 실행했더니 원본보다 느렸다. 가장 적절한 해석은?'''
+explanation = '''내보내기는 계산을 그래프와 가중치로 옮기는 일이고, 그 자체가 최적화는 아니다. 속도는 그 그래프를 받는 컴파일러나 추론 엔진(AOTInductor, ONNX Runtime, 하드웨어 제조사의 엔진 등)이 kernel fusion·정밀도 조정 등을 해서 나온다. 엔진을 바꾸면 연산 순서가 바뀌므로 수치 비교를 다시 해야 한다.'''
+
+[[questions.choices]]
+text = "내보내기에 실패한 것이다. 성공하면 항상 빨라진다."
+feedback = "내보내기의 목적은 이식성이다. 수치가 같으면 내보내기는 성공한 것이다."
+
+[[questions.choices]]
+text = "내보낸 그래프는 최적화의 입력이다. 속도는 그 그래프를 실행·컴파일하는 엔진에서 나온다."
+correct = true
+
+[[questions.choices]]
+text = "내보낸 모델은 정밀도가 낮아져서 느리다."
+feedback = "torch.export는 dtype을 바꾸지 않는다. 출력이 원본과 같았다는 점이 그 증거다."
+
+[[questions]]
+id = "per-channel-scale"
+type = "single"
+objective = 2
+prompt = '''출력 채널마다 가중치 크기가 크게 다른 층(어떤 행은 크기 0.01, 어떤 행은 5)을 대칭 int8로 양자화한다. 텐서 전체에 scale 하나를 쓸 때 생기는 일은?'''
+explanation = '''scale은 텐서 전체의 절댓값 최댓값(약 5 수준)으로 정해진다. 크기 0.01인 행의 원소는 $s/2$보다 작아 모두 0으로 반올림되고, 그 출력 채널은 사라진다. 출력 채널마다 scale을 두면 각 행이 자기 크기에 맞는 눈금을 써서 모든 행의 상대오차가 비슷하게 작아진다. scale 저장 비용은 행마다 실수 하나뿐이다.'''
+
+[[questions.choices]]
+text = "모든 행의 상대오차가 똑같이 작다. int8은 256단계라 충분하다."
+feedback = "256단계는 텐서 전체의 범위에 나뉜다. 작은 행은 그중 0 근처 한두 단계만 쓰게 된다."
+
+[[questions.choices]]
+text = "작은 행의 가중치가 거의 모두 0이 되어 그 출력 채널이 사라진다. 행별 scale로 해결한다."
+correct = true
+
+[[questions.choices]]
+text = "큰 행이 127을 넘어 overflow한다."
+feedback = "scale이 최댓값을 127에 맞추므로 큰 행은 범위 안에 들어간다. 손해를 보는 쪽은 작은 행이다."
+
+[[questions.choices]]
+text = "오차는 생기지만 출력 metric에는 영향이 없다."
+feedback = "한 출력 채널 전체가 0이 되면 다음 층의 입력이 바뀐다. 영향은 최종 metric으로 확인해야 한다."
+
+[[questions]]
+id = "int16-accumulation"
+type = "numeric"
+objective = 2
+prompt = '''int8 값(−127..127)끼리의 곱을 int16(최댓값 32767)에 누적한다. 최악의 경우에도 넘치지 않는 내적의 최대 길이는 몇인가?'''
+answer = 2
+tolerance = 0
+slider = { min = 0, max = 16, step = 1, unit = "항" }
+explanation = '''곱 하나의 최대 크기는 $127^2 = 16129$다. $2 \times 16129 = 32258 \le 32767$이고 $3 \times 16129 = 48387 > 32767$이므로 최대 2항이다. 그래서 정수 행렬 곱 하드웨어는 int8 곱을 int32로 누적한다. int32로는 $\lfloor (2^{31}-1)/16129 \rfloor = 133144$항까지 안전하다.'''
+
+[[questions]]
+id = "batch-latency-throughput"
+type = "multiple"
+objective = 3
+prompt = '''온라인 추론 서버에 동적 batching을 켜고 최대 batch 크기를 1에서 128로 늘렸다. 옳은 것을 모두 고르시오.'''
+explanation = '''batch마다 고정 비용이 있으므로 batch를 키우면 표본당 비용이 줄어 처리량이 오른다. 대신 요청은 batch가 찰 때까지 기다리고, 큰 batch의 계산 자체도 더 오래 걸리므로 요청 하나의 지연은 늘어난다. 처리량은 고정 비용이 묻히면 포화하므로 batch에 비례해 끝없이 늘지 않는다. 그래서 지연 상한을 먼저 정하고 그 안에서 처리량이 가장 큰 batch를 고른다.'''
+
+[[questions.choices]]
+text = "처리량(초당 표본 수)이 오른다."
+correct = true
+
+[[questions.choices]]
+text = "요청 하나의 지연이 늘어날 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "처리량이 batch 크기에 비례해 128배가 된다."
+feedback = "표본당 비용은 0이 아니므로 고정 비용이 묻히면 처리량은 포화한다."
+
+[[questions.choices]]
+text = "지연과 처리량이 모두 좋아지므로 batch는 클수록 좋다."
+feedback = "batch를 채우는 대기와 큰 batch의 계산 시간이 지연에 더해진다. 지연과 처리량은 거래 관계다."
+
+[[questions]]
+id = "contract-normalization"
+type = "single"
+objective = 1
+prompt = '''학습 때 입력을 학습 데이터의 평균·표준편차로 정규화했다. 서빙 코드에서 정규화를 어떻게 해야 하는가?'''
+explanation = '''정규화 상수는 학습 데이터로 정한 상수이고 모델의 일부다. 체크포인트와 함께 저장해 추론 때 그대로 쓴다. 들어온 batch의 통계로 다시 계산하면 같은 입력이 함께 온 다른 요청에 따라 다른 답을 받고, batch 크기 1이면 표준편차가 0이 되어 계산 자체가 깨진다. 정규화를 빼면 모델은 학습 때 본 적 없는 범위의 입력을 받는다.'''
+
+[[questions.choices]]
+text = "들어온 요청 batch의 평균·표준편차로 정규화한다. 최신 데이터에 맞추는 것이 낫다."
+feedback = "같은 입력이 함께 들어온 요청에 따라 다른 답을 받게 된다. 요청이 하나면 표준편차가 0이다."
+
+[[questions.choices]]
+text = "학습 데이터로 정한 평균·표준편차를 모델과 함께 저장해 그대로 쓴다."
+correct = true
+
+[[questions.choices]]
+text = "모델이 충분히 크면 정규화 없이 원래 값을 넣어도 된다."
+feedback = "모델은 정규화된 입력의 범위에서만 학습되었다. 원래 값은 그 범위 밖이라 외삽이 된다."

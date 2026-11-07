@@ -1,0 +1,6 @@
+title = "학습 메모리 예산 계산기"
+chapter = "experiment-operations/memory-management"
+objective = 1
+exec = "browser"
+entry = "training_memory"
+timeout_s = 10

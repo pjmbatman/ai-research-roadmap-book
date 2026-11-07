@@ -1,0 +1,6 @@
+title = "ring all-reduce 시뮬레이션"
+chapter = "experiment-operations/distributed-training"
+objective = 2
+exec = "browser"
+entry = "ring_all_reduce"
+timeout_s = 10
