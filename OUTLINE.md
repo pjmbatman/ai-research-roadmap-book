@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 384문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 408문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -273,17 +273,17 @@ _다변수 미분, 행렬 미분, 적분과 변수변환, 자동미분과 역전
 
 _부동소수점, 안정성과 조건수, 수치 선형대수, 반복법, ODE·PDE·DAE 수치해법과 시뮬레이터 검증을 다룬다._
 
-- **9.1** [부동소수점과 수치 오차](content/09-numerical-methods/01-floating-point/index.md) · `필수` · 위젯: 부동소수점 비트 구조
-  - 부동소수점 표현 · 오차의 종류 · 위험한 연산 · 안정한 계산식
+- **9.1** [부동소수점과 수치 오차](content/09-numerical-methods/01-floating-point/index.md) · `필수` · 퀴즈 6 · 위젯: 부동소수점 비트 구조
+  - 부동소수점 표현 · 오차의 종류 · 위험한 연산 · 안정한 계산식 · 참고 문헌
   - 선수: 5.5 컴퓨터 구조와 병렬 계산
-- **9.2** [조건수·안정성·수렴](content/09-numerical-methods/02-conditioning-and-stability/index.md) · `필수`
-  - 조건수 · 알고리즘의 안정성 · 수렴 · 스케일링과 전처리
+- **9.2** [조건수·안정성·수렴](content/09-numerical-methods/02-conditioning-and-stability/index.md) · `필수` · 퀴즈 6
+  - 조건수 · 알고리즘의 안정성 · 수렴 · 스케일링과 전처리 · 참고 문헌
   - 선수: 9.1 부동소수점과 수치 오차
-- **9.3** [수치 선형대수](content/09-numerical-methods/03-numerical-linear-algebra/index.md) · `필수`
-  - 직접법 · 반복법 · 희소 행렬 · 대규모 계산
+- **9.3** [수치 선형대수](content/09-numerical-methods/03-numerical-linear-algebra/index.md) · `필수` · 퀴즈 6
+  - 직접법 · 반복법 · 희소 행렬 · 대규모 계산 · 참고 문헌
   - 선수: 9.2 조건수·안정성·수렴, 7.6 SVD·PCA·저랭크 근사
-- **9.4** [비선형 방정식과 반복법](content/09-numerical-methods/04-nonlinear-equations/index.md) · `필수`
-  - 근 찾기 · 고정점 반복 · 다변수 Newton · 실패 양상
+- **9.4** [비선형 방정식과 반복법](content/09-numerical-methods/04-nonlinear-equations/index.md) · `필수` · 퀴즈 6
+  - 근 찾기 · 고정점 반복 · 다변수 Newton · 실패 양상 · 참고 문헌
   - 선수: 9.2 조건수·안정성·수렴
 - **9.5** [보간·근사·수치적분](content/09-numerical-methods/05-interpolation-and-quadrature/index.md) · `필수`
   - 보간 · 근사 · 수치적분 · 고차원 적분
