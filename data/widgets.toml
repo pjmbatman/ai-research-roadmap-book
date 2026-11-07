@@ -97,7 +97,7 @@ status = "prototype"
 name = "attention-visualizer"
 title = "Attention 계산"
 chapters = ["architectures/transformers"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "diffusion-process"
