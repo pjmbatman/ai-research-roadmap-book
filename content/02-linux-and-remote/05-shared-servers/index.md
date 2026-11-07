@@ -233,6 +233,8 @@ for interval_h in [0.25, 0.5, 0.9, 2.0, 4.0, 10.0]:
 
 근사 최적 주기 근처(0.9시간)에서 총 소요 시간이 가장 짧고, checkpoint 없이 한 번에 돌리면(주기 10시간) 두 배 가까이 걸린다. 최적점 근처에서는 곡선이 평평하므로 주기를 정확히 맞출 필요는 없다. 중요한 것은 **checkpoint가 있느냐 없느냐**와 자릿수다.
 
+::widget{name="preemption-checkpoint"}
+
 ::quiz{id="checkpoint-interval-minutes"}
 
 :::note[분야 예시]
