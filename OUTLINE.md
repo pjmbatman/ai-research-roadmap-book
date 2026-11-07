@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1032문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1057문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -571,17 +571,17 @@ _생성모델의 공통 문제 정의, 자기회귀·VAE·GAN·flow·확산·flo
 - **19.5** [확산 모델과 score 기반 모델](content/19-generative-and-foundation-models/05-diffusion-models/index.md) · `필수` · 퀴즈 6 · 위젯: 확산 과정의 forward와 reverse
   - forward 과정 · reverse 과정과 학습 · score 관점 · 샘플링 · 조건부 생성 · 과학 데이터에의 적용 · 참고 문헌
   - 선수: 19.1 생성모델의 공통 문제 정의, 11.7 확률과정 기초
-- **19.6** [Flow Matching과 연속시간 생성모델](content/19-generative-and-foundation-models/06-flow-matching/index.md) · `심화`
-  - 연속 정규화 흐름 · flow matching · rectified flow와 최적 수송 · 확산 모델과의 관계
+- **19.6** [Flow Matching과 연속시간 생성모델](content/19-generative-and-foundation-models/06-flow-matching/index.md) · `심화` · 퀴즈 6
+  - 연속 정규화 흐름 · flow matching · rectified flow와 최적 수송 · 확산 모델과의 관계 · 참고 문헌
   - 선수: 19.5 확산 모델과 score 기반 모델, 9.6 ODE 수치해법
-- **19.7** [생성모델의 평가](content/19-generative-and-foundation-models/07-evaluating-generative-models/index.md) · `필수`
-  - 평가 축 · 지표 · 도메인 지표 · 하위 과제 평가
+- **19.7** [생성모델의 평가](content/19-generative-and-foundation-models/07-evaluating-generative-models/index.md) · `필수` · 퀴즈 6
+  - 평가 축 · 지표 · 도메인 지표 · 하위 과제 평가 · 참고 문헌
   - 선수: 19.1 생성모델의 공통 문제 정의
-- **19.8** [자기지도학습](content/19-generative-and-foundation-models/08-self-supervised-learning/index.md) · `필수`
-  - 방법 계열 · 설계 요소 · 실패 양상 · 평가
+- **19.8** [자기지도학습](content/19-generative-and-foundation-models/08-self-supervised-learning/index.md) · `필수` · 퀴즈 7
+  - 방법 계열 · 설계 요소 · 실패 양상 · 평가 · 참고 문헌
   - 선수: 18.1 귀납적 편향과 아키텍처 선택, 14.2 상호정보량과 표현
-- **19.9** [사전학습·전이·Foundation Model](content/19-generative-and-foundation-models/09-foundation-models/index.md) · `심화`
-  - foundation model이란 · 데이터 통합 · 스케일링 · 전이 방법 · 도메인 적응과 부정적 전이 · 평가
+- **19.9** [사전학습·전이·Foundation Model](content/19-generative-and-foundation-models/09-foundation-models/index.md) · `심화` · 퀴즈 6
+  - foundation model이란 · 데이터 통합 · 스케일링 · 전이 방법 · 도메인 적응과 부정적 전이 · 평가 · 참고 문헌
   - 선수: 19.8 자기지도학습, 14.5 현대 딥러닝의 일반화와 스케일링
 
 ### 제20부. 강화학습과 순차 의사결정 <sub>Reinforcement Learning and Sequential Decision-Making</sub>

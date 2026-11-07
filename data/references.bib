@@ -1889,6 +1889,46 @@
   note      = {확인: NeurIPS 2017 포스터 페이지와 arXiv. 쪽수는 한 출처뿐이라 적지 않음}
 }
 
+@inproceedings{chen2018neural,
+  author    = {Chen, Ricky T. Q. and Rubanova, Yulia and Bettencourt, Jesse and Duvenaud, David},
+  title     = {Neural Ordinary Differential Equations},
+  booktitle = {Advances in Neural Information Processing Systems 31},
+  year      = {2018},
+  eprint    = {1806.07366},
+  archivePrefix = {arXiv},
+  note      = {확인: arXiv 초록과 NeurIPS 2018 논문 정보. 연속 정규화 흐름과 ODE solver를 통한 역전파}
+}
+
+@inproceedings{lipman2023flow,
+  author    = {Lipman, Yaron and Chen, Ricky T. Q. and Ben-Hamu, Heli and Nickel, Maximilian and Le, Matt},
+  title     = {Flow Matching for Generative Modeling},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2023},
+  eprint    = {2210.02747},
+  archivePrefix = {arXiv},
+  note      = {확인: arXiv 초록과 ICLR 2023 서지 기록. 고정된 조건부 확률 경로의 속도장 회귀, 확산 경로를 포함하는 가우시안 경로 족}
+}
+
+@inproceedings{liu2023flow,
+  author    = {Liu, Xingchao and Gong, Chengyue and Liu, Qiang},
+  title     = {Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2023},
+  eprint    = {2209.03003},
+  archivePrefix = {arXiv},
+  note      = {확인: arXiv 초록과 ICLR 2023 서지 기록. 직선 경로 ODE, reflow가 볼록 수송 비용을 늘리지 않는 결정적 짝을 만듦}
+}
+
+@inproceedings{albergo2023building,
+  author    = {Albergo, Michael S. and Vanden-Eijnden, Eric},
+  title     = {Building Normalizing Flows with Stochastic Interpolants},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2023},
+  eprint    = {2209.15571},
+  archivePrefix = {arXiv},
+  note      = {확인: arXiv 초록(Comments: ICLR 2023)과 ICLR 2023 포스터 페이지. 보간으로부터 속도장을 이차 손실로 학습}
+}
+
 @article{garfield1955citation,
   author  = {Garfield, Eugene},
   title   = {Citation Indexes for Science: A New Dimension in Documentation through Association of Ideas},
@@ -2059,207 +2099,6 @@
   note    = {확인: 서지 기록과 저자 페이지 초록(웹 검색). 파라미터 보정과 모델 불일치(model inadequacy) 함수를 GP로 함께 다루는 베이지안 보정}
 }
 
-@article{brunton2016discovering,
-  author  = {Brunton, Steven L. and Proctor, Joshua L. and Kutz, J. Nathan},
-  title   = {Discovering Governing Equations from Data by Sparse Identification of Nonlinear Dynamical Systems},
-  journal = {Proceedings of the National Academy of Sciences},
-  volume  = {113},
-  number  = {15},
-  pages   = {3932--3937},
-  year    = {2016},
-  doi     = {10.1073/pnas.1517384113},
-  note    = {확인: 서지 기록과 초록(웹 검색, PMC4839439). 후보 비선형 함수 공간에서 희소 회귀로 동역학을 식별하는 SINDy, Lorenz 계 예제}
-}
-
-@article{gordon1993novel,
-  author  = {Gordon, Neil J. and Salmond, David J. and Smith, Adrian F. M.},
-  title   = {Novel Approach to Nonlinear/Non-{G}aussian {B}ayesian State Estimation},
-  journal = {IEE Proceedings F (Radar and Signal Processing)},
-  volume  = {140},
-  number  = {2},
-  pages   = {107--113},
-  year    = {1993},
-  note    = {확인: 서지 기록과 초록(웹 검색). 선형·가우시안 가정 없이 재귀 베이지안 필터를 표본으로 구현하는 bootstrap filter}
-}
-
-@article{julier2004unscented,
-  author  = {Julier, Simon J. and Uhlmann, Jeffrey K.},
-  title   = {Unscented Filtering and Nonlinear Estimation},
-  journal = {Proceedings of the IEEE},
-  volume  = {92},
-  number  = {3},
-  pages   = {401--422},
-  year    = {2004},
-  doi     = {10.1109/JPROC.2003.823141},
-  note    = {확인: IEEE Xplore 서지 기록(웹 검색). unscented 변환으로 평균·공분산을 비선형 함수에 전파하는 방법과 UKF}
-}
-
-@article{raue2009structural,
-  author  = {Raue, Andreas and Kreutz, Clemens and Maiwald, Thomas and Bachmann, Julie and Schilling, Marcel and Klingm{\"u}ller, Ursula and Timmer, Jens},
-  title   = {Structural and Practical Identifiability Analysis of Partially Observed Dynamical Models by Exploiting the Profile Likelihood},
-  journal = {Bioinformatics},
-  volume  = {25},
-  number  = {15},
-  pages   = {1923--1929},
-  year    = {2009},
-  doi     = {10.1093/bioinformatics/btp358},
-  note    = {확인: PubMed·DBLP 서지 기록과 초록(웹 검색). 프로파일 우도로 구조적·실용적 식별 불가능성을 진단}
-}
-
-@article{hansen1993use,
-  author  = {Hansen, Per Christian and O'Leary, Dianne Prost},
-  title   = {The Use of the {L}-Curve in the Regularization of Discrete Ill-Posed Problems},
-  journal = {SIAM Journal on Scientific Computing},
-  volume  = {14},
-  number  = {6},
-  pages   = {1487--1503},
-  year    = {1993},
-  doi     = {10.1137/0914086},
-  note    = {확인: 서지 기록과 초록(웹 검색, 저자 사본 cs.umd.edu). 해 노름 대 잔차 노름의 L-curve와 모서리로 정규화 파라미터를 고르는 방법}
-}
-
-@article{stuart2010inverse,
-  author  = {Stuart, Andrew M.},
-  title   = {Inverse Problems: A {B}ayesian Perspective},
-  journal = {Acta Numerica},
-  volume  = {19},
-  pages   = {451--559},
-  year    = {2010},
-  doi     = {10.1017/S0962492910000061},
-  note    = {확인: Cambridge·Caltech 서지 기록과 초록(웹 검색). 역문제의 베이지안 정식화와 well-posedness 이론, MCMC·필터링·변분 알고리즘 개관}
-}
-
-@article{cranmer2020frontier,
-  author  = {Cranmer, Kyle and Brehmer, Johann and Louppe, Gilles},
-  title   = {The Frontier of Simulation-Based Inference},
-  journal = {Proceedings of the National Academy of Sciences},
-  volume  = {117},
-  number  = {48},
-  pages   = {30055--30062},
-  year    = {2020},
-  doi     = {10.1073/pnas.1912789117},
-  note    = {확인: PMC7720103·arXiv:1911.01429 서지 기록과 초록(웹 검색). 시뮬레이터가 정의하는 우도를 계산할 수 없을 때의 추론 방법 개관}
-}
-
-@article{sobol2001global,
-  author  = {Sobol', Ilya M.},
-  title   = {Global Sensitivity Indices for Nonlinear Mathematical Models and Their {M}onte {C}arlo Estimates},
-  journal = {Mathematics and Computers in Simulation},
-  volume  = {55},
-  number  = {1--3},
-  pages   = {271--280},
-  year    = {2001},
-  doi     = {10.1016/S0378-4754(00)00270-6},
-  note    = {확인: 서지 기록과 초록(웹 검색). 개별 변수·변수 묶음이 출력에 미치는 영향을 재는 전역 민감도 지수와 Monte Carlo 추정}
-}
-
-@article{saltelli2010variance,
-  author  = {Saltelli, Andrea and Annoni, Paola and Azzini, Ivano and Campolongo, Francesca and Ratto, Marco and Tarantola, Stefano},
-  title   = {Variance Based Sensitivity Analysis of Model Output. Design and Estimator for the Total Sensitivity Index},
-  journal = {Computer Physics Communications},
-  volume  = {181},
-  number  = {2},
-  pages   = {259--270},
-  year    = {2010},
-  doi     = {10.1016/j.cpc.2009.09.018},
-  note    = {확인: 서지 기록(웹 검색, JRC 저장소 JRC52955). 분산 기반 민감도 지수의 표본 설계와 1차·총 지수 추정식 비교}
-}
-
-@inproceedings{satorras2021en,
-  author    = {Satorras, V{\'\i}ctor Garcia and Hoogeboom, Emiel and Welling, Max},
-  title     = {E(n) Equivariant Graph Neural Networks},
-  booktitle = {Proceedings of the 38th International Conference on Machine Learning},
-  series    = {Proceedings of Machine Learning Research},
-  volume    = {139},
-  pages     = {9323--9332},
-  year      = {2021},
-  eprint    = {2102.09844},
-  archivePrefix = {arXiv},
-  note      = {확인: PMLR 서지 기록과 초록(웹 검색). 회전·평행이동·반사·순열에 등변이며 고차 표현 없이 거리와 상대 벡터로 만드는 EGNN}
-}
-
-@article{batzner2022e3,
-  author  = {Batzner, Simon and Musaelian, Albert and Sun, Lixin and Geiger, Mario and Mailoa, Jonathan P. and Kornbluth, Mordechai and Molinari, Nicola and Smidt, Tess E. and Kozinsky, Boris},
-  title   = {E(3)-Equivariant Graph Neural Networks for Data-Efficient and Accurate Interatomic Potentials},
-  journal = {Nature Communications},
-  volume  = {13},
-  pages   = {2453},
-  year    = {2022},
-  doi     = {10.1038/s41467-022-29939-5},
-  note    = {확인: 서지 기록과 초록(웹 검색, arXiv:2101.03164). E(3) 등변 GNN 원자 간 퍼텐셜 NequIP, 적은 학습 데이터에서의 정확도}
-}
-
-@inproceedings{cohen2016group,
-  author    = {Cohen, Taco S. and Welling, Max},
-  title     = {Group Equivariant Convolutional Networks},
-  booktitle = {Proceedings of the 33rd International Conference on Machine Learning},
-  series    = {Proceedings of Machine Learning Research},
-  volume    = {48},
-  pages     = {2990--2999},
-  year      = {2016},
-  eprint    = {1602.07576},
-  archivePrefix = {arXiv},
-  note      = {확인: PMLR 서지 기록(웹 검색). 회전·반사 군에 등변인 합성곱(G-CNN)}
-}
-
-@inproceedings{pfaff2021learning,
-  author    = {Pfaff, Tobias and Fortunato, Meire and Sanchez-Gonzalez, Alvaro and Battaglia, Peter W.},
-  title     = {Learning Mesh-Based Simulation with Graph Networks},
-  booktitle = {International Conference on Learning Representations},
-  year      = {2021},
-  eprint    = {2010.03409},
-  archivePrefix = {arXiv},
-  note      = {확인: arXiv 목록·ICLR 2021 포스터 페이지와 초록(웹 검색). 메시 그래프 위 message passing으로 시뮬레이션을 학습하는 MeshGraphNets, 학습에 쓴 시뮬레이터보다 1–2 자릿수 빠름}
-@inproceedings{chen2018neural,
-  author    = {Chen, Ricky T. Q. and Rubanova, Yulia and Bettencourt, Jesse and Duvenaud, David},
-  title     = {Neural Ordinary Differential Equations},
-  booktitle = {Advances in Neural Information Processing Systems 31},
-  year      = {2018},
-  eprint    = {1806.07366},
-  archivePrefix = {arXiv},
-  note      = {확인: arXiv 초록과 NeurIPS 2018 논문 정보. 연속 정규화 흐름과 ODE solver를 통한 역전파}
-}
-
-@inproceedings{lipman2023flow,
-  author    = {Lipman, Yaron and Chen, Ricky T. Q. and Ben-Hamu, Heli and Nickel, Maximilian and Le, Matt},
-  title     = {Flow Matching for Generative Modeling},
-  booktitle = {International Conference on Learning Representations},
-  year      = {2023},
-  eprint    = {2210.02747},
-  archivePrefix = {arXiv},
-  note      = {확인: arXiv 초록과 ICLR 2023 서지 기록. 고정된 조건부 확률 경로의 속도장 회귀, 확산 경로를 포함하는 가우시안 경로 족}
-}
-
-@inproceedings{liu2023flow,
-  author    = {Liu, Xingchao and Gong, Chengyue and Liu, Qiang},
-  title     = {Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow},
-  booktitle = {International Conference on Learning Representations},
-  year      = {2023},
-  eprint    = {2209.03003},
-  archivePrefix = {arXiv},
-  note      = {확인: arXiv 초록과 ICLR 2023 서지 기록. 직선 경로 ODE, reflow가 볼록 수송 비용을 늘리지 않는 결정적 짝을 만듦}
-}
-
-@inproceedings{albergo2023building,
-  author    = {Albergo, Michael S. and Vanden-Eijnden, Eric},
-  title     = {Building Normalizing Flows with Stochastic Interpolants},
-  booktitle = {International Conference on Learning Representations},
-  year      = {2023},
-  eprint    = {2209.15571},
-  archivePrefix = {arXiv},
-  note      = {확인: arXiv 초록(Comments: ICLR 2023)과 ICLR 2023 포스터 페이지. 보간으로부터 속도장을 이차 손실로 학습}
-}
-
-@inproceedings{theis2016note,
-  author    = {Theis, Lucas and van den Oord, A{\"a}ron and Bethge, Matthias},
-  title     = {A Note on the Evaluation of Generative Models},
-  booktitle = {International Conference on Learning Representations},
-  year      = {2016},
-  eprint    = {1511.01844},
-  archivePrefix = {arXiv},
-  note      = {확인: arXiv 초록(ICLR 2016 학회 논문). 고차원에서 평균 log-likelihood·Parzen 추정·표본 품질이 대체로 독립이며, 응용에 맞춰 직접 평가해야 함}
-}
-
 @article{gretton2012kernel,
   author  = {Gretton, Arthur and Borgwardt, Karsten M. and Rasch, Malte J. and Sch{\"o}lkopf, Bernhard and Smola, Alexander},
   title   = {A Kernel Two-Sample Test},
@@ -2311,6 +2150,53 @@
   eprint    = {2301.13188},
   archivePrefix = {arXiv},
   note      = {확인: USENIX Security 2023 발표 페이지. 확산 모델에서 학습 이미지 천 개 이상 추출, 중복 제거·차분 프라이버시의 한계}
+}
+
+@article{brunton2016discovering,
+  author  = {Brunton, Steven L. and Proctor, Joshua L. and Kutz, J. Nathan},
+  title   = {Discovering Governing Equations from Data by Sparse Identification of Nonlinear Dynamical Systems},
+  journal = {Proceedings of the National Academy of Sciences},
+  volume  = {113},
+  number  = {15},
+  pages   = {3932--3937},
+  year    = {2016},
+  doi     = {10.1073/pnas.1517384113},
+  note    = {확인: 서지 기록과 초록(웹 검색, PMC4839439). 후보 비선형 함수 공간에서 희소 회귀로 동역학을 식별하는 SINDy, Lorenz 계 예제}
+}
+
+@article{gordon1993novel,
+  author  = {Gordon, Neil J. and Salmond, David J. and Smith, Adrian F. M.},
+  title   = {Novel Approach to Nonlinear/Non-{G}aussian {B}ayesian State Estimation},
+  journal = {IEE Proceedings F (Radar and Signal Processing)},
+  volume  = {140},
+  number  = {2},
+  pages   = {107--113},
+  year    = {1993},
+  note    = {확인: 서지 기록과 초록(웹 검색). 선형·가우시안 가정 없이 재귀 베이지안 필터를 표본으로 구현하는 bootstrap filter}
+}
+
+@article{julier2004unscented,
+  author  = {Julier, Simon J. and Uhlmann, Jeffrey K.},
+  title   = {Unscented Filtering and Nonlinear Estimation},
+  journal = {Proceedings of the IEEE},
+  volume  = {92},
+  number  = {3},
+  pages   = {401--422},
+  year    = {2004},
+  doi     = {10.1109/JPROC.2003.823141},
+  note    = {확인: IEEE Xplore 서지 기록(웹 검색). unscented 변환으로 평균·공분산을 비선형 함수에 전파하는 방법과 UKF}
+}
+
+@article{raue2009structural,
+  author  = {Raue, Andreas and Kreutz, Clemens and Maiwald, Thomas and Bachmann, Julie and Schilling, Marcel and Klingm{\"u}ller, Ursula and Timmer, Jens},
+  title   = {Structural and Practical Identifiability Analysis of Partially Observed Dynamical Models by Exploiting the Profile Likelihood},
+  journal = {Bioinformatics},
+  volume  = {25},
+  number  = {15},
+  pages   = {1923--1929},
+  year    = {2009},
+  doi     = {10.1093/bioinformatics/btp358},
+  note    = {확인: PubMed·DBLP 서지 기록과 초록(웹 검색). 프로파일 우도로 구조적·실용적 식별 불가능성을 진단}
 }
 
 @inproceedings{chen2020simple,
@@ -2392,6 +2278,65 @@
   note      = {확인: CVF open access 페이지. 문맥 블록의 표현으로 목표 블록의 표현을 예측, 손으로 설계한 증강 없이 학습}
 }
 
+@article{hansen1993use,
+  author  = {Hansen, Per Christian and O'Leary, Dianne Prost},
+  title   = {The Use of the {L}-Curve in the Regularization of Discrete Ill-Posed Problems},
+  journal = {SIAM Journal on Scientific Computing},
+  volume  = {14},
+  number  = {6},
+  pages   = {1487--1503},
+  year    = {1993},
+  doi     = {10.1137/0914086},
+  note    = {확인: 서지 기록과 초록(웹 검색, 저자 사본 cs.umd.edu). 해 노름 대 잔차 노름의 L-curve와 모서리로 정규화 파라미터를 고르는 방법}
+}
+
+@article{stuart2010inverse,
+  author  = {Stuart, Andrew M.},
+  title   = {Inverse Problems: A {B}ayesian Perspective},
+  journal = {Acta Numerica},
+  volume  = {19},
+  pages   = {451--559},
+  year    = {2010},
+  doi     = {10.1017/S0962492910000061},
+  note    = {확인: Cambridge·Caltech 서지 기록과 초록(웹 검색). 역문제의 베이지안 정식화와 well-posedness 이론, MCMC·필터링·변분 알고리즘 개관}
+}
+
+@article{cranmer2020frontier,
+  author  = {Cranmer, Kyle and Brehmer, Johann and Louppe, Gilles},
+  title   = {The Frontier of Simulation-Based Inference},
+  journal = {Proceedings of the National Academy of Sciences},
+  volume  = {117},
+  number  = {48},
+  pages   = {30055--30062},
+  year    = {2020},
+  doi     = {10.1073/pnas.1912789117},
+  note    = {확인: PMC7720103·arXiv:1911.01429 서지 기록과 초록(웹 검색). 시뮬레이터가 정의하는 우도를 계산할 수 없을 때의 추론 방법 개관}
+}
+
+@article{sobol2001global,
+  author  = {Sobol', Ilya M.},
+  title   = {Global Sensitivity Indices for Nonlinear Mathematical Models and Their {M}onte {C}arlo Estimates},
+  journal = {Mathematics and Computers in Simulation},
+  volume  = {55},
+  number  = {1--3},
+  pages   = {271--280},
+  year    = {2001},
+  doi     = {10.1016/S0378-4754(00)00270-6},
+  note    = {확인: 서지 기록과 초록(웹 검색). 개별 변수·변수 묶음이 출력에 미치는 영향을 재는 전역 민감도 지수와 Monte Carlo 추정}
+}
+
+@article{saltelli2010variance,
+  author  = {Saltelli, Andrea and Annoni, Paola and Azzini, Ivano and Campolongo, Francesca and Ratto, Marco and Tarantola, Stefano},
+  title   = {Variance Based Sensitivity Analysis of Model Output. Design and Estimator for the Total Sensitivity Index},
+  journal = {Computer Physics Communications},
+  volume  = {181},
+  number  = {2},
+  pages   = {259--270},
+  year    = {2010},
+  doi     = {10.1016/j.cpc.2009.09.018},
+  note    = {확인: 서지 기록(웹 검색, JRC 저장소 JRC52955). 분산 기반 민감도 지수의 표본 설계와 1차·총 지수 추정식 비교}
+}
+
 @misc{bommasani2021opportunities,
   author        = {Bommasani, Rishi and others},
   title         = {On the Opportunities and Risks of Foundation Models},
@@ -2440,4 +2385,51 @@
   eprint    = {2202.10054},
   archivePrefix = {arXiv},
   note      = {확인: arXiv 초록과 ICLR 2022 서지 기록. 좋은 사전학습 특징과 큰 분포 이동에서 full fine-tuning이 OOD에서 linear probe보다 나쁠 수 있음, LP-FT 제안}
+}
+
+@inproceedings{satorras2021en,
+  author    = {Satorras, V{\'\i}ctor Garcia and Hoogeboom, Emiel and Welling, Max},
+  title     = {E(n) Equivariant Graph Neural Networks},
+  booktitle = {Proceedings of the 38th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {139},
+  pages     = {9323--9332},
+  year      = {2021},
+  eprint    = {2102.09844},
+  archivePrefix = {arXiv},
+  note      = {확인: PMLR 서지 기록과 초록(웹 검색). 회전·평행이동·반사·순열에 등변이며 고차 표현 없이 거리와 상대 벡터로 만드는 EGNN}
+}
+
+@article{batzner2022e3,
+  author  = {Batzner, Simon and Musaelian, Albert and Sun, Lixin and Geiger, Mario and Mailoa, Jonathan P. and Kornbluth, Mordechai and Molinari, Nicola and Smidt, Tess E. and Kozinsky, Boris},
+  title   = {E(3)-Equivariant Graph Neural Networks for Data-Efficient and Accurate Interatomic Potentials},
+  journal = {Nature Communications},
+  volume  = {13},
+  pages   = {2453},
+  year    = {2022},
+  doi     = {10.1038/s41467-022-29939-5},
+  note    = {확인: 서지 기록과 초록(웹 검색, arXiv:2101.03164). E(3) 등변 GNN 원자 간 퍼텐셜 NequIP, 적은 학습 데이터에서의 정확도}
+}
+
+@inproceedings{cohen2016group,
+  author    = {Cohen, Taco S. and Welling, Max},
+  title     = {Group Equivariant Convolutional Networks},
+  booktitle = {Proceedings of the 33rd International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {48},
+  pages     = {2990--2999},
+  year      = {2016},
+  eprint    = {1602.07576},
+  archivePrefix = {arXiv},
+  note      = {확인: PMLR 서지 기록(웹 검색). 회전·반사 군에 등변인 합성곱(G-CNN)}
+}
+
+@inproceedings{pfaff2021learning,
+  author    = {Pfaff, Tobias and Fortunato, Meire and Sanchez-Gonzalez, Alvaro and Battaglia, Peter W.},
+  title     = {Learning Mesh-Based Simulation with Graph Networks},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2021},
+  eprint    = {2010.03409},
+  archivePrefix = {arXiv},
+  note      = {확인: arXiv 목록·ICLR 2021 포스터 페이지와 초록(웹 검색). 메시 그래프 위 message passing으로 시뮬레이션을 학습하는 MeshGraphNets, 학습에 쓴 시뮬레이터보다 1–2 자릿수 빠름}
 }
