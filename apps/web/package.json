@@ -12,7 +12,8 @@
     "preview": "astro preview",
     "test": "node tests/e2e.mjs",
     "typecheck": "tsc --noEmit -p .",
-    "test:links": "node tests/links.mjs dist"
+    "test:links": "node tests/links.mjs dist",
+    "test:cells": "node tests/cells-pyodide.mjs ../.."
   },
   "dependencies": {
     "@codemirror/commands": "6.11.1",
