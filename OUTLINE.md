@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1136문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1166문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -742,20 +742,20 @@ _물리 모델과 학습 문제의 대응, PINN, Neural ODE와 미분가능 시�
 
 _시뮬레이션 기반 추론, 방정식 발견, 능동 학습과 베이지안 실험 설계, 자율 실험, 과학 foundation model과 AI 에이전트를 다룬다._
 
-- **25.1** [시뮬레이션 기반 추론](content/25-scientific-discovery/01-simulation-based-inference/index.md) · `심화`
-  - 우도 없는 추론 · 고전적 방법 · 신경망 기반 추론 · 진단
+- **25.1** [시뮬레이션 기반 추론](content/25-scientific-discovery/01-simulation-based-inference/index.md) · `심화` · 퀴즈 6
+  - 우도 없는 추론 · 고전적 방법 · 신경망 기반 추론 · 진단 · 참고 문헌
   - 선수: 24.7 역문제와 불확실성 정량화, 19.1 생성모델의 공통 문제 정의
-- **25.2** [방정식 발견과 기호 회귀](content/25-scientific-discovery/02-equation-discovery/index.md) · `심화`
-  - 희소 회귀로 동역학 찾기 · 기호 회귀 · 해석 가능성과 단순성 · 검증
+- **25.2** [방정식 발견과 기호 회귀](content/25-scientific-discovery/02-equation-discovery/index.md) · `심화` · 퀴즈 6
+  - 희소 회귀로 동역학 찾기 · 기호 회귀 · 해석 가능성과 단순성 · 검증 · 참고 문헌
   - 선수: 24.1 물리 모델과 학습 문제, 16.2 선형 모델과 정규화
-- **25.3** [능동 학습과 베이지안 실험 설계](content/25-scientific-discovery/03-experimental-design/index.md) · `필수`
-  - 왜 실험을 고르는가 · 능동 학습 · 베이지안 실험 설계 · 베이지안 최적화와의 관계 · 평가
+- **25.3** [능동 학습과 베이지안 실험 설계](content/25-scientific-discovery/03-experimental-design/index.md) · `필수` · 퀴즈 6
+  - 왜 실험을 고르는가 · 능동 학습 · 베이지안 실험 설계 · 베이지안 최적화와의 관계 · 평가 · 참고 문헌
   - 선수: 10.7 특수한 최적화 문제, 21.1 불확실성 정량화
-- **25.4** [자율 실험과 closed-loop 연구](content/25-scientific-discovery/04-autonomous-experimentation/index.md) · `심화`
-  - closed-loop의 구성 · 자율 실험실 · 다목적과 제약 · 운영 문제
+- **25.4** [자율 실험과 closed-loop 연구](content/25-scientific-discovery/04-autonomous-experimentation/index.md) · `심화` · 퀴즈 6
+  - closed-loop의 구성 · 자율 실험실 · 다목적과 제약 · 운영 문제 · 참고 문헌
   - 선수: 25.3 능동 학습과 베이지안 실험 설계
-- **25.5** [과학 Foundation Model과 AI 에이전트](content/25-scientific-discovery/05-scientific-foundation-models/index.md) · `심화`
-  - 과학 foundation model · 평가 · LLM과 과학 문헌 · 과학 연구 에이전트 · 위험과 책임
+- **25.5** [과학 Foundation Model과 AI 에이전트](content/25-scientific-discovery/05-scientific-foundation-models/index.md) · `심화` · 퀴즈 6
+  - 과학 foundation model · 평가 · LLM과 과학 문헌 · 과학 연구 에이전트 · 위험과 책임 · 참고 문헌
   - 선수: 19.9 사전학습·전이·Foundation Model, 18.5 언어모델과 LLM의 기초
 
 ## `DOM` 과학 분야별 응용 <sub>Domain Applications</sub>
