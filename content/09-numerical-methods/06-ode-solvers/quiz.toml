@@ -17,7 +17,7 @@ id = "implicit-step-cost"
 type = "single"
 objective = 1
 prompt = '''implicit Euler 방법 $\mathbf{y}_{n+1} = \mathbf{y}_n + h f(t_{n+1}, \mathbf{y}_{n+1})$의 한 step에 대한 설명으로 옳은 것은?'''
-explanation = '''미지수 $\mathbf{y}_{n+1}$이 양변에 있으므로, $f$가 비선형이면 매 step마다 비선형 방정식 $\mathbf{y}_{n+1} - h f(t_{n+1}, \mathbf{y}_{n+1}) - \mathbf{y}_n = \mathbf{0}$을 풀어야 한다. 보통 Newton 방법을 쓰고, 그 안에서 Jacobian $\partial f/\partial \mathbf{y}$로 만든 행렬 $\mathbf{I} - h\mathbf{J}$의 선형 시스템을 푼다. 그래서 한 step은 explicit 방법보다 비싸지만, stiff 문제에서는 훨씬 큰 step을 쓸 수 있어 전체 비용이 작다. 본문의 Robertson 문제에서 BDF는 Jacobian을 3–5번 계산하고 step 수는 RK45의 30분의 1 이하였다.'''
+explanation = '''미지수 $\mathbf{y}_{n+1}$이 양변에 있으므로, $f$가 비선형이면 매 step마다 비선형 방정식 $\mathbf{y}_{n+1} - h f(t_{n+1}, \mathbf{y}_{n+1}) - \mathbf{y}_n = \mathbf{0}$을 풀어야 한다. 보통 Newton 방법을 쓰고, 그 안에서 Jacobian $\partial f/\partial \mathbf{y}$로 만든 행렬 $\mathbf{I} - h\mathbf{J}$의 선형 시스템을 푼다. 그래서 한 step은 explicit 방법보다 비싸지만, stiff 문제에서는 훨씬 큰 step을 쓸 수 있어 전체 비용이 작다. 본문 실습의 Robertson 문제($T = 1$)에서 BDF는 Jacobian을 3번 계산하고 step 수는 RK45의 30분의 1 이하였다.'''
 
 [[questions.choices]]
 text = "f를 한 번 계산하면 바로 다음 상태가 나오므로 explicit Euler와 비용이 같다."

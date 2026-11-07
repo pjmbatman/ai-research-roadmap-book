@@ -209,23 +209,26 @@ def robertson(t, y):                           # 세 화학종의 농도, shape 
             0.04 * y1 - 1e4 * y2 * y3 - 3e7 * y2**2,
             3e7 * y2**2]
 
-for T in [1.0, 10.0]:
+for T in [0.2, 10.0]:
     for method in ["RK45", "BDF", "Radau"]:
         sol = solve_ivp(robertson, (0, T), [1.0, 0.0, 0.0], method=method)
-        print(f"T = {T:4.1f}  {method:5s}  성공 {sol.success!s:5s}  도달 t {sol.t[-1]:5.2f}  step {sol.t.size - 1:4d}"
-              f"  f 호출 {sol.nfev:4d}  Jacobian {sol.njev}  y1 = {sol.y[0, -1]:.4f}")
+        if sol.success:
+            print(f"T = {T:4.1f}  {method:5s}  성공  step {sol.t.size - 1:3d}  최대 step "
+                  f"{np.max(np.diff(sol.t)):.0e}  f 호출 {sol.nfev:4d}  Jacobian {sol.njev}  y1 = {sol.y[0, -1]:.4f}")
+        else:
+            print(f"T = {T:4.1f}  {method:5s}  실패  음수 농도가 나왔는가: {bool(sol.y.min() < 0)}")
 ```
 
 ```output
-T =  1.0  RK45   성공 True   도달 t  1.00  step  741  f 호출 6008  Jacobian 0  y1 = 0.9665
-T =  1.0  BDF    성공 True   도달 t  1.00  step   23  f 호출   58  Jacobian 3  y1 = 0.9664
-T =  1.0  Radau  성공 True   도달 t  1.00  step   10  f 호출  123  Jacobian 6  y1 = 0.9665
-T = 10.0  RK45   성공 False  도달 t  1.37  step 1060  f 호출 8660  Jacobian 0  y1 = -1662.2529
-T = 10.0  BDF    성공 True   도달 t 10.00  step   33  f 호출   83  Jacobian 4  y1 = 0.8414
-T = 10.0  Radau  성공 True   도달 t 10.00  step   14  f 호출  151  Jacobian 7  y1 = 0.8414
+T =  0.2  RK45   성공  step 147  최대 step 3e-03  f 호출 1208  Jacobian 0  y1 = 0.9923
+T =  0.2  BDF    성공  step  20  최대 step 5e-02  f 호출   52  Jacobian 3  y1 = 0.9923
+T =  0.2  Radau  성공  step   8  최대 step 1e-01  f 호출   88  Jacobian 3  y1 = 0.9923
+T = 10.0  RK45   실패  음수 농도가 나왔는가: True
+T = 10.0  BDF    성공  step  33  최대 step 2e+00  f 호출   83  Jacobian 4  y1 = 0.8414
+T = 10.0  Radau  성공  step  14  최대 step 3e+00  f 호출  151  Jacobian 7  y1 = 0.8414
 ```
 
-$t \in [0, 1]$에서 RK45는 741 step, BDF는 23 step을 쓴다. 해는 이 구간에서 거의 변하지 않는데도 RK45의 step은 약 $10^{-3}$에 묶여 있다. $T = 10$으로 늘리면 RK45는 $t = 1.37$에서 농도가 음수인 비물리적 상태로 발산한 뒤 "필요한 step 크기가 부동소수점 간격보다 작다"는 메시지와 함께 멈춘다. 오차 추정은 정확도를 지키도록 step을 고르지만, 안정 영역의 경계 근처에서 움직이는 explicit 방법을 언제나 지켜 주지는 못한다. `success` 플래그를 확인하지 않고 `sol.y`를 그대로 썼다면, 음수 농도가 그래프에 그려졌을 것이다.
+$t \in [0, 0.2]$에서 $y_1$은 1에서 0.992로 거의 변하지 않는데도, RK45의 step은 $3 \times 10^{-3}$을 넘지 못해 147 step이 필요하다. 같은 구간에서 BDF는 20 step이면 되고, 뒤로 갈수록 step을 키워 $T = 10$에서는 2 단위의 step을 쓴다. RK45로 $T = 10$을 풀면 농도가 음수인 비물리적 상태로 발산한 뒤 "필요한 step 크기가 부동소수점 간격보다 작다"는 메시지와 함께 멈춘다. 멈추는 시각조차 재현되지 않는다. 집필 환경(로컬 CPython)에서는 $t \approx 1.4$, 브라우저(Pyodide)에서는 $t \approx 0.8$이었다. 안정성의 경계에서 움직이는 계산은 반올림의 작은 차이로 갈라진다. 오차 추정은 정확도를 지키도록 step을 고르지만, 안정 영역의 경계 근처에서 움직이는 explicit 방법을 언제나 지켜 주지는 못한다. `success` 플래그를 확인하지 않고 `sol.y`를 그대로 썼다면, 음수 농도가 그래프에 그려졌을 것이다.
 
 ::quiz{id="stiffness-signs"}
 

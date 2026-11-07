@@ -50,8 +50,10 @@ for n in [4, 8, 16]:
     x = np.linspace(0, 1, n + 1)                       # (n+1,) 등간격 n구간
     xg, wg = np.polynomial.legendre.leggauss(n)        # [-1, 1]의 노드·가중치
     gauss = 0.5 * np.sum(wg * f(0.5 * (xg + 1)))       # [0, 1]로 옮김
+    e_g = abs(gauss - exact)
+    e_g = f"{e_g:.2e}" if e_g > 1e-13 else "< 1e-13"   # 반올림 한계 아래는 판정만
     print(f"{n:2d}  {abs(trapezoid(f(x), x=x) - exact):.2e}  "
-          f"{abs(simpson(f(x), x=x) - exact):.2e}  {abs(gauss - exact):.2e}")
+          f"{abs(simpson(f(x), x=x) - exact):.2e}  {e_g}")
 
 # %% cell 5 — 차원의 저주: 같은 점 4096개로 [0,1]^d 적분
 def exact_cos_sum(d):                                  # ∫ cos(x_1+…+x_d) dx

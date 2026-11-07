@@ -61,11 +61,14 @@ def robertson(t, y):                           # 세 화학종의 농도, shape 
             0.04 * y1 - 1e4 * y2 * y3 - 3e7 * y2**2,
             3e7 * y2**2]
 
-for T in [1.0, 10.0]:
+for T in [0.2, 10.0]:
     for method in ["RK45", "BDF", "Radau"]:
         sol = solve_ivp(robertson, (0, T), [1.0, 0.0, 0.0], method=method)
-        print(f"T = {T:4.1f}  {method:5s}  성공 {sol.success!s:5s}  도달 t {sol.t[-1]:5.2f}  step {sol.t.size - 1:4d}"
-              f"  f 호출 {sol.nfev:4d}  Jacobian {sol.njev}  y1 = {sol.y[0, -1]:.4f}")
+        if sol.success:
+            print(f"T = {T:4.1f}  {method:5s}  성공  step {sol.t.size - 1:3d}  최대 step "
+                  f"{np.max(np.diff(sol.t)):.0e}  f 호출 {sol.nfev:4d}  Jacobian {sol.njev}  y1 = {sol.y[0, -1]:.4f}")
+        else:
+            print(f"T = {T:4.1f}  {method:5s}  실패  음수 농도가 나왔는가: {bool(sol.y.min() < 0)}")
 
 # %% cell 4 — tolerance를 바꾸어 수렴 확인하기
 osc = lambda t, y: [y[1], -y[0]]               # 조화 진동자, 정확해 x(t) = cos t

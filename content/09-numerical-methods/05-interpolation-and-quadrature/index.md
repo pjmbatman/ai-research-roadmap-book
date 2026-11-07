@@ -186,18 +186,20 @@ for n in [4, 8, 16]:
     x = np.linspace(0, 1, n + 1)                       # (n+1,) 등간격 n구간
     xg, wg = np.polynomial.legendre.leggauss(n)        # [-1, 1]의 노드·가중치
     gauss = 0.5 * np.sum(wg * f(0.5 * (xg + 1)))       # [0, 1]로 옮김
+    e_g = abs(gauss - exact)
+    e_g = f"{e_g:.2e}" if e_g > 1e-13 else "< 1e-13"   # 반올림 한계 아래는 판정만
     print(f"{n:2d}  {abs(trapezoid(f(x), x=x) - exact):.2e}  "
-          f"{abs(simpson(f(x), x=x) - exact):.2e}  {abs(gauss - exact):.2e}")
+          f"{abs(simpson(f(x), x=x) - exact):.2e}  {e_g}")
 ```
 
 ```output
  n   사다리꼴    Simpson    Gauss(n점)
  4  8.94e-03  3.70e-05  9.33e-10
- 8  2.24e-03  2.33e-06  2.22e-16
-16  5.59e-04  1.46e-07  0.00e+00
+ 8  2.24e-03  2.33e-06  < 1e-13
+16  5.59e-04  1.46e-07  < 1e-13
 ```
 
-$n$을 두 배로 할 때 사다리꼴 오차는 4.0배, Simpson 오차는 15.9배 줄어 각각 $p = 2$, $p = 4$를 확인한다. Gauss 구적은 점 4개(7차 다항식까지 정확)로 $10^{-9}$, 점 8개로 이미 반올림 한계($2.2 \times 10^{-16}$)에 닿는다. 매끄러운(해석적인) 함수에서 Gauss 구적의 오차는 $h$의 거듭제곱이 아니라 점 수에 대해 지수적으로 준다.
+$n$을 두 배로 할 때 사다리꼴 오차는 4.0배, Simpson 오차는 15.9배 줄어 각각 $p = 2$, $p = 4$를 확인한다. Gauss 구적은 점 4개(7차 다항식까지 정확)로 $10^{-9}$, 점 8개로 이미 배정밀도의 반올림 한계에 닿는다(그 아래의 값은 기계마다 달라지므로 판정만 찍었다). 매끄러운(해석적인) 함수에서 Gauss 구적의 오차는 $h$의 거듭제곱이 아니라 점 수에 대해 지수적으로 준다.
 
 ::quiz{id="simpson-halving"}
 
