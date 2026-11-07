@@ -152,6 +152,8 @@ print("병합 W0 + BA의 출력 = 두 경로 출력:", np.allclose((W0 + B @ A) 
 - **표본이 2,000개면 full fine-tuning(0.258)이 가장 낫다.** 작은 full-rank 성분까지 맞출 자료가 있기 때문이다. 이때 잡음 바닥은 0.25이므로 모든 방법이 바닥 가까이에 있다.
 - **병합은 정확하다.** $\mathbf{W}_0 + \mathbf{B}\mathbf{A}$ 하나로 계산한 출력과, 고정 경로와 저랭크 경로를 따로 계산해 더한 출력이 같다. rank 2 갱신은 $2 \times (64 + 64) = 256$개의 수로 저장된다.
 
+::widget{name="lora-rank"}
+
 ::quiz{id="lora-param-count"}
 
 ## 도메인 적응과 부정적 전이
