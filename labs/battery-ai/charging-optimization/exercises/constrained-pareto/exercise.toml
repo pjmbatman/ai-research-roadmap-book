@@ -1,0 +1,6 @@
+title = "제약을 만족하는 Pareto front"
+chapter = "battery-ai/charging-optimization"
+objective = 2
+exec = "browser"
+entry = "feasible_pareto"
+timeout_s = 10
