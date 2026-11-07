@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1289문항 · 위젯 23개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1305문항 · 위젯 23개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -897,14 +897,14 @@ _표기법, 용어집, 공식 모음, 치트시트, 실패 사례 갤러리, 템
 
 - **A** [표기법](content/appendices/a-notation/index.md) · `참조`
   - 수와 집합 · 스칼라·벡터·행렬·텐서 · 함수와 미분 · 확률과 통계 · 학습 문제 · 시간과 동역학 · 공통 예제의 기호 · 코드 표기
-- **B** [용어집](content/appendices/b-glossary/index.md) · `참조`
-  - 용어 표기 원칙 · 용어 목록
-- **C** [공식 모음](content/appendices/c-formulas/index.md) · `참조`
-  - 행렬 미분 항등식 · 가우시안 항등식 · 분포 표 · 정보이론
-- **D** [명령어 치트시트](content/appendices/d-cheatsheets/index.md) · `참조`
-  - Linux와 셸 · 원격과 세션 · GPU · 환경 · Git · PyTorch
-- **E** [실패 사례 갤러리](content/appendices/e-failure-gallery/index.md) · `참조`
-  - 데이터 · 학습 · 평가 · 환경 · 연구
+- **B** [용어집](content/appendices/b-glossary/index.md) · `참조` · 퀴즈 4
+  - 용어 표기 원칙 · 연구 인프라와 도구 · 연구 소프트웨어 공학 · 선형대수와 기하 · 미적분과 자동미분 · 수치해석 · 최적화 · 확률 · 통계적 추론 · 베이지안 추론 · 정보이론과 일반화 · 데이터와 평가 · 머신러닝과 딥러닝 · 생성모델과 강화학습 · 신뢰성 · 실험 운영 · 연구 방법 · 과학 머신러닝 · 헷갈리기 쉬운 용어
+- **C** [공식 모음](content/appendices/c-formulas/index.md) · `참조` · 퀴즈 4
+  - 선형대수 · 미분과 행렬 미분 · 확률 · 가우시안 항등식 · 분포 표 · 통계적 추론 · 최적화 · 정보이론 · 수치해석
+- **D** [명령어 치트시트](content/appendices/d-cheatsheets/index.md) · `참조` · 퀴즈 4
+  - Linux와 셸 · 원격과 세션 · GPU · 환경 · Git · Python과 NumPy · PyTorch · 실험 관리
+- **E** [실패 사례 갤러리](content/appendices/e-failure-gallery/index.md) · `참조` · 퀴즈 4
+  - 분류 기준 · 데이터와 누수 · 평가와 비교 · 수치 계산 · 학습과 구현 · 재현성과 환경 · 해석과 주장
 - **F** [템플릿 모음](content/appendices/f-templates/index.md) · `참조` · 퀴즈 4
   - 사용법 · 문제와 질문 · 프로젝트 · 기록 · 데이터와 모델 문서 · 논문과 심사
 - **G** [체크리스트 모음](content/appendices/g-checklists/index.md) · `참조` · 퀴즈 4

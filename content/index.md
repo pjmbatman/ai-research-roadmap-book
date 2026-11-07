@@ -2,7 +2,7 @@
 id: home
 title: "AI for Science 로드맵"
 title_en: "AI for Science Roadmap"
-status: outline
+status: draft
 summary: "과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵"
 ---
 
