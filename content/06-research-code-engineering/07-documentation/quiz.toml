@@ -1,0 +1,144 @@
+# 6.7 연구 코드 문서화 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "readme-essentials"
+type = "multiple"
+objective = 1
+prompt = "새 연구원이 구두 설명 없이 첫 결과를 재현하도록 README에 **반드시** 있어야 하는 것을 모두 고르시오."
+explanation = '''재현용 README의 핵심은 "처음 보는 사람이 위에서부터 그대로 따라 하면 결과가 나오는가"다. 그러려면 lockfile로 환경을 만드는 정확한 설치 명령, 데이터를 어디서 받아 어디에 두는지, 대표 결과 하나를 다시 만드는 명령과 그 기대 결과(숫자·걸리는 시간)가 필요하다. 기대 결과가 없으면 따라 한 사람이 성공했는지 판단할 수 없다. 프로젝트의 개발 역사나 모든 함수의 목록은 README의 일이 아니다. 역사는 CHANGELOG와 결정 기록에, 함수 설명은 docstring과 API 문서에 둔다.'''
+
+[[questions.choices]]
+text = "lockfile로 환경을 만드는 정확한 설치 명령"
+correct = true
+
+[[questions.choices]]
+text = "데이터를 받는 방법과 놓아야 할 경로"
+correct = true
+
+[[questions.choices]]
+text = "대표 결과 하나를 재현하는 명령과 기대 결과(숫자와 대략의 실행 시간)"
+correct = true
+
+[[questions.choices]]
+text = "프로젝트를 시작한 이유와 지금까지 시도한 방법의 전체 역사"
+feedback = "길어진 README는 읽히지 않는다. 동기는 한두 문장이면 되고, 시도의 역사는 실험 기록과 결정 기록(ADR)에 둔다."
+
+[[questions.choices]]
+text = "모든 함수와 클래스의 인자 설명"
+feedback = "인자 설명은 docstring의 일이다. README에 복사하면 코드가 바뀔 때 두 곳 중 한 곳이 낡는다."
+
+[[questions]]
+id = "readme-command-drift"
+type = "single"
+objective = 1
+prompt = "README의 실행 명령을 복사해 실행한 신입 연구원이 `unrecognized arguments: --lr`를 받았다. CLI의 인자 이름이 몇 달 전에 `--learning-rate`로 바뀌었다. 같은 일이 다시 생기지 않게 하는 가장 효과적인 방법은?"
+explanation = '''문서와 코드가 어긋나는 것은 사람의 주의로는 막기 어렵다. 코드를 바꾼 사람은 README를 떠올리지 못하고, 문서는 틀려도 오류를 내지 않는다. 그래서 README의 명령을 **실행되는 검사**로 만든다. CI에서 README의 코드 블록을 뽑아 작은 설정으로 실제로 실행하거나, 최소한 CLI parser가 그 인자를 받아들이는지 확인한다. 그러면 인자 이름을 바꾼 PR이 바로 실패하고, 그 PR에서 README도 함께 고치게 된다.'''
+
+[[questions.choices]]
+text = "README의 명령을 CI에서 실행(또는 parser로 검사)해, 어긋나면 PR이 실패하게 한다."
+correct = true
+
+[[questions.choices]]
+text = "README에 \"옵션 이름은 바뀔 수 있으니 --help를 확인하세요\"라고 적어 둔다."
+feedback = "문서가 틀릴 수 있다고 미리 적는 것은 해결이 아니다. 독자는 여전히 어느 부분이 틀렸는지 모른다."
+
+[[questions.choices]]
+text = "CLI 인자 이름을 다시는 바꾸지 않는다."
+feedback = "이름을 바꿀 이유(설정 키와 맞추기 등)는 계속 생긴다. 바꾸지 말자는 규칙보다 바꾸면 문서가 함께 검사되는 구조가 낫다."
+
+[[questions.choices]]
+text = "질문이 오면 담당자가 그때그때 알려 준다."
+feedback = "README의 목적이 구두 설명 없이 재현하게 하는 것이다. 담당자가 떠나면 아무도 답할 수 없다."
+
+[[questions]]
+id = "docstring-research-essentials"
+type = "single"
+objective = 2
+prompt = '''`def rmse(pred, target, axis=0)`의 docstring에 가장 먼저 들어가야 할 정보는?'''
+explanation = '''연구 코드의 함수를 잘못 쓰는 가장 흔한 이유는 shape과 단위다. `pred`와 `target`의 shape이 무엇이어야 하는지, `axis=0`이 표본 축인지 변수 축인지, 결과의 shape과 단위가 무엇인지(입력과 같은 단위), 어떤 입력에서 예외를 내는지(shape이 다를 때, NaN이 있을 때)를 적는다. 함수 이름을 문장으로 다시 쓴 docstring("RMSE를 계산한다")은 이름 이상의 정보를 주지 않는다.'''
+
+[[questions.choices]]
+text = "입력과 출력의 shape(`axis`의 의미 포함), 단위, 그리고 어떤 입력에서 어떤 예외를 내는지"
+correct = true
+
+[[questions.choices]]
+text = "\"RMSE를 계산하는 함수\"라는 한 줄 설명"
+feedback = "함수 이름이 이미 말하는 내용이다. 독자가 모르는 것은 어느 축으로 평균하는지, 입력 shape이 무엇이어야 하는지다."
+
+[[questions.choices]]
+text = "작성자와 작성 날짜, 수정 이력"
+feedback = "이 정보는 git이 정확하게 기록한다. docstring에 쓰면 곧 낡는다."
+
+[[questions.choices]]
+text = "RMSE 공식의 유도 과정"
+feedback = "잘 알려진 공식의 유도는 필요 없다. 공식에서 벗어난 선택(예: NaN을 무시하는가)이 있으면 그것을 적는다."
+
+[[questions]]
+id = "doctest-numpy-repr"
+type = "single"
+objective = 2
+prompt = '''docstring 예제 `>>> np.mean([1.0, 2.0])` 아래에 기대 출력 `1.5`를 적었다. NumPy 2 환경에서 doctest를 돌리자 이 예제가 실패했다. 이유는?'''
+explanation = '''doctest는 예제의 출력 **문자열**을 비교한다. 계산이 맞아도 출력 모양이 다르면 실패한다. NumPy 2.0부터 NumPy 스칼라의 repr이 `np.float64(1.5)`처럼 타입을 드러내는 형태로 바뀌었으므로, 대화형 출력(repr)을 그대로 적은 예제는 실패한다. 예제에서는 `print(...)`나 `float(...)`로 출력 모양을 고정하고, 부동소수 결과는 반올림해서 보인다. 이렇게 문서의 예제를 실제로 실행하는 것이 doctest의 가치다. 문서가 낡으면 바로 드러난다.'''
+
+[[questions.choices]]
+text = "doctest는 출력 문자열을 비교하는데, NumPy 2의 스칼라 repr이 `np.float64(1.5)`라서 `1.5`와 다르다."
+correct = true
+
+[[questions.choices]]
+text = "부동소수 오차로 평균이 1.4999999999999998이 되었다."
+feedback = "1.0과 2.0의 평균은 부동소수로 정확히 1.5다. 문제는 값이 아니라 출력 모양이다."
+
+[[questions.choices]]
+text = "doctest는 NumPy 함수를 실행할 수 없다."
+feedback = "doctest는 예제를 일반 Python 코드로 실행하므로 NumPy도 쓸 수 있다. 출력 모양만 일치하면 통과한다."
+
+[[questions.choices]]
+text = "docstring 예제는 실행용이 아니므로 doctest를 돌린 것이 잘못이다."
+feedback = "실행되지 않는 예제는 언젠가 틀린다. 예제를 실행해 보는 것이 문서와 코드의 어긋남을 잡는 가장 싼 방법이다."
+
+[[questions]]
+id = "adr-purpose"
+type = "single"
+objective = 2
+prompt = "결정 기록(ADR, Architecture Decision Record)에 들어가야 할 내용으로 가장 알맞은 것은?"
+explanation = '''ADR은 "왜 이렇게 했는가"를 남기는 짧은 문서다. 결정이 필요했던 맥락, 내린 결정, 검토한 대안과 버린 이유, 그 결정의 결과(얻는 것과 잃는 것)를 적는다. 몇 달 뒤 누군가 "왜 시료 단위로 나눴지? 행 단위가 데이터를 더 쓰는데"라고 물을 때, 코드와 커밋은 무엇을 했는지만 말하고 이유는 말하지 않는다. 결정은 한 번 기록하면 고치지 않고, 바뀌면 새 ADR을 써서 이전 것을 대체(superseded)했다고 표시한다.'''
+
+[[questions.choices]]
+text = "맥락, 결정, 검토한 대안과 버린 이유, 결과(장단점)"
+correct = true
+
+[[questions.choices]]
+text = "회의에서 나온 모든 발언"
+feedback = "회의록은 결정의 근거를 찾기 어렵게 만든다. ADR은 결정 하나와 그 이유만 짧게 남긴다."
+
+[[questions.choices]]
+text = "결정을 구현한 코드의 함수별 설명"
+feedback = "그것은 docstring의 일이다. ADR은 코드가 말하지 못하는 '왜'를 남긴다."
+
+[[questions.choices]]
+text = "결정이 바뀔 때마다 같은 문서를 고쳐 최신 상태만 유지한다"
+feedback = "이전 결정과 그 이유가 사라진다. 결정이 바뀌면 새 ADR을 쓰고 이전 ADR에 대체되었다고 표시한다."
+
+[[questions]]
+id = "changelog-result-impact"
+type = "single"
+objective = 2
+prompt = "열전도도 기본값을 0.6에서 0.58로 고친 PR이 merge되었다. 이 변경으로 이후의 모든 열유속 계산 결과가 약 3% 달라진다. 변경 기록에서 가장 중요한 것은?"
+explanation = '''결과에 영향을 주는 변경은 일반적인 변경과 구분해 표시한다. CHANGELOG 항목에 무엇이 바뀌었는지, 어떤 결과가 얼마나 영향을 받는지(열유속 약 3% 감소), 어느 버전·커밋부터인지를 적어 두면, 이전 버전으로 만든 표와 그림을 찾아 다시 계산할지 판단할 수 있다. 커밋 메시지는 변경의 단위로는 좋지만, 수백 개의 커밋 중에서 결과에 영향을 준 것을 골라 읽기 어렵다.'''
+
+[[questions.choices]]
+text = "결과에 영향을 주는 변경임을 표시하고, 영향 범위(무엇이 약 몇 % 달라지는지)와 적용 시점(버전·커밋)을 적는다."
+correct = true
+
+[[questions.choices]]
+text = "커밋 메시지에 적었으면 충분하다. git log가 곧 변경 기록이다."
+feedback = "git log에는 오타 수정과 리팩터링이 함께 섞여 있다. 결과를 다시 계산해야 하는지 판단하는 데 필요한 변경만 골라 사람이 읽을 수 있게 정리한 것이 CHANGELOG다."
+
+[[questions.choices]]
+text = "작은 숫자 변경이므로 기록하지 않아도 된다."
+feedback = "3% 차이는 논문의 표에서 두 방법의 순위를 뒤집기에 충분하다. 숫자 하나의 변경도 결과에 영향을 주면 기록한다."
+
+[[questions.choices]]
+text = "버전 번호만 올리면 된다."
+feedback = "버전 번호는 무엇이 바뀌었는지 말하지 않는다. 독자는 변경 내용과 영향 범위를 알아야 한다."
