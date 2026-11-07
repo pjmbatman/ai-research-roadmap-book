@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1007문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1032문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -725,17 +725,17 @@ _물리 모델과 학습 문제의 대응, PINN, Neural ODE와 미분가능 시�
 - **24.4** [Neural Operator와 동역학 학습](content/24-scientific-ml/04-neural-operators/index.md) · `심화`
   - operator learning · DeepONet · FNO · 다른 계열 · 일반화 · 시간 동역학 · 제약
   - 선수: 24.1 물리 모델과 학습 문제, 7.9 함수공간과 연산자
-- **24.5** [하이브리드 모델과 대리모델](content/24-scientific-ml/05-hybrid-and-surrogate-models/index.md) · `필수`
-  - 결합 방식 · 대리모델 · 다중 충실도 · 능동 학습 · 공정한 비교
+- **24.5** [하이브리드 모델과 대리모델](content/24-scientific-ml/05-hybrid-and-surrogate-models/index.md) · `필수` · 퀴즈 6
+  - 결합 방식 · 대리모델 · 다중 충실도 · 능동 학습 · 공정한 비교 · 참고 문헌
   - 선수: 24.1 물리 모델과 학습 문제, 13.7 Gaussian Process
-- **24.6** [시스템 식별과 상태 추정](content/24-scientific-ml/06-system-identification-and-estimation/index.md) · `필수`
-  - 파라미터 식별 · 관측 가능성 · Kalman filter 계열 · particle filter · 학습과 결합
+- **24.6** [시스템 식별과 상태 추정](content/24-scientific-ml/06-system-identification-and-estimation/index.md) · `필수` · 퀴즈 6
+  - 파라미터 식별 · 관측 가능성 · Kalman filter 계열 · particle filter · 학습과 결합 · 참고 문헌
   - 선수: 24.1 물리 모델과 학습 문제, 11.4 다변량 가우시안
-- **24.7** [역문제와 불확실성 정량화](content/24-scientific-ml/07-inverse-problems-and-uq/index.md) · `심화`
-  - 역문제 · 베이지안 역문제 · 민감도 분석 · 불확실성 전파
+- **24.7** [역문제와 불확실성 정량화](content/24-scientific-ml/07-inverse-problems-and-uq/index.md) · `심화` · 퀴즈 7
+  - 역문제 · 베이지안 역문제 · 민감도 분석 · 불확실성 전파 · 참고 문헌
   - 선수: 24.6 시스템 식별과 상태 추정, 13.5 근사 추론 I: MCMC
-- **24.8** [대칭성을 반영한 과학 모델](content/24-scientific-ml/08-geometric-models/index.md) · `심화`
-  - 기하 데이터의 표현 · 등변 신경망 · 격자·메시·구면 위의 모델 · 대칭 제약의 효과 · 대칭이 깨질 때
+- **24.8** [대칭성을 반영한 과학 모델](content/24-scientific-ml/08-geometric-models/index.md) · `심화` · 퀴즈 6
+  - 기하 데이터의 표현 · 등변 신경망 · 격자·메시·구면 위의 모델 · 대칭 제약의 효과 · 대칭이 깨질 때 · 참고 문헌
   - 선수: 18.6 그래프 신경망과 기하학적 딥러닝, 7.10 대칭과 군 표현
 
 ### 제25부. 과학적 발견과 실험 설계 <sub>Scientific Discovery and Experimental Design</sub>
