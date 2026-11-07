@@ -277,6 +277,8 @@ for k in range(65):
 
 전파 2–4번까지는 이웃 평균이 잡음을 줄여 정확도가 0.88에서 1.00으로 오른다. 그 뒤로는 공동체 사이의 경계까지 평균되어, 32번이면 다른 공동체 노드끼리도 cosine이 1에 이르고 정확도는 0.62로 떨어진다. 실제 GNN 층에는 가중치와 비선형성이 있어 수렴이 이렇게 단순하지는 않지만, 깊게 쌓은 GNN이 얕은 GNN보다 나빠지는 흔한 이유가 이것이다. 진단 지표로는 층별 노드 표현 사이의 평균 거리나 **Dirichlet 에너지** $\tfrac{1}{2}\sum_{i,j} A_{ij}\lVert\mathbf{h}_i - \mathbf{h}_j\rVert^2$를 쓴다. 층이 깊어질수록 이 값이 0으로 떨어지면 over-smoothing이다. 대응으로는 층 수를 줄이기, 잔차 연결(residual connection), 각 층의 표현을 모두 이어 붙여 쓰기 등이 있다.
 
+::widget{name="over-smoothing"}
+
 **over-squashing.** $k$층 GNN의 노드 하나는 $k$-hop 이웃 전체의 정보를 고정된 크기의 벡터 하나에 담아야 한다. 나무처럼 가지를 치는 그래프에서는 $k$-hop 이웃의 수가 $k$에 대해 지수적으로 늘어난다. 먼 노드의 정보가 좁은 경로(병목)를 지나며 다른 정보와 함께 눌려 거의 전달되지 않는 현상을 **over-squashing**이라 한다(Alon, Yahav, 2021). over-smoothing이 "모든 노드가 같아지는" 문제라면, over-squashing은 "먼 곳의 정보가 도착하지 않는" 문제다. 그래서 층을 늘리는 것으로는 해결되지 않고(over-smoothing이 심해진다), 먼 노드 사이에 간선을 추가하거나 그래프 전체에 대한 attention을 함께 쓰는 식으로 그래프 구조 자체를 바꾼다.
 
 ::quiz{id="oversmoothing-vs-squashing"}
