@@ -1,0 +1,6 @@
+title = "D-최적 설계를 찾는 교환 알고리즘"
+chapter = "scientific-discovery/experimental-design"
+objective = 1
+exec = "browser"
+entry = "d_optimal"
+timeout_s = 15

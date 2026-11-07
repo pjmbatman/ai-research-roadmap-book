@@ -1,0 +1,6 @@
+title = "Buckingham π 그룹의 지수 구하기"
+chapter = "scientific-discovery/equation-discovery"
+objective = 3
+exec = "browser"
+entry = "pi_exponents"
+timeout_s = 10

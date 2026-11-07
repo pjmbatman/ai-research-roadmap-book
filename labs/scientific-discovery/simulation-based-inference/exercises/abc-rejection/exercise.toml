@@ -1,0 +1,6 @@
+title = "ABC rejection의 수용 단계"
+chapter = "scientific-discovery/simulation-based-inference"
+objective = 1
+exec = "browser"
+entry = "abc_accept"
+timeout_s = 10
