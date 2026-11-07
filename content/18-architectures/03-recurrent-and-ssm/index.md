@@ -195,6 +195,8 @@ kernel |K_j| j=0, 50, 199: [0.1681 0.0358 0.0026]
 
 블록 행렬 $\begin{bmatrix}\mathbf{A} & \mathbf{B} \\ \mathbf{0} & 0\end{bmatrix}$의 행렬 지수 한 번으로 $\bar{\mathbf{A}}$와 $\bar{\mathbf{B}}$를 함께 얻는다($\mathbf{A}$의 역행렬을 피하는 방법이다). 연속시간 고윳값 $-0.05$인 느린 모드는 이산화 후 $e^{-0.005} \approx 0.995$가 되어, kernel이 200 step 뒤에도 0이 아니다. 고윳값을 어디에 두느냐가 모델이 얼마나 먼 과거를 기억하는지를 정한다.
 
+::widget{name="ssm-kernel"}
+
 ::quiz{id="ssm-kernel-formula"}
 
 **S4.** 이 아이디어를 깊은 신경망의 층으로 쓰려면 두 문제를 풀어야 한다. 먼 과거를 기억하는 $\mathbf{A}$를 어떻게 정하는가, 그리고 긴 kernel $K_0, \dots, K_{L-1}$을 행렬 거듭제곱 없이 어떻게 빠르게 계산하는가. Gu 외(2022)의 S4(structured state space sequence model)는 장기 기억에 유리하도록 설계된 상태 행렬(HiPPO 이론에서 온 초기화)을 쓰고, 그 행렬에 저랭크 보정을 둔 구조를 이용해 kernel을 효율적으로 계산했다. 이렇게 만든 SSM 층을 비선형 층과 번갈아 쌓아, 길이 수천–수만인 시퀀스 과제(Long Range Arena)에서 좋은 결과를 보고했다.
