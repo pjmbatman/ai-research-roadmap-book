@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 448문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 474문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -331,16 +331,16 @@ _최적화 문제의 구조, 볼록성과 최적성 조건, 제약 최적화, 1�
 
 _확률변수와 분포, 조건부확률, 다변량 가우시안, 기댓값과 극한정리, 샘플링, 확률과정의 기초를 다룬다._
 
-- **11.1** [확률공간과 확률변수](content/11-probability/01-random-variables/index.md) · `필수` · 위젯: 분포 탐색기
+- **11.1** [확률공간과 확률변수](content/11-probability/01-random-variables/index.md) · `필수` · 퀴즈 6 · 위젯: 분포 탐색기
   - 확률공간의 직관 · 확률변수 · 분포의 표현 · 변수변환
-- **11.2** [주요 분포와 지수족](content/11-probability/02-distributions/index.md) · `필수` · 위젯: 분포 탐색기
-  - 이산 분포 · 연속 분포 · 분포의 생성 이야기 · 지수족 · 혼합분포와 두꺼운 꼬리
+- **11.2** [주요 분포와 지수족](content/11-probability/02-distributions/index.md) · `필수` · 퀴즈 7 · 위젯: 분포 탐색기
+  - 이산 분포 · 연속 분포 · 분포의 생성 이야기 · 지수족 · 혼합분포와 두꺼운 꼬리 · 참고 문헌
   - 선수: 11.1 확률공간과 확률변수
-- **11.3** [결합·주변·조건부분포와 독립성](content/11-probability/03-conditional-probability/index.md) · `필수`
-  - 결합과 주변화 · 조건부분포 · 베이즈 정리 · 독립과 조건부 독립 · 확률 그래프 모델 입문
+- **11.3** [결합·주변·조건부분포와 독립성](content/11-probability/03-conditional-probability/index.md) · `필수` · 퀴즈 7
+  - 결합과 주변화 · 조건부분포 · 베이즈 정리 · 독립과 조건부 독립 · 확률 그래프 모델 입문 · 참고 문헌
   - 선수: 11.1 확률공간과 확률변수
-- **11.4** [다변량 가우시안](content/11-probability/04-multivariate-gaussian/index.md) · `필수` · 위젯: 다변량 가우시안의 조건부분포
-  - 정의와 기하 · 주변화와 조건부 · 선형 변환과 선형-가우시안 모델 · 정밀도 행렬 · 활용
+- **11.4** [다변량 가우시안](content/11-probability/04-multivariate-gaussian/index.md) · `필수` · 퀴즈 6 · 위젯: 다변량 가우시안의 조건부분포
+  - 정의와 기하 · 주변화와 조건부 · 선형 변환과 선형-가우시안 모델 · 정밀도 행렬 · 활용 · 참고 문헌
   - 선수: 11.3 결합·주변·조건부분포와 독립성, 7.5 고윳값과 대칭행렬
 - **11.5** [기댓값·부등식·극한정리](content/11-probability/05-expectation-and-limits/index.md) · `필수` · 퀴즈 7
   - 기댓값과 모멘트 · 부등식 · 집중 부등식 · 극한정리 · 참고 문헌
