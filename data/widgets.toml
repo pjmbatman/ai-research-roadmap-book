@@ -403,37 +403,37 @@ status = "prototype"
 name = "robust-outlier"
 title = "z와 robust z"
 chapters = ["data/preprocessing-and-eda"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "regularization-path"
 title = "정규화 경로"
 chapters = ["classical-ml/linear-models"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "knn-rbf-scale"
 title = "kNN과 RBF 길이척도"
 chapters = ["classical-ml/kernels-and-neighbors"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "tree-boosting-overfit"
 title = "트리 깊이와 boosting"
 chapters = ["classical-ml/trees-and-ensembles"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "tsne-perplexity"
 title = "t-SNE perplexity"
 chapters = ["classical-ml/unsupervised-learning"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "kaplan-meier"
 title = "Kaplan–Meier와 중도절단"
 chapters = ["classical-ml/survival-and-causal"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "smoothing-illusion"
