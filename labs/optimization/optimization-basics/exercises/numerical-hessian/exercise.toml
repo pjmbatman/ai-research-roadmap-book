@@ -1,0 +1,6 @@
+title = "중앙 차분 Hessian으로 볼록성 판별하기"
+chapter = "optimization/optimization-basics"
+objective = 2
+exec = "browser"
+entry = "is_convex_on"
+timeout_s = 10

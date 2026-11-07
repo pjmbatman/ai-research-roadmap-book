@@ -1,0 +1,6 @@
+title = "stationary point 분류하기"
+chapter = "optimization/optimization-basics"
+objective = 3
+exec = "browser"
+entry = "classify"
+timeout_s = 10
