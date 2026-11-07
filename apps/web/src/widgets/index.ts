@@ -8,6 +8,7 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "distribution-explorer": () => import("./distribution-explorer/index"),
   "gaussian-conditioning": () => import("./gaussian-conditioning/index"),
   "bayesian-update": () => import("./bayesian-update/index"),
+  "gp-regression": () => import("./gp-regression/index"),
 };
 
 export function mountWidgets(page: PageData) {

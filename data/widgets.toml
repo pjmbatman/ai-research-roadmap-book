@@ -79,7 +79,7 @@ status = "prototype"
 name = "gp-regression"
 title = "Gaussian process 회귀"
 chapters = ["bayesian-inference/gaussian-processes"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "split-leakage"
