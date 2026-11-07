@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 76문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 108문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -222,21 +222,21 @@ _디렉터리 구조, 네이밍, 설정 파일, CLI, 로깅, 테스트, 문서�
 
 _데이터와 모델을 공간과 변환의 관점에서 이해한다. 선형·아핀·비선형 구조, rank, 분해, 텐서, 다양체, 함수공간까지 다룬다._
 
-- **7.1** [벡터공간과 선형사상](content/07-linear-algebra/01-vector-spaces/index.md) · `필수` · 위젯: 2차원 선형·아핀 사상
+- **7.1** [벡터공간과 선형사상](content/07-linear-algebra/01-vector-spaces/index.md) · `필수` · 퀴즈 6 · 위젯: 2차원 선형·아핀 사상
   - 집합·함수·벡터공간 · span·선형독립·basis·dimension · 선형사상 · 행렬 표현
 - **7.2** [아핀 구조와 비선형성](content/07-linear-algebra/02-affine-and-nonlinear/index.md) · `필수` · 퀴즈 6 · 위젯: 2차원 선형·아핀 사상, ReLU 신경망의 조각별 아핀 영역
   - 선형 변환과 아핀 변환 · 결합의 종류 · 선형층의 합성 · 비선형성의 역할 · 선형 근사로서의 미분 · 참고 문헌
   - 선수: 7.1 벡터공간과 선형사상
-- **7.3** [행렬의 네 부분공간과 rank](content/07-linear-algebra/03-rank-and-subspaces/index.md) · `필수`
+- **7.3** [행렬의 네 부분공간과 rank](content/07-linear-algebra/03-rank-and-subspaces/index.md) · `필수` · 퀴즈 6
   - 네 부분공간 · rank · rank–nullity와 선형시스템 · 수치적 rank · 저랭크 구조
   - 선수: 7.1 벡터공간과 선형사상
-- **7.4** [내적·노름·직교성·사영](content/07-linear-algebra/04-inner-products-and-projection/index.md) · `필수`
+- **7.4** [내적·노름·직교성·사영](content/07-linear-algebra/04-inner-products-and-projection/index.md) · `필수` · 퀴즈 6
   - 내적과 노름 · 직교성 · 사영 · 최소제곱 · pseudoinverse
   - 선수: 7.3 행렬의 네 부분공간과 rank
-- **7.5** [고윳값과 대칭행렬](content/07-linear-algebra/05-eigen-and-symmetric/index.md) · `필수`
+- **7.5** [고윳값과 대칭행렬](content/07-linear-algebra/05-eigen-and-symmetric/index.md) · `필수` · 퀴즈 7
   - 고윳값과 고유벡터 · 스펙트럴 정리 · 양의 정부호성과 이차형식 · 공분산 행렬 · 동역학과 안정성
   - 선수: 7.4 내적·노름·직교성·사영
-- **7.6** [SVD·PCA·저랭크 근사](content/07-linear-algebra/06-svd-and-pca/index.md) · `필수` · 위젯: SVD: 회전–스케일–회전
+- **7.6** [SVD·PCA·저랭크 근사](content/07-linear-algebra/06-svd-and-pca/index.md) · `필수` · 퀴즈 7 · 위젯: SVD: 회전–스케일–회전
   - SVD · 저랭크 근사 · PCA · 계산 · 활용
   - 선수: 7.5 고윳값과 대칭행렬
 - **7.7** [텐서와 einsum](content/07-linear-algebra/07-tensors-and-einsum/index.md) · `필수`
