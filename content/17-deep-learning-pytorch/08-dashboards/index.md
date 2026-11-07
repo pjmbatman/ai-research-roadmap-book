@@ -255,6 +255,8 @@ EMA 0.99 : 상승 구간(900–1000)에서 기저 곡선보다 평균 0.058 낮�
 - **추세를 늦게 보여 준다.** 손실이 오르는 구간에서 smoothed 곡선은 실제보다 낮게, 즉 아직 덜 나빠진 것처럼 보인다. 원본도 이 구간의 잡음 때문에 기저 곡선보다 평균 0.021 낮지만, $w = 0.99$의 smoothed 곡선은 그보다 약 0.04 더 낮다. 이 차이가 smoothing의 지연이다. 과적합이 시작된 시점을 늦게 판단하게 된다.
 - **보정이 없으면 시작이 0 쪽으로 끌린다.** 보정 없는 EMA의 첫 값은 0.023으로, 실제 손실 2.297의 1%다.
 
+::widget{name="smoothing-illusion"}
+
 ::quiz{id="ema-without-debias"}
 
 **표본 줄이기.** 기록된 점이 많으면 TensorBoard는 태그마다 일부만 남겨 보여 준다. 실습의 `tensorboard_demo.py`는 20000 step의 손실을 기록하고 step 12345에 spike를 하나 넣은 뒤, TensorBoard의 이벤트 읽기 도구(`EventAccumulator`)로 다시 읽는다. 집필 시점(tensorboard 2.21.0)의 결과는 다음과 같다.
