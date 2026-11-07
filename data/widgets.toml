@@ -151,37 +151,37 @@ status = "prototype"
 name = "split-unit-forecast"
 title = "분할 단위와 예측 지평"
 chapters = ["research-landscape/problem-formulation"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "seed-variance"
 title = "seed마다 흔들리는 검증 점수"
 chapters = ["research-landscape/first-pipeline"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "tmux-anatomy"
 title = "tmux 세션·창·패널"
 chapters = ["linux-and-remote/processes-and-monitoring"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "ssh-tunnel"
 title = "SSH 포트 포워딩 방향"
 chapters = ["linux-and-remote/ssh"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "preemption-checkpoint"
 title = "선점과 체크포인트 간격"
 chapters = ["linux-and-remote/shared-servers"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "cuda-version-stack"
 title = "드라이버·CUDA·프레임워크 호환"
 chapters = ["environments/software-stack"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "docker-layer-cache"
