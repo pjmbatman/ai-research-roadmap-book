@@ -511,37 +511,37 @@ status = "planned"
 name = "contrastive-collapse"
 title = "대조학습 붕괴"
 chapters = ["generative-and-foundation-models/self-supervised-learning"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "lora-rank"
 title = "LoRA 랭크"
 chapters = ["generative-and-foundation-models/foundation-models"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "gridworld-vi"
 title = "격자 세계 가치 반복"
 chapters = ["reinforcement-learning/mdp-and-dp"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "bandit-regret"
 title = "밴딧 누적 후회"
 chapters = ["reinforcement-learning/bandits-and-offline-rl"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "lqr-mpc"
 title = "LQR과 제약 MPC"
 chapters = ["reinforcement-learning/model-based-control"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "conformal-coverage"
 title = "split conformal 포함률"
 chapters = ["reliability/conformal-prediction"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "cost-threshold"
