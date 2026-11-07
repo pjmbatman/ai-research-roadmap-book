@@ -14,9 +14,9 @@ Q = {q["id"]: q for q in tomllib.loads(QUIZ.read_text(encoding="utf-8"))["questi
 BASH = shutil.which("bash")
 
 CHILD = r'''
-import signal, sys, time
+import os, signal, sys, time
 def on_term(signum, frame):
-    print("saved", flush=True)
+    os.write(1, b"saved\n")  # print는 신호가 print("start") 도중에 오면 재진입 오류가 난다
     sys.exit(0)
 signal.signal(signal.SIGTERM, on_term)
 try:
