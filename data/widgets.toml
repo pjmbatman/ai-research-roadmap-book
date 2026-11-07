@@ -121,28 +121,28 @@ status = "prototype"
 name = "coulomb-matrix-invariance"
 title = "Coulomb 행렬 고윳값의 불변성"
 chapters = ["chemistry-and-materials/molecular-representations"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "scaffold-split-explorer"
 title = "무작위 분할 vs scaffold 분할"
 chapters = ["chemistry-and-materials/property-prediction"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "md-energy-conservation"
 title = "분자동역학 에너지 보존"
 chapters = ["chemistry-and-materials/interatomic-potentials"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "predictor-exploitation"
 title = "예측 모델 착취와 적용 영역"
 chapters = ["chemistry-and-materials/molecular-design"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "leakage-threshold"
 title = "근접 중복 누수 임계 탐색"
 chapters = ["chemistry-and-materials/chemistry-evaluation"]
-status = "planned"
+status = "prototype"
