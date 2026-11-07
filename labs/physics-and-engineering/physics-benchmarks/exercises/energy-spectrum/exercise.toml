@@ -1,0 +1,6 @@
+title = "주기 장의 에너지 스펙트럼"
+chapter = "physics-and-engineering/physics-benchmarks"
+objective = 1
+exec = "browser"
+entry = "energy_spectrum"
+timeout_s = 10
