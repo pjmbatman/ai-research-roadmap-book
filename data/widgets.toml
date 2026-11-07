@@ -691,40 +691,40 @@ status = "prototype"
 name = "energy-spectrum-blur"
 title = "흐릿함과 에너지 스펙트럼"
 chapters = ["earth-and-climate/climate-evaluation"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "homology-split"
 title = "상동성 기준 분할"
 chapters = ["life-sciences/bio-evaluation"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "kabsch-align"
 title = "Kabsch 정렬과 RMSD"
 chapters = ["life-sciences/protein-structure"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "batch-correction"
 title = "배치 효과와 보정"
 chapters = ["life-sciences/omics-and-single-cell"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "soc-filter"
 title = "쿨롱 카운팅 vs EKF"
 chapters = ["battery-ai/state-and-lifetime-prediction"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "charge-pareto"
 title = "다단계 충전 Pareto"
 chapters = ["battery-ai/charging-optimization"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "competency-radar"
 title = "역량 레이더"
 chapters = ["capstone/competency-assessment"]
-status = "planned"
+status = "prototype"
