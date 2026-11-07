@@ -1,0 +1,99 @@
+# 19.3 VAE와 잠재변수 생성모델 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "elbo-gap-numeric"
+type = "numeric"
+objective = 1
+prompt = '''어떤 관측 $\mathbf{x}$에서 정확한 $\log p_\theta(\mathbf{x}) = -2.5$이고, encoder 분포와 정확한 사후분포 사이의 $\mathrm{KL}\big(q_\phi(\mathbf{z} \mid \mathbf{x}) \,\|\, p_\theta(\mathbf{z} \mid \mathbf{x})\big) = 0.4$이다. 이 관측의 ELBO는?'''
+answer = -2.9
+tolerance = 0.001
+explanation = '''$\log p_\theta(\mathbf{x}) = \mathrm{ELBO} + \mathrm{KL}(q \,\|\, p(\mathbf{z} \mid \mathbf{x}))$이므로 $\mathrm{ELBO} = -2.5 - 0.4 = -2.9$다. ELBO 안에 들어 있는 KL 항 $\mathrm{KL}(q \,\|\, p(\mathbf{z}))$(사전분포와의 KL)과 하한의 간격을 만드는 KL(사후분포와의 KL)을 혼동하면 안 된다. 본문 셀 1에서 어긋난 encoder는 사전분포와의 KL이 0.24로 작았지만 사후분포와의 KL은 2.76이었다.'''
+
+[[questions]]
+id = "beta-objective-bound"
+type = "multiple"
+objective = 1
+prompt = '''β-VAE 목적함수 $\mathcal{L}_\beta = \mathbb{E}_q[\log p_\theta(\mathbf{x} \mid \mathbf{z})] - \beta\,\mathrm{KL}(q \,\|\, p(\mathbf{z}))$에 대해 옳은 것을 모두 고르시오.'''
+explanation = '''KL $\geq 0$이므로 $\beta \geq 1$이면 $\mathcal{L}_\beta \leq \mathcal{L}_1 = \mathrm{ELBO} \leq \log p$이고, $\beta = 1$일 때만 ELBO 그 자체다. $\beta < 1$이면 $\mathcal{L}_\beta \geq \mathrm{ELBO}$이고, KL 항이 크면 $\log p$보다 커질 수도 있어 하한이라는 보장이 없다. 그래서 $\beta$가 다른 모델의 목적함수 값을 log-likelihood처럼 비교하면 안 된다.'''
+
+[[questions.choices]]
+text = '''$\beta = 1$일 때만 ELBO와 같다.'''
+correct = true
+
+[[questions.choices]]
+text = '''$\beta > 1$이면 여전히 $\log p_\theta(\mathbf{x})$의 하한이지만 ELBO보다 느슨하다.'''
+correct = true
+
+[[questions.choices]]
+text = '''$\beta < 1$이면 ELBO보다 더 촘촘한(정확한) 하한이 된다.'''
+feedback = "β < 1이면 목적함수가 ELBO보다 커질 뿐 하한이라는 보장이 사라진다. KL 항이 크면 log p(x)를 넘을 수 있다."
+
+[[questions.choices]]
+text = '''$\beta$와 무관하게 최댓값은 $\log p_\theta(\mathbf{x})$와 같다.'''
+feedback = "ELBO(β = 1)의 최댓값도 encoder가 정확한 사후분포일 때만 log p(x)와 같다. β ≠ 1이면 최적 encoder 자체가 달라진다."
+
+[[questions]]
+id = "reparam-sigma-grad"
+type = "numeric"
+objective = 2
+prompt = '''$z = \mu + s\,\varepsilon$, $\varepsilon \sim \mathcal{N}(0, 1)$, $\mu = 1$, $s = 0.5$일 때 재매개변수화로 $\frac{\partial}{\partial s}\mathbb{E}[z^2]$를 구하면? (정확한 값)'''
+answer = 1.0
+tolerance = 0.001
+explanation = '''$\frac{\partial}{\partial s}\mathbb{E}[z^2] = \mathbb{E}_\varepsilon\big[2z \cdot \varepsilon\big] = \mathbb{E}[2(\mu + s\varepsilon)\varepsilon] = 2s\,\mathbb{E}[\varepsilon^2] = 2s = 1.0$이다. 닫힌 꼴 $\mathbb{E}[z^2] = \mu^2 + s^2$을 $s$로 미분해도 같다. $\partial z / \partial s = \varepsilon$을 빠뜨리고 $\mathbb{E}[2z] = 2\mu = 2$로 계산하는 실수가 흔하다.'''
+
+[[questions]]
+id = "reparam-why"
+type = "single"
+objective = 2
+prompt = '''VAE 구현에서 `z = mu + exp(log_s) * eps`(eps는 표준정규 난수)처럼 쓰는 이유로 가장 정확한 것은?'''
+explanation = '''$q_\phi$에서 직접 뽑은 표본은 $\phi$의 미분 가능한 함수가 아니어서 자동미분이 encoder로 gradient를 보낼 수 없다. 표본을 $\phi$와 무관한 잡음 $\varepsilon$의 결정론적 변환으로 쓰면 기댓값의 분포가 $\phi$와 무관해지고, $\partial z / \partial \mu = 1$, $\partial z / \partial s = \varepsilon$을 통해 gradient가 흐른다. 분포 자체는 바뀌지 않는다.'''
+
+[[questions.choices]]
+text = "표본을 encoder 출력의 미분 가능한 함수로 만들어 ELBO의 gradient가 encoder 파라미터로 흐르게 하기 위해서다."
+correct = true
+
+[[questions.choices]]
+text = "표준정규에서 뽑는 것이 가우시안 q(z|x)에서 직접 뽑는 것보다 빠르기 때문이다."
+feedback = "속도 차이는 본질이 아니다. 같은 분포에서 뽑는 두 방법 중 하나만 gradient 계산을 가능하게 한다."
+
+[[questions.choices]]
+text = "q(z|x)를 표준정규분포에 가깝게 만드는 정규화 효과를 주기 위해서다."
+feedback = "q(z|x)를 사전분포로 당기는 것은 KL 항의 역할이다. 재매개변수화는 분포를 바꾸지 않고 표본을 쓰는 방식만 바꾼다."
+
+[[questions.choices]]
+text = "ELBO를 정확히(닫힌 꼴로) 계산하기 위해서다."
+feedback = "재매개변수화된 표본으로 계산한 재구성 항은 여전히 Monte Carlo 추정이다. 닫힌 꼴이 되는 것은 가우시안끼리의 KL 항이다."
+
+[[questions]]
+id = "collapse-threshold"
+type = "numeric"
+objective = 3
+prompt = '''1차원 선형 VAE에서 데이터 분산이 $v = 2$, decoder 잡음 분산이 $\sigma^2 = 0.5$로 고정되어 있다. KL 가중치 $\beta$를 키워 갈 때, posterior collapse($w^\star = 0$)가 최적해가 되기 시작하는 $\beta$는?'''
+answer = 4
+tolerance = 0.001
+slider = { min = 0.5, max = 8, step = 0.5 }
+explanation = '''최적 decoder 가중치는 $w^{\star 2} = \max(v - \beta\sigma^2, 0)$이므로 $\beta\sigma^2 \geq v$, 즉 $\beta \geq v/\sigma^2 = 2/0.5 = 4$이면 $w^\star = 0$이다. $\beta$를 키우는 것은 decoder 잡음 분산을 $\beta\sigma^2$로 키우는 것과 같은 효과이고, 그 "잡음"이 데이터 분산보다 크면 데이터의 변동을 잡음으로 설명하는 것이 더 싸다.'''
+
+[[questions]]
+id = "collapse-diagnosis"
+type = "single"
+objective = 3
+prompt = '''VAE 학습 뒤 posterior collapse를 진단하는 데 가장 직접적인 지표는?'''
+explanation = '''collapse는 $q_\phi(\mathbf{z} \mid \mathbf{x}) \approx p(\mathbf{z})$가 되는 현상이므로, 데이터 평균한 잠재 차원별 KL이 0에 가까운 차원을 찾으면 된다. 전체 KL의 합만 보면 일부 차원만 죽은 경우를 놓친다. 표본 품질이나 ELBO 값 자체는 collapse가 아닌 다른 이유로도 나빠지므로 직접적인 지표가 아니다.'''
+
+[[questions.choices]]
+text = "잠재 차원별로 데이터 평균한 KL(q(z_j|x) || p(z_j))이 0에 가까운지 본다."
+correct = true
+
+[[questions.choices]]
+text = "학습 손실(−ELBO)이 계속 줄어드는지 본다."
+feedback = "collapse된 모델도 손실은 잘 줄어든다. KL 항이 0이 되면서 decoder가 데이터 평균을 맞추는 쪽으로 수렴하기 때문이다."
+
+[[questions.choices]]
+text = "재구성 오차가 작은지 본다."
+feedback = "재구성 오차가 작으면 collapse가 아닐 가능성이 크지만, 강력한 자기회귀 decoder는 z 없이도 재구성(사실상 예측)을 잘할 수 있다. 차원별 KL이 더 직접적이다."
+
+[[questions.choices]]
+text = "사전분포에서 뽑은 표본의 시각적 품질을 본다."
+feedback = "실습에서 σ_dec = 0.1 모델은 collapse가 전혀 아닌데도 표본이 나빴다. 표본 품질은 collapse 외의 여러 원인에 좌우된다."

@@ -1,0 +1,6 @@
+title = "혼합 가우시안의 평균 NLL을 안정하게 계산하기"
+chapter = "generative-and-foundation-models/generative-modeling"
+objective = 3
+exec = "browser"
+entry = "mixture_nll"
+timeout_s = 10

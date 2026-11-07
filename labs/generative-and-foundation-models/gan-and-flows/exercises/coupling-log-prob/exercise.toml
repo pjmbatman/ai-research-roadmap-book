@@ -1,0 +1,6 @@
+title = "affine coupling flow의 log-likelihood"
+chapter = "generative-and-foundation-models/gan-and-flows"
+objective = 2
+exec = "browser"
+entry = "flow_log_prob"
+timeout_s = 15

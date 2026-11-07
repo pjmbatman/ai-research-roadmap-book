@@ -1,0 +1,6 @@
+title = "온도와 nucleus(top-p) 필터 구현하기"
+chapter = "generative-and-foundation-models/autoregressive-models"
+objective = 2
+exec = "browser"
+entry = "sample_probs"
+timeout_s = 10

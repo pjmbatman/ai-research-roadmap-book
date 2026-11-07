@@ -1,0 +1,114 @@
+# 19.5 확산 모델과 score 기반 모델 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "forward-closed-form"
+type = "numeric"
+objective = 1
+prompt = '''variance preserving forward 과정에서 시각 $t$의 $\bar\alpha_t = 0.36$이다. 데이터 점 $x_0 = 2$에서 출발한 $x_t$의 조건부 평균 $\mathbb{E}[x_t \mid x_0]$는?'''
+answer = 1.2
+tolerance = 0.001
+explanation = '''$q(x_t \mid x_0) = \mathcal{N}(\sqrt{\bar\alpha_t}\,x_0,\ 1 - \bar\alpha_t)$이므로 평균은 $\sqrt{0.36} \times 2 = 1.2$, 분산은 $0.64$다. 흔한 실수는 $\bar\alpha_t$를 제곱근 없이 곱해 $0.72$를 얻는 것이다. 분산 쪽이 $1 - \bar\alpha_t$이고 평균 쪽이 그 계수의 제곱근이어야 전체 분산이 보존된다.'''
+
+[[questions]]
+id = "forward-endpoint"
+type = "single"
+objective = 1
+prompt = '''forward 과정의 끝 $x_T$의 분포가 데이터와 무관하게 거의 $\mathcal{N}(0, 1)$이 되는 이유로 옳은 것은?'''
+explanation = '''$x_T = \sqrt{\bar\alpha_T}\,x_0 + \sqrt{1 - \bar\alpha_T}\,\varepsilon$이고 $\bar\alpha_T \approx 0$이 되도록 스케줄을 고르기 때문이다. 데이터의 기여가 $\sqrt{\bar\alpha_T}$배로 사라지고 분산 거의 1의 잡음만 남는다. 연속시간으로 보면 OU 과정이 정상분포로 수렴하는 것이다(11.7장). 데이터를 정규화했는지와는 무관하다(본문 셀 1의 데이터 분산은 약 1.7).'''
+
+[[questions.choices]]
+text = "누적 계수 abar_T가 거의 0이 되도록 스케줄을 정해, 데이터 성분이 사라지고 분산 1의 잡음만 남기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "중심극한정리에 의해 독립 잡음을 많이 더하면 무엇이든 정규분포가 되기 때문이다."
+feedback = "신호를 줄이지 않고 잡음만 더하면 분산이 끝없이 커지고, 데이터 성분도 그대로 남는다. 핵심은 매 step 신호를 sqrt(1 − beta)배로 줄이는 데 있다."
+
+[[questions.choices]]
+text = "데이터를 미리 평균 0, 분산 1로 정규화하기 때문이다."
+feedback = "정규화는 학습의 수치적 편의를 위한 것이다. 셀 1의 데이터는 분산이 약 1.7이었지만 t = 1000에서 분산 1에 도달했다."
+
+[[questions]]
+id = "optimal-denoiser"
+type = "single"
+objective = 2
+prompt = '''denoising 손실 $\mathbb{E}\lVert\varepsilon - \varepsilon_\theta(x_t, t)\rVert^2$를 아무리 잘 최소화해도 0이 되지 않는 이유는?'''
+explanation = '''같은 $x_t$가 여러 $(x_0, \varepsilon)$ 쌍에서 나올 수 있으므로, $x_t$만 보고는 실제로 섞인 $\varepsilon$을 정확히 알 수 없다. 제곱오차의 최적해는 조건부 기댓값 $\mathbb{E}[\varepsilon \mid x_t]$이고, 남는 손실은 $\varepsilon$의 조건부 분산이다. 본문 셀 2에서 정확한 최적해의 손실은 0.471이었다. 손실 값이 크다고 신경망이 나쁜 것은 아니다.'''
+
+[[questions.choices]]
+text = "같은 x_t가 여러 (x_0, ε) 쌍에서 나올 수 있어, 최적해인 조건부 기댓값 E[ε | x_t]에도 피할 수 없는 오차가 남기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "신경망의 용량이 유한하기 때문이다. 충분히 큰 신경망이면 0까지 줄일 수 있다."
+feedback = "정확한 최적해(셀 2의 eps*)도 손실이 0.471이었다. 남는 손실은 용량이 아니라 문제 자체의 불확실성에서 온다."
+
+[[questions.choices]]
+text = "학습 시각 t를 무작위로 뽑아 손실에 잡음이 섞이기 때문이다."
+feedback = "t를 하나로 고정해도(셀 2는 t = 300) 손실은 0이 되지 않는다."
+
+[[questions]]
+id = "eps-score-relation"
+type = "single"
+objective = 2
+prompt = '''최적의 잡음 예측 $\varepsilon^\star(x_t, t) = \mathbb{E}[\varepsilon \mid x_t]$와 $p_t$의 score $\nabla\log p_t(x_t)$ 사이의 관계로 옳은 것은? (forward 과정 $x_t = \sqrt{\bar\alpha_t}x_0 + \sqrt{1 - \bar\alpha_t}\,\varepsilon$)'''
+explanation = '''Tweedie 공식에서 $\mathbb{E}[\varepsilon \mid x_t] = -\sqrt{1 - \bar\alpha_t}\,\nabla\log p_t(x_t)$다. score는 밀도가 커지는 방향, 즉 잡음을 걷어 내는 방향을 가리키고, 섞인 잡음의 기댓값은 그 반대 방향이다. 그래서 ε 예측 신경망을 학습하는 것은 모든 시각의 score를 학습하는 것과 같다. 1차원 가우시안 $p_t = \mathcal{N}(0, 1)$ 같은 예로 부호를 확인할 수 있다.'''
+
+[[questions.choices]]
+text = '''$\varepsilon^\star = -\sqrt{1 - \bar\alpha_t}\,\nabla\log p_t(x_t)$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\varepsilon^\star = +\sqrt{1 - \bar\alpha_t}\,\nabla\log p_t(x_t)$'''
+feedback = "부호가 반대다. score는 밀도가 높은 쪽(데이터 쪽)을 가리키고, 섞인 잡음은 x_t를 데이터에서 밀어낸 방향이다."
+
+[[questions.choices]]
+text = '''$\varepsilon^\star = -\nabla\log p_t(x_t) / \sqrt{1 - \bar\alpha_t}$'''
+feedback = "규모가 틀렸다. 이 식은 잡음 크기에 맞춰 나눈 score 회귀 목표 −ε/sqrt(1 − abar)와 혼동한 것이다."
+
+[[questions.choices]]
+text = "둘은 무관하다. score는 정규화 상수를 알아야 계산할 수 있다."
+feedback = "score는 로그밀도의 기울기라 정규화 상수가 미분으로 사라진다. 그래서 정규화 상수 없이도 학습할 수 있다."
+
+[[questions]]
+id = "steps-vs-quality"
+type = "single"
+objective = 3
+prompt = '''정확한 score를 쓰는 DDPM 샘플러로 1000 step일 때 W1 = 0.004, 5 step일 때 W1 = 0.40을 얻었다. 이 차이의 원인으로 옳은 것은?'''
+explanation = '''score가 정확하므로 신경망 오차는 없다. 남는 오차는 연속적인 reverse 과정을 적은 step으로 이산화한 오차와 유한 표본의 통계적 오차뿐이고, 후자는 두 경우 같다. step을 줄일수록 한 step이 건너뛰는 시간이 커져 이산화 오차가 커진다. 같은 step 수에서는 결정론적 DDIM이 DDPM보다 작은 오차를 냈다(셀 4).'''
+
+[[questions.choices]]
+text = "reverse 과정을 적은 step으로 이산화한 오차다. score는 정확하므로 신경망 오차는 없다."
+correct = true
+
+[[questions.choices]]
+text = "5 step에서는 신경망이 덜 학습되었기 때문이다."
+feedback = "이 실험에는 신경망이 없다. 두 경우 모두 같은 정확한 score를 썼다."
+
+[[questions.choices]]
+text = "5 step에서는 forward 과정의 끝이 표준정규분포에 도달하지 못하기 때문이다."
+feedback = "샘플러의 step 수는 forward 스케줄을 바꾸지 않는다. 출발점 x_T는 두 경우 모두 abar_T ≈ 0인 시각의 표준정규분포다."
+
+[[questions]]
+id = "guidance-weight"
+type = "single"
+objective = 3
+prompt = '''classifier-free guidance의 가중치 $w$를 0에서 3으로 키웠다. 표본 분포에 일어나는 일로 옳은 것은?'''
+explanation = '''guidance는 암묵적 분류기의 기울기 $\nabla\log p_t(\mathbf{c} \mid \mathbf{x})$를 $(1 + w)$배로 키운다. 표본은 다른 조건에서 멀어지는 쪽으로 밀리고 퍼짐이 줄어든다. 본문 셀 5에서 평균은 1.20에서 1.54로 이동하고 표준편차는 0.33에서 0.20으로 줄었다. 결과 분포는 더 이상 $p(\mathbf{x} \mid \mathbf{c})$가 아니므로, 앙상블의 퍼짐을 불확실성으로 해석할 때 주의해야 한다.'''
+
+[[questions.choices]]
+text = "조건에 더 확실히 속하는 쪽으로 표본이 밀리고 다양성이 줄어든다. 표본 분포는 p(x|c)에서 벗어난다."
+correct = true
+
+[[questions.choices]]
+text = "p(x|c)에서 더 정확하게 뽑게 된다. w가 클수록 조건부분포에 가까워진다."
+feedback = "w = 0이 조건부분포 그대로다. w > 0은 분포를 의도적으로 바꾼다(셀 5에서 참 조건부분포는 표준편차 0.35, w = 3은 0.20)."
+
+[[questions.choices]]
+text = "w는 조건 c가 맞을 확률이므로 0과 1 사이여야 하고, 3은 의미가 없다."
+feedback = "w는 확률이 아니라 외삽의 크기다. 1보다 큰 값도 흔히 쓰인다."
+
+[[questions.choices]]
+text = "조건부 예측과 무조건 예측의 평균을 쓰므로 두 분포의 중간이 된다."
+feedback = "(1 + w)ε(c) − wε(∅)는 w > 0이면 평균이 아니라 조건부 쪽으로의 외삽이다."
