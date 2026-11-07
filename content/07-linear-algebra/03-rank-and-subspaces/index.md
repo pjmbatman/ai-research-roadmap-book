@@ -104,7 +104,7 @@ $$
 \operatorname{rank}(\mathbf{A}\mathbf{B}) \le \min\big(\operatorname{rank}\mathbf{A}, \operatorname{rank}\mathbf{B}\big)
 $$
 
-이다. 7.2장에서 활성화 없는 층을 쌓을 때 좁은 중간 층이 병목이 된 이유다. 같은 장에서 자주 쓰는 등식이 하나 더 있다.
+이다. 7.2장에서 활성화 없는 층을 쌓을 때 좁은 중간 층이 병목이 된 이유다. rank에 관해 자주 쓰는 등식이 하나 더 있다.
 
 $$
 \operatorname{rank}(\mathbf{A}^\top\mathbf{A}) = \operatorname{rank}(\mathbf{A}).
