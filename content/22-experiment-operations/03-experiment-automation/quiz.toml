@@ -1,0 +1,133 @@
+# 22.3 실험 자동화와 하이퍼파라미터 탐색 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "manifest-job-id"
+type = "single"
+objective = 1
+prompt = '''sweep의 각 job을 가리키는 ID로 **설정 내용의 hash**를 쓰는 편이 목록 안의 **순번**(0, 1, 2, …)을 쓰는 것보다 나은 가장 중요한 이유는?'''
+explanation = '''순번은 목록이 바뀌면 다른 설정을 가리킨다. 탐색 공간에 값 하나를 추가하거나 순서를 바꾸면 "job 7"이 전혀 다른 설정이 되어, 이미 끝난 결과를 건너뛰거나 결과를 설정에 연결하는 일이 어긋난다. 설정 hash는 설정 내용만으로 정해지므로 sweep을 넓혀도 기존 job은 같은 ID를 유지하고, 새로 돌릴 job만 골라낼 수 있다.'''
+
+[[questions.choices]]
+text = "탐색 공간을 넓히거나 순서를 바꿔도 같은 설정은 같은 ID를 유지해, 끝난 job을 건너뛰고 결과를 정확히 연결할 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "hash가 순번보다 짧아서 파일 이름으로 쓰기 좋다."
+feedback = "길이는 부차적이다. 순번이 더 짧다. 핵심은 ID가 목록의 위치가 아니라 설정 내용에 묶인다는 점이다."
+
+[[questions.choices]]
+text = "hash를 쓰면 같은 설정을 여러 번 돌려도 매번 다른 ID가 생겨 결과가 덮어써지지 않는다."
+feedback = "반대다. 같은 설정은 같은 hash를 갖는다. seed를 바꿔 여러 번 돌리려면 seed를 설정에 넣는다."
+
+[[questions]]
+id = "grid-vs-random"
+type = "single"
+objective = 2
+prompt = '''하이퍼파라미터 2개(lr, weight decay)를 시도 9번으로 탐색한다. 실제로는 lr이 결과의 대부분을 정하고 weight decay는 거의 영향이 없다. 3 × 3 grid search와 random search 9회를 비교한 설명으로 옳은 것은?'''
+explanation = '''3 × 3 grid는 lr 값을 3개만 시도한다. 나머지 6번은 영향이 거의 없는 weight decay만 바꿔 같은 lr을 반복한다. random search 9회는 lr 값을 9개 시도하므로 중요한 축을 더 촘촘히 덮는다. 어느 축이 중요한지 미리 모르는 경우가 많고, 실제 문제에서는 소수의 축만 중요한 경우가 흔하다는 것이 Bergstra와 Bengio(2012)가 random search를 기본으로 권한 근거다.'''
+
+[[questions.choices]]
+text = "random search가 lr을 9개 값에서 시도해 중요한 축을 더 촘촘히 덮으므로 대개 더 좋은 설정을 찾는다."
+correct = true
+
+[[questions.choices]]
+text = "grid search가 공간을 고르게 덮으므로 항상 더 좋다."
+feedback = "grid는 각 축을 고르게 덮지만, 축마다 값이 3개뿐이다. 중요한 축 하나에서 보면 3점만 시도한 셈이다."
+
+[[questions.choices]]
+text = "시도 횟수가 같으므로 두 방법의 기대 성능은 같다."
+feedback = "시도 횟수가 같아도 중요한 축에서 시도한 서로 다른 값의 수가 3 대 9로 다르다."
+
+[[questions]]
+id = "sh-budget"
+type = "numeric"
+objective = 2
+prompt = '''후보 27개를 successive halving으로 탐색한다. 처음 예산은 1 epoch, 단계마다 상위 1/3만 남기고 예산을 3배로 늘리며, 마지막 1개를 27 epoch로 평가하고 끝낸다. 각 평가는 처음부터 학습한다고 할 때 쓰는 epoch의 총합은? (모든 후보를 27 epoch씩 학습하면 729 epoch다.)'''
+answer = 108
+tolerance = 0
+explanation = '''단계별로 27개 × 1 + 9개 × 3 + 3개 × 9 + 1개 × 27 = 27 + 27 + 27 + 27 = 108 epoch다. 단계마다 쓰는 예산이 같다는 것이 이 방식의 특징이다. 모두 끝까지 학습하는 729 epoch의 약 15%로 27개 후보를 모두 살펴본다. 같은 108 epoch로 random search를 하면 후보 4개만 끝까지 학습할 수 있다.'''
+
+[[questions]]
+id = "late-bloomer"
+type = "single"
+objective = 2
+prompt = '''successive halving 같은 조기 중단 탐색에서, 작은 learning rate 설정이 첫 단계에서 거의 항상 탈락했다. 가장 먼저 의심할 것은?'''
+explanation = '''조기 중단은 "적은 예산에서의 순위가 최종 순위와 비슷하다"는 가정에 기댄다. 작은 learning rate는 처음에는 천천히 내려가지만 최종적으로 더 좋을 수 있다(late bloomer). 첫 단계 예산이 너무 작으면 이런 설정이 체계적으로 탈락한다. 첫 단계 예산을 늘리거나, Hyperband처럼 첫 예산이 다른 여러 묶음(bracket)을 함께 돌리거나, 탈락한 설정 일부를 끝까지 학습해 가정을 확인한다.'''
+
+[[questions.choices]]
+text = "첫 단계 예산이 너무 작아, 늦게 좋아지는 설정이 최종 성능과 무관하게 탈락했을 가능성"
+correct = true
+
+[[questions.choices]]
+text = "작은 learning rate는 어떤 문제에서도 나쁜 설정이라는 사실"
+feedback = "작은 learning rate가 최종적으로 더 좋은 경우는 흔하다. 첫 단계의 낮은 순위는 느린 출발 때문일 수 있다."
+
+[[questions.choices]]
+text = "eta를 키우면 해결된다."
+feedback = "eta를 키우면 단계마다 더 많이 탈락시키므로 이 문제는 더 심해진다."
+
+[[questions]]
+id = "fair-budget"
+type = "single"
+objective = 2
+prompt = '''제안 방법은 하이퍼파라미터 탐색을 100번 했고, baseline은 원 논문의 기본값으로 한 번 돌렸다. 제안 방법이 2% 더 좋았다. 이 비교에 대한 판단으로 가장 알맞은 것은?'''
+explanation = '''탐색 예산이 다르면 차이의 일부 또는 전부가 방법이 아니라 튜닝에서 온 것일 수 있다. 원 논문의 기본값은 다른 데이터·다른 구현에 맞춰진 값이다. Melis 외(2018)는 언어 모델에서 잘 튜닝한 표준 LSTM이 더 새로운 구조를 앞설 수 있음을, Lucic 외(2018)는 GAN 여러 종류가 충분한 탐색 예산을 주면 비슷한 점수에 이른다는 것을 보였다. baseline에도 같은 탐색 공간 크기와 같은 시도 횟수를 주고, 탐색 예산을 함께 보고한다.'''
+
+[[questions.choices]]
+text = "튜닝 예산이 달라 차이가 방법 때문인지 알 수 없다. baseline에도 같은 예산으로 탐색해야 한다."
+correct = true
+
+[[questions.choices]]
+text = "baseline은 원 논문 저자가 이미 튜닝한 값이므로 공정한 비교다."
+feedback = "원 논문의 기본값은 원 논문의 데이터와 구현에 맞춘 것이다. 이 데이터에서는 다시 튜닝해야 같은 조건이 된다."
+
+[[questions.choices]]
+text = "제안 방법을 100번 탐색한 것은 노력의 결과이므로 그대로 보고해도 된다."
+feedback = "노력은 결과가 아니다. 독자가 알고 싶은 것은 같은 노력을 들였을 때 어느 방법이 나은가다."
+
+[[questions.choices]]
+text = "2%는 충분히 크므로 예산 차이와 무관하게 결론을 낼 수 있다."
+feedback = "튜닝만으로 몇 % 차이가 나는 경우는 흔하다. 차이의 크기만으로는 원인을 가를 수 없다."
+
+[[questions]]
+id = "atomic-save"
+type = "single"
+objective = 3
+prompt = '''결과 파일을 임시 파일에 다 쓴 뒤 `os.replace(tmp, path)`로 이름을 바꾸는 이유는?'''
+explanation = '''같은 파일 시스템 안에서 이름 바꾸기는 원자적이다. 다른 프로세스는 이전 파일 또는 완성된 새 파일 중 하나만 보고, 반쯤 쓴 파일은 보지 못한다. 결과 파일에 직접 쓰다가 job이 죽으면 반쯤 쓴 파일이 남고, 재개하는 runner는 파일이 있으니 끝난 job으로 알고 건너뛴다. 그러면 깨진 결과가 표에 들어가거나 집계 스크립트가 실패한다.'''
+
+[[questions.choices]]
+text = "쓰는 도중 죽어도 반쯤 쓴 파일이 결과 경로에 나타나지 않아, 재개할 때 깨진 결과를 끝난 job으로 오인하지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "임시 파일에 쓰는 것이 더 빠르기 때문에"
+feedback = "쓰는 양은 같다. 목적은 속도가 아니라, 결과 경로에는 완성된 파일만 나타나게 하는 것이다."
+
+[[questions.choices]]
+text = "같은 job이 동시에 두 번 실행되는 것을 막기 위해"
+feedback = "이름 바꾸기는 중복 실행을 막지 않는다. 그것은 lock이나 scheduler가 할 일이다."
+
+[[questions]]
+id = "which-to-retry"
+type = "multiple"
+objective = 3
+prompt = '''job runner가 실패한 job을 **자동으로 재시도**해도 되는 경우를 모두 고르시오.'''
+explanation = '''자동 재시도는 다시 돌리면 결과가 달라질 수 있는 **일시적** 실패에만 의미가 있다. 노드 장애나 선점(preemption)은 같은 job을 다른 때 다른 노드에서 돌리면 성공할 수 있다. 특정 설정에서 매번 손실이 NaN이 되거나 설정 키 오타로 예외가 나는 것은 **결정적** 실패라서 몇 번을 다시 돌려도 같다. 이런 실패를 재시도하면 계산만 낭비하고, 실패를 기록하는 시점도 늦어진다. 결정적 실패는 원인과 함께 기록하고 사람이 판단한다.'''
+
+[[questions.choices]]
+text = "job이 돌던 계산 노드가 하드웨어 문제로 꺼졌다."
+correct = true
+
+[[questions.choices]]
+text = "우선순위가 높은 job에 밀려 선점(preemption)되었다."
+correct = true
+
+[[questions.choices]]
+text = "이 설정(lr = 0.1)에서는 실행할 때마다 3번째 epoch에서 손실이 NaN이 된다."
+feedback = "같은 설정·같은 코드에서 매번 일어나는 결정적 실패다. 재시도해도 같은 결과가 나온다. 원인과 함께 실패로 기록한다."
+
+[[questions.choices]]
+text = "설정 파일에 키 이름 오타가 있어 시작하자마자 KeyError가 난다."
+feedback = "코드나 설정을 고치기 전에는 몇 번을 돌려도 같은 오류가 난다."
