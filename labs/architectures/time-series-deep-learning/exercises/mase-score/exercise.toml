@@ -1,0 +1,6 @@
+title = "MASE 구현하기"
+chapter = "architectures/time-series-deep-learning"
+objective = 2
+exec = "browser"
+entry = "mase"
+timeout_s = 10
