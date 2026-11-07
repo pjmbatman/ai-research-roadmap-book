@@ -1,0 +1,102 @@
+# 9.7 PDE·DAE와 시뮬레이터 검증 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+# 계산으로 확인할 수 있는 정답은 labs/numerical-methods/pde-and-dae/test_quiz.py가 검증한다.
+
+[[questions]]
+id = "ftcs-dt-limit"
+type = "numeric"
+objective = 1
+prompt = '''열확산계수 $\alpha = 10^{-4}$ m²/s인 막대를 격자 간격 $\Delta x = 0.01$ m로 나누어 FTCS(explicit Euler + 중심차분)로 푼다. 안정한 가장 큰 시간 간격 $\Delta t$는 몇 초인가?'''
+answer = 0.5
+tolerance = 0.01
+slider = { min = 0.0, max = 2.0, step = 0.05, unit = "s" }
+explanation = '''FTCS는 $r = \alpha\Delta t/\Delta x^2 \le 1/2$일 때 안정하다. $\Delta t \le \Delta x^2/(2\alpha) = 10^{-4}/(2\times10^{-4}) = 0.5$ s다. 이 조건은 가장 빠르게 감쇠하는 격자 모드(이웃 점끼리 부호가 바뀌는 지그재그)가 explicit Euler의 안정 영역 안에 있어야 한다는 조건이다. 9.6장의 $h \le 2/|\lambda|$에 라플라시안의 가장 큰 고유값 크기 $\approx 4\alpha/\Delta x^2$을 넣은 것과 같다.'''
+
+[[questions]]
+id = "explicit-heat-cost"
+type = "numeric"
+objective = 1
+prompt = '''1차원 열방정식을 FTCS로 안정 한계의 $\Delta t$로 푼다. 정확도를 높이려고 $\Delta x$를 절반으로 줄이면, 같은 시각까지 가는 총 계산량(격자점 수 × 시간 step 수)은 몇 배가 되는가?'''
+answer = 8
+tolerance = 0
+slider = { min = 1, max = 16, step = 1, unit = "배" }
+explanation = '''격자점은 2배가 되고, 안정 한계 $\Delta t \le \Delta x^2/(2\alpha)$는 4분의 1이 되어 step 수가 4배가 된다. 총 계산량은 $2 \times 4 = 8$배다. 공간 오차는 $O(\Delta x^2)$라 4분의 1밖에 줄지 않는데 비용은 8배다. explicit 방법이 확산 문제에서 비싼 이유이며, 3차원에서는 $2^3 \times 4 = 32$배가 된다. implicit 방법이나 method of lines + BDF는 이 $\Delta x^2$ 제한을 받지 않는다.'''
+
+[[questions]]
+id = "cfl-meaning"
+type = "single"
+objective = 1
+prompt = '''이류 방정식 $u_t + c\,u_x = 0$을 upwind 차분으로 풀 때 CFL 조건 $\nu = c\,\Delta t/\Delta x \le 1$에 대한 설명으로 옳은 것은?'''
+explanation = '''한 step 동안 정보는 물리적으로 $c\,\Delta t$만큼 이동한다. upwind 차분은 한 step에 이웃 한 칸의 값만 쓰므로, $c\,\Delta t > \Delta x$이면 수치해법이 물리적으로 필요한 정보를 보지 못해 불안정해진다(수치적 의존 영역이 물리적 의존 영역을 포함해야 한다). CFL 조건은 안정성의 **필요조건**일 뿐 정확도를 보장하지 않는다. 본문 계산에서 $\nu = 0.5$는 안정했지만 수치 확산 때문에 펄스의 최댓값이 1에서 0.58로 깎였다.'''
+
+[[questions.choices]]
+text = "ν ≤ 1이면 수치해의 정확도가 보장된다."
+feedback = "CFL은 안정성 조건이다. ν = 0.5에서 upwind 해는 안정했지만 수치 확산으로 펄스가 크게 뭉개졌다."
+
+[[questions.choices]]
+text = "한 step 동안 정보가 이동하는 거리가 수치해법이 참조하는 격자 범위를 넘으면 안 된다는 조건이다."
+correct = true
+
+[[questions.choices]]
+text = "Δx를 줄이면 CFL 수가 작아지므로 Δt는 그대로 두어도 된다."
+feedback = "ν = cΔt/Δx이므로 Δx를 줄이면 ν는 커진다. 격자를 세밀하게 하면 Δt도 같은 비율로 줄여야 한다."
+
+[[questions]]
+id = "dae-index-pendulum"
+type = "numeric"
+objective = 2
+prompt = '''질점 진자를 직교좌표 $(x, y)$와 Lagrange 승수 $\lambda$로 쓴 DAE
+$x'' = -\lambda x$, $y'' = -\lambda y - g$, $x^2 + y^2 = L^2$
+의 (미분) index는 얼마인가? (대수 변수 $\lambda$의 ODE를 얻기까지 제약을 몇 번 미분해야 하는가)'''
+answer = 3
+tolerance = 0
+slider = { min = 0, max = 5, step = 1 }
+explanation = '''제약 $x^2 + y^2 = L^2$에는 $\lambda$가 없다. 한 번 미분하면 속도 제약 $x\dot x + y\dot y = 0$, 두 번 미분하면 $\dot x^2 + \dot y^2 - \lambda(x^2 + y^2) - gy = 0$이 되어 비로소 $\lambda$가 나타나고 $\lambda$에 대한 대수식을 풀 수 있다. 여기서 한 번 더 미분해야 $\lambda'$에 대한 ODE가 되므로 index는 3이다. index가 높을수록 숨은 제약(속도 제약)이 많아지고, 일관된 초기조건을 고르기와 수치 풀이가 어려워진다.'''
+
+[[questions]]
+id = "dae-consistent-init"
+type = "single"
+objective = 2
+prompt = '''진자 DAE를 index 1로 축소해 ODE solver로 푼다. 초기 위치는 $x^2 + y^2 = L^2$을 만족하지만 초기 속도에 막대 방향 성분이 있다($x\dot x + y\dot y \neq 0$). 어떤 일이 일어나는가?'''
+explanation = '''index를 줄이려고 제약을 두 번 미분했으므로, 축소된 시스템은 $\frac{d^2}{dt^2}(x^2 + y^2 - L^2) = 0$만 보장한다. 초기 속도 제약이 깨져 있으면 제약 잔차는 $2(x\dot x + y\dot y)|_{t=0}\cdot t$로 시간에 비례해 커진다. 본문 계산에서 초기 속도 제약 잔차 0.1은 $t = 100$ s에서 위치 제약 잔차 20을 만들었다(tolerance를 엄격하게 해도 같다). solver 오차가 아니라 초기조건이 틀린 것이다. 위치뿐 아니라 숨은 제약(속도 제약)까지 만족하는 일관된 초기조건이 필요하다.'''
+
+[[questions.choices]]
+text = "위치 제약은 만족하므로 결과에 문제가 없다."
+feedback = "DAE에는 숨은 제약이 있다. 위치 제약을 미분한 속도 제약도 초기에 만족해야 한다."
+
+[[questions.choices]]
+text = "제약 잔차가 시간에 비례해 커진다. tolerance를 줄여도 해결되지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "solver가 첫 step에서 자동으로 속도를 고쳐 주므로 tolerance만 엄격하게 하면 된다."
+feedback = "일반 ODE solver는 축소된 시스템에 숨은 제약이 있다는 것을 모른다. 본문 계산에서 rtol = 1e-8로도 잔차는 정확히 0.2t로 자랐다."
+
+[[questions]]
+id = "observed-order"
+type = "numeric"
+objective = 3
+prompt = '''격자 간격을 $h$, $h/2$, $h/4$로 줄이며 해석해와의 오차를 쟀더니 $4.0\times10^{-3}$, $1.0\times10^{-3}$, $2.5\times10^{-4}$였다. 관측 수렴 차수 $p$는 얼마인가?'''
+answer = 2
+tolerance = 0.05
+slider = { min = 0, max = 4, step = 0.5 }
+explanation = '''$p = \log_2\big(E(h)/E(h/2)\big) = \log_2 4 = 2$이고, 다음 쌍도 같다. 2차 중심차분이 이론대로 동작한다는 증거다. 관측 차수가 이론 차수보다 낮으면 경계조건 처리, 매끄럽지 않은 초기조건, 또는 시간 오차가 공간 오차를 가리는지 의심한다.'''
+
+[[questions]]
+id = "loose-tolerance-plateau"
+type = "single"
+objective = 3
+prompt = '''method of lines로 확산 방정식을 풀며 격자를 $N = 40, 80, 160$으로 늘렸는데, 해석해와의 오차가 $1.5\times10^{-4}$, $1.0\times10^{-4}$, $9.5\times10^{-5}$로 거의 줄지 않았다. 시간 적분은 `solve_ivp`의 기본 tolerance였다. 가장 가능성 높은 원인은?'''
+explanation = '''공간 오차는 $O(\Delta x^2)$로 계속 줄어야 하는데 오차가 멈췄다면, 다른 오차가 바닥을 만들고 있다. 기본 `rtol=1e-3`의 시간 적분 오차가 약 $10^{-4}$이므로 격자를 아무리 줄여도 그 아래로 내려가지 못한다. 시간 tolerance를 $10^{-10}$으로 줄이면 같은 격자에서 오차가 $N$을 두 배로 할 때마다 4분의 1로 줄었다(실습). 격자 수렴 연구는 시간 오차가 공간 오차보다 충분히 작을 때만 의미가 있다.'''
+
+[[questions.choices]]
+text = "격자가 아직 충분히 세밀하지 않으므로 N을 더 늘려야 한다."
+feedback = "공간 오차라면 N을 두 배로 할 때마다 4분의 1로 줄어야 한다. 오차가 멈춘 것은 다른 오차 원천이 지배한다는 신호다."
+
+[[questions.choices]]
+text = "시간 적분 오차가 공간 오차보다 커서 바닥을 만들고 있다. 시간 tolerance를 줄여야 한다."
+correct = true
+
+[[questions.choices]]
+text = "2차 중심차분은 원래 N이 커지면 수렴하지 않는다."
+feedback = "2차 중심차분은 매끄러운 해에서 O(Δx²)로 수렴한다. 시간 tolerance를 엄격하게 하면 관측 차수 2.00이 나온다."
