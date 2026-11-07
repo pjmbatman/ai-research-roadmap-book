@@ -103,7 +103,7 @@ status = "prototype"
 name = "diffusion-process"
 title = "확산 과정의 forward와 reverse"
 chapters = ["generative-and-foundation-models/diffusion-models"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "calibration-diagram"
