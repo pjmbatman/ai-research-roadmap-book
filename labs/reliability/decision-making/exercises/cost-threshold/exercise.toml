@@ -1,0 +1,6 @@
+title = "비용으로 정하는 경보 threshold"
+chapter = "reliability/decision-making"
+objective = 2
+exec = "browser"
+entry = "best_threshold"
+timeout_s = 10

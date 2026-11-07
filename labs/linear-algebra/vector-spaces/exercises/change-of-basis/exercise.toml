@@ -1,0 +1,6 @@
+title = "기저 변환"
+chapter = "linear-algebra/vector-spaces"
+objective = 3
+exec = "browser"
+entry = "change_basis"
+timeout_s = 10

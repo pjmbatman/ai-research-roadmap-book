@@ -1,0 +1,38 @@
+---
+// 실습실 (ADR 0012): 브라우저 안의 리눅스 데스크톱 모양. 창 다섯 개(안내 · 편집기 · 채점 · 터미널 · 파일)를 띄운다.
+// 터미널은 흉내 셸이고, python 실행과 채점은 브라우저 Python(Pyodide)에서 실제로 돌린다. 연습문제가 있는 장만 만든다.
+import Shell from "../../../../layouts/Shell.astro";
+import { allChapters, str } from "../../../../lib/book";
+import { chapterData } from "../../../../lib/page";
+import { labFiles, labGuide } from "../../../../lib/lab";
+
+export function getStaticPaths() {
+  return allChapters().filter((c) => Object.keys(c.exercises).length > 0).map((ch) => ({ params: { part: ch.partSlug, chapter: ch.slug }, props: { id: ch.id } }));
+}
+const { id } = Astro.props as { id: string };
+const ch = allChapters().find((c) => c.id === id)!;
+const base = import.meta.env.BASE_URL;
+const files = labFiles(ch);
+const lab = {
+  files: files.text, other: files.other,
+  guide: labGuide(ch, `${base}content-assets/${ch.partSlug}/${ch.slug}/`),
+  dir: `labs/${ch.partSlug}/${ch.slug}`,
+  questUrl: base + ch.url,
+  title: `${ch.label} ${str(ch.meta.title)}`,
+};
+---
+<Shell title={`실습실 · ${ch.label} ${str(ch.meta.title)}`} description={`${str(ch.meta.title)} 연습문제를 브라우저에서 풀고 채점한다`} pageData={chapterData(ch)} variant="lab">
+  <div class="lab" data-lab data-chapter={ch.id}>
+    <div class="wall"></div>
+    <header class="l-top">
+      <a class="back" href={base + ch.url}>← 퀘스트</a>
+      <span class="ttl">{`실습실 · ${ch.label} ${str(ch.meta.title)}`}</span>
+      <span class="clock" data-clock></span>
+      <span class="status" data-py data-state="idle"><i></i><span>Python 대기</span></span>
+    </header>
+    <nav class="dock" data-dock aria-label="창"></nav>
+    <div class="desk" data-desk></div>
+    <div class="boot" data-boot><div class="b-in"><div class="logo"></div><div class="bar"><i></i></div><p></p></div></div>
+  </div>
+  <script type="application/json" id="lab-data" set:html={JSON.stringify(lab).replace(/</g, "\\u003c")} />
+</Shell>

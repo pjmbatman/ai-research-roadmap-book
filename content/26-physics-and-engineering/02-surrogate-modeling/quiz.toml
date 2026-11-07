@@ -1,0 +1,109 @@
+# 26.2 시뮬레이션 대리모델 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "pod-energy-truncation"
+type = "numeric"
+objective = 1
+prompt = '''평균을 뺀 스냅샷 행렬의 특이값이 $6, 3, 2, 1$이다. POD 모드 2개를 쓰면 에너지(특이값 제곱의 합)의 몇 %를 담는가?'''
+answer = 90
+tolerance = 0.5
+slider = { min = 0, max = 100, step = 1, unit = "%" }
+explanation = '''에너지는 특이값의 **제곱**에 비례한다. $(36 + 9)/(36 + 9 + 4 + 1) = 45/50 = 90\%$다. 특이값 자체로 계산하면 $9/12 = 75\%$가 나오는데, 이는 에너지가 아니다. 버린 에너지 10%는 학습 스냅샷을 모드 2개로 복원할 때의 오차 제곱합(의 비율)과 같다.'''
+
+[[questions]]
+id = "surrogate-error-decomposition"
+type = "single"
+objective = 1
+prompt = '''POD + 회귀 대리모델이 학습 범위 밖의 파라미터에서 6.6% 틀렸다. 같은 조건의 고충실도 해를 POD 기저에 투영해 복원하면 오차가 0.7%다. 오차를 줄이는 데 가장 먼저 시도할 것은?'''
+explanation = '''투영 오차(0.7%)는 기저로 표현할 수 있는 최선이므로, 나머지 대부분은 모드 계수를 잘못 예측한 회귀 오차다. 모드를 늘려도 기저 오차 0.7%만 줄일 수 있을 뿐 회귀 오차는 그대로다. 회귀 모델을 바꾸거나(외삽에 덜 민감한 모델, 물리적 의존성을 반영한 입력 변환), 근본적으로는 그 범위의 학습 데이터를 추가해야 한다.'''
+
+[[questions.choices]]
+text = "모드 계수의 회귀를 개선하거나 그 범위의 학습 데이터를 추가한다."
+correct = true
+
+[[questions.choices]]
+text = "POD 모드 수를 두 배로 늘린다."
+feedback = "모드를 늘리면 기저 오차(최대 0.7%)만 줄어든다. 6.6% 중 대부분은 계수 회귀에서 왔다."
+
+[[questions.choices]]
+text = "고충실도 solver의 격자를 더 곱게 해서 데이터를 다시 만든다."
+feedback = "데이터의 이산화 오차는 대리모델과 고충실도 해의 차이(6.6%)와 별개다. 이 비교는 같은 solver 출력끼리의 차이다."
+
+[[questions.choices]]
+text = "학습 데이터에 잡음을 섞어 정규화한다."
+feedback = "외삽 오차는 과적합보다 학습 범위 밖의 행동을 데이터가 정하지 못한 데서 온다. 잡음 주입이 그 정보를 만들어 주지 않는다."
+
+[[questions]]
+id = "pod-linear-invariants"
+type = "multiple"
+objective = 3
+prompt = '''모든 학습 스냅샷이 같은 질량 $\sum_j u_j\Delta x$를 갖고, 모두 $u \ge 0$이며, 모두 같은 경계값 $u_0 = 1$을 가진다. 평균 + POD 모드의 선형 결합으로 만든 예측이 **계수와 상관없이 항상** 만족하는 성질을 모두 고르시오.'''
+explanation = '''질량과 경계값은 선형 제약이다. 모든 스냅샷이 만족하면 평균도 만족하고, 스냅샷 − 평균인 모드는 제약의 동차형(질량 0, 경계값 0)을 만족한다. 따라서 평균 + 모드의 어떤 선형 결합도 같은 제약을 만족한다. 반면 $u \ge 0$은 부등식 제약이라 선형 결합에서 깨질 수 있고, 최대 원리 같은 부등식 성질도 마찬가지다. 그래서 질량 검사는 선형 축소 모델의 외삽 실패를 감지하지 못하고, 부등식 검사는 감지할 수 있다.'''
+
+[[questions.choices]]
+text = "전체 질량이 학습 스냅샷과 같다."
+correct = true
+
+[[questions.choices]]
+text = "경계값이 1이다."
+correct = true
+
+[[questions.choices]]
+text = "모든 격자점에서 u ≥ 0이다."
+feedback = "부등식 제약은 선형 결합에서 보존되지 않는다. 계수가 학습 범위 밖으로 나가면 음수가 나올 수 있다."
+
+[[questions.choices]]
+text = "학습 스냅샷의 최댓값을 넘지 않는다."
+feedback = "최대 원리도 부등식이다. 본문의 nu = 0.02 예측이 바로 이 조건을 어겼다."
+
+[[questions]]
+id = "fair-speedup"
+type = "single"
+objective = 2
+prompt = '''논문이 "대리모델(오차 1%)이 solver보다 1000배 빠르다"고 보고했다. solver는 상대 tolerance $10^{-8}$, 가장 고운 격자로 돌렸다. 같은 solver를 오차 1%가 나오는 가장 싼 설정으로 돌리면 50배 빨라진다. 공정한 속도 이득은 대략 얼마인가(학습 비용 제외)?'''
+explanation = '''같은 정확도에서 비교해야 한다. 오차 1% 설정의 solver는 원래보다 50배 빠르므로, 대리모델은 그보다 $1000/50 = 20$배 빠를 뿐이다. 여기에 학습 데이터 생성·학습 비용을 더하면 손익분기 질의 수가 나온다. 고충실도 설정과의 비교는 solver가 필요 이상으로 정확한 답을 내는 비용까지 대리모델의 이득으로 계산한다.'''
+
+[[questions.choices]]
+text = "약 20배"
+correct = true
+
+[[questions.choices]]
+text = "1000배. 논문의 비교가 그대로 맞다."
+feedback = "solver가 대리모델보다 훨씬 정확한 답을 내는 조건에서 잰 값이다. 같은 정확도의 solver와 비교해야 한다."
+
+[[questions.choices]]
+text = "약 50000배"
+feedback = "solver의 설정을 낮추면 solver가 빨라지므로 대리모델의 상대적 이득은 줄어든다. 곱하는 것이 아니라 나눈다."
+
+[[questions.choices]]
+text = "속도는 하드웨어마다 다르므로 비교할 수 없다."
+feedback = "같은 하드웨어와 같은 정확도로 조건을 맞추면 비교할 수 있다. 조건을 명시하는 것이 공정한 비교의 핵심이다."
+
+[[questions]]
+id = "surrogate-break-even"
+type = "numeric"
+objective = 2
+prompt = '''solver 1회는 10분이다. 대리모델을 만들려고 solver를 200회 돌리고, 학습에 5시간을 더 썼다. 대리모델 추론 시간은 무시할 수 있다. 질의가 몇 번을 넘어야 solver를 매번 직접 돌리는 것보다 총시간이 적은가?'''
+answer = 230
+tolerance = 1
+explanation = '''대리모델의 고정 비용은 $200 \times 10 + 300 = 2300$분이다. 질의 하나마다 solver 10분을 아끼므로, $2300 / 10 = 230$번을 넘으면 이득이다. 단, 이 계산은 질의가 모두 학습 범위 안에 있어 대리모델 답을 그대로 쓸 수 있다고 가정한다. 외삽 질의를 solver로 넘기는 규칙이 있다면 그만큼 손익분기점이 늦어진다.'''
+
+[[questions]]
+id = "physics-check-not-sufficient"
+type = "single"
+objective = 3
+prompt = '''대리모델 예측이 질량 보존, 최대·최소 원리, 총변동 감소 조건을 모두 통과했다. 이로부터 말할 수 있는 것은?'''
+explanation = '''물리 검사는 필요조건이다. 위반하면 틀린 것이 확실하지만, 통과했다고 정확하지는 않다. 본문의 GP 대리모델은 외삽에서 최대 27% 틀리면서 모든 검사를 통과했다. 매끄러운 평균 모양으로 돌아간 예측은 부등식 조건을 쉽게 만족하기 때문이다. 정확도는 고충실도 재계산이나 불확실성 추정 같은 다른 근거로 확인한다.'''
+
+[[questions.choices]]
+text = "명백한 물리 위반은 없다는 것만 말할 수 있고, 정확도는 따로 확인해야 한다."
+correct = true
+
+[[questions.choices]]
+text = "물리 법칙을 만족하므로 예측이 정확하다."
+feedback = "여러 함수가 같은 물리 조건을 만족한다. 조건을 만족하는 틀린 답도 많다."
+
+[[questions.choices]]
+text = "학습 범위 안의 질의라는 뜻이다."
+feedback = "외삽 예측도 검사를 통과할 수 있다. 본문의 GP 예측과 nu = 0.4의 POD 예측이 그 예다."

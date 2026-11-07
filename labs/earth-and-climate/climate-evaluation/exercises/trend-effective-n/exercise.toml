@@ -1,0 +1,6 @@
+title = "자기상관을 보정한 추세의 표준오차"
+chapter = "earth-and-climate/climate-evaluation"
+objective = 3
+exec = "browser"
+entry = "trend_test"
+timeout_s = 10

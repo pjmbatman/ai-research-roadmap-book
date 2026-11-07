@@ -1,0 +1,118 @@
+# 29.2 생물 서열 모델 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "kmer-dimension"
+type = "numeric"
+objective = 1
+prompt = '''표준 아미노산 20종으로 된 단백질 서열을 4-mer 개수 벡터로 표현하면 벡터의 차원은?'''
+answer = 160000
+tolerance = 0
+explanation = '''가능한 4-mer는 각 자리에 20종이 올 수 있으므로 $20^4 = 160{,}000$개다. 길이 300인 단백질에는 4-mer가 297개뿐이라 벡터의 거의 모든 성분이 0이다. $k$를 키우면 순서 정보가 늘지만 차원이 지수적으로 늘고 벡터가 희소해진다.'''
+
+[[questions]]
+id = "composition-only"
+type = "single"
+objective = 1
+prompt = '''서열의 아미노산 조성(1-mer 개수)만 입력으로 받는 모델에 대한 설명으로 옳은 것은?'''
+explanation = '''1-mer 개수는 각 글자가 몇 번 나오는지만 센다. 같은 글자들을 다른 순서로 배열한 서열은 같은 벡터가 되므로 모델이 구분할 수 없다. 모티프처럼 순서가 중요한 신호는 k를 키우거나 one-hot 위의 서열 모델(CNN, Transformer)로 다룬다. 반면 조성에 진짜 신호가 있으면 조성 모델은 처음 보는 가족에도 일반화할 수 있다.'''
+
+[[questions.choices]]
+text = "같은 아미노산들을 다른 순서로 배열한 두 서열을 구분하지 못한다."
+correct = true
+
+[[questions.choices]]
+text = "서열 길이가 다르면 입력 차원이 달라져 쓸 수 없다."
+feedback = "k-mer 벡터의 차원은 알파벳 크기와 k만으로 정해진다(1-mer는 20). 길이와 무관하다."
+
+[[questions.choices]]
+text = "정보를 너무 많이 버리므로 어떤 기능 예측 과제에서도 쓸모가 없다."
+feedback = "조성에 진짜 신호가 있는 과제에서는 단순한 조성 모델이 새 가족에도 일반화한다. 이 장의 합성 실험에서 가족 분할 성능이 1-최근접 이웃보다 높았다."
+
+[[questions.choices]]
+text = "one-hot과 같은 정보를 담지만 차원이 작다."
+feedback = "one-hot은 위치 정보를 모두 담는다. 조성은 위치 정보를 버린다."
+
+[[questions]]
+id = "mlm-objective"
+type = "single"
+objective = 1
+prompt = '''단백질 언어모델의 마스크 언어모델(MLM) 목표에 대한 설명으로 옳은 것은?'''
+explanation = '''MLM은 서열의 일부 위치를 가리고, 가리지 않은 나머지 위치 전체(양쪽 문맥)로 가린 자리의 잔기를 맞히도록 음의 로그우도를 줄인다. 다음 토큰만 예측하는 자기회귀 목표와 다르다. 가린 잔기를 맞히는 가장 강한 단서는 같은 가족의 서열들이 그 위치에 가지는 잔기 분포, 즉 진화 정보다. 그래서 학습 데이터에 친척이 많은 서열일수록 손실이 낮고 표현도 좋아진다.'''
+
+[[questions.choices]]
+text = "가린 자리를 양쪽 문맥으로 예측한다. 손실을 줄이는 주된 단서는 같은 가족 서열에 담긴 진화 정보다."
+correct = true
+
+[[questions.choices]]
+text = "왼쪽 문맥만으로 다음 잔기를 예측한다."
+feedback = "그것은 자기회귀(다음 토큰 예측) 목표다. MLM은 가린 자리의 양쪽 문맥을 모두 본다."
+
+[[questions.choices]]
+text = "서열 전체를 입력받아 3차원 구조 좌표를 복원한다."
+feedback = "MLM의 target은 가린 잔기 자체다. 구조 label 없이 서열만으로 학습한다."
+
+[[questions.choices]]
+text = "label이 없으므로 학습 데이터에 어떤 서열이 있었는지는 평가 결과에 영향을 주지 않는다."
+feedback = "평가 서열의 친척이 사전학습 데이터에 많을수록 모델은 그 가족의 분포를 잘 기억한다. 사전학습 데이터와 평가 데이터의 거리를 확인해야 한다."
+
+[[questions]]
+id = "coevolution-signal"
+type = "single"
+objective = 1
+prompt = '''한 단백질 가족의 다중 서열 정렬(MSA)에서 두 열 $i, j$의 상호정보량이 다른 열 쌍보다 크게 나왔다. 가장 적절한 해석은?'''
+explanation = '''접촉하는 잔기 쌍은 함께 변하므로 상관이 큰 열 쌍은 3차원 접촉의 후보다. 그러나 서열들이 계통수로 묶여 있으면 접촉하지 않는 열도 함께 변하고, A–B·B–C 접촉이 A–C의 간접 상관을 만든다. 표본이 적으면 독립인 열 쌍도 양의 상호정보량을 보인다. 그래서 실제 분석은 서열 가중치, 편향 보정, 간접 효과를 분리하는 전역 모델을 쓴다.'''
+
+[[questions.choices]]
+text = "두 잔기는 3차원 구조에서 반드시 맞닿아 있다."
+feedback = "계통 구조와 간접 상관도 열 사이 상관을 만든다. 상관은 접촉의 증거가 아니라 후보다."
+
+[[questions.choices]]
+text = "접촉의 후보다. 계통 구조·간접 상관·표본 크기에 따른 편향을 보정한 뒤 판단해야 한다."
+correct = true
+
+[[questions.choices]]
+text = "두 열 모두 완전히 보존된 위치다."
+feedback = "완전히 보존된 열은 잔기가 하나뿐이라 엔트로피가 0이고, 어떤 열과도 상호정보량이 0이다."
+
+[[questions]]
+id = "split-reverses-ranking"
+type = "single"
+objective = 2
+prompt = '''합성 단백질 가족 데이터에서 두 모델을 비교했다. 1-최근접 이웃(2-mer): 무작위 분할 1.00, 가족 분할 0.63. 로지스틱 회귀(조성): 무작위 분할 0.84, 가족 분할 0.76. **처음 보는 가족**의 기능을 예측하는 데 쓸 모델과 그 근거는?'''
+explanation = '''주장이 "처음 보는 가족"이면 평가도 가족 단위로 나누어야 한다. 가족 분할에서는 로지스틱 회귀(0.76)가 1-최근접 이웃(0.63)보다 낫다. 무작위 분할에서 1-최근접 이웃이 1.00인 것은 test 서열의 형제가 train에 있어 그 label을 베꼈기 때문이다. 무작위 분할은 성능의 크기뿐 아니라 모델의 순위도 틀리게 알려 준다.'''
+
+[[questions.choices]]
+text = "1-최근접 이웃. 무작위 분할에서 가장 높다."
+feedback = "무작위 분할의 1.00은 같은 가족의 형제 서열을 베낀 결과다. 처음 보는 가족에는 형제가 없다."
+
+[[questions.choices]]
+text = "로지스틱 회귀. 주장과 맞는 가족 분할에서 더 높다."
+correct = true
+
+[[questions.choices]]
+text = "두 분할의 평균이 높은 1-최근접 이웃."
+feedback = "분할을 평균 내면 누수된 점수가 섞인다. 주장에 맞는 분할 하나의 점수로 고른다."
+
+[[questions]]
+id = "pretrain-claim-checks"
+type = "multiple"
+objective = 2
+prompt = '''"사전학습 단백질 언어모델 embedding이 one-hot보다 기능 예측을 10%p 개선한다"는 주장을 검토한다. 이 주장을 뒷받침하려면 확인해야 하는 것을 모두 고르시오.'''
+explanation = '''전이 효과는 처음 보는 가족에서 남아야 의미가 있으므로 서열 유사도 기반 군집 분할로 평가한다. 사전학습 데이터에 test 서열이나 가까운 친척이 있으면 test 정보가 이미 표현에 들어간 것이므로 중복을 점검한다. 두 표현에 같은 downstream 모델과 같은 튜닝 예산을 써야 표현의 차이만 비교할 수 있다. 사전학습 모델의 매개변수 수는 결과를 해석하는 맥락일 뿐, 주장의 타당성을 확인하는 항목이 아니다.'''
+
+[[questions.choices]]
+text = "서열 유사도 기반 군집 분할에서도 개선이 남는가"
+correct = true
+
+[[questions.choices]]
+text = "test 서열이나 가까운 친척이 사전학습 데이터에 있었는가"
+correct = true
+
+[[questions.choices]]
+text = "두 표현에 같은 downstream 모델과 같은 튜닝 예산을 썼는가"
+correct = true
+
+[[questions.choices]]
+text = "사전학습 모델의 매개변수가 충분히 많은가"
+feedback = "모델 크기는 주장이 타당한지를 확인해 주지 않는다. 누수와 비교 조건이 먼저다."

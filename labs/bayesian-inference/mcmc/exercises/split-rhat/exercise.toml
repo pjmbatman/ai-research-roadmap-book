@@ -1,0 +1,6 @@
+title = "split R-hat 구현하기"
+chapter = "bayesian-inference/mcmc"
+objective = 3
+exec = "browser"
+entry = "split_rhat"
+timeout_s = 15

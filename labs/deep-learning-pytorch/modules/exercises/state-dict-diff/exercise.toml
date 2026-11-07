@@ -1,0 +1,6 @@
+title = "state_dict 비교와 접두사 정리"
+chapter = "deep-learning-pytorch/modules"
+objective = 3
+exec = "browser"
+entry = "diff_state_dict"
+timeout_s = 10

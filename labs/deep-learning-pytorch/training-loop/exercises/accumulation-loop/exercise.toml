@@ -1,0 +1,6 @@
+title = "gradient accumulation이 있는 학습 루프"
+chapter = "deep-learning-pytorch/training-loop"
+objective = 2
+exec = "browser"
+entry = "train_linear"
+timeout_s = 10

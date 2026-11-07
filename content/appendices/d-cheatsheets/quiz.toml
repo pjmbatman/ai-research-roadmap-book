@@ -1,0 +1,90 @@
+# 부록 D 명령어 치트시트 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "redirect-order"
+type = "single"
+objective = 1
+prompt = '''밤새 돌릴 학습의 stdout과 stderr를 **모두** `train.log`에 남기려 한다. 어느 명령이 맞는가?'''
+explanation = '''셸은 리다이렉션을 왼쪽부터 처리한다. `> train.log 2>&1`은 먼저 stdout을 파일로 돌리고, 그다음 stderr를 "지금 stdout이 가리키는 곳"(파일)으로 복제한다. 순서를 바꾼 `2>&1 > train.log`는 stderr를 원래 stdout(터미널)으로 복제한 뒤에 stdout만 파일로 돌리므로, 오류 메시지는 파일에 남지 않는다.'''
+
+[[questions.choices]]
+text = "`python train.py > train.log 2>&1`"
+correct = true
+
+[[questions.choices]]
+text = "`python train.py 2>&1 > train.log`"
+feedback = "왼쪽부터 처리되므로 stderr는 그 시점의 stdout인 터미널로 복제된다. 오류 메시지가 로그에 남지 않는다."
+
+[[questions.choices]]
+text = "`python train.py > train.log`"
+feedback = "stdout만 파일로 간다. traceback은 stderr로 출력되므로 빠진다."
+
+[[questions.choices]]
+text = "`python train.py 2> train.log`"
+feedback = "stderr만 파일로 간다. print로 찍은 진행 상황(stdout)은 빠진다."
+
+[[questions]]
+id = "rsync-trailing-slash"
+type = "single"
+objective = 2
+prompt = '''`dst/`가 비어 있을 때 `rsync -a src/ dst/`를 실행하면 `src/a.txt`는 어디에 생기는가?'''
+explanation = '''원본 경로 끝에 `/`가 있으면 rsync는 디렉터리의 **내용**을 복사하므로 `dst/a.txt`가 된다. `/`가 없는 `rsync -a src dst/`는 디렉터리 자체를 복사해 `dst/src/a.txt`를 만든다. `--delete`와 함께 이 차이를 틀리면 대상의 파일이 지워질 수 있으므로, `-n`(dry-run)으로 먼저 확인한다.'''
+
+[[questions.choices]]
+text = "`dst/a.txt`"
+correct = true
+
+[[questions.choices]]
+text = "`dst/src/a.txt`"
+feedback = "이것은 끝에 /가 없는 rsync -a src dst/의 결과다. src/는 디렉터리의 내용을 뜻한다."
+
+[[questions.choices]]
+text = "두 형태 모두 같은 결과를 낸다."
+feedback = "rsync에서는 원본 끝의 / 하나가 결과 경로를 바꾼다. cp와 다르게 동작하는 대표적인 지점이다."
+
+[[questions]]
+id = "recover-after-reset"
+type = "single"
+objective = 2
+prompt = '''`git reset --hard HEAD~2`를 실수로 실행해 commit 두 개가 `git log`에서 사라졌다. 가장 먼저 할 일은?'''
+explanation = '''commit 객체는 reset으로 바로 지워지지 않는다. `git reflog`가 HEAD와 branch가 거쳐 온 위치를 기록하므로, 거기서 사라진 commit의 id를 찾아 `git branch rescue <id>`로 이름을 붙이거나 `git reset --hard <id>`로 되돌린다. 다시 clone하면 로컬에만 있던 commit은 찾을 수 없고, `git revert`는 남아 있는 commit을 되돌리는 명령이라 사라진 commit을 살리지 못한다. 단, 커밋하지 않았던 변경은 reflog에 없으므로 되살릴 수 없다.'''
+
+[[questions.choices]]
+text = "`git reflog`로 사라진 commit의 id를 찾는다."
+correct = true
+
+[[questions.choices]]
+text = "저장소를 지우고 원격에서 다시 clone한다."
+feedback = "push하지 않은 commit은 원격에 없다. 로컬 저장소의 객체와 reflog를 지우면 오히려 복구할 길이 사라진다."
+
+[[questions.choices]]
+text = "`git revert HEAD~2`로 reset을 되돌린다."
+feedback = "revert는 현재 이력에 있는 commit의 변경을 반대로 적용하는 새 commit을 만든다. reset 자체를 취소하지 않는다."
+
+[[questions.choices]]
+text = "되돌릴 방법이 없으므로 코드를 다시 작성한다."
+feedback = "commit했던 내용은 reflog로 대부분 되살릴 수 있다. 되살릴 수 없는 것은 커밋하지 않았던 변경이다."
+
+[[questions]]
+id = "permute-not-view"
+type = "single"
+objective = 1
+prompt = '''`x`의 shape이 `(B, T, D)`이고 Conv1d에 넣기 위해 `(B, D, T)`로 축을 바꾸려 한다. 맞는 코드는?'''
+explanation = '''`permute(0, 2, 1)`은 축의 순서를 바꾸므로 `y[b, d, t] == x[b, t, d]`가 성립한다. `view`와 `reshape`는 메모리의 원소를 행 우선 순서 그대로 두고 shape만 다시 읽으므로, shape은 `(B, D, T)`가 되지만 원소가 뒤섞인다. 오류가 나지 않아서 학습이 덜 되는 형태로만 드러나는 버그다.'''
+
+[[questions.choices]]
+text = "`x.permute(0, 2, 1)`"
+correct = true
+
+[[questions.choices]]
+text = "`x.view(B, D, T)`"
+feedback = "shape은 맞지만 축을 바꾸지 않고 같은 메모리를 다른 shape으로 읽을 뿐이다. 원소가 뒤섞인다."
+
+[[questions.choices]]
+text = "`x.reshape(B, D, T)`"
+feedback = "reshape도 원소의 행 우선 순서를 유지한 채 shape만 바꾼다. 축 교환이 아니다."
+
+[[questions.choices]]
+text = "`x.contiguous().view(B, D, T)`"
+feedback = "contiguous는 메모리 배치만 정리할 뿐 축 순서를 바꾸지 않는다. 결과는 view와 같이 뒤섞인다."

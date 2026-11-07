@@ -1,0 +1,6 @@
+title = "상대 import를 절대 이름으로 바꾸기"
+chapter = "python-and-computing/modules-and-imports"
+objective = 1
+exec = "browser"
+entry = "resolve"
+timeout_s = 10

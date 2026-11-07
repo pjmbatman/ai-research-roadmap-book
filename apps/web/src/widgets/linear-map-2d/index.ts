@@ -39,13 +39,13 @@ export function mount(root: HTMLElement, attrs: Record<string, string>) {
     const R = 6;
     // 원래 격자
     ctx.lineWidth = 1;
-    ctx.strokeStyle = "rgba(220,230,242,0.07)";
+    ctx.strokeStyle = C.faint;
     for (let k = -R; k <= R; k++) {
       line(toPx(k, -R), toPx(k, R));
       line(toPx(-R, k), toPx(R, k));
     }
     // 변형된 격자
-    ctx.strokeStyle = C.faint;
+    ctx.strokeStyle = C.grid2;
     for (let k = -R; k <= R; k++) {
       line(toPx(...apply(m, k, -R)), toPx(...apply(m, k, R)));
       line(toPx(...apply(m, -R, k)), toPx(...apply(m, R, k)));
@@ -59,14 +59,14 @@ export function mount(root: HTMLElement, attrs: Record<string, string>) {
     ctx.beginPath();
     sq.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
     ctx.closePath();
-    ctx.fillStyle = "rgba(220,230,242,0.10)";
+    ctx.fillStyle = C.fill;
     ctx.fill();
-    ctx.strokeStyle = "rgba(220,230,242,0.6)";
+    ctx.strokeStyle = C.ink2;
     ctx.stroke();
     // 기저 벡터의 상: 원점의 상에서 출발
     const o = toPx(...apply(m, 0, 0));
     arrow(o, toPx(...apply(m, 1, 0)), C.ink, "Ae₁");
-    arrow(o, toPx(...apply(m, 0, 1)), C.blue, "Ae₂");
+    arrow(o, toPx(...apply(m, 0, 1)), C.ink2, "Ae₂");
     // 원래 원점과 원점의 상
     const o0 = toPx(0, 0);
     ctx.fillStyle = C.mid;
@@ -135,7 +135,7 @@ export function mount(root: HTMLElement, attrs: Record<string, string>) {
     ro.set("f0", `f(0) = (${bb[0].toFixed(2)}, ${bb[1].toFixed(2)})`, linear ? "" : "hot");
     ro.set("lin", linear ? "선형사상" : "아핀 사상 · 선형 아님", linear ? "ok" : "hot");
     const z = (v: number) => (Math.abs(v) < 5e-3 ? 0 : v).toFixed(2);
-    ro.set("res", `f(x+y)−f(x)−f(y) = (${z(-bb[0])}, ${z(-bb[1])})`);
+    void z;
     pageState.set("A", [[A[0], A[1]], [A[2], A[3]]], root);
     pageState.set("b", [bb[0], bb[1]], root);
     if (redraw) draw();
@@ -145,7 +145,7 @@ export function mount(root: HTMLElement, attrs: Record<string, string>) {
     if (reducedMotion()) { t = 1; draw(); return; }
     const t0 = performance.now();
     const step = (now: number) => {
-      const p = Math.min(1, (now - t0) / 1100);
+      const p = Math.min(1, (now - t0) / 600);
       t = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
       draw();
       if (p < 1) requestAnimationFrame(step); else { t = 1; draw(); }

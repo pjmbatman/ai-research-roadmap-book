@@ -1,0 +1,122 @@
+# 17.4 Dataset과 DataLoader — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "sample-contract"
+type = "single"
+objective = 1
+prompt = '''여러 사람이 함께 쓰는 Dataset의 `__getitem__` 반환값으로 가장 좋은 설계는?'''
+explanation = '''이름이 붙은 필드(dict나 dataclass)는 순서 실수를 막고, 필드를 추가해도 기존 코드가 깨지지 않는다. shape·dtype·단위를 문서와 테스트로 고정해 두면 모델 쪽 코드가 데이터의 의미를 추측하지 않아도 된다. 위치로만 구분하는 tuple은 필드가 늘수록 순서 실수가 생기고, 표준화를 Dataset 밖 여기저기에서 하면 학습과 추론의 전처리가 어긋나기 쉽다.'''
+
+[[questions.choices]]
+text = '''`{"x": (T, C) float32, "y": () float32, "mask": (T,) bool, "meta": {...}}`처럼 이름 있는 필드를 돌려주고, 각 필드의 shape·dtype·단위를 문서와 테스트로 고정한다.'''
+correct = true
+
+[[questions.choices]]
+text = "(x, y, mask, station_id, time) 튜플을 돌려주고 순서는 코드 주석으로 설명한다."
+feedback = "동작은 하지만 필드가 늘수록 순서를 틀리기 쉽고, 필드 추가가 기존 코드를 깨뜨린다."
+
+[[questions.choices]]
+text = "원본 파일에서 읽은 float64 배열을 그대로 돌려주고, 단위 변환과 표준화는 모델의 forward에서 상황에 맞게 한다."
+feedback = "dtype과 단위가 모델 쪽 코드에 암묵적으로 맡겨진다. 같은 데이터를 쓰는 다른 모델이 다른 변환을 하기 쉽다."
+
+[[questions.choices]]
+text = "batch 단위로 미리 묶은 배열을 돌려주어 DataLoader가 할 일을 줄인다."
+feedback = "Dataset이 batch를 만들면 shuffle·sampler·batch 크기를 DataLoader에서 바꿀 수 없다. Dataset은 sample 하나를, batch는 collate가 만든다."
+
+[[questions]]
+id = "padding-in-loss"
+type = "numeric"
+objective = 2
+prompt = '''길이 2와 6인 시계열(모든 값이 3)을 길이 6으로 맞추려고 0으로 padding했다. 모델이 모든 위치에서 0을 예측할 때, padding 위치까지 포함해 MSE를 평균하면 값은? (mask를 적용한 올바른 MSE는 9다.)'''
+explanation = '''batch 배열은 $2 \times 6 = 12$칸이고 그중 실제 값은 8칸이다. 실제 값 위치의 제곱오차는 $3^2 = 9$, padding 위치는 $(0 - 0)^2 = 0$이므로 평균은 $8 \times 9 / 12 = 6$이다. padding이 "완벽히 맞힌 예측"으로 섞여 손실을 낮춘다. padding 비율이 batch마다 다르면 손실의 의미도 batch마다 달라진다.'''
+answer = 6
+tolerance = 0.001
+
+[[questions]]
+id = "element-vs-sample-mean"
+type = "single"
+objective = 2
+prompt = '''가변 길이 batch에서 mask를 적용해 "실제 값 원소 전체의 평균"으로 손실을 계산했다. 이 손실의 성질로 옳은 것은?'''
+explanation = '''원소 단위 평균에서는 각 시각이 같은 비중을 가지므로, 긴 시계열이 짧은 시계열보다 손실에 더 크게 기여한다. 표본마다 같은 비중을 원하면 표본별 평균을 먼저 구한 뒤 평균한다. 둘 다 올바른 손실일 수 있고, 어느 쪽을 쓸지는 과제의 단위(표본 단위인가, 시각 단위인가)에 맞춰 정하고 밝힌다.'''
+
+[[questions.choices]]
+text = "긴 시계열이 짧은 시계열보다 손실에 더 크게 기여한다."
+correct = true
+
+[[questions.choices]]
+text = "모든 시계열이 길이와 무관하게 같은 비중을 가진다."
+feedback = "그것은 표본별 평균을 먼저 구한 뒤 평균한 손실의 성질이다."
+
+[[questions.choices]]
+text = "padding 값에 따라 손실이 달라진다."
+feedback = "mask를 적용했으므로 padding 위치는 계산에 들어가지 않는다. padding 값을 바꿔도 결과는 같다."
+
+[[questions]]
+id = "default-collate-varlen"
+type = "single"
+objective = 2
+prompt = '''`__getitem__`이 길이가 다른 `(T_i, C)` 텐서를 돌려주는 Dataset을 기본 설정의 DataLoader(batch_size=8)로 읽으면?'''
+explanation = '''기본 collate 함수는 같은 필드의 텐서들을 `torch.stack`으로 쌓는다. shape이 다르면 쌓을 수 없어 RuntimeError가 난다. padding과 mask(또는 길이)를 만드는 collate_fn을 직접 넘겨야 한다. 자르기(truncation)로 길이를 맞추는 방법도 있지만 정보가 사라지므로 의도적으로 선택해야 한다.'''
+
+[[questions.choices]]
+text = "기본 collate가 텐서를 쌓지 못해 RuntimeError가 난다. padding·mask를 만드는 collate_fn이 필요하다."
+correct = true
+
+[[questions.choices]]
+text = "DataLoader가 가장 긴 길이에 맞춰 0으로 자동 padding한다."
+feedback = "기본 collate는 padding을 하지 않는다. 자동으로 padding했다면 mask가 없어 padding이 손실에 섞였을 것이다."
+
+[[questions.choices]]
+text = "가장 짧은 길이에 맞춰 자동으로 잘라 낸다."
+feedback = "기본 collate는 데이터를 자르지 않는다. 자르기는 정보 손실이므로 명시적으로 해야 한다."
+
+[[questions.choices]]
+text = "텐서들을 list로 묶어 그대로 돌려준다."
+feedback = "list로 묶는 것은 문자열 같은 텐서가 아닌 필드의 동작이다. 텐서 필드는 stack을 시도하고 실패한다."
+
+[[questions]]
+id = "worker-same-random"
+type = "single"
+objective = 3
+prompt = '''Dataset의 `__init__`에서 `self.rng = np.random.default_rng(0)`을 만들고 `__getitem__`에서 증강용 잡음을 뽑는다. `num_workers=4`로 학습하면 어떤 일이 생기는가?'''
+explanation = '''각 worker는 Dataset의 복사본(fork로 복사된 메모리 또는 pickle된 객체)을 받으므로, 같은 상태의 Generator 네 개가 같은 난수열을 낸다. 서로 다른 표본에 같은 잡음이 더해져 증강의 다양성이 줄어든다. 오류는 나지 않는다. 집필 시점 PyTorch는 worker마다 `random`, `torch`, NumPy 전역 난수 상태는 다르게 시드하지만, 사용자가 만든 Generator 객체는 건드리지 않는다. `worker_init_fn`에서 `get_worker_info().seed`로 다시 시드한다.'''
+
+[[questions.choices]]
+text = "네 worker가 같은 난수열을 써서, 서로 다른 표본에 같은 잡음이 더해진다."
+correct = true
+
+[[questions.choices]]
+text = "PyTorch가 worker마다 자동으로 다른 시드를 주므로 문제없다."
+feedback = "자동으로 시드되는 것은 random·torch·NumPy 전역 상태다. Dataset 안에 만든 Generator 객체는 복사된 상태 그대로다."
+
+[[questions.choices]]
+text = "worker들이 하나의 Generator를 공유해 난수를 나눠 쓴다."
+feedback = "worker는 별도 프로세스라 객체를 공유하지 않는다. 각자 복사본을 가진다."
+
+[[questions.choices]]
+text = "멀티프로세싱에서 Generator를 쓸 수 없어 오류가 난다."
+feedback = "오류는 나지 않는다. 그래서 더 발견하기 어렵다."
+
+[[questions]]
+id = "num-workers-facts"
+type = "multiple"
+objective = 3
+prompt = '''map-style Dataset을 DataLoader로 읽을 때 `num_workers`에 대한 설명으로 옳은 것을 모두 고르시오. (집필 시점 PyTorch 기본 설정)'''
+explanation = '''`num_workers > 0`이면 `__getitem__`과 collate가 별도 worker 프로세스에서 실행된다. batch는 worker들에게 차례로 배분되지만 DataLoader는 원래 순서대로 돌려주므로(기본 `in_order=True`), sampler가 같으면 batch 순서도 같다. worker는 Dataset의 복사본을 쓰므로 worker 안에서 바꾼 Dataset 속성(캐시, 카운터)은 메인 프로세스에 보이지 않는다. `pin_memory`는 CPU 계산을 빠르게 하는 옵션이 아니라, 고정(page-locked) 메모리를 써서 CPU→GPU 복사를 빠르게 하고 비동기로 만들 수 있게 하는 옵션이다.'''
+
+[[questions.choices]]
+text = "__getitem__과 collate가 별도 프로세스에서 실행된다."
+correct = true
+
+[[questions.choices]]
+text = "shuffle과 시드가 같으면, num_workers를 0에서 4로 바꿔도 batch 순서는 같다."
+correct = true
+
+[[questions.choices]]
+text = "worker 안에서 Dataset 속성(예: 캐시 dict)을 바꾸면 메인 프로세스의 Dataset에도 반영된다."
+feedback = "worker는 복사본을 가진 별도 프로세스다. worker에서 채운 캐시는 그 worker 안에만 있다."
+
+[[questions.choices]]
+text = "pin_memory=True는 CPU에서 하는 데이터 전처리를 빠르게 한다."
+feedback = "pin_memory는 batch를 고정 메모리에 두어 GPU로의 복사를 빠르게 하는 옵션이다. 전처리 속도와는 무관하다."

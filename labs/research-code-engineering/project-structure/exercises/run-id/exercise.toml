@@ -1,0 +1,6 @@
+title = "설정에서 run ID 만들기"
+chapter = "research-code-engineering/project-structure"
+objective = 1
+exec = "browser"
+entry = "make_run_id"
+timeout_s = 10

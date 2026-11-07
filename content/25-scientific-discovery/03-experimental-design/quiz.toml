@@ -1,0 +1,126 @@
+# 25.3 능동 학습과 베이지안 실험 설계 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "uncertainty-sampling-trap"
+type = "single"
+objective = 1
+prompt = '''GP 대리모델로 불확실성 샘플링을 하는데, 길이 척도를 실제보다 훨씬 길게(함수가 매끄럽다고) 고정했다. 실험을 늘려도 대리모델 오차가 거의 줄지 않았다. 가장 그럴듯한 이유는?'''
+explanation = '''길이 척도가 길면 GP는 측정점 사이에서도 함수를 잘 안다고 믿어 사후 표준편차를 작게 보고한다. 불확실성 샘플링은 그 표준편차가 큰 곳을 고르므로, 실제로는 짧은 진동을 모르는 영역을 "이미 아는 곳"으로 보고 지나친다. 전략의 효율은 불확실성 추정의 질에 묶여 있다. 그래서 하이퍼파라미터를 데이터로 다시 추정하고, 초기 데이터를 충분히 두고, 불확실성의 보정을 점검한다.'''
+
+[[questions.choices]]
+text = "모델이 측정점 사이의 불확실성을 실제보다 작게 보고해, 아직 모르는 영역을 고르지 않게 되었다."
+correct = true
+
+[[questions.choices]]
+text = "불확실성 샘플링은 원래 무작위 선택보다 효율이 낮다."
+feedback = "불확실성 추정이 맞을 때는 본문 셀 1처럼 같은 정확도를 절반 이하의 실험으로 얻는다. 문제는 전략이 아니라 잘못된 불확실성이다."
+
+[[questions.choices]]
+text = "측정 잡음이 커서 어떤 전략을 써도 오차가 줄지 않는다."
+feedback = "같은 잡음에서 길이 척도가 맞는 GP는 오차가 계속 줄었다. 차이는 모델의 가정에서 나온다."
+
+[[questions.choices]]
+text = "실험 수가 너무 많아 GP 계산이 수치적으로 불안정해졌다."
+feedback = "실험 20개 정도에서는 GP 계산이 불안정해지지 않는다. 오차가 멈춘 이유는 실험을 고르는 기준에 있다."
+
+[[questions]]
+id = "eig-scalar-repeats"
+type = "numeric"
+objective = 2
+prompt = '''스칼라 파라미터 $\theta \sim \mathcal{N}(0, 1)$을 $y_i = \theta + \varepsilon_i$, $\varepsilon_i \sim \mathcal{N}(0, 1)$로 독립적으로 3번 측정한다. 이 실험의 기대 정보 이득(EIG)은 몇 nat인가? (소수 셋째 자리까지)'''
+answer = 0.693
+tolerance = 0.005
+explanation = '''선형 가우시안 모델에서 사후 분산은 $(1/\sigma_0^2 + n/\sigma^2)^{-1} = (1 + 3)^{-1} = 1/4$이다. EIG는 사전·사후 엔트로피의 차이 $\tfrac{1}{2}\log(\sigma_0^2 / \sigma_{\text{post}}^2) = \tfrac{1}{2}\log 4 = \log 2 \approx 0.693$ nat이다. 같은 식 $\tfrac{1}{2}\log\det(\mathbf{I} + \sigma^{-2}\boldsymbol{\Phi}\boldsymbol{\Sigma}_0\boldsymbol{\Phi}^\top)$에서 $\boldsymbol{\Phi} = (1, 1, 1)^\top$을 넣어도 $\tfrac{1}{2}\log(1 + 3)$이 나온다. 측정 수가 늘면 EIG는 $\log$로만 늘어나 수확이 체감한다.'''
+
+[[questions]]
+id = "eig-decay-timing"
+type = "single"
+objective = 2
+prompt = '''지수 감쇠 $y = e^{-kt} + \varepsilon$에서 감쇠율 $k$(사전 중앙값 1 s⁻¹)를 추정하려고 측정 시각 하나를 고른다. 측정 시각이 아주 이르거나(0.01 s) 아주 늦으면(20 s) EIG가 작아지는 이유로 옳은 것은?'''
+explanation = '''아주 이른 시각에는 어떤 $k$에서든 $e^{-kt} \approx 1$이고, 아주 늦은 시각에는 어떤 $k$에서든 $e^{-kt} \approx 0$이다. 두 경우 모두 서로 다른 $k$가 거의 같은 측정값을 예측하므로, 측정값이 $k$를 구별하지 못한다. EIG는 "가능한 $\theta$들이 예측하는 결과가 측정 잡음에 비해 얼마나 다른가"로 생각할 수 있고, 감쇠 모델에서는 시간 상수 $1/k$ 근처에서 그 차이가 가장 크다.'''
+
+[[questions.choices]]
+text = "두 경우 모두 서로 다른 k가 거의 같은 측정값을 예측해, 측정이 k를 구별하지 못한다."
+correct = true
+
+[[questions.choices]]
+text = "이른 시각에는 신호가 커서 측정 잡음이 상대적으로 커지기 때문이다."
+feedback = "이른 시각의 신호는 1 근처로 크고 잡음은 그대로다. 문제는 신호의 크기가 아니라 k에 따른 신호의 차이가 작다는 것이다."
+
+[[questions.choices]]
+text = "늦은 시각에는 사후분포가 사전분포보다 넓어지기 때문이다."
+feedback = "선형이든 비선형이든 기대 정보 이득은 0 이상이다. 사후분포가 평균적으로 넓어지지는 않는다. 정보가 적을 뿐이다."
+
+[[questions.choices]]
+text = "EIG는 측정 시각과 무관하고, 차이는 몬테카를로 잡음이다."
+feedback = "본문 셀 3에서 EIG는 0.25 s의 0.79 nat에서 1 s의 1.24 nat, 5 s의 0.24 nat까지 체계적으로 변했다. 잡음으로 설명할 수 없는 크기다."
+
+[[questions]]
+id = "d-optimal-replicates"
+type = "single"
+objective = 1
+prompt = '''2차 회귀 $y = \beta_0 + \beta_1 x + \beta_2 x^2$를 $x \in [-1, 1]$에서 실험 6번으로 맞출 때, D-최적 설계는 $\{-1, 0, 1\}$에 두 번씩 측정한다. 이 설계의 약점으로 가장 중요한 것은?'''
+explanation = '''D-최적성은 가정한 모델 안에서 파라미터 신뢰 영역의 부피를 최소화한다. 측정을 세 점에 몰면 2차식의 세 계수는 가장 정밀하게 정해지지만, 세 점은 어떤 2차식으로도 정확히 지나갈 수 있으므로 3차 항 같은 모델의 결함을 데이터로 확인할 수 없다. 모델이 확실하지 않으면 검정용 점을 남기는 절충 설계를 쓴다.'''
+
+[[questions.choices]]
+text = "모델이 정말 2차식인지(3차 항이 없는지) 데이터로 확인할 수 없다."
+correct = true
+
+[[questions.choices]]
+text = "같은 점을 반복 측정하므로 파라미터 추정이 고르게 덮는 설계보다 부정확하다."
+feedback = "본문 셀 4에서 이 설계의 log det(XᵀX)는 3.466으로 고르게 6점(2.776)보다 크다. 가정한 모델 안에서는 오히려 더 정확하다."
+
+[[questions.choices]]
+text = "구간 양 끝의 측정은 잡음이 크므로 피해야 한다."
+feedback = "측정 잡음이 위치와 무관하다고 가정한 모델이다. 양 끝은 기울기와 곡률 정보를 가장 많이 준다."
+
+[[questions.choices]]
+text = "사전분포가 없으므로 베이지안 설계와 무관한 기준이다."
+feedback = "사전분포가 약한 극한에서 선형 가우시안 모델의 EIG 최대화는 D-최적성과 같아진다."
+
+[[questions]]
+id = "fair-comparison"
+type = "multiple"
+objective = 3
+prompt = '''새 실험 선택 전략이 무작위 선택보다 효율적이라고 주장하려 한다. 공정한 비교에 필요한 것을 모두 고르시오.'''
+explanation = '''같은 예산(실험 수 또는 비용), 같은 초기 실험, 여러 시드에서의 분포, 그리고 목적에 맞는 지표가 있어야 차이가 선택 규칙에서 나왔다고 말할 수 있다. 새 전략에만 하이퍼파라미터를 튜닝하면 비교가 기울어진다. 최종 예산 한 점보다 실험 수에 따른 곡선 전체를 보고해야 초반과 후반의 순위 변화도 드러난다.'''
+
+[[questions.choices]]
+text = "두 전략에 같은 실험 수(또는 같은 비용)를 준다."
+correct = true
+
+[[questions.choices]]
+text = "초기 실험을 두 전략이 공유하게 한다."
+correct = true
+
+[[questions.choices]]
+text = "시드 여러 개에서 결과의 분포(중앙값과 범위)를 보고한다."
+correct = true
+
+[[questions.choices]]
+text = "새 전략의 결과가 가장 좋게 나온 시드 하나를 대표로 보고한다."
+feedback = "순차적 설계는 시드에 따라 결과가 크게 흔들린다. 고른 시드 하나는 효율의 증거가 아니다."
+
+[[questions]]
+id = "al-vs-bo"
+type = "single"
+objective = 1
+prompt = '''같은 GP와 같은 예산으로 불확실성 샘플링과 EI(expected improvement)를 비교했더니, 불확실성 샘플링은 함수 전체 RMSE가 더 작고 EI는 regret이 더 작았다. 이 결과의 해석으로 옳은 것은?'''
+explanation = '''두 획득함수는 목적이 다르다. 불확실성 샘플링은 함수 전체를 알기 위해 모르는 곳을 고르게 메우고, EI는 최솟값을 낮출 가능성이 큰 곳에 측정을 집중한다. 그래서 각자 자기 목적의 지표에서 이긴다. 연구 목적이 최적 조건 찾기면 EI, 응답 곡면 지도 만들기면 불확실성 샘플링을 쓰고, 보고할 때는 목적에 맞는 지표를 쓴다.'''
+
+[[questions.choices]]
+text = "두 전략은 목적이 다르므로 각자 자기 목적의 지표에서 이긴 것이다. 목적에 따라 고른다."
+correct = true
+
+[[questions.choices]]
+text = "EI가 regret에서 이겼으므로 모든 목적에서 EI가 더 좋은 전략이다."
+feedback = "EI는 최적점 근처에 측정을 몰아 다른 영역의 모델을 나쁘게 남긴다. 함수 전체를 알아야 하는 목적에서는 진다."
+
+[[questions.choices]]
+text = "불확실성 샘플링이 RMSE에서 이겼으므로 최적점도 결국 더 잘 찾는다."
+feedback = "함수 전체를 잘 아는 것과 최적점을 빨리 찾는 것은 다르다. 같은 예산에서 regret은 EI가 더 작았다."
+
+[[questions.choices]]
+text = "시드가 다르면 결과가 뒤집힐 수 있으므로 아무 결론도 낼 수 없다."
+feedback = "시드 20개의 중앙값에서 일관된 차이가 났다. 목적에 따른 차이는 체계적인 결과다."

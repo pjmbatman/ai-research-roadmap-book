@@ -3,7 +3,7 @@ id: physics-and-engineering
 title: "물리·공학 시뮬레이션"
 title_en: "Physics and Engineering Simulation"
 track: domain-applications
-status: outline
+status: draft
 summary: "연속체 역학과 시뮬레이션의 기초, 시뮬레이션 대리모델, 난류와 closure 모델 학습, 설계 최적화, 벤치마크와 평가를 다룬다."
 ---
 

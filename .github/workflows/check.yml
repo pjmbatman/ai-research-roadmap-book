@@ -50,6 +50,8 @@ jobs:
       - run: npm run build
       - name: No broken internal links
         run: npm run test:links
+      - name: Browser code cells print the book's output in Pyodide
+        run: npm run test:cells
       - name: Install Chromium for Playwright
         run: npx playwright install --with-deps chromium
       - name: End-to-end (quizzes, widgets, Pyodide cells and exercise grading)

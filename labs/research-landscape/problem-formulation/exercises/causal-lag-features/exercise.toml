@@ -1,0 +1,6 @@
+title = "과거 정보만 쓰는 lag 특징 만들기"
+chapter = "research-landscape/problem-formulation"
+objective = 2
+exec = "browser"
+entry = "lag_features"
+timeout_s = 10

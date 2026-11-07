@@ -1,0 +1,6 @@
+title = "베이지안 선형회귀의 사후분포와 예측분포"
+chapter = "bayesian-inference/conjugate-models"
+objective = 2
+exec = "browser"
+entry = "predictive"
+timeout_s = 10

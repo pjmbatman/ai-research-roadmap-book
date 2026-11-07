@@ -1,0 +1,6 @@
+title = "MLP 학습 한 step: forward → loss → backward → update"
+chapter = "research-landscape/first-pipeline"
+objective = 1
+exec = "browser"
+entry = "train_step"
+timeout_s = 10

@@ -1,0 +1,6 @@
+title = "해의 구조 판정"
+chapter = "linear-algebra/rank-and-subspaces"
+objective = 2
+exec = "browser"
+entry = "solution_structure"
+timeout_s = 10

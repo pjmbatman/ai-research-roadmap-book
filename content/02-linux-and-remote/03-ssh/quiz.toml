@@ -1,0 +1,149 @@
+# 2.3 SSH와 원격 접속 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "private-key-permissions"
+type = "single"
+objective = 1
+prompt = '''새 노트북으로 개인키 `~/.ssh/id_ed25519`를 옮겼더니 접속할 때 `Permissions 0644 for '/home/kim/.ssh/id_ed25519' are too open.` 경고와 함께 키가 무시된다. 알맞은 조치는?'''
+explanation = '''ssh 클라이언트는 개인키 파일이 소유자 외의 사용자(그룹·기타)에게 조금이라도 열려 있으면 그 키를 쓰지 않는다. 0644는 그룹과 기타에게 읽기(044)가 열려 있다. `chmod 600 ~/.ssh/id_ed25519`(또는 400)로 소유자만 읽게 한다. 공개키(`.pub`)는 이름 그대로 공개해도 되므로 644여도 괜찮다. 권한을 더 넓히는 것은 반대 방향이고, 키를 서버에 복사하거나 비밀번호로 돌아가는 것은 문제를 키우거나 피하는 것이다.'''
+
+[[questions.choices]]
+text = "`chmod 600 ~/.ssh/id_ed25519`로 소유자만 읽고 쓸 수 있게 한다."
+correct = true
+
+[[questions.choices]]
+text = "`chmod 777 ~/.ssh/id_ed25519`로 권한 문제를 없앤다."
+feedback = "경고는 권한이 '너무 열려 있다'는 뜻이다. 777은 모두에게 쓰기까지 허용해 더 크게 거부된다."
+
+[[questions.choices]]
+text = "개인키를 서버의 `~/.ssh/`에도 복사해 두면 양쪽에서 인증된다."
+feedback = "서버에 두는 것은 공개키(authorized_keys)뿐이다. 개인키를 서버에 두면 그 서버의 관리자나 침입자가 내 신원으로 다른 곳에 접속할 수 있다."
+
+[[questions.choices]]
+text = "키 인증을 포기하고 비밀번호 인증으로 접속한다."
+feedback = "비밀번호 인증은 추측·유출에 더 약하고, 많은 연구 서버는 아예 막아 둔다. 권한 비트만 고치면 된다."
+
+[[questions]]
+id = "ssh-config-order"
+type = "single"
+objective = 1
+prompt = '''`~/.ssh/config`의 맨 위에 `Host *` 블록(`User kim`)이 있고, 그 아래에 `Host gpu1` 블록(`HostName 10.0.3.21`, `User lab`)이 있다. `ssh gpu1`은 어느 사용자로 접속하려 하는가?'''
+explanation = '''ssh는 config를 위에서 아래로 읽으며, **각 설정에 대해 처음 얻은 값**을 쓴다. `Host *`는 gpu1에도 맞으므로 `User kim`이 먼저 정해지고, 아래의 `User lab`은 무시된다. `HostName`은 앞에서 정해진 적이 없으므로 gpu1 블록의 값이 쓰인다. 그래서 구체적인 Host를 위에, `Host *` 기본값을 맨 아래에 둔다. 실제 값은 `ssh -G gpu1`로 확인한다.'''
+
+[[questions.choices]]
+text = "kim. Host *가 먼저 나와 User가 이미 정해졌기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "lab. 더 구체적인 Host 블록이 항상 우선한다."
+feedback = "ssh_config에는 '구체성' 우선순위가 없다. 파일 순서에서 처음 얻은 값이 이긴다. 그래서 구체적인 블록을 위에 써야 한다."
+
+[[questions.choices]]
+text = "lab. 아래에 쓴 값이 위의 값을 덮어쓴다."
+feedback = "많은 설정 파일 형식과 반대로, ssh_config는 덮어쓰지 않고 처음 값을 유지한다."
+
+[[questions.choices]]
+text = "두 User가 충돌해 오류가 난다."
+feedback = "충돌은 오류가 아니다. 뒤의 값이 조용히 무시된다. 그래서 이 실수는 알아채기 어렵다."
+
+[[questions]]
+id = "agent-forwarding-risk"
+type = "single"
+objective = 1
+prompt = '''연구실 GPU 서버는 외부에서 바로 접속할 수 없고 bastion(jump host)을 거쳐야 한다. bastion에서 GPU 서버로 다시 ssh하기 위해 흔히 쓰는 두 방법 중, `ProxyJump`가 `ForwardAgent yes`보다 권장되는 이유는?'''
+explanation = '''agent forwarding을 켜면, 접속해 있는 동안 bastion 위의 소켓을 통해 내 ssh-agent에 서명을 요청할 수 있게 된다. bastion의 root나 침입자는 그 소켓을 이용해 내 신원으로 다른 서버에 접속할 수 있다(개인키 자체는 넘어가지 않지만, 쓸 수는 있다). ProxyJump는 bastion을 통로로만 쓰고, 최종 서버와의 인증은 내 컴퓨터에서 끝까지 암호화된 채 이루어진다. bastion에 agent도 개인키도 노출되지 않는다.'''
+
+[[questions.choices]]
+text = "ProxyJump는 bastion을 통로로만 쓰고 인증은 내 컴퓨터에서 하므로, bastion에 내 agent가 노출되지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "agent forwarding은 개인키 파일을 bastion에 복사하기 때문이다."
+feedback = "개인키 파일이 복사되지는 않는다. 위험은 접속 중에 bastion에서 내 agent에 서명을 요청할 수 있다는 점이다. 키가 복사되지 않아도 키를 '쓸' 수는 있다."
+
+[[questions.choices]]
+text = "ProxyJump가 전송 속도가 훨씬 빠르기 때문이다."
+feedback = "선택의 핵심은 속도가 아니라 신뢰 경계다. 두 방법 모두 bastion을 경유한다."
+
+[[questions.choices]]
+text = "둘은 같은 기능의 다른 이름이라 차이가 없다."
+feedback = "agent forwarding은 원격에서 내 agent를 쓰게 하는 기능이고, ProxyJump는 연결 경로를 정하는 기능이다. 위험의 범위가 다르다."
+
+[[questions]]
+id = "local-forward-tensorboard"
+type = "single"
+objective = 2
+prompt = '''GPU 서버(`gpu1`)에서 `tensorboard --logdir runs --port 6006`이 서버 자신(localhost)에게만 열려 있다. 내 노트북 브라우저에서 이 대시보드를 보려면?'''
+explanation = '''local forwarding `-L 로컬포트:대상호스트:대상포트`는 **내 컴퓨터의** 로컬포트로 들어온 연결을 SSH 터널로 넘겨, 원격 서버 입장에서 본 `대상호스트:대상포트`로 연결한다. 여기서 `localhost`는 원격 서버 자신을 뜻한다. 그래서 `ssh -N -L 16006:localhost:6006 gpu1` 뒤 노트북에서 `http://localhost:16006`을 연다. `-R`은 반대 방향(원격의 포트를 내 쪽 서비스로)이다. 대시보드를 모든 인터페이스에 공개하는 것은 인증 없는 웹 서버를 네트워크 전체에 여는 일이다.'''
+
+[[questions.choices]]
+text = "`ssh -N -L 16006:localhost:6006 gpu1`을 실행하고 노트북 브라우저에서 `http://localhost:16006`을 연다."
+correct = true
+
+[[questions.choices]]
+text = "`ssh -N -R 16006:localhost:6006 gpu1`을 실행하고 노트북에서 `http://localhost:16006`을 연다."
+feedback = "-R은 원격 서버 쪽 포트를 내 컴퓨터의 서비스로 연결하는 반대 방향이다. 원격의 서비스를 내 쪽으로 가져오는 것은 -L이다."
+
+[[questions.choices]]
+text = "노트북 브라우저에서 `http://gpu1:6006`을 바로 연다."
+feedback = "TensorBoard가 서버의 localhost에만 열려 있고, 연구 서버는 보통 방화벽 뒤에 있다. 외부에서 그 포트로 직접 갈 수 없다."
+
+[[questions.choices]]
+text = "TensorBoard를 모든 네트워크 인터페이스에 열어 누구나 접속할 수 있게 한다."
+feedback = "인증 없는 대시보드를 네트워크에 공개하게 된다. 포워딩은 SSH 인증을 통과한 나만 접근하게 해 준다."
+
+[[questions]]
+id = "local-forward-port"
+type = "numeric"
+objective = 2
+prompt = '''원격 서버에서 Jupyter가 8888번 포트로 실행 중이고, 내 노트북에서는 이미 다른 Jupyter가 8888번을 쓰고 있다. 그래서 `ssh -N -L 8890:localhost:8888 gpu1`을 실행했다. 원격 Jupyter를 열려면 노트북 브라우저에서 `http://localhost:____`의 빈칸에 어떤 포트 번호를 쓰는가?'''
+answer = 8890
+tolerance = 0
+explanation = '''`-L 8890:localhost:8888`에서 앞의 8890이 **내 컴퓨터에서 여는 포트**, 뒤의 `localhost:8888`이 원격 서버 입장에서 본 목적지다. 그래서 노트북 브라우저는 8890으로 접속하고, 터널이 원격의 8888로 넘긴다. 8888을 쓰면 노트북에서 이미 돌고 있는 로컬 Jupyter가 열린다. 이 혼동은 "원격 파일이 안 보인다"는 증상으로 나타난다.'''
+
+[[questions]]
+id = "remote-extension-location"
+type = "single"
+objective = 3
+prompt = '''VS Code의 Remote-SSH로 GPU 서버의 프로젝트 폴더를 열었다. 편집기 안의 터미널, Python 확장의 인터프리터 선택·디버거는 어디에서 실행되는가?'''
+explanation = '''Remote-SSH는 원격 서버에 VS Code 서버 프로그램을 설치해 실행하고, 내 컴퓨터의 창은 화면과 입력만 담당한다. 파일 탐색, 터미널, 언어 서버·디버거처럼 작업 공간을 다루는 확장은 **원격에서** 실행된다(테마 같은 UI 확장만 로컬에서 돈다). 그래서 인터프리터는 원격 서버의 conda 환경 경로를 골라야 하고, 원격 쪽 확장은 원격에 따로 설치된다. 같은 이유로 이 서버 프로그램이 로그인 노드의 CPU·메모리를 쓰게 되므로, 클러스터에 따라 사용 규칙이 있다(2.5장).'''
+
+[[questions.choices]]
+text = "원격 서버에서 실행된다. 인터프리터도 원격 서버의 환경에서 골라야 한다."
+correct = true
+
+[[questions.choices]]
+text = "모두 내 노트북에서 실행되고, 파일만 SSH로 주고받는다."
+feedback = "그런 구조라면 노트북의 Python으로 원격 코드를 돌리게 된다. Remote-SSH는 원격에 서버 프로그램을 두고 그곳에서 터미널과 확장을 실행한다."
+
+[[questions.choices]]
+text = "터미널은 원격, 디버거와 인터프리터는 노트북에서 실행된다."
+feedback = "작업 공간 확장(언어 서버, 디버거)은 코드와 같은 곳, 즉 원격에서 실행되어야 원격의 파일과 환경을 쓸 수 있다."
+
+[[questions.choices]]
+text = "확장은 한 번 설치하면 로컬과 원격 어디서든 같은 인스턴스가 동작한다."
+feedback = "원격에서 실행되는 확장은 원격에 따로 설치된다. 로컬에만 설치된 확장이 원격 창에서 보이지 않는 이유다."
+
+[[questions]]
+id = "host-key-changed"
+type = "single"
+objective = 1
+prompt = '''늘 쓰던 서버에 접속하려는데 `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!`가 뜨며 접속이 거부되었다. 가장 알맞은 대응은?'''
+explanation = '''ssh는 처음 접속한 서버의 host key를 `~/.ssh/known_hosts`에 기록하고, 이후 접속마다 같은 키인지 확인한다. 키가 바뀌었다는 것은 서버가 재설치되었거나(정상), 누군가 중간에서 서버를 사칭하고 있다는(공격) 뜻이다. 둘은 내 쪽에서 구분할 수 없으므로, 관리자에게 서버 재설치·키 교체 여부와 새 fingerprint를 확인한 뒤에만 `ssh-keygen -R <호스트>`로 옛 기록을 지우고 다시 접속한다. 확인 기능 자체를 끄는 것은 이후의 모든 사칭을 통과시킨다.'''
+
+[[questions.choices]]
+text = "관리자에게 서버 키 교체 여부와 새 fingerprint를 확인한 뒤 `ssh-keygen -R <호스트>`로 옛 기록을 지우고 다시 접속한다."
+correct = true
+
+[[questions.choices]]
+text = "config에 `StrictHostKeyChecking no`를 넣어 경고가 다시 나오지 않게 한다."
+feedback = "host key 확인은 서버 사칭을 막는 유일한 장치다. 끄면 이후 진짜 공격도 경고 없이 통과한다."
+
+[[questions.choices]]
+text = "`~/.ssh/known_hosts` 파일을 통째로 지운다."
+feedback = "다른 모든 서버의 기록까지 사라져, 확인 없이 새 키를 받아들이게 된다. 지우더라도 확인을 마친 해당 호스트 줄만 지운다."
+
+[[questions.choices]]
+text = "내 개인키가 손상된 것이므로 ssh-keygen으로 새 키를 만든다."
+feedback = "이 경고는 내 키가 아니라 서버의 host key에 관한 것이다. 새 사용자 키를 만들어도 해결되지 않는다."

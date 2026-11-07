@@ -1,0 +1,6 @@
+title = "상대오차로 gradient 검증하기"
+chapter = "calculus-and-autodiff/automatic-differentiation"
+objective = 3
+exec = "browser"
+entry = "grad_check"
+timeout_s = 10

@@ -1,0 +1,6 @@
+title = "one-step 예측과 free rollout"
+chapter = "architectures/recurrent-and-ssm"
+objective = 3
+exec = "browser"
+entry = "rollout"
+timeout_s = 10

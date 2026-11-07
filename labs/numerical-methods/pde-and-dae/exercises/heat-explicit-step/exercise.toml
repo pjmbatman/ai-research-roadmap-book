@@ -1,0 +1,6 @@
+title = "열방정식 explicit step과 안정 조건"
+chapter = "numerical-methods/pde-and-dae"
+objective = 1
+exec = "browser"
+entry = "ftcs_step"
+timeout_s = 10

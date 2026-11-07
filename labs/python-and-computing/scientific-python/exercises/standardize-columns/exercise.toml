@@ -1,0 +1,6 @@
+title = "원본을 바꾸지 않는 열별 표준화"
+chapter = "python-and-computing/scientific-python"
+objective = 1
+exec = "browser"
+entry = "standardize"
+timeout_s = 10

@@ -1,0 +1,112 @@
+# 15.3 전처리와 탐색적 분석 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "zscore-masking"
+type = "single"
+objective = 1
+prompt = '''정상값 90개(평균 10, 표준편차 1 근처)와 40–60 사이의 이상치 10개가 섞인 데이터에서, 평균·표준편차로 계산한 $|z| > 3$ 규칙은 이상치 10개 중 4개만 찾았다. 가장 큰 이유는?'''
+explanation = '''평균과 표준편차는 이상치 자신의 영향을 크게 받는다. 이상치 10개가 표준편차를 1에서 12로 부풀리자, 이상치까지의 거리를 표준편차로 나눈 $z$가 작아졌다. 이것을 masking이라 한다. 중앙값과 MAD(median absolute deviation)는 데이터의 절반 가까이가 오염되어도 크게 흔들리지 않으므로, 이를 쓴 robust z는 10개를 모두 찾았다.'''
+
+[[questions.choices]]
+text = "이상치가 표준편차를 크게 부풀려, 이상치의 z값이 작아졌기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "임계값 3이 너무 커서다. 2로 낮추면 문제가 해결된다."
+feedback = "임계값을 낮추면 일부를 더 찾지만, 기준(평균·표준편차)이 오염된 문제는 그대로이고 정상값의 오탐도 늘어난다."
+
+[[questions.choices]]
+text = "데이터가 정규분포가 아니므로 이상치라는 개념이 성립하지 않는다."
+feedback = "이상치 검출은 분포 가정 없이도 의미가 있다. 문제는 분포가 아니라, 이상치에 민감한 통계량으로 기준을 잡았다는 점이다."
+
+[[questions.choices]]
+text = "이상치가 10%나 되면 어떤 방법으로도 찾을 수 없다."
+feedback = "중앙값·MAD 기반 robust z는 같은 데이터에서 10개를 모두 찾았다. 이 통계량은 오염 비율이 50%에 가까워질 때까지 버틴다."
+
+[[questions]]
+id = "robust-z-value"
+type = "numeric"
+objective = 1
+prompt = '''한 센서 열의 중앙값이 10.0, MAD(중앙값에서의 절대편차의 중앙값)가 2.0이다. 값 18.0의 robust z, $0.6745\,(x - \mathrm{median}) / \mathrm{MAD}$는 얼마인가? (소수 둘째 자리까지)'''
+answer = 2.70
+tolerance = 0.01
+explanation = '''$0.6745 \times (18 - 10) / 2 = 0.6745 \times 4 = 2.698 \approx 2.70$이다. 상수 0.6745는 정규분포에서 MAD가 표준편차의 약 0.6745배이므로, robust z를 보통의 z와 같은 척도로 맞추기 위한 것이다. 흔히 쓰는 기준 3.5보다 작으므로 이 값은 이상치로 표시되지 않는다.'''
+
+[[questions]]
+id = "fit-on-train"
+type = "single"
+objective = 2
+prompt = '''시간에 따라 천천히 변하는 센서 데이터를 시간 순으로 train(앞 80%)과 test(뒤 20%)로 나눈다. 표준화의 평균·표준편차는 어디서 추정해야 하는가?'''
+explanation = '''전처리 통계량도 모델 파라미터처럼 데이터에서 추정한 값이므로 train에서만 추정하고, 같은 값을 validation·test에 적용한다. 전체에서 추정하면 test의 정보(여기서는 뒤쪽 시점의 낮은 값)가 입력에 섞이고, train과 test 사이의 분포 이동이 줄어든 것처럼 보인다. 본문의 예에서 test의 표준화 평균은 train fit이면 -2.15, 전체 fit이면 -1.37이었다.'''
+
+[[questions.choices]]
+text = "train에서만 추정하고, 같은 값을 test에 적용한다."
+correct = true
+
+[[questions.choices]]
+text = "train과 test를 합친 전체에서 추정한다. 데이터가 많을수록 통계량이 정확하다."
+feedback = "정확한 통계량보다 정직한 평가가 중요하다. 전체에서 추정하면 test의 정보가 입력에 들어가고, 분포 이동이 가려진다."
+
+[[questions.choices]]
+text = "train과 test 각각에서 따로 추정해 각자 표준화한다."
+feedback = "그러면 test의 평균이 다시 0으로 맞춰져 분포 이동이 완전히 사라진다. 배포 시점에는 test 전체를 미리 볼 수도 없다."
+
+[[questions.choices]]
+text = "표준화는 값의 순서를 바꾸지 않으므로 어디서 추정해도 결과에 영향이 없다."
+feedback = "표준화는 아핀 변환이라 한 집합 안의 순서는 보존하지만, train과 test 사이의 상대 위치는 어떤 통계량을 쓰느냐에 따라 달라진다. 거리·정규화에 민감한 모델의 결과도 바뀐다."
+
+[[questions]]
+id = "smoothing-peak"
+type = "single"
+objective = 2
+prompt = '''폭이 약 1 s인 펄스가 들어 있는 2 Hz 신호에 4.5 s짜리 이동 평균을 적용했다. 무엇이 일어나는가?'''
+explanation = '''이동 평균은 창 안의 값을 평균하므로, 창보다 훨씬 짧은 사건은 주변의 작은 값과 섞여 높이가 크게 줄고 폭은 넓어진다. 본문의 예에서 최댓값이 0.87에서 0.29로 줄었다. smoothing의 창 크기는 보존해야 할 가장 짧은 현상의 시간 척도보다 작게 잡고, 잃는 정보를 기록한다.'''
+
+[[questions.choices]]
+text = "펄스의 높이가 크게 줄고 폭이 넓어진다."
+correct = true
+
+[[questions.choices]]
+text = "잡음만 줄고 펄스의 높이는 보존된다."
+feedback = "이동 평균은 잡음과 신호를 구분하지 않는다. 창보다 짧은 신호는 잡음처럼 평균되어 줄어든다."
+
+[[questions.choices]]
+text = "펄스가 시간 축에서 앞쪽으로 이동한다."
+feedback = "대칭 창(mode=\"same\")의 이동 평균은 위치를 옮기지 않는다. 한쪽 창(과거 값만 쓰는 인과 필터)은 지연을 만든다."
+
+[[questions.choices]]
+text = "펄스의 넓이(적분)가 크게 줄어든다."
+feedback = "합이 1인 창의 이동 평균은 넓이를 거의 보존한다. 높이가 줄어든 만큼 폭이 넓어진다."
+
+[[questions]]
+id = "nyquist-resample"
+type = "numeric"
+objective = 2
+prompt = '''진동수 0.5 Hz의 진동을 재표본화 후에도 aliasing 없이 표현하려면 표본화 주파수가 최소 몇 Hz보다 커야 하는가?'''
+answer = 1
+tolerance = 0
+explanation = '''Nyquist 조건에 따라 표본화 주파수는 신호의 최고 진동수의 두 배, 즉 $2 \times 0.5 = 1$ Hz보다 커야 한다. 그보다 느리게 재표본화하면 진동이 더 느린 가짜 진동(alias)으로 보이거나 사라진다. 재표본화로 데이터를 줄일 때는 먼저 보존할 가장 빠른 현상의 진동수를 정하고, 필요하면 재표본화 전에 저역 통과 필터로 그보다 빠른 성분을 제거한다.'''
+
+[[questions]]
+id = "simpson-groups"
+type = "single"
+objective = 3
+prompt = '''장비 4대의 데이터를 모두 합치면 $x$와 $y$의 상관이 $-0.84$인데, 장비별로 나누어 보면 네 장비 모두 상관이 $+0.87$ 이상이다. 가장 타당한 해석은?'''
+explanation = '''장비마다 기준점(offset)이 달라, 합친 데이터의 상관은 장비 사이의 차이를 반영하고 장비 안의 관계와는 반대 방향이 되었다(Simpson의 역설). 그룹 변수를 무시한 집계는 그룹 안의 관계를 보여 주지 않는다. EDA에서는 출처·장비·배치별로 나누어 그린다. 모델의 입력에 장비 정보가 없으면 모델은 장비 차이를 $x$의 효과로 오해할 수 있다.'''
+
+[[questions.choices]]
+text = "장비마다 기준점이 달라서, 합친 상관은 장비 사이 차이를 반영하고 장비 안의 관계는 양의 상관이다."
+correct = true
+
+[[questions.choices]]
+text = "합친 데이터가 더 많으므로 $-0.84$가 참 관계이고, 장비별 상관은 표본이 작아 생긴 우연이다."
+feedback = "장비별 표본도 50개씩이고 네 장비가 모두 같은 방향이다. 합친 상관이 반대 방향인 것은 표본 크기가 아니라 그룹 구조 때문이다."
+
+[[questions.choices]]
+text = "상관이 서로 모순이므로 데이터에 오류가 있다."
+feedback = "오류 없이도 일어나는 현상이다. 그룹마다 평균이 다를 때 집계 수준에 따라 관계의 방향이 바뀔 수 있다."
+
+[[questions.choices]]
+text = "상관계수는 그룹으로 나누어도 바뀌지 않으므로 계산 실수다."
+feedback = "상관계수는 데이터 전체의 퍼짐에 의존한다. 그룹을 나누면 그룹 사이의 퍼짐이 빠지므로 값과 부호가 모두 바뀔 수 있다."

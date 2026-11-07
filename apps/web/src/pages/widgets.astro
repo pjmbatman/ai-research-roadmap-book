@@ -1,0 +1,24 @@
+---
+// 위젯 모음: 등록된 모든 위젯을 한 화면에서 조작해 본다(개발·검수용, e2e가 모든 위젯이 뜨는지 확인한다).
+import Shell from "../layouts/Shell.astro";
+import { loadBook } from "../lib/book";
+const { widgets } = loadBook();
+const pageData = {
+  chapterId: "_widgets", title: "위젯", objectives: [], quiz: [], exercises: {},
+  widgets: Object.fromEntries(widgets.map((w) => [w.name, { title: w.title, kind: w.kind, status: w.status }])),
+};
+---
+<Shell title="위젯" description="책에 쓰이는 인터랙티브 위젯 모음" pageData={pageData}>
+  <div class="page-head">
+    <h1>위젯</h1>
+    <p>장 본문에 들어가는 인터랙티브 위젯을 한곳에 모았다. 각 위젯 아래에 쓰이는 장이 있다.</p>
+  </div>
+  <div class="widget-gallery prose">
+    {widgets.map((w) => (
+      <section class="tile" id={`w-${w.name}`} data-status={w.status}>
+        <div class="widget" data-widget={w.name} data-attrs="{}"></div>
+        <p class="muted" style="font-size:13px;margin:10px 0 0"><code>{w.name}</code> · {w.status} · {w.chapters.join(", ")}</p>
+      </section>
+    ))}
+  </div>
+</Shell>

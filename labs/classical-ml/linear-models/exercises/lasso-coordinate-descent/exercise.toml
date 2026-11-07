@@ -1,0 +1,6 @@
+title = "좌표 하강법과 soft-thresholding으로 Lasso 풀기"
+chapter = "classical-ml/linear-models"
+objective = 2
+exec = "browser"
+entry = "lasso_cd"
+timeout_s = 10

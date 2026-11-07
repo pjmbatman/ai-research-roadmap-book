@@ -4,6 +4,30 @@
 
 ## [Unreleased]
 
+### Changed
+- **시각 언어를 Liquid Glass + 대시보드로 바꿨다** ([ADR 0011](editorial/decisions/0011-liquid-glass-dashboard.md)). 기준은 사용자가 준 레퍼런스(visionOS 창 화면, visionOS 음악 앱, Easyread 대시보드)다.
+  - 배경과 유리: 흐린 환경 배경 위에 반투명 유리 창을 띄운다.
+  - 셸: 왼쪽 세로 알약 탭 막대를 두고, 모바일에서는 아래 가로 알약으로 바꿨다.
+  - 홈 = 대시보드: 이어서 학습 커버 · 주간 목표 게이지 · 숫자 카드 · 트랙 격자 · 오른쪽 어두운 패널.
+  - 트랙 목록 = 라이브러리: 안쪽 사이드바 + 커버 격자.
+  - 장 읽기: 주소창 알약 + 재생 막대 알약.
+  - 커버: 트랙 색 추상 SVG를 생성한다.
+  - 색: Apple HIG 글자 색과 시스템 색을 쓴다.
+- **UI/UX를 처음부터 다시 만들었다** ([ADR 0010](editorial/decisions/0010-reference-based-design.md)). 이전 방향(Midnight·Glacier·Coral 테마, floating dock, 효과 도구 상자, 위젯 `kind`, 캔버스 지도)과 그 명세를 폐기했다.
+  - 시각 기반: shadcn/ui v4 neutral 토큰을 그대로 쓴다. 상태 색은 Tailwind 팔레트에서 가져왔다.
+  - 공통 머리: shadcn/ui 문서 사이트 형식. dock은 없앴다.
+  - 홈·트랙·로드맵: roadmap.sh 형식. 부는 주제 노드, 장은 하위 노드이고, 노드 서랍에서 학습 중·완료·건너뜀을 고른다.
+  - 로드맵 전체: 레이어별 트랙과 의존선, 트랙 서랍.
+  - 장 읽기: Brilliant·Duolingo식 레슨 화면(레슨 바·진행 막대·하단 이전/계속), 퀴즈는 카드형 선택지와 주 버튼 하나.
+  - 연습문제: TutorialKit·svelte식 분할 화면.
+  - 위젯: Card 틀, 색은 테마 토큰을 따르고 초기화 버튼이 있다.
+  - 코드 편집기: 토큰 기반 색과 GitHub 기본 문법 색.
+- 위젯 레지스트리에서 디자인 명세 필드(`kind`·`interaction`·`binds`·`motion`)를 지웠다.
+- 장 상태 모델: 시작 전 · 학습 중 · 완료 · 건너뜀 (roadmap.sh)
+
+### Added
+- UI/UX 벤치마킹(`editorial/benchmarks.md`)
+
 ## [0.1.0] - 2026-11-06 — 프로토타입 1
 
 ### Added

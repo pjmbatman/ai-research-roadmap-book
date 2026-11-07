@@ -1,0 +1,6 @@
+title = "도수표에서 plug-in 상호정보량 계산하기"
+chapter = "information-and-learning-theory/mutual-information"
+objective = 2
+exec = "browser"
+entry = "plugin_mi"
+timeout_s = 10

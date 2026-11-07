@@ -1,0 +1,115 @@
+# 5.2 모듈·패키지·import 시스템 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "import-runs-once"
+type = "numeric"
+objective = 1
+prompt = '''모듈 `consts.py`의 첫 줄은 `print("loaded")`다. 한 Python 프로세스에서 `train.py`가 `import consts`를 두 번 하고, `train.py`가 import하는 `model.py`와 `data.py`도 각각 `import consts`를 한다. `"loaded"`는 몇 번 출력되는가?'''
+answer = 1
+tolerance = 0
+slider = { min = 0, max = 4, step = 1 }
+explanation = '''모듈은 프로세스에서 처음 import될 때 **한 번** 실행되고, 만들어진 모듈 객체는 `sys.modules`에 저장된다. 이후의 `import consts`는 어느 파일에서 하든 `sys.modules`에서 같은 객체를 꺼내 이름만 붙인다. 다시 실행하려면 `importlib.reload`를 명시적으로 불러야 한다. 단, 같은 파일이 서로 다른 이름(예: `consts`와 `pkg.consts`)으로 import되면 별개의 모듈로 두 번 실행된다.'''
+
+[[questions]]
+id = "from-import-binding"
+type = "single"
+objective = 1
+prompt = '''`train.py`가 `from config import LR`로 학습률(초깃값 `1e-3`)을 가져왔다. 그 뒤 다른 모듈에서 `import config; config.LR = 1e-2`를 실행했다. `train.py`의 `LR`은?'''
+explanation = '''`from config import LR`은 import 시점에 `config.LR`이 가리키던 객체에 `train.py`의 새 이름 `LR`을 붙인다. 나중에 `config.LR`이 다른 객체로 바뀌어도 `train.py`의 `LR`은 원래 객체를 가리킨다. 실행 중에 바뀌는 값을 공유하려면 `import config`로 모듈을 가져와 매번 `config.LR`로 읽거나, 더 낫게는 설정을 인자로 명시적으로 넘긴다.'''
+
+[[questions.choices]]
+text = "`1e-2` — 같은 변수를 공유하므로 바뀐 값이 보인다."
+feedback = "Python의 변수는 이름표다. `from ... import`는 모듈의 이름표를 공유하는 것이 아니라, 같은 객체에 새 이름표를 붙인다."
+
+[[questions.choices]]
+text = "`1e-3` — import 시점의 객체를 가리키는 별개의 이름이다."
+correct = true
+
+[[questions.choices]]
+text = "`NameError`가 난다. 모듈 속성이 바뀌면 from으로 가져온 이름은 무효가 된다."
+feedback = "이름은 그대로 살아 있고 원래 객체를 계속 가리킨다. 오류 없이 옛 값이 쓰이기 때문에 더 위험하다."
+
+[[questions]]
+id = "script-sys-path"
+type = "single"
+objective = 3
+prompt = '''저장소 루트에 패키지 `mypkg/`와 `scripts/train.py`가 있다. 루트에서 `python scripts/train.py`를 실행하면 `import mypkg`가 `ModuleNotFoundError`로 실패한다. 같은 루트에서 Jupyter 노트북을 열면 `import mypkg`가 된다. 이유로 가장 정확한 것은?'''
+explanation = '''`python 파일경로`로 실행하면 `sys.path[0]`은 **그 파일이 있는 디렉터리**(`scripts/`)다. 현재 작업 디렉터리(루트)는 들어가지 않으므로 `mypkg`를 찾지 못한다. 루트에서 연 노트북 커널과 `python -c`, `python -m`은 현재 작업 디렉터리를 `sys.path`에 넣기 때문에 우연히 된다. 근본적인 해결은 패키지를 설치(`pip install -e .`)해 어느 위치에서든 같은 방식으로 찾게 하는 것이다.'''
+
+[[questions.choices]]
+text = "`python 파일경로` 실행에서 `sys.path[0]`은 스크립트가 있는 디렉터리(`scripts/`)이고 현재 작업 디렉터리가 아니기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "`mypkg/`에 `__init__.py`가 없기 때문이다."
+feedback = "그렇다면 노트북에서도 같은 차이가 나야 한다. 더구나 `__init__.py`가 없는 디렉터리도 namespace package로 import될 수 있다. 차이는 탐색 경로(`sys.path`)에 있다."
+
+[[questions.choices]]
+text = "스크립트는 현재 작업 디렉터리를 기준으로 import하지만, 루트가 아닌 다른 곳에서 실행되었기 때문이다."
+feedback = "문제의 실행 위치는 루트다. 스크립트 실행은 현재 작업 디렉터리가 아니라 스크립트 파일의 디렉터리를 `sys.path`에 넣는다."
+
+[[questions.choices]]
+text = "Jupyter가 별도의 가상환경을 쓰기 때문이다."
+feedback = "환경이 다를 수도 있지만, 그 경우에는 노트북 쪽에서 실패하는 일이 더 흔하다. 여기서는 같은 루트에서 노트북만 성공하는 이유를 묻고 있다."
+
+[[questions]]
+id = "relative-import-as-script"
+type = "single"
+objective = 3
+prompt = '''`pkg/mod.py`에 `from .util import X`가 있다. 패키지 루트에서 `python pkg/mod.py`를 실행하면 `ImportError: attempted relative import with no known parent package`가 난다. 이 모듈을 직접 실행하는 올바른 방법은?'''
+explanation = '''파일 경로로 실행된 모듈은 `__name__`이 `"__main__"`이고 `__package__`가 비어 있어 상대 import의 기준이 없다. `python -m pkg.mod`는 모듈을 패키지의 일부로 찾아 실행하므로 `__package__`가 `"pkg"`가 되고 상대 import가 풀린다. 더 나은 설계는 실행 진입점을 별도의 `main()` 함수로 두고 console script나 `-m`으로 호출하는 것이다.'''
+
+[[questions.choices]]
+text = "`python -m pkg.mod`"
+correct = true
+
+[[questions.choices]]
+text = "`from .util import X`를 `from util import X`로 바꾼다."
+feedback = "스크립트 실행에서는 우연히 될 수 있지만(`pkg/`가 `sys.path[0]`이므로), 패키지로 import할 때는 `util`이라는 최상위 모듈을 찾다가 실패하거나 엉뚱한 모듈을 가져온다. 실행 방식에 따라 동작이 달라지는 코드가 된다."
+
+[[questions.choices]]
+text = "`mod.py` 첫 줄에 `sys.path.append('..')`를 넣는다."
+feedback = "`sys.path`를 고쳐도 `__package__`는 비어 있으므로 상대 import는 여전히 실패한다. 게다가 실행 위치에 의존하는 경로 조작은 다른 디렉터리에서 실행하면 깨진다."
+
+[[questions]]
+id = "src-layout-benefits"
+type = "multiple"
+objective = 2
+prompt = '''패키지를 저장소 루트(`mypkg/`)가 아니라 `src/mypkg/`에 두는 src layout의 효과를 모두 고르시오.'''
+explanation = '''src layout에서는 루트에서 실행해도 `mypkg`가 `sys.path`에 우연히 잡히지 않는다. 그래서 패키지를 **설치해야만** import되고, 테스트와 스크립트가 저장소의 작업 파일이 아니라 설치된 패키지(설치 설정에 빠진 파일이 있으면 그 결함까지)를 검사한다. import 속도나 실행 속도와는 관계가 없고, Python이 요구하는 규칙도 아니다(flat layout도 정상적으로 동작한다).'''
+
+[[questions.choices]]
+text = "설치하지 않은 패키지가 현재 디렉터리 덕분에 우연히 import되는 일을 막는다."
+correct = true
+
+[[questions.choices]]
+text = "테스트가 설치된 패키지를 대상으로 돌아, 패키징 설정의 누락(빠진 모듈·데이터 파일)이 드러난다."
+correct = true
+
+[[questions.choices]]
+text = "모듈 import가 더 빨라진다."
+feedback = "디렉터리 배치는 import 속도와 사실상 무관하다."
+
+[[questions.choices]]
+text = "Python은 `src/` 디렉터리가 없으면 패키지를 설치할 수 없다."
+feedback = "flat layout도 설치할 수 있다. src layout은 실수를 줄이는 관례이지 언어의 요구 사항이 아니다."
+
+[[questions]]
+id = "main-guard"
+type = "single"
+objective = 3
+prompt = '''`analysis.py`의 맨 아래에 `run_experiment()` 호출이 `if __name__ == "__main__":` 보호 없이 들어 있다. 다른 모듈에서 `from analysis import load_results`를 하면?'''
+explanation = '''import는 모듈 본문 전체를 위에서 아래로 실행한다. 보호 없이 모듈 최상위에 놓인 `run_experiment()`도 실행되므로, 함수 하나를 가져오려다 실험 전체가 돌아간다. `if __name__ == "__main__":`은 모듈이 직접 실행될 때(`__name__`이 `"__main__"`)만 참이므로 import할 때 실행을 막는다. `multiprocessing`의 spawn 방식처럼 자식 프로세스가 주 모듈을 다시 import하는 경우, 이 보호가 없으면 자식 프로세스 안에서 프로세스 생성 코드가 다시 실행되어 오류가 난다.'''
+
+[[questions.choices]]
+text = "`load_results`만 가져오므로 `run_experiment()`는 실행되지 않는다."
+feedback = "`from ... import`도 모듈 전체를 먼저 실행한 뒤 이름을 꺼낸다. 일부만 실행하는 import는 없다."
+
+[[questions.choices]]
+text = "모듈 본문이 실행되면서 `run_experiment()`도 실행된다."
+correct = true
+
+[[questions.choices]]
+text = "`ImportError`가 난다. 실행 코드가 있는 모듈은 import할 수 없다."
+feedback = "Python은 모듈 최상위의 실행 코드를 막지 않는다. 그래서 더 조심해야 한다."

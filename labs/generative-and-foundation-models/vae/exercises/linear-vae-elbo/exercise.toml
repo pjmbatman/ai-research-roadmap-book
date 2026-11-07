@@ -1,0 +1,6 @@
+title = "선형 가우시안 VAE의 ELBO 두 항"
+chapter = "generative-and-foundation-models/vae"
+objective = 1
+exec = "browser"
+entry = "elbo_terms"
+timeout_s = 10

@@ -1,0 +1,6 @@
+title = "노출 시간이 다른 계수 데이터의 최대우도"
+chapter = "statistical-inference/likelihood"
+objective = 2
+exec = "browser"
+entry = "poisson_mle"
+timeout_s = 10

@@ -3,7 +3,7 @@ id: orientation
 title: "시작하기"
 title_en: "Orientation"
 track: orientation
-status: outline
+status: draft
 summary: "이 책이 무엇을 목표로 하며, 어떤 순서와 형식으로 읽고 훈련하는지 안내한다."
 ---
 

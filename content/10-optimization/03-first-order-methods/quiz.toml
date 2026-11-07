@@ -1,0 +1,137 @@
+# 10.3 1차 최적화 방법 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "max-stable-lr-value"
+type = "numeric"
+objective = 1
+prompt = '''Hessian의 고윳값이 $2$와 $50$인 이차함수에 경사하강을 적용한다. 수렴하는 학습률의 상한 $\eta_{\max}$는?'''
+answer = 0.04
+tolerance = 0.001
+slider = { min = 0, max = 0.1, step = 0.01 }
+explanation = '''고유벡터 방향마다 오차가 $(1 - \eta\lambda_i)$배가 되므로, 모든 $i$에서 $\lvert 1 - \eta\lambda_i \rvert < 1$, 즉 $0 < \eta < 2/\lambda_i$여야 한다. 가장 엄격한 조건은 가장 큰 고윳값 $L = 50$에서 나오므로 $\eta_{\max} = 2/50 = 0.04$다. 작은 고윳값 $2$는 상한에 영향을 주지 않고, 그 방향의 수렴 속도를 정한다.'''
+
+[[questions]]
+id = "slowest-direction"
+type = "single"
+objective = 1
+prompt = '''조건수가 큰 이차함수에 학습률 $\eta = 1/L$로 경사하강을 적용했다. 오차가 가장 느리게 줄어드는 방향은?'''
+explanation = '''고윳값 $\lambda$ 방향의 축소율은 $\lvert 1 - \lambda/L \rvert$다. 가장 큰 곡률 방향($\lambda = L$)은 한 step에 0이 되고, 가장 작은 곡률 방향($\lambda = \mu$)은 매 step $1 - \mu/L = 1 - 1/\kappa$배로만 줄어든다. 학습률은 가장 가파른 방향이 정하고, 수렴 속도는 가장 완만한 방향이 정한다. 그래서 반복 수가 조건수 $\kappa$에 비례한다.'''
+
+[[questions.choices]]
+text = "곡률이 가장 작은(가장 완만한) 고유벡터 방향"
+correct = true
+
+[[questions.choices]]
+text = "곡률이 가장 큰(가장 가파른) 고유벡터 방향"
+feedback = "η = 1/L이면 그 방향의 축소율은 |1 - L/L| = 0으로, 한 step에 수렴한다. 가파른 방향은 학습률의 상한을 정할 뿐이다."
+
+[[questions.choices]]
+text = "모든 방향이 같은 속도로 줄어든다."
+feedback = "축소율 |1 - ηλ|이 고윳값마다 다르다. 모든 방향이 같은 속도인 것은 κ = 1일 때뿐이다."
+
+[[questions.choices]]
+text = "시작점에서 gradient가 가장 큰 방향"
+feedback = "축소율은 시작점과 무관하게 Hessian의 고윳값만으로 정해진다. 시작점은 각 방향의 초기 오차 크기만 바꾼다."
+
+[[questions]]
+id = "batch-size-noise"
+type = "numeric"
+objective = 1
+prompt = '''데이터에서 복원 없이 무작위로 뽑은 mini-batch의 gradient로 전체 gradient를 추정한다(데이터 수는 batch 크기보다 훨씬 크다). batch 크기를 10에서 40으로 늘리면, mini-batch gradient의 **표준편차**는 대략 몇 배가 되는가?'''
+answer = 0.5
+tolerance = 0.02
+slider = { min = 0, max = 1, step = 0.05 }
+explanation = '''mini-batch gradient는 샘플별 gradient $B$개의 평균이므로 분산이 $\sigma^2/B$에 비례한다(데이터 수가 $B$보다 훨씬 크면 유한 모집단 보정은 무시할 수 있다). batch 크기가 4배가 되면 분산은 1/4, 표준편차는 $1/\sqrt{4} = 1/2$배다. 잡음을 절반으로 줄이는 데 계산량은 4배가 든다.'''
+
+[[questions]]
+id = "sgd-plateau"
+type = "single"
+objective = 1
+prompt = '''볼록한 최소제곱 문제를 고정 학습률 SGD(batch 크기 1)로 학습했더니, 손실이 처음에는 빠르게 줄다가 최솟값보다 높은 수준에서 오르내리며 더 내려가지 않는다. 가장 알맞은 설명은?'''
+explanation = '''최솟점에서도 샘플별 gradient는 0이 아니므로, 고정 학습률 SGD는 최솟점 근처에서 계속 흔들린다. 흔들림의 크기(초과 손실)는 대략 학습률에 비례한다. 본문의 실험에서 학습률을 0.1에서 0.01로 줄이면 바닥이 약 10분의 1로 내려가고, $\eta_k \propto 1/k$처럼 줄어드는 학습률은 바닥 없이 계속 내려간다. 볼록 문제이므로 국소 최솟점에 갇힐 수 없다.'''
+
+[[questions.choices]]
+text = "고정 학습률에서 생기는 gradient 잡음의 바닥이다. 학습률을 줄여 가거나 batch를 키우면 더 내려간다."
+correct = true
+
+[[questions.choices]]
+text = "국소 최솟점에 갇혔다."
+feedback = "볼록 문제에는 전역이 아닌 국소 최솟점이 없다. 멈춘 원인은 지형이 아니라 gradient 잡음이다."
+
+[[questions.choices]]
+text = "학습률이 너무 작아서 더 내려가지 못한다."
+feedback = "반대다. 잡음 바닥은 학습률에 비례하므로 학습률을 줄이면 바닥이 낮아진다."
+
+[[questions.choices]]
+text = "모델 용량이 부족하다."
+feedback = "용량 부족은 최솟값 자체를 높이지만, 최솟값보다 높은 곳에서 오르내리는 현상은 설명하지 못한다."
+
+[[questions]]
+id = "armijo-meaning"
+type = "single"
+objective = 1
+prompt = '''Backtracking line search에서 step $t$를 받아들이는 Armijo 조건 $f(\mathbf{x} - t\nabla f) \le f(\mathbf{x}) - c\,t\,\lVert \nabla f \rVert^2$ ($0 < c < 1$)이 보장하는 것은?'''
+explanation = '''Armijo 조건은 실제 감소량이 1차 근사가 예측한 감소량 $t\lVert \nabla f \rVert^2$의 일정 비율 $c$ 이상이 되도록 요구하는 **충분 감소**(sufficient decrease) 조건이다. 너무 긴 step(곡률 때문에 오히려 올라가는 step)을 걸러 내지만, 그 방향의 최적 step을 찾는 것은 아니다. $t$를 반으로 줄여 가면 작은 $t$에서는 1차 근사가 정확해지므로 결국 조건을 만족하는 $t$가 나온다.'''
+
+[[questions.choices]]
+text = "받아들인 step이 1차 근사가 예측한 감소의 일정 비율 이상을 실제로 줄인다(충분 감소)."
+correct = true
+
+[[questions.choices]]
+text = "받아들인 step이 그 방향에서 f를 가장 작게 만드는 최적 step이다."
+feedback = "그것은 정확한 line search(exact line search)다. Armijo 조건은 충분히 줄었는지만 확인한다."
+
+[[questions.choices]]
+text = "어떤 t를 넣어도 f가 줄어든다."
+feedback = "t가 크면 곡률 때문에 f가 오히려 커질 수 있다. 그래서 조건을 만족할 때까지 t를 줄인다."
+
+[[questions.choices]]
+text = "함수 평가 없이 gradient만으로 step을 정할 수 있다."
+feedback = "조건 확인에 f(x - t∇f)를 평가해야 한다. 본문의 실험에서는 step마다 평균 9번 정도 추가 평가가 들었다."
+
+[[questions]]
+id = "momentum-effects"
+type = "multiple"
+objective = 2
+prompt = '''조건수가 큰 이차함수에서 heavy ball momentum에 대해 옳은 것을 모두 고르시오.'''
+explanation = '''곡률이 낮은 방향의 gradient는 매 step 같은 부호이므로 속도에 누적되어 그 방향의 이동이 빨라진다. 파라미터를 잘 고르면 반복 수가 $\kappa$가 아니라 $\sqrt{\kappa}$에 비례한다. 안정한 학습률의 상한은 $2/L$에서 $2(1 + \beta)/L$로 오히려 커진다. heavy ball은 감쇠가 약한 진동자처럼 최솟점을 지나쳤다 돌아오는 진동을 보일 수 있다. 본문의 실험에서 $\beta = 0.9$ heavy ball은 완만한 방향으로도 13번 부호가 바뀌었다.'''
+
+[[questions.choices]]
+text = "일정한 방향의 gradient가 누적되어 곡률이 낮은 방향의 이동이 빨라진다."
+correct = true
+
+[[questions.choices]]
+text = '''파라미터를 잘 고르면 필요한 반복 수가 $\kappa$ 대신 $\sqrt{\kappa}$에 비례한다.'''
+correct = true
+
+[[questions.choices]]
+text = '''momentum을 쓰면 안정한 학습률의 상한이 $2/L$보다 작아진다.'''
+feedback = "heavy ball의 상한은 2(1 + β)/L로, β > 0이면 오히려 커진다. 실습에서 β = 0.9일 때 3.8/L을 확인한다."
+
+[[questions.choices]]
+text = "momentum은 궤적의 진동을 항상 없앤다."
+feedback = "heavy ball은 최솟점을 지나쳤다 돌아오는 진동을 만들 수 있다. 진동이 줄어드는 효과는 Nesterov 방식에서 더 뚜렷하다."
+
+[[questions]]
+id = "convex-rate"
+type = "single"
+objective = 1
+prompt = '''$L$-smooth하고 볼록하지만 **강볼록은 아닌** 함수에 학습률 $1/L$의 경사하강을 적용한다. $f(\mathbf{x}_k) - f^\star$에 대한 일반적인 보장은?'''
+explanation = '''$L$-smooth 볼록 함수에서 경사하강은 $f(\mathbf{x}_k) - f^\star \le \frac{L\lVert \mathbf{x}_0 - \mathbf{x}^\star \rVert^2}{2k}$, 즉 $O(1/k)$를 보장한다. 강볼록성($\mu > 0$)이 더해져야 오차가 매 step 일정 비율로 줄어드는 선형(기하급수) 수렴이 된다. $O(1/\sqrt{k})$는 미분 불가능한 볼록 함수의 subgradient 방법이나 SGD에서 나오는 비율이다.'''
+
+[[questions.choices]]
+text = '''$O(1/k)$로 줄어든다.'''
+correct = true
+
+[[questions.choices]]
+text = "매 step 일정 비율로 줄어드는 선형(기하급수) 수렴이다."
+feedback = "선형 수렴에는 강볼록성이 필요하다. 바닥이 평평한 볼록 함수에서는 수렴이 점점 느려진다."
+
+[[questions.choices]]
+text = '''$O(1/\sqrt{k})$로 줄어든다.'''
+feedback = "그것은 미분 불가능한 볼록 함수(subgradient 방법)나 확률적 gradient의 비율이다. 매끄러운 볼록 함수의 GD는 O(1/k)다."
+
+[[questions.choices]]
+text = "볼록이므로 유한한 step 안에 정확히 최솟값에 도달한다."
+feedback = "경사하강은 일반적으로 유한한 step에서 정확한 최솟값에 도달하지 않는다. 보장은 오차의 감소 속도에 대한 것이다."

@@ -1,0 +1,6 @@
+title = "AdamW의 decoupled weight decay 구현하기"
+chapter = "optimization/adaptive-methods"
+objective = 2
+exec = "browser"
+entry = "adamw_step"
+timeout_s = 15

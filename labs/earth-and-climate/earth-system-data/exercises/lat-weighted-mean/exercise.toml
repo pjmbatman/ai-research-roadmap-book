@@ -1,0 +1,6 @@
+title = "결측이 있는 격자의 위도 가중 평균"
+chapter = "earth-and-climate/earth-system-data"
+objective = 2
+exec = "browser"
+entry = "weighted_mean"
+timeout_s = 10

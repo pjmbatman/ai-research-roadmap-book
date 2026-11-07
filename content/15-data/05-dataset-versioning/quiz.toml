@@ -1,0 +1,149 @@
+# 15.5 데이터셋 버전·문서화·라이선스 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "content-hash-vs-name"
+type = "single"
+objective = 1
+prompt = '''공유 폴더의 `cycles_v2.csv`로 3개월 전에 낸 결과를 다시 돌렸더니 숫자가 달라졌다. 파일 이름과 수정 날짜는 그대로다. 이런 일을 미리 막으려면 실험마다 무엇을 기록했어야 하는가?'''
+explanation = '''파일 이름과 날짜는 내용을 보증하지 않는다. 누군가 같은 이름으로 덮어쓰거나, 도구가 날짜를 보존한 채 내용을 바꿀 수 있다. 실험마다 사용한 파일의 내용 해시(checksum)를 기록해 두면, 다시 돌릴 때 해시를 비교해 데이터가 바뀌었는지 바로 알 수 있다. 여러 파일이면 manifest와 그 해시를 기록한다.'''
+
+[[questions.choices]]
+text = "사용한 파일의 내용 해시(예: sha256)와 파일 목록(manifest)"
+correct = true
+
+[[questions.choices]]
+text = "파일 이름과 마지막 수정 날짜"
+feedback = "이번 사례처럼 이름과 날짜가 그대로여도 내용은 바뀔 수 있다. 이름은 약속이고 해시는 검사다."
+
+[[questions.choices]]
+text = "파일 크기"
+feedback = "크기는 일부 변경을 잡지만, 값 하나가 같은 자릿수의 다른 값으로 바뀌면 크기는 그대로다."
+
+[[questions.choices]]
+text = "데이터를 읽는 코드의 git 커밋"
+feedback = "코드 버전도 필요하지만, 데이터는 git 밖에 있으므로 코드 커밋으로는 데이터 변경을 알 수 없다. 둘 다 기록한다."
+
+[[questions]]
+id = "crlf-hash"
+type = "single"
+objective = 1
+prompt = '''같은 표를 줄 끝 문자만 `\n`과 `\r\n`으로 다르게 저장한 두 CSV의 sha256이 다르다. 옳은 해석은?'''
+explanation = '''내용 해시는 바이트를 비교하므로 표현만 다른 같은 데이터도 다른 해시를 낸다. 이것은 오류가 아니라 해시가 하는 일이다. raw 파일은 받은 바이트 그대로 해시해 무결성을 확인하고, "같은 데이터인가"를 비교하고 싶으면 읽어서 정렬하고 정해진 형식으로 다시 쓴 정규화 표현을 해시한다.'''
+
+[[questions.choices]]
+text = "해시는 바이트를 비교하므로 정상이다. 내용 비교가 목적이면 정규화한 표현을 해시한다."
+correct = true
+
+[[questions.choices]]
+text = "sha256이 불안정하므로 더 강한 해시 함수로 바꿔야 한다."
+feedback = "어떤 해시 함수든 입력 바이트가 다르면 다른 값을 내는 것이 정상이다. 문제는 함수가 아니라 무엇을 해시하느냐다."
+
+[[questions.choices]]
+text = "두 파일의 데이터가 실제로 다르다는 증거다."
+feedback = "해시가 다르다는 것은 바이트가 다르다는 뜻일 뿐이다. 표현(줄 끝, 행 순서, 자릿수)만 달라도 해시는 바뀐다."
+
+[[questions.choices]]
+text = "해시는 데이터 버전 관리에 쓸 수 없다."
+feedback = "해시는 바이트 단위의 변경을 확실히 잡으므로 무결성 확인에 꼭 필요하다. 표현 차이를 무시하려면 정규화를 함께 쓴다."
+
+[[questions]]
+id = "hash-split-stability"
+type = "numeric"
+objective = 1
+prompt = '''셀 ID의 sha256 값으로 train/test를 정하는 분할(ID마다 해시를 계산해 값이 일정 범위에 들면 test)을 쓴다. 셀 100개로 시작한 데이터셋에 셀 50개가 추가되었다. 기존 100개 셀 중 분할이 바뀌는 셀은 몇 개인가?'''
+answer = 0
+tolerance = 0
+explanation = '''해시 기반 분할에서 셀의 소속은 그 셀의 ID만으로 정해지므로, 다른 셀이 추가되어도 바뀌지 않는다. 반면 전체 목록을 무작위 순열로 섞어 앞부분을 test로 정하면, 목록이 바뀔 때 순열이 바뀌어 기존 셀의 소속이 흔들린다(본문의 예에서 100개 중 28개). 대신 해시 기반 분할은 test 비율을 정확히 맞추지 못한다(본문의 예에서 v1 13%, v2 17%). 분할 결과는 어느 방법이든 split manifest 파일로 고정해 기록한다.'''
+
+[[questions]]
+id = "datasheet-contents"
+type = "multiple"
+objective = 2
+prompt = '''데이터셋 문서(datasheet·data card)에 들어가야 하는 것을 모두 고르시오.'''
+explanation = '''데이터셋 문서는 데이터를 만든 사람과 쓰는 사람 사이의 정보 차이를 줄이기 위한 것이다. 수집 목적·조건·절차, 알려진 한계와 편향, 권장하지 않는 용도, 라이선스와 연락처가 핵심이다. 특정 모델의 최고 성능은 모델 문서(model card)나 논문에 속한다. 데이터 문서에 넣으면 데이터의 성질과 모델의 성질이 섞인다.'''
+
+[[questions.choices]]
+text = "수집 목적과 수집 조건(장비, 기간, 대상, 프로토콜)"
+correct = true
+
+[[questions.choices]]
+text = "알려진 한계·편향과 권장하지 않는 용도"
+correct = true
+
+[[questions.choices]]
+text = "라이선스, 인용 방법, 유지 관리 담당자"
+correct = true
+
+[[questions.choices]]
+text = "이 데이터로 얻은 최고 모델의 test 정확도"
+feedback = "모델 성능은 데이터의 성질이 아니라 특정 모델의 성질이다. 기준 결과를 참고로 적을 수는 있지만 데이터 문서의 핵심 내용은 아니다."
+
+[[questions]]
+id = "no-license"
+type = "single"
+objective = 3
+prompt = '''웹에서 내려받은 측정 데이터를 전처리해 논문과 함께 다시 공개하려 한다. 원 데이터 페이지에는 라이선스 표기가 없다. 어떻게 하는가?'''
+explanation = '''라이선스가 없다는 것은 자유롭게 쓸 수 있다는 뜻이 아니다. 이용 조건이 정해지지 않았다는 뜻이고, 재배포 권한은 확인되지 않은 상태다. 제공자에게 이용 조건을 문의해 서면으로 받고, 허락을 받지 못하면 전처리된 데이터 대신 원 데이터를 받는 방법과 전처리 코드만 공개한다. 이용 조건과 그 근거는 데이터 카드에 기록한다.'''
+
+[[questions.choices]]
+text = "제공자에게 이용 조건을 확인하고, 허락이 없으면 전처리 코드와 원 데이터 받는 방법만 공개한다."
+correct = true
+
+[[questions.choices]]
+text = "라이선스가 없으므로 공공 영역(public domain)으로 보고 자유롭게 재배포한다."
+feedback = "라이선스 표기가 없는 것은 권리 포기가 아니다. 재배포 권한이 확인되지 않은 상태다."
+
+[[questions.choices]]
+text = "전처리를 거쳐 형태가 바뀌었으므로 원 데이터의 조건과 무관하게 공개할 수 있다."
+feedback = "전처리한 데이터는 원 데이터에서 파생된 것이다. 형태가 바뀌었다고 원 데이터의 이용 조건이 사라지지 않는다."
+
+[[questions.choices]]
+text = "논문에 출처만 인용하면 재배포해도 된다."
+feedback = "인용은 학술적 의무이고, 재배포 권한과는 별개다. 둘 다 확인해야 한다."
+
+[[questions]]
+id = "unsalted-hash-pseudonym"
+type = "single"
+objective = 3
+prompt = '''환자 ID(`P0000`–`P9999` 형식)를 sha256으로 해시해 공개 데이터의 ID 열로 썼다. 이 처리에 대한 설명으로 옳은 것은?'''
+explanation = '''가능한 ID가 1만 개뿐이므로, 누구나 1만 개를 모두 해시해 표를 만들면 원래 ID를 되찾을 수 있다(본문의 예). 해시는 일방향 함수이지만, 입력 공간이 작으면 전수 대입으로 뒤집힌다. 데이터와 따로 보관한 비밀 키를 쓰는 HMAC 같은 방법으로 가명을 만들고, 그 키의 접근을 통제한다. 가명화는 익명화가 아니다. 나이·지역·날짜 같은 다른 열의 조합으로도 개인을 다시 식별할 수 있으므로 함께 검토한다.'''
+
+[[questions.choices]]
+text = "가능한 ID를 모두 해시해 비교하면 원래 ID를 되찾을 수 있으므로 보호가 되지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "sha256은 되돌릴 수 없으므로 완전한 익명화다."
+feedback = "함수를 거꾸로 계산할 수는 없어도, 가능한 입력을 모두 넣어 보면 같은 출력을 찾을 수 있다. 입력이 1만 개면 순식간이다."
+
+[[questions.choices]]
+text = "해시값이 64자로 길어서 추측할 수 없다."
+feedback = "출력의 길이가 아니라 입력 공간의 크기가 중요하다. 입력이 1만 가지면 출력도 1만 가지뿐이다."
+
+[[questions.choices]]
+text = "ID만 가리면 나머지 열은 그대로 공개해도 개인을 식별할 수 없다."
+feedback = "생년월일·우편번호·성별 같은 열의 조합만으로도 개인을 다시 식별할 수 있다. ID 처리와 별개로 준식별자(quasi-identifier)를 검토한다."
+
+[[questions]]
+id = "retrain-scope"
+type = "single"
+objective = 1
+prompt = '''데이터셋 v2에서 test 샘플 3%의 label 오류가 고쳐졌다. 논문에는 v1에서 측정한 baseline과 제안 모델의 비교가 있다. 무엇을 다시 해야 하는가?'''
+explanation = '''test label이 바뀌면 v1의 점수와 v2의 점수는 비교할 수 없다. 비교에 쓰인 모든 모델(baseline 포함)을 v2의 같은 분할로 다시 평가하고, 보고하는 표에 데이터 버전을 명시한다. 학습 데이터가 바뀌지 않았다면 재학습 없이 재평가만으로 충분하다. 학습 데이터나 분할이 바뀌었다면 재학습까지 필요하다.'''
+
+[[questions.choices]]
+text = "비교한 모든 모델을 v2의 같은 분할로 다시 평가하고, 표에 데이터 버전을 쓴다."
+correct = true
+
+[[questions.choices]]
+text = "제안 모델만 v2로 다시 평가하고, baseline은 v1의 숫자를 그대로 쓴다."
+feedback = "서로 다른 test label로 잰 점수를 한 표에 놓으면 비교가 성립하지 않는다."
+
+[[questions.choices]]
+text = "3%뿐이므로 다시 할 필요가 없다."
+feedback = "모델 사이의 차이가 몇 % 수준이면 3%의 label 변경이 순위를 바꿀 수 있다. 다시 평가해 확인한다."
+
+[[questions.choices]]
+text = "모든 모델을 처음부터 다시 학습해야 한다."
+feedback = "바뀐 것이 test label뿐이면 학습된 모델은 그대로이고 재평가만 필요하다. 재실험 범위는 무엇이 바뀌었는지로 정한다."

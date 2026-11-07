@@ -1,0 +1,126 @@
+# 18.7 시계열 딥러닝 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "patch-count"
+type = "numeric"
+objective = 1
+prompt = '''lookback $L = 336$인 window를 길이 $P = 16$, 간격 $S = 8$로 patching하면 채널 하나당 토큰은 몇 개인가?'''
+explanation = '''$n_{\text{patch}} = \lfloor (L - P)/S \rfloor + 1 = (336 - 16)/8 + 1 = 41$이다. 패치가 겹치므로 $L/P = 21$이 아니다. 시점마다 토큰을 만들면 336개이므로 attention 행렬 원소 수는 $(336/41)^2 \approx 67$배 줄어든다.'''
+answer = 41
+tolerance = 0
+
+[[questions]]
+id = "known-future-covariates"
+type = "multiple"
+objective = 1
+prompt = '''오늘 자정에 건물의 내일 24시간 전력 수요를 예측한다. 내일 구간(horizon)의 값을 입력으로 **써도 되는** 공변량을 모두 고르시오.'''
+explanation = '''horizon 구간의 값을 입력에 쓰려면 예측 시점(오늘 자정)에 그 값을 알 수 있어야 한다. 시각·요일·공휴일은 달력으로 정해지고, 미리 정한 운전 계획도 알고 있으며, 오늘 발표된 내일의 기상 예보도 이미 있다. 내일 실제로 관측될 기온은 내일이 지나야 알 수 있으므로, 학습에 쓰면 배포 때 없는 정보에 기대는 누수가 된다. 학습에도 당시 발표된 예보 값을 써야 배포 조건과 같다.'''
+
+[[questions.choices]]
+text = "내일의 시각·요일·공휴일 여부"
+correct = true
+
+[[questions.choices]]
+text = "미리 정해 둔 내일의 냉난방 설정 온도 계획"
+correct = true
+
+[[questions.choices]]
+text = "오늘 발표된 내일의 기온 예보"
+correct = true
+
+[[questions.choices]]
+text = "내일 실제로 관측된 시간별 외기 온도"
+feedback = "예측 시점에는 아직 관측되지 않은 값이다. 학습에서 쓰면 성능이 부풀려지고, 배포 때는 넣을 값이 없다. 대신 그 시점의 예보를 쓴다."
+
+[[questions]]
+id = "random-split-windows"
+type = "single"
+objective = 2
+prompt = '''stride 1로 자른 window(lookback 48, horizon 24)를 무작위로 섞어 train/test로 나눴다. 이 평가가 낙관적인 가장 직접적인 이유는?'''
+explanation = '''이웃한 window는 $L + H - 1 = 71$개 시점을 공유한다. 무작위로 섞으면 test window의 정답 구간이 거의 항상 어떤 train window 안에 들어 있어(본문에서 99.8%), 모델이 test의 미래를 학습 중에 본다. 개별 window를 외울 수 있는 유연한 모델일수록 이 누수의 덕을 크게 본다. 본문의 1-최근접 이웃은 무작위 분할에서 1.38 °C, 실제 미래에서 1.79 °C였다.'''
+
+[[questions.choices]]
+text = "겹치는 window 때문에 test 정답 구간이 이미 train window에 들어 있어, 모델이 미래를 학습 중에 본다."
+correct = true
+
+[[questions.choices]]
+text = "무작위 분할은 test 크기가 작아져 분산이 커지기 때문이다."
+feedback = "두 분할 모두 test 비율은 같게 둘 수 있다. 문제는 크기가 아니라 train과 test가 같은 시점을 공유한다는 것이다."
+
+[[questions.choices]]
+text = "시계열은 정상성이 없어서 어떤 분할을 써도 낙관적이다."
+feedback = "시간 순서 분할은 미래를 보지 않으므로 이런 누수가 없다. 정상성 여부와는 별개의 문제다."
+
+[[questions.choices]]
+text = "선형 모델에서도 같은 크기로 낙관적이므로 모델과 무관한 상수 편향이다."
+feedback = "편향의 크기는 모델에 따라 다르다. 외울 수 없는 작은 선형 모델은 거의 영향을 받지 않고, 외우는 모델일수록 크게 부풀려진다."
+
+[[questions]]
+id = "mase-interpretation"
+type = "single"
+objective = 2
+prompt = '''어떤 딥러닝 모델의 test MASE가 1.25다(분모는 학습 구간의 seasonal naive 1-step MAE). 이 값의 해석으로 옳은 것은?'''
+explanation = '''MASE는 test MAE를 학습 구간에서 seasonal naive가 낸 1-step MAE로 나눈 값이다. 1.25는 모델의 평균 절대 오차가 그 척도보다 25% 크다는 뜻이다. 오차의 25%나 정확도 75%로 읽으면 안 된다. 같은 test 구간에서 seasonal naive 자체의 MASE도 1이 아닐 수 있으므로(본문에서는 0.86), 모델과 나이브 baseline의 MASE를 같은 표에 둔다.'''
+
+[[questions.choices]]
+text = "모델의 평균 절대 오차가 학습 구간 seasonal naive 1-step 오차보다 25% 크다."
+correct = true
+
+[[questions.choices]]
+text = "모델의 상대 오차가 평균 1.25%다."
+feedback = "MASE는 백분율이 아니라 두 MAE의 비다. 단위도 퍼센트가 아니다."
+
+[[questions.choices]]
+text = "모델이 seasonal naive보다 25% 정확하다."
+feedback = "1보다 크면 척도로 쓴 나이브 오차보다 나쁘다는 뜻이다. 방향이 반대다."
+
+[[questions.choices]]
+text = "MASE는 단위가 있어서, 다른 단위의 변수와는 비교할 수 없다."
+feedback = "분자와 분모가 같은 단위의 MAE이므로 단위가 사라진다. 그래서 여러 시계열을 함께 보고할 때 쓴다."
+
+[[questions]]
+id = "recursive-vs-direct"
+type = "single"
+objective = 2
+prompt = '''본문 실험에서 lookback 6시간 선형 모델은 recursive로 12시간 뒤 MAE 5.77 °C, direct로 2.55 °C였다(lookback 48시간에서는 두 전략이 비슷했다). 이 차이의 이유로 가장 알맞은 것은?'''
+explanation = '''6시간 입력으로는 하루 주기를 알 수 없으므로 1-step 모델은 자료를 잘 설명하지 못한다. recursive는 그 모델의 예측을 다시 입력으로 쓰므로 틀린 부분이 단계마다 쌓인다. direct는 horizon마다 입력에서 그 시점으로 가는 사상을 따로 학습해 오차가 누적되지 않는다. 모델이 자료를 잘 설명하는 48시간 lookback에서는 두 전략의 차이가 작다.'''
+
+[[questions.choices]]
+text = "1-step 모델이 자료를 잘 설명하지 못하면, recursive는 예측을 입력으로 되먹이면서 오차를 쌓는다."
+correct = true
+
+[[questions.choices]]
+text = "direct가 파라미터를 더 많이 써서 항상 recursive보다 낫다."
+feedback = "48시간 lookback에서는 두 전략이 거의 같았다. 차이는 1-step 모델이 틀렸을 때 커진다."
+
+[[questions.choices]]
+text = "recursive는 1시간 뒤(h=1) 오차가 이미 크기 때문이다."
+feedback = "h=1 오차는 두 전략이 0.42 °C로 같다. 1-step 오차만 보면 차이가 보이지 않는다."
+
+[[questions.choices]]
+text = "recursive는 시간 순서 분할을 쓸 수 없어 누수가 생겼다."
+feedback = "두 전략 모두 같은 시간 순서 분할로 평가했다. 차이는 다단계 예측 방식에서 온다."
+
+[[questions]]
+id = "normalization-leak"
+type = "single"
+objective = 2
+prompt = '''시계열 전체(학습 + 평가 구간)의 평균과 표준편차로 정규화한 뒤 시간 순서로 분할해 학습·평가했다. 무엇이 문제인가?'''
+explanation = '''정규화 통계에 평가 구간의 값이 들어가므로 미래 정보가 입력에 섞인다. 추세가 있는 자료라면 평균에 미래의 높은 값이 반영되어, 모델이 정규화된 입력을 통해 미래 수준을 간접적으로 알게 된다. 배포 때는 미래 값을 모르므로 같은 정규화를 할 수 없다. 통계는 학습 구간에서만 계산하고 같은 값을 평가 구간에 적용한다.'''
+
+[[questions.choices]]
+text = "정규화 통계에 평가 구간의 미래 값이 섞여 누수가 생긴다. 통계는 학습 구간에서만 계산한다."
+correct = true
+
+[[questions.choices]]
+text = "시간 순서로 분할했으므로 정규화 방식은 문제가 되지 않는다."
+feedback = "분할이 올바라도 전처리 단계에서 미래 값을 쓰면 누수다. 분할 전에 전체 자료로 계산한 모든 통계가 해당된다."
+
+[[questions.choices]]
+text = "딥러닝 모델은 정규화하지 않은 원래 단위로 학습해야 한다."
+feedback = "정규화는 학습을 안정시키는 데 유용하다. 문제는 정규화 자체가 아니라 통계를 계산한 구간이다."
+
+[[questions.choices]]
+text = "평가 구간마다 그 구간의 평균과 표준편차로 따로 정규화해야 한다."
+feedback = "평가 구간의 통계도 예측 시점에는 모르는 미래 정보다. 학습 구간의 통계를 그대로 쓴다."

@@ -1,0 +1,6 @@
+title = "잡음 있는 용량 기록에서 수명 label 만들기"
+chapter = "battery-ai/battery-data"
+objective = 3
+exec = "browser"
+entry = "cycle_life"
+timeout_s = 10

@@ -3,7 +3,7 @@ id: capstone
 title: "종합 프로젝트와 성장"
 title_en: "Capstone Projects and Growth"
 track: capstone
-status: outline
+status: draft
 summary: "여러 트랙을 가로지르는 단계별 종합 프로젝트, 오픈소스·데이터·벤치마크로 과학 커뮤니티에 기여하는 법, 역량 평가와 다음 단계를 다룬다."
 ---
 

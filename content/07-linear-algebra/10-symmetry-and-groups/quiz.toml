@@ -1,0 +1,129 @@
+# 7.10 대칭과 군 표현 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "which-are-groups"
+type = "multiple"
+objective = 1
+prompt = '''다음 중 합성을 연산으로 하여 **군**을 이루는 집합을 모두 고르시오.'''
+explanation = '''군은 연산에 대해 닫혀 있고, 결합법칙이 성립하고, 항등원과 역원이 있어야 한다. 평면의 회전, $n$개 원소의 치환, 3차원 공간의 평행이동은 모두 이 조건을 만족한다. 평면의 반사들만 모은 집합은 닫혀 있지 않다. 두 반사를 합성하면 반사가 아니라 회전(행렬식 $(-1)(-1) = 1$)이 되기 때문이다. 반사와 회전을 함께 모은 집합 $O(2)$는 군이다.'''
+
+[[questions.choices]]
+text = "평면에서 원점을 중심으로 한 모든 회전"
+correct = true
+
+[[questions.choices]]
+text = "n개 원소의 모든 치환(순서 바꾸기)"
+correct = true
+
+[[questions.choices]]
+text = "3차원 공간의 모든 평행이동"
+correct = true
+
+[[questions.choices]]
+text = "평면에서 원점을 지나는 직선에 대한 모든 반사"
+feedback = "반사를 두 번 하면 회전이 된다. 집합 밖으로 나가므로 닫혀 있지 않다. 회전까지 함께 넣어야 군(O(2))이 된다."
+
+[[questions]]
+id = "centroid-equivariant"
+type = "single"
+objective = 2
+prompt = '''점구름 $\mathbf{X}$의 모든 점에 회전 $\mathbf{R}$과 평행이동 $\mathbf{t}$를 적용한 것을 $g\mathbf{X}$라 하자. 무게중심 $c(\mathbf{X}) = \frac{1}{N}\sum_n \mathbf{x}_n$에 대해 옳은 것은?'''
+explanation = '''$c(g\mathbf{X}) = \frac{1}{N}\sum_n(\mathbf{R}\mathbf{x}_n + \mathbf{t}) = \mathbf{R}\,c(\mathbf{X}) + \mathbf{t}$이다. 출력이 입력과 같은 방식으로 변환되므로 **등변**이다. 불변이라면 $c(g\mathbf{X}) = c(\mathbf{X})$여야 하는데, 점구름을 옮기면 무게중심도 따라 움직인다. 반면 쌍별 거리는 불변이다.'''
+
+[[questions.choices]]
+text = '''등변이다: $c(g\mathbf{X}) = \mathbf{R}\,c(\mathbf{X}) + \mathbf{t}$'''
+correct = true
+
+[[questions.choices]]
+text = '''불변이다: $c(g\mathbf{X}) = c(\mathbf{X})$'''
+feedback = "점구름 전체를 옮기면 무게중심도 따라 움직인다. 불변인 것은 거리처럼 점들의 상대적인 배치만 보는 양이다."
+
+[[questions.choices]]
+text = '''회전에만 등변이고 평행이동에는 불변이다.'''
+feedback = "모든 점에 t를 더하면 평균에도 정확히 t가 더해진다. 평행이동에 대해서도 등변이다."
+
+[[questions]]
+id = "force-equivariant"
+type = "single"
+objective = 2
+prompt = '''분자의 원자 좌표를 입력받아 전체 에너지 $E$와 원자마다의 힘 $\mathbf{F}_n$을 예측하는 모델을 만든다. 분자 전체를 회전 $\mathbf{R}$로 돌렸을 때 정답이 만족해야 하는 변환 규칙은?'''
+explanation = '''에너지는 스칼라라서 분자를 돌려도 변하지 않는다(불변). 힘은 벡터라서 분자와 함께 돈다: $\mathbf{F}_n \mapsto \mathbf{R}\mathbf{F}_n$(등변). 힘이 에너지의 음의 gradient $\mathbf{F}_n = -\partial E / \partial \mathbf{x}_n$라는 관계에서도 같은 결론이 나온다. 불변인 함수의 gradient는 등변이다. 힘에 불변성을 요구하면 회전한 분자에 회전하지 않은 힘을 예측하게 된다.'''
+
+[[questions.choices]]
+text = '''$E$는 불변, $\mathbf{F}_n$은 등변($\mathbf{F}_n \mapsto \mathbf{R}\mathbf{F}_n$)'''
+correct = true
+
+[[questions.choices]]
+text = '''$E$와 $\mathbf{F}_n$ 모두 불변'''
+feedback = "힘은 방향을 가진 벡터다. 분자를 90° 돌리면 각 원자에 걸리는 힘의 방향도 90° 돈다."
+
+[[questions.choices]]
+text = '''$E$와 $\mathbf{F}_n$ 모두 등변'''
+feedback = "에너지는 방향이 없는 스칼라다. 스칼라에 대한 회전의 작용은 '아무것도 하지 않는 것'이고, 이것이 불변이다."
+
+[[questions]]
+id = "deepsets-parameters"
+type = "numeric"
+objective = 3
+prompt = '''순열 등변 층 $f(\mathbf{H}) = \mathbf{H}\mathbf{W}_{\text{self}} + \mathbf{1}\bar{\mathbf{h}}^\top\mathbf{W}_{\text{pool}} + \mathbf{1}\mathbf{b}^\top$에서 입력 특징 차원 $D_{\text{in}} = 16$, 출력 특징 차원 $D_{\text{out}} = 32$이다. 집합의 원소 수가 $N = 100$일 때 이 층의 파라미터 수는?'''
+answer = 1056
+tolerance = 0
+explanation = '''$\mathbf{W}_{\text{self}}$와 $\mathbf{W}_{\text{pool}}$이 각각 $16 \times 32 = 512$개, $\mathbf{b}$가 32개로 합 $1056$개다. 원소 수 $N$은 파라미터 수에 들어가지 않는다. 같은 층을 $N = 10$에도 $N = 1000$에도 쓸 수 있다. 집합을 펼쳐 일반 dense 층에 넣으면 $(100 \cdot 16) \times (100 \cdot 32) = 5{,}120{,}000$개의 가중치가 필요하고, 순서가 바뀌면 출력이 엉뚱하게 바뀐다. 대칭을 구조에 넣으면 가중치가 공유되어 파라미터가 줄어든다.'''
+
+[[questions]]
+id = "augmentation-approximate"
+type = "single"
+objective = 3
+prompt = '''회전에 불변이어야 하는 물성을 예측하려고, 좌표를 그대로 받는 MLP를 무작위 회전 증강으로 학습했다. 학습 후 이 모델에 대해 옳은 것은?'''
+explanation = '''증강은 손실을 통해 "회전한 입력에도 같은 답을 내라"고 권할 뿐, 함수의 구조를 바꾸지 않는다. 그래서 불변성은 근사적이고, 학습 분포에서 멀어질수록(새로운 크기, 새로운 원자 수, 덜 본 방향) 깨질 수 있다. 실습에서도 증강한 MLP의 회전 민감도는 0이 아니었고, 불변 특징을 쓴 모델은 부동소수점 수준으로 불변이었다. 증강은 구조를 바꾸기 어려울 때 유용한 도구지만 보장은 아니다.'''
+
+[[questions.choices]]
+text = "근사적으로만 불변이다. 회전한 입력의 예측이 조금씩 달라질 수 있고, 학습 분포를 벗어나면 더 크게 달라질 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "모든 회전에 대해 정확히 불변이다. 학습 중에 모든 방향을 보았기 때문이다."
+feedback = "회전각은 연속이라 모든 방향을 볼 수 없고, 본 방향에서도 손실이 0이 되지 않는다. 증강은 불변성을 권장할 뿐 보장하지 않는다."
+
+[[questions.choices]]
+text = "증강은 데이터 수만 늘릴 뿐 불변성에는 영향을 주지 않는다."
+feedback = "증강은 회전 민감도를 실제로 줄인다(실습에서 약 절반). 다만 정확한 불변성을 만들지는 못한다."
+
+[[questions]]
+id = "chirality-o3"
+type = "single"
+objective = 3
+prompt = '''거울상 이성질체(enantiomer) 쌍은 서로 거울에 비친 모양이고, 어떤 물성(예: 편광면을 돌리는 방향)은 둘이 반대다. 이 물성을 예측하는 모델에 대해 옳은 것은?'''
+explanation = '''거울상 이성질체는 반사로 서로 바뀌지만 회전으로는 겹칠 수 없다. 모델이 회전과 반사를 모두 포함한 $O(3)$에 불변이면 두 분자에 반드시 같은 값을 내므로 반대 부호의 물성을 구별할 수 없다. 이런 물성에는 반사를 제외한 $SO(3)$에만 불변(또는 반사에 대해 부호가 바뀌는 성질)인 모델이 필요하다. 쌍별 거리만 쓰는 특징은 반사에도 불변이라 이 경우에 부족하다.'''
+
+[[questions.choices]]
+text = "반사까지 포함한 O(3)에 불변인 모델은 두 분자를 구별할 수 없으므로, 반사에는 불변이 아닌 SO(3) 대칭을 써야 한다."
+correct = true
+
+[[questions.choices]]
+text = "대칭을 많이 넣을수록 좋으므로 O(3) 불변 모델을 쓴다."
+feedback = "데이터가 실제로 갖지 않은 대칭을 강제하면 구별해야 할 것을 구별하지 못한다. 넣을 대칭은 예측 대상의 대칭과 같아야 한다."
+
+[[questions.choices]]
+text = "쌍별 원자 거리만 쓰면 두 분자를 구별할 수 있다."
+feedback = "거울상은 모든 쌍별 거리를 그대로 보존한다. 거리 기반 특징은 반사에 불변이라 두 분자를 같은 입력으로 본다."
+
+[[questions]]
+id = "noether-correspondence"
+type = "single"
+objective = 3
+prompt = '''서로 당기는 입자들의 퍼텐셜 에너지가 입자 사이의 거리에만 의존한다(외부장 없음). Noether 정리의 관점에서, 이 계가 가진 회전 대칭에 대응하는 보존량은?'''
+explanation = '''퍼텐셜이 거리에만 의존하면 계 전체를 돌려도 운동 방정식이 바뀌지 않는다(회전 대칭). Noether 정리는 이 연속 대칭에 각운동량 보존을 대응시킨다. 평행이동 대칭에는 선운동량, 시간 이동 대칭에는 에너지가 대응한다. 본문 셀에서도 외부장이 없을 때 각운동량이 반올림 오차 수준으로 보존되고, x 방향 외부장으로 회전 대칭을 깨면 보존되지 않았다.'''
+
+[[questions.choices]]
+text = "각운동량"
+correct = true
+
+[[questions.choices]]
+text = "선운동량"
+feedback = "선운동량은 평행이동 대칭에 대응한다. 이 계도 평행이동 대칭이 있어 선운동량이 보존되지만, 회전 대칭에 대응하는 것은 아니다."
+
+[[questions.choices]]
+text = "운동에너지"
+feedback = "운동에너지만으로는 보존되지 않는다(퍼텐셜과 주고받는다). 시간 이동 대칭에 대응하는 것은 전체 에너지다."

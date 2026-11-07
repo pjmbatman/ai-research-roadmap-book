@@ -1,0 +1,6 @@
+title = "우도에서 가중 최소제곱 유도하기"
+chapter = "information-and-learning-theory/objective-design"
+objective = 1
+exec = "browser"
+entry = "weighted_lstsq"
+timeout_s = 10

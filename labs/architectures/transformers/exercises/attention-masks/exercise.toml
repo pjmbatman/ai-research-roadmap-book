@@ -1,0 +1,6 @@
+title = "causal mask와 padding mask 만들기"
+chapter = "architectures/transformers"
+objective = 2
+exec = "browser"
+entry = "make_mask"
+timeout_s = 10

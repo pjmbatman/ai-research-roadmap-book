@@ -1,0 +1,126 @@
+# 31.2 오픈소스·데이터·벤치마크로 기여하기 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "first-contribution"
+type = "single"
+objective = 1
+prompt = '''연구에 쓰는 과학 라이브러리의 데이터 로더가 특정 파일 형식에서 단위를 잘못 변환하는 것을 발견했다. 이 프로젝트에 처음 기여한다. 가장 적절한 첫 행동은?'''
+explanation = '''먼저 기여 가이드를 읽고 같은 문제가 보고되었는지 검색한 뒤, 없으면 최소 재현 예제와 함께 이슈를 연다. 그다음 수정 전에 실패하고 수정 후에 통과하는 테스트와 함께 목적 하나짜리 PR을 보낸다. 관련 없는 변경을 섞은 큰 PR은 리뷰하기 어려워 받아들여지기 어렵고, 자기 코드에서만 우회하면 다음 사람이 같은 문제를 겪는다.'''
+
+[[questions.choices]]
+text = "CONTRIBUTING.md를 읽고 기존 이슈를 검색한 뒤, 최소 재현 예제로 이슈를 열고 버그를 재현하는 테스트와 함께 작은 PR을 보낸다."
+correct = true
+
+[[questions.choices]]
+text = "기왕 고치는 김에 로더 모듈 전체를 자기 스타일로 리팩터링하고 서식도 정리해 PR 하나로 보낸다."
+feedback = "목적이 여러 개 섞인 큰 PR은 유지보수자가 리뷰하기 어렵다. 동작이 바뀌는 큰 변경은 이슈로 먼저 합의하고, PR 하나에는 목적 하나만 담는다."
+
+[[questions.choices]]
+text = "자기 코드에서 단위를 다시 변환해 우회하고 넘어간다. 남의 프로젝트이므로 관여하지 않는다."
+feedback = "연구는 진행되지만 같은 버그를 다음 사용자도 겪는다. 최소한 재현 예제가 있는 이슈 하나는 공동체 전체의 시간을 아낀다."
+
+[[questions.choices]]
+text = "오류가 난 화면을 캡처해 이슈에 올리고 \"로더가 이상합니다\"라고 쓴다."
+feedback = "유지보수자가 자기 컴퓨터에서 재현할 수 없으면 고칠 수 없다. 최소 재현 코드, 기대 결과와 실제 결과, 환경 버전을 텍스트로 쓴다."
+
+[[questions]]
+id = "bug-report-contents"
+type = "multiple"
+objective = 1
+prompt = '''과학 오픈소스 프로젝트에 버그 보고를 쓸 때 들어가야 하는 것을 **모두** 고르시오.'''
+explanation = '''좋은 버그 보고의 목표는 유지보수자가 문제를 자기 컴퓨터에서 재현하는 것이다. 그러려면 문제를 일으키는 가장 작은 코드와 입력, 기대한 결과와 실제 결과(오류라면 traceback 전문을 텍스트로), 운영체제와 패키지 버전이 필요하다. 자기 프로젝트 전체나 비공개 원 데이터는 재현을 어렵게 만들고, 공개할 수 없는 데이터라면 외부로 보내서도 안 된다.'''
+
+[[questions.choices]]
+text = "문제를 일으키는 가장 작은 코드와, 무작위 배열 같은 작은 입력"
+correct = true
+
+[[questions.choices]]
+text = "기대한 결과와 실제 결과. 오류라면 traceback 전문을 텍스트로"
+correct = true
+
+[[questions.choices]]
+text = "운영체제, Python과 관련 패키지의 버전, 설치 방법"
+correct = true
+
+[[questions.choices]]
+text = "문제가 생긴 연구 프로젝트 저장소 전체와 원 측정 데이터"
+feedback = "수천 줄의 코드에서 원인을 찾는 일을 유지보수자에게 넘기는 것이다. 또 원 데이터에는 공개할 수 없는 조건이 붙어 있을 수 있다. 무작위 배열이나 내장 데이터로 줄인 최소 예제를 만든다."
+
+[[questions]]
+id = "derived-data-license"
+type = "single"
+objective = 2
+prompt = '''CC BY-NC(저작자 표시·비상업) 조건으로 공개된 측정 데이터를 받아, 이상치를 제거하고 단위를 통일하고 분할 파일을 붙였다. 이 파생 데이터셋을 공개하는 방법으로 옳은 것은?'''
+explanation = '''전처리한 데이터는 원 데이터의 파생물이고, 원 데이터의 이용 조건을 따른다. 비상업 조건이 붙은 데이터의 파생물을 상업적 이용까지 허용하는 CC BY나 CC0로 공개할 수 없다. 원 조건을 지켜 공개하거나(원 저작자 표시 포함), 재배포에 불확실성이 있으면 원 데이터를 받는 방법·전처리 스크립트·manifest 해시만 공개해 다른 사람이 같은 데이터를 스스로 만들 수 있게 한다. 판단이 어려우면 제공자와 소속 기관에 확인한다.'''
+
+[[questions.choices]]
+text = "원 데이터의 조건(저작자 표시·비상업)을 유지해 공개하거나, 받는 방법과 전처리 스크립트·manifest 해시만 공개한다."
+correct = true
+
+[[questions.choices]]
+text = "전처리로 새 데이터가 되었으므로 CC0로 공개한다."
+feedback = "전처리했다고 새 데이터가 되지 않는다. 파생물은 원 데이터의 조건을 벗어날 수 없다."
+
+[[questions.choices]]
+text = "논문에서 원 데이터를 인용했으므로 어떤 라이선스로든 공개할 수 있다."
+feedback = "인용은 저작자 표시 조건의 일부를 채울 뿐, 비상업 조건을 없애지 않는다."
+
+[[questions.choices]]
+text = "누구나 내려받을 수 있는 공개 데이터이므로 라이선스를 붙이지 않고 공개한다."
+feedback = "공개되어 있다는 것은 접근할 수 있다는 뜻이지 조건이 없다는 뜻이 아니다. 라이선스 표기가 없는 파생 데이터셋은 쓰는 사람이 조건을 알 수 없게 만든다."
+
+[[questions]]
+id = "persistent-identifier"
+type = "single"
+objective = 2
+prompt = '''논문에 실험 코드와 데이터의 위치를 적으려 한다. GitHub 저장소의 기본 branch URL 대신 release를 아카이브해 DOI 같은 영구 식별자로 인용하는 가장 중요한 이유는?'''
+explanation = '''branch는 움직인다. 기본 branch URL은 몇 달 뒤 다른 코드를 가리키고, 저장소가 옮겨지거나 지워지면 링크가 깨진다. 영구 식별자는 특정 버전의 아카이브를 가리키고, 저장 위치가 바뀌어도 그 버전으로 연결되도록 관리된다. DOI는 내용의 품질을 보증하거나 라이선스를 정해 주지 않는다.'''
+
+[[questions.choices]]
+text = "논문의 결과를 만든 바로 그 버전을 가리키는 식별자가 저장 위치가 바뀌어도 유지되기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "DOI를 받으면 코드와 데이터가 동료 심사를 거친 것으로 인정되기 때문이다."
+feedback = "DOI는 식별자일 뿐 품질 보증이 아니다. 아카이브 저장소는 대개 내용을 심사하지 않는다."
+
+[[questions.choices]]
+text = "DOI를 받으면 자동으로 오픈 라이선스가 적용되기 때문이다."
+feedback = "라이선스는 공개하는 사람이 따로 정해 명시한다. 식별자와 라이선스는 별개다."
+
+[[questions.choices]]
+text = "GitHub URL은 논문에 쓸 수 없도록 학회 규정이 금지하기 때문이다."
+feedback = "규정의 문제가 아니라 URL이 가리키는 내용이 바뀌고 사라질 수 있다는 문제다."
+
+[[questions]]
+id = "leaderboard-noise"
+type = "numeric"
+objective = 2
+prompt = '''벤치마크의 테스트 데이터가 독립 표본 $n = 1000$개이고, 어떤 방법의 정확도가 $p = 0.90$이다. 정확도 추정값의 표준오차 $\sqrt{p(1-p)/n}$을 **%p 단위**로 구하시오(소수 둘째 자리까지).'''
+answer = 0.95
+tolerance = 0.02
+explanation = '''$\sqrt{0.9 \times 0.1 / 1000} = \sqrt{9 \times 10^{-5}} \approx 0.00949$, 즉 약 0.95%p다. 리더보드에서 0.2%p 차이로 순위가 갈렸다면, 그 차이는 테스트 표본의 유한성에서 오는 불확실성보다 훨씬 작다. 같은 테스트 데이터로 두 방법을 비교할 때는 짝지은 비교가 필요하므로 차이의 불확실성은 이 값과 다르지만, 작은 차이로 매긴 순위를 그대로 믿기 어렵다는 결론은 같다. 9.5를 답했다면 단위를 %p가 아닌 ‰로 계산한 것이고, 0.09는 분산 $p(1-p)$에서 멈춘 것이다.'''
+
+[[questions]]
+id = "roadmap-quiz-id"
+type = "single"
+objective = 1
+prompt = '''이 로드맵의 한 장에서 퀴즈 문항의 질문과 정답을 크게 바꿔야 할 오류를 발견했다. 저장소 규칙에 맞는 기여 방법은?'''
+explanation = '''퀴즈 문항 id는 학습자의 진도·응답 기록의 키이므로 바꾸지 않는다. 내용을 크게 바꾸면 새 id로 문항을 쓴다. 변경 후에는 `python3 scripts/book.py check`를 통과시키고, PR 템플릿의 검증 체크리스트(퀴즈 정답을 직접 확인 등)를 채운다. `OUTLINE.md`는 생성 파일이므로 직접 고치지 않고, 장 status는 기여자가 `draft`까지만 올린다.'''
+
+[[questions.choices]]
+text = "내용 오류 이슈를 열고, 새 id로 문항을 고쳐 쓴 뒤 book.py check를 통과시키고 PR 템플릿의 검증 체크리스트를 채운다."
+correct = true
+
+[[questions.choices]]
+text = "기존 문항 id를 새 내용에 더 알맞은 이름으로 바꾼다."
+feedback = "문항 id는 학습자 기록의 키다. id를 바꾸면 기존 학습자의 응답 기록이 끊긴다."
+
+[[questions.choices]]
+text = "문항을 고친 뒤 OUTLINE.md의 퀴즈 문항 수도 손으로 고친다."
+feedback = "OUTLINE.md는 생성 파일이다. 직접 고치지 않고, 목차 구조를 바꾼 경우에만 book.py outline으로 다시 만든다."
+
+[[questions.choices]]
+text = "리뷰를 빨리 받기 위해 장의 status를 review로 올려 PR을 연다."
+feedback = "status는 기여자가 draft까지만 올린다. review와 done은 사람 리뷰어가 올린다."

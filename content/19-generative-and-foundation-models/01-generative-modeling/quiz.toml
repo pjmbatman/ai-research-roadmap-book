@@ -1,0 +1,118 @@
+# 19.1 생성모델의 공통 문제 정의 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "mle-is-forward-kl"
+type = "single"
+objective = 1
+prompt = '''데이터가 충분히 많을 때, 생성모델 $p_\theta$를 최대우도로 학습하는 것은 무엇을 최소화하는 것과 같은가?'''
+explanation = '''$-\mathbb{E}_{p_{\text{data}}}[\log p_\theta] = H(p_{\text{data}}) + \mathrm{KL}(p_{\text{data}} \,\|\, p_\theta)$이고 엔트로피 항은 $\theta$와 무관하므로, 최대우도는 데이터 분포를 앞에 둔 KL $\mathrm{KL}(p_{\text{data}} \,\|\, p_\theta)$의 최소화다. 이 방향의 KL은 데이터가 있는 곳에 모델 밀도가 작으면 크게 벌점을 주므로 모드를 빠뜨리는 모델을 싫어한다. 반대 방향 $\mathrm{KL}(p_\theta \,\|\, p_{\text{data}})$는 $p_{\text{data}}$의 값을 알아야 계산할 수 있어 데이터만으로는 최적화할 수 없다.'''
+
+[[questions.choices]]
+text = '''$\mathrm{KL}(p_{\text{data}} \,\|\, p_\theta)$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathrm{KL}(p_\theta \,\|\, p_{\text{data}})$'''
+feedback = "이 방향은 모델 표본에서 log p_data를 계산해야 하므로 데이터 표본만으로는 최적화할 수 없다. 최대우도의 기대값은 데이터 분포에 대해 취한다."
+
+[[questions.choices]]
+text = '''데이터 분포의 엔트로피 $H(p_{\text{data}})$'''
+feedback = "엔트로피는 데이터의 성질이라 θ와 무관한 상수다. 최대우도로 줄일 수 있는 것은 NLL에서 이 상수를 뺀 KL 부분뿐이다."
+
+[[questions.choices]]
+text = "생성한 표본과 가장 가까운 학습 데이터 사이의 평균 거리"
+feedback = "이 거리는 학습 데이터를 그대로 복사하면 0이 된다. 최대우도는 표본 거리가 아니라 데이터 점에서의 모델 밀도를 키운다."
+
+[[questions]]
+id = "conditional-nll-gap"
+type = "numeric"
+objective = 1
+prompt = '''모드 8개가 서로 잘 떨어져 있고 각 모드의 확률이 같은 분포에서, 모드 번호 $c$를 조건으로 받는 조건부 모델 $p(\mathbf{x} \mid c)$와 무조건 모델 $p(\mathbf{x}) = \sum_c p(c)\,p(\mathbf{x} \mid c)$의 test NLL 차이(무조건 − 조건부)는 대략 몇 nats인가? (소수 둘째 자리까지)'''
+answer = 2.079
+tolerance = 0.05
+explanation = '''모드가 잘 떨어져 있으면 $\mathbf{x}$ 근처에서는 한 성분만 의미 있는 밀도를 가지므로 $p(\mathbf{x}) \approx p(c)\,p(\mathbf{x} \mid c) = \tfrac{1}{8}p(\mathbf{x} \mid c)$이다. 따라서 $-\log p(\mathbf{x}) \approx -\log p(\mathbf{x} \mid c) + \log 8$이고 차이는 $\log 8 \approx 2.079$ nats다. 정보이론으로는 상호정보량 $I(\mathbf{X}; C) = H(C) = \log 8$이다. 본문 셀에서도 2.079가 나온다. 조건부 NLL이 낮은 것은 조건이 정보를 준 결과이지 모델이 더 좋아서가 아니다.'''
+
+[[questions]]
+id = "regression-mean-not-sample"
+type = "single"
+objective = 1
+prompt = '''같은 $x_1$에서 $x_2$가 $+2$ 근처와 $-2$ 근처에 반씩 나타나는 데이터가 있다. 제곱오차로 학습한 회귀 모델이 $x_1$을 받아 내놓는 $x_2$ 예측에 대한 설명으로 옳은 것은?'''
+explanation = '''제곱오차를 최소화하는 예측은 조건부 평균 $\mathbb{E}[x_2 \mid x_1] \approx 0$이다. 실제 데이터는 0 근처에 하나도 없으므로 이 예측은 그럴듯한 표본이 아니다. 조건부분포 $p(x_2 \mid x_1)$에서 표본을 뽑는 생성모델은 매번 두 봉우리 중 하나를 낸다. 예측의 목표(손실 최소)와 생성의 목표(분포 일치)는 다르다.'''
+
+[[questions.choices]]
+text = "0 근처의 값을 낸다. 손실은 최소이지만 실제로 나타나는 값은 아니다."
+correct = true
+
+[[questions.choices]]
+text = "+2 또는 −2 중 하나를 무작위로 낸다."
+feedback = "회귀 모델은 결정론적 함수라 같은 입력에 같은 값을 낸다. 봉우리 중 하나를 무작위로 고르는 것은 조건부분포에서 표본을 뽑는 생성모델이다."
+
+[[questions.choices]]
+text = "데이터가 조금 더 많은 쪽 봉우리의 값(+2 또는 −2)을 낸다."
+feedback = "그것은 최빈값(mode)이고, 0-1 손실에 해당하는 대표값이다. 제곱오차의 최적해는 평균이다."
+
+[[questions]]
+id = "exact-likelihood-families"
+type = "multiple"
+objective = 2
+prompt = '''다음 중 학습한 모델에서 데이터 점의 **정확한** $\log p_\theta(\mathbf{x})$를 한 번의 계산으로 얻을 수 있는 계열을 모두 고르시오.'''
+explanation = '''자기회귀 모델은 chain rule로 쓴 조건부분포들의 로그를 더하면 정확한 log-likelihood가 되고, normalizing flow는 변수변환 공식으로 정확히 계산한다. VAE는 잠재변수에 대한 적분 때문에 하한(ELBO)만 계산한다. GAN의 생성자는 암묵적 모델이라 밀도 식이 없다.'''
+
+[[questions.choices]]
+text = "자기회귀 모델"
+correct = true
+
+[[questions.choices]]
+text = "Normalizing flow"
+correct = true
+
+[[questions.choices]]
+text = "VAE"
+feedback = "VAE의 p(x) = ∫p(x|z)p(z)dz는 계산할 수 없어, 학습과 평가 모두 하한인 ELBO(또는 importance sampling 추정)를 쓴다."
+
+[[questions.choices]]
+text = "GAN"
+feedback = "GAN의 생성자는 x = g(z)로 표본만 만든다. 특정 x의 밀도는 정의되지 않거나 계산할 수 없다."
+
+[[questions]]
+id = "kde-likelihood-unreliable"
+type = "single"
+objective = 3
+prompt = '''샘플링만 되는 모델 A의 log-likelihood를 표본 200개와 커널 폭 $h$의 KDE로 추정했더니 $-1.28$, 정확한 log-likelihood를 계산할 수 있는 모델 B는 $-1.20$이었다. 가장 타당한 결론은?'''
+explanation = '''KDE 추정값은 커널 폭과 표본 수에 따라 크게 움직이고, 본문 예에서는 모든 설정에서 참값보다 낮게 나왔다. 본문 예에서는 참 분포와 똑같은 샘플러도 $h$와 표본 수에 따라 $-6.6$에서 $-1.2$까지 나왔다. 따라서 두 숫자의 차이 0.08이 모델의 차이인지 추정 방법의 차이인지 알 수 없다. 같은 방법으로 두 모델을 평가하거나, 표본 기반의 다른 지표를 함께 써야 한다.'''
+
+[[questions.choices]]
+text = "두 값은 추정 방법이 달라 직접 비교할 수 없다. 이 차이로는 어느 모델이 나은지 결론 내릴 수 없다."
+correct = true
+
+[[questions.choices]]
+text = "B의 log-likelihood가 더 높으므로 B가 데이터 분포에 더 가깝다."
+feedback = "A의 값은 KDE 추정이라 h와 표본 수에 따라 크게 바뀐다. 참 분포와 같은 샘플러도 KDE로는 참값보다 낮게 나올 수 있다."
+
+[[questions.choices]]
+text = "A의 커널 폭을 아주 작게 하면 정확한 값에 수렴하므로, 작은 h로 다시 계산하면 공정한 비교가 된다."
+feedback = "표본 수가 고정되면 h를 줄일수록 표본 사이 빈 곳의 밀도가 0에 가까워져 추정값이 오히려 크게 나빠진다(본문 h=0.02, 표본 200개에서 −6.6)."
+
+[[questions]]
+id = "copier-detection"
+type = "single"
+objective = 3
+prompt = '''어떤 생성모델의 표본이 모두 데이터와 구별되지 않을 만큼 그럴듯하고, 모든 모드에 고르게 퍼져 있다. 이 모델이 학습 데이터를 **외워서 그대로 내고 있는지** 확인하는 데 가장 직접적인 방법은?'''
+explanation = '''외운 모델의 표본은 학습 데이터 점과 (거의) 정확히 겹친다. 생성 표본마다 가장 가까운 학습 데이터까지의 거리를 재고, 같은 분포의 held-out 데이터에서 학습 데이터까지의 거리 분포와 비교하면 암기가 드러난다. held-out likelihood도 나빠진다(본문 실습에서 test NLL 4.4). 표본의 시각적 품질이나 모드 커버리지는 암기를 구별하지 못한다.'''
+
+[[questions.choices]]
+text = "생성 표본마다 가장 가까운 학습 데이터까지의 거리를 재서, held-out 데이터의 같은 거리와 비교한다."
+correct = true
+
+[[questions.choices]]
+text = "표본을 더 많이 뽑아 시각적으로 이상한 표본이 있는지 확인한다."
+feedback = "외운 모델의 표본은 실제 데이터이므로 아무리 많이 봐도 이상한 표본이 나오지 않는다."
+
+[[questions.choices]]
+text = "표본이 몇 개의 모드를 덮는지 센다."
+feedback = "학습 데이터가 모든 모드를 덮고 있으면 그것을 복사한 표본도 모든 모드를 덮는다. 본문 실습에서 복사 모델의 모드 수는 8/8이었다."
+
+[[questions.choices]]
+text = "학습 데이터에서 계산한 log-likelihood가 높은지 확인한다."
+feedback = "외운 모델은 학습 데이터 위에서 밀도가 아주 높으므로, 학습 데이터 likelihood는 오히려 좋아 보인다. 평가는 held-out 데이터에서 해야 한다."

@@ -1,0 +1,126 @@
+# 25.4 자율 실험과 closed-loop 연구 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "kriging-believer"
+type = "single"
+objective = 1
+prompt = '''반응기 4대로 한 라운드에 조건 4개를 고른다. UCB 점수 상위 4개를 그대로 고르는 대신 kriging believer를 쓰는 이유로 가장 정확한 것은?'''
+explanation = '''점수가 높은 곳은 서로 붙어 있으므로 상위 4개는 거의 같은 조건이 되기 쉽다. kriging believer는 하나를 고른 뒤 그 점의 측정값이 예측 평균과 같다고 가정해 모델을 갱신한다. 그러면 그 근처의 불확실성이 줄어 다음 선택이 다른 곳으로 간다. 본문 셀 3에서 상위 4개 batch는 batch 안 최소 간격이 격자 한 칸 수준(0.052)이었고, believer는 0.231이었다. 가정한 값은 실제 측정이 아니므로 라운드가 끝나면 실제 측정으로 바꾼다.'''
+
+[[questions.choices]]
+text = "가상의 측정값으로 모델을 갱신해 이미 고른 점 근처의 불확실성을 줄여, batch 안의 조건이 서로 퍼지게 한다."
+correct = true
+
+[[questions.choices]]
+text = "예측 평균을 실제 측정값으로 쓰므로 실험을 하지 않아도 된다."
+feedback = "예측 평균은 batch를 고르는 동안에만 쓰는 임시 값이다. 실제 실험은 모두 수행하고, 그 측정값으로 모델을 다시 갱신한다."
+
+[[questions.choices]]
+text = "UCB 점수가 가장 높은 점을 네 번 반복 측정해 잡음을 줄인다."
+feedback = "반복 측정은 다른 목적의 전략이다. kriging believer는 오히려 같은 곳을 반복하지 않게 만든다."
+
+[[questions.choices]]
+text = "순차 선택보다 실험 하나당 정보가 더 많다."
+feedback = "실험 수로 보면 순차 선택이 가장 효율적이다(앞선 결과를 모두 보고 고르므로). batch의 이점은 라운드 수, 즉 벽시계 시간이다."
+
+[[questions]]
+id = "constraint-probability"
+type = "numeric"
+objective = 1
+prompt = '''어떤 후보 조건의 EI가 0.20이다. 제약 GP는 그 조건의 압력을 평균 3.0 bar, 표준편차 0.5 bar로 예측하고, 압력 한계는 4.0 bar다. 제약을 고려한 획득함수 $\mathrm{EI} \cdot \Phi\big((c_{\max} - \mu_c)/\sigma_c\big)$의 값은? (소수 셋째 자리까지)'''
+answer = 0.195
+tolerance = 0.002
+explanation = '''한계까지의 거리는 $(4.0 - 3.0)/0.5 = 2$ 표준편차이고, $\Phi(2) \approx 0.977$이다. 따라서 $0.20 \times 0.977 \approx 0.195$다. 한계 안일 확률이 높으므로 EI가 거의 그대로 남는다. 같은 EI라도 예측 압력이 3.9 bar이면 $\Phi(0.2) \approx 0.58$이 곱해져 점수가 크게 줄어든다.'''
+
+[[questions]]
+id = "saturation-feedback"
+type = "single"
+objective = 2
+prompt = '''장비 상태를 확인하지 않는 closed-loop가 "최고 수율 0.887"을 보고했는데, 그 조건의 실제 수율은 0.299였다. 포화된 검출기가 1.0을 낸 영역이 있었다. 이런 결과가 나온 과정으로 가장 정확한 것은?'''
+explanation = '''포화값 1.0이 대리모델에 "그 영역에 높은 봉우리가 있다"고 가르치고, UCB가 그 봉우리를 확인하러 같은 영역을 다시 고르고, 그 실험이 또 포화값을 내 모델의 믿음을 강화한다. 틀린 측정이 다음 실험을 끌어당기는 되먹임이다. 사람이 매 측정을 보던 때는 자연히 걸러지던 오류가 고리 안에서 증폭된다. 장비 상태를 매 측정과 함께 받고, 정상이 아닌 측정은 학습에서 빼야 한다.'''
+
+[[questions.choices]]
+text = "틀린 측정이 모델을 속이고, 속은 모델이 같은 영역을 다시 골라 틀린 측정이 더 쌓였다."
+correct = true
+
+[[questions.choices]]
+text = "측정 잡음이 커서 최고 측정값이 위로 치우쳤다."
+feedback = "측정 잡음(표준편차 0.02)으로는 0.3과 0.9의 차이를 설명할 수 없다. 값 자체가 틀린 측정이 학습에 들어간 것이다."
+
+[[questions.choices]]
+text = "UCB의 탐색 계수 β가 너무 커서 무작위 탐색처럼 동작했다."
+feedback = "무작위 탐색이었다면 포화 영역을 반복해서 고르지 않는다. 루프는 오히려 틀린 봉우리를 체계적으로 쫓았다."
+
+[[questions.choices]]
+text = "실험 예산 20번이 너무 적어 최적점을 찾지 못했다."
+feedback = "같은 예산에서 상태를 확인한 루프는 참 수율 0.78대의 조건을 찾았다. 문제는 예산이 아니라 학습에 들어간 데이터다."
+
+[[questions]]
+id = "max-measurement-bias"
+type = "single"
+objective = 2
+prompt = '''closed-loop의 최고 측정값이 0.812였는데, 그 조건의 참 수율은 0.800이다(측정 잡음 표준편차 0.02). 최종 보고 방법으로 가장 적절한 것은?'''
+explanation = '''잡음 있는 측정 여러 개 중 최댓값을 고르면, 위로 튄 잡음이 선택되기 쉬우므로 최댓값은 참값보다 크게 치우친다. 그래서 최고 측정값 하나를 그대로 보고하지 않고, 그 조건을 독립적으로 반복 측정한 평균이나 대리모델의 예측 평균을 불확실성과 함께 보고한다.'''
+
+[[questions.choices]]
+text = "그 조건을 독립적으로 반복 측정해 평균과 불확실성을 보고한다."
+correct = true
+
+[[questions.choices]]
+text = "가장 높은 측정값이므로 0.812를 그대로 보고한다."
+feedback = "여러 측정 중 최댓값은 위로 치우친다. 이 예에서도 참값보다 0.012 크다."
+
+[[questions.choices]]
+text = "측정 잡음만큼 빼서 0.792로 보고한다."
+feedback = "치우침의 크기는 측정 수와 잡음에 따라 달라지고, 한 번 뺀다고 바로잡히지 않는다. 반복 측정으로 직접 확인한다."
+
+[[questions.choices]]
+text = "잡음이 있으므로 수율은 보고하지 않고 조건만 보고한다."
+feedback = "조건만으로는 결과를 평가할 수 없다. 반복 측정으로 수율과 그 불확실성을 함께 보고한다."
+
+[[questions]]
+id = "drift-detection"
+type = "single"
+objective = 2
+prompt = '''자율 실험 루프가 며칠 동안 돌면서 최적점 근처로 모였는데, 후반부 측정이 전반부보다 조금씩 낮게 나온다. 장비 감도의 드리프트인지, 그 영역이 실제로 생각보다 나쁜지 구별하는 가장 좋은 방법은?'''
+explanation = '''루프는 시간이 지나며 특정 영역으로 모이므로, 시간에 따른 변화(드리프트)와 조건에 따른 변화가 섞인다. 같은 대조 조건을 정해진 간격으로 반복 측정하면 조건이 고정되어 있으므로 값의 변화는 장비의 변화다. 대조 측정은 예산을 쓰지만, 그것 없이는 두 원인을 구별할 수 없다.'''
+
+[[questions.choices]]
+text = "같은 대조 조건을 주기적으로 반복 측정해 그 값이 시간에 따라 변하는지 본다."
+correct = true
+
+[[questions.choices]]
+text = "대리모델의 예측 불확실성이 커졌는지 본다."
+feedback = "대리모델은 드리프트를 모른다. 드리프트가 있으면 모델은 그 영역의 수율이 낮다고 배울 뿐이다."
+
+[[questions.choices]]
+text = "후반부 측정을 모두 버리고 전반부 데이터만 쓴다."
+feedback = "원인을 모른 채 데이터를 버리면, 실제로 그 영역이 나쁜 경우의 정보도 잃는다."
+
+[[questions.choices]]
+text = "획득함수의 탐색 계수를 키워 다른 영역도 재 본다."
+feedback = "다른 영역을 재도 시간과 조건이 함께 바뀌므로 두 원인이 여전히 섞인다. 조건을 고정한 반복 측정이 필요하다."
+
+[[questions]]
+id = "loop-record"
+type = "multiple"
+objective = 3
+prompt = '''closed-loop 실행을 나중에 재현·감사할 수 있도록 매 결정마다 남겨야 하는 것을 모두 고르시오.'''
+explanation = '''결정을 재현하려면 그 시점의 입력(지금까지의 데이터), 결정 규칙(모델·획득함수 설정과 시드), 결정의 근거(예측 평균·표준편차·획득함수 값), 실제로 일어난 일(장비가 수행한 조건, 측정값과 상태), 그리고 사람의 개입이 필요하다. 최종 최고 결과만 남기면 어떤 결정이 왜 내려졌는지 알 수 없다.'''
+
+[[questions.choices]]
+text = "선택한 조건과 그 근거(예측 평균·표준편차, 획득함수 값)"
+correct = true
+
+[[questions.choices]]
+text = "모델·획득함수 설정과 난수 시드"
+correct = true
+
+[[questions.choices]]
+text = "측정값과 함께 장비 상태(정상·실패·포화 등)"
+correct = true
+
+[[questions.choices]]
+text = "최종적으로 가장 좋았던 조건과 그 측정값만"
+feedback = "최종 결과만으로는 루프가 왜 그 조건에 도달했는지, 중간에 틀린 측정이 들어갔는지 확인할 수 없다."

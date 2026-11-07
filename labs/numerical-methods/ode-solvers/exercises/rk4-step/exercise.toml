@@ -1,0 +1,6 @@
+title = "RK4 한 step"
+chapter = "numerical-methods/ode-solvers"
+objective = 1
+exec = "browser"
+entry = "rk4_step"
+timeout_s = 10

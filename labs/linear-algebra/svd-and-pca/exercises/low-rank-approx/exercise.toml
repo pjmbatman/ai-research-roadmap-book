@@ -1,0 +1,6 @@
+title = "최적 저랭크 근사"
+chapter = "linear-algebra/svd-and-pca"
+objective = 2
+exec = "browser"
+entry = "low_rank_approx"
+timeout_s = 10

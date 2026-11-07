@@ -3,7 +3,7 @@ id: scientific-discovery
 title: "과학적 발견과 실험 설계"
 title_en: "Scientific Discovery and Experimental Design"
 track: scientific-ml
-status: outline
+status: draft
 summary: "시뮬레이션 기반 추론, 방정식 발견, 능동 학습과 베이지안 실험 설계, 자율 실험, 과학 foundation model과 AI 에이전트를 다룬다."
 ---
 

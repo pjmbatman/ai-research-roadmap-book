@@ -1,0 +1,6 @@
+title = "이산 KL과 교차엔트로피 구현하기"
+chapter = "information-and-learning-theory/entropy-and-kl"
+objective = 1
+exec = "browser"
+entry = "kl_divergence"
+timeout_s = 10

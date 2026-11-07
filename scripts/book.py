@@ -44,7 +44,6 @@ QUIZ_TYPES = ("single", "multiple", "numeric")
 WIDGETS = ROOT / "data" / "widgets.toml"
 LABS = ROOT / "labs"
 WIDGET_STATUSES = ("planned", "prototype", "implemented")
-WIDGET_KINDS = ("manipulate", "stepper", "simulate", "compare")
 EXEC_TIERS = ("browser", "python", "gpu")
 DIRECTIVE = re.compile(r'^::(widget|quiz|exercise)\{(.*)\}\s*$', flags=re.M)
 DIRECTIVE_ATTR = re.compile(r'(\w+)="([^"]*)"')
@@ -97,6 +96,23 @@ def parse_value(raw: str):
     if len(raw) >= 2 and raw[0] == raw[-1] == '"':
         return raw[1:-1].replace('\\"', '"')
     return raw
+
+
+def strip_fences(body: str) -> str:
+    """코드 펜스(``` 또는 ~~~) 안의 줄을 비운다. 예시 코드 속 '## '가 절 제목으로 잡히지 않게 한다."""
+    out, fence = [], None
+    for line in body.split("\n"):
+        m = re.match(r"^\s{0,3}(`{3,}|~{3,})", line)
+        if fence is None and m:
+            fence = m.group(1)
+            out.append("")
+        elif fence is not None:
+            if re.match(r"^\s{0,3}" + re.escape(fence[0]) + "{" + str(len(fence)) + r",}\s*$", line):
+                fence = None
+            out.append("")
+        else:
+            out.append(line)
+    return "\n".join(out)
 
 
 def read_doc(path: Path) -> tuple[dict, str]:
@@ -158,7 +174,7 @@ def load_book(errors: Errors) -> list[Part]:
                 continue
             order = m.group(1)
             clabel = order.upper() if slug == APPENDIX_PART else f"{label}.{int(order)}"
-            headings = re.findall(r"^## (.+?)\s*$", body, flags=re.M)
+            headings = re.findall(r"^## (.+?)\s*$", strip_fences(body), flags=re.M)
             ch = Chapter(cindex, clabel, order, m.group(2), cmeta, headings, body)
             qpath = cdir / QUIZ_FILE
             if qpath.exists():
@@ -272,9 +288,7 @@ def load_widgets(errors: Errors) -> list[dict]:
         seen.add(name)
         if w.get("status") not in WIDGET_STATUSES:
             errors.add(WIDGETS, f"위젯 '{name}': status는 {WIDGET_STATUSES} 중 하나")
-        if w.get("kind") not in WIDGET_KINDS:
-            errors.add(WIDGETS, f"위젯 '{name}': kind는 {WIDGET_KINDS} 중 하나")
-        for f in ("title", "chapters", "interaction"):
+        for f in ("title", "chapters"):
             if not w.get(f):
                 errors.add(WIDGETS, f"위젯 '{name}': '{f}' 없음")
     return widgets
@@ -591,6 +605,32 @@ def new_chapter(part_dir: str, slug: str, title: str, title_en: str) -> Path:
     return cdir / "index.md"
 
 
+def check_bib(errors: Errors) -> None:
+    """data/references.bib의 항목마다 키가 하나뿐이고, 괄호가 맞고, 필드가 겹치지 않는지 본다.
+    여러 브랜치가 파일 끝에 덧붙이는 병합에서 항목이 서로 섞이는 것을 잡는다."""
+    path = ROOT / "data" / "references.bib"
+    if not path.exists():
+        return
+    text = path.read_text(encoding="utf-8")
+    seen: set[str] = set()
+    for chunk in re.split(r"\n(?=@\w+\{)", text):
+        m = re.match(r"@\w+\{([^,\s]+),", chunk)
+        if not m:
+            continue
+        key = m.group(1)
+        if key in seen:
+            errors.add(path, f"참고문헌 키 중복: {key}")
+        seen.add(key)
+        body = chunk.rstrip()
+        fields = re.findall(r"^\s*(\w+)\s*=", body, flags=re.M)
+        lines = [l for l in body.split("\n")[1:] if l.strip()]
+        missing_comma = any(
+            re.match(r"^\s*\w+\s*=", b) and not a.rstrip().endswith(",") for a, b in zip(lines, lines[1:])
+        )
+        if body.count("{") != body.count("}") or not body.endswith("}") or len(fields) != len(set(fields)) or missing_comma:
+            errors.add(path, f"참고문헌 항목이 깨짐(괄호·쉼표·중복 필드): {key}")
+
+
 # ------------------------------------------------------------------------ main
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -616,6 +656,7 @@ def main() -> int:
 
     if args.cmd == "check":
         check(parts, config, errors)
+        check_bib(errors)
         if not errors.items and (
             not OUTLINE.exists() or OUTLINE.read_text(encoding="utf-8") != render_outline(parts, config)
         ):

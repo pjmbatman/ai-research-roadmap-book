@@ -1,0 +1,6 @@
+title = "전체 분산을 배치 안과 배치 간으로 나누기"
+chapter = "probability/expectation-and-limits"
+objective = 1
+exec = "browser"
+entry = "variance_decomposition"
+timeout_s = 10

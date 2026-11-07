@@ -1,0 +1,6 @@
+title = "2목적 hypervolume 계산하기"
+chapter = "optimization/special-optimization"
+objective = 1
+exec = "browser"
+entry = "hypervolume_2d"
+timeout_s = 10

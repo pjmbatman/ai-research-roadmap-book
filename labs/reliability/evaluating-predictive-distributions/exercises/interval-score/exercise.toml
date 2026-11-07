@@ -1,0 +1,6 @@
+title = "예측 구간의 interval score"
+chapter = "reliability/evaluating-predictive-distributions"
+objective = 2
+exec = "browser"
+entry = "interval_score"
+timeout_s = 10

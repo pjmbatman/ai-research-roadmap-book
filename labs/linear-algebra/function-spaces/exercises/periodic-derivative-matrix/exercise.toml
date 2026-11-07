@@ -1,0 +1,6 @@
+title = "주기 격자 위의 미분 행렬"
+chapter = "linear-algebra/function-spaces"
+objective = 2
+exec = "browser"
+entry = "central_diff_matrix"
+timeout_s = 10

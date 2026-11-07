@@ -3,7 +3,7 @@ id: bayesian-inference
 title: "베이지안 추론"
 title_en: "Bayesian Inference"
 track: probabilistic-inference
-status: outline
+status: draft
 summary: "사전·우도·사후·예측분포, 켤레 모델, 계층 모델, 잠재변수와 EM, MCMC, 변분추론, Gaussian process, 베이지안 워크플로를 다룬다."
 ---
 

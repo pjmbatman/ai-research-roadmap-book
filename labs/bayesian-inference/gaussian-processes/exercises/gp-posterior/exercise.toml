@@ -1,0 +1,6 @@
+title = "GP 회귀의 사후분포와 주변우도"
+chapter = "bayesian-inference/gaussian-processes"
+objective = 2
+exec = "browser"
+entry = "gp_posterior"
+timeout_s = 15

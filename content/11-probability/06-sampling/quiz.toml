@@ -1,0 +1,122 @@
+# 11.6 Monte Carlo와 샘플링 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "mc-error-scaling"
+type = "numeric"
+objective = 1
+prompt = '''표본 $N$개로 얻은 Monte Carlo 추정의 표준오차가 0.02다. 표준오차를 0.002로 줄이려면 표본이 몇 배 필요한가?'''
+answer = 100
+tolerance = 0
+slider = { min = 10, max = 1000, step = 10, unit = "배" }
+explanation = '''표준오차는 $\sigma_f/\sqrt{N}$이므로 10배 줄이려면 $\sqrt{N}$이 10배, 즉 $N$이 100배가 되어야 한다. 표본을 10배 늘리면 표준오차는 $\sqrt{10} \approx 3.16$배만 준다. 같은 $N$에서 분산 $\sigma_f^2$을 줄이는 분산 감소 기법이 중요한 이유다.'''
+
+[[questions]]
+id = "mc-dimension"
+type = "single"
+objective = 1
+prompt = '''고차원 적분에서 격자 수치적분 대신 Monte Carlo를 쓰는 이유로 가장 정확한 것은?'''
+explanation = '''Monte Carlo 표준오차 $\sigma_f/\sqrt{N}$에는 차원이 직접 나타나지 않는다. 격자는 축마다 점 $m$개면 $m^d$개가 필요해 차원에 대해 지수적으로 늘어난다. Monte Carlo도 차원이 $\sigma_f$를 통해 간접적으로 영향을 줄 수 있고, 저차원의 매끄러운 함수에서는 격자 적분이 훨씬 정확하다.'''
+
+[[questions.choices]]
+text = "오차가 1/√N으로 줄어들고, 이 속도가 차원에 직접 의존하지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "Monte Carlo는 어떤 차원에서도 격자 적분보다 오차가 빨리 줄어든다."
+feedback = "1차원의 매끄러운 함수라면 사다리꼴·Gauss 구적법의 오차가 1/√N보다 훨씬 빨리 준다. Monte Carlo의 장점은 고차원에서 드러난다."
+
+[[questions.choices]]
+text = "Monte Carlo 추정은 편향이 없으므로 오차도 없다."
+feedback = "불편이란 평균적으로 맞는다는 뜻일 뿐이다. 한 번의 추정에는 σ_f/√N 크기의 무작위 오차가 있다."
+
+[[questions.choices]]
+text = "Monte Carlo는 차원이 높을수록 오차가 작아진다."
+feedback = "차원이 높아진다고 오차가 줄지는 않는다. 차원은 수렴 속도에 직접 나타나지 않을 뿐이고, f(X)의 분산을 통해 오히려 나빠질 수 있다."
+
+[[questions]]
+id = "inverse-cdf-exponential"
+type = "single"
+objective = 2
+prompt = '''$U \sim \mathrm{Uniform}(0, 1)$로 비율 $\lambda$인 지수분포 $F(x) = 1 - e^{-\lambda x}$의 표본을 만드는 식은?'''
+explanation = '''$u = 1 - e^{-\lambda x}$를 $x$에 대해 풀면 $x = -\log(1 - u)/\lambda$다. $1 - U$도 균등분포이므로 $-\log(U)/\lambda$도 같은 분포를 준다. $\lambda$를 곱하면 평균이 $\lambda$인 지수분포, 즉 비율과 평균을 뒤바꾼 분포가 된다.'''
+
+[[questions.choices]]
+text = '''$X = -\log(1 - U)/\lambda$'''
+correct = true
+
+[[questions.choices]]
+text = '''$X = -\lambda \log(1 - U)$'''
+feedback = "평균이 λ인 지수분포가 나온다. 비율 λ인 지수분포의 평균은 1/λ이다."
+
+[[questions.choices]]
+text = '''$X = \log(1 - U)/\lambda$'''
+feedback = "log(1 - U)는 음수이므로 X가 음수가 된다. 역함수를 풀 때 부호를 놓쳤다."
+
+[[questions.choices]]
+text = '''$X = 1 - e^{-\lambda U}$'''
+feedback = "이것은 F에 U를 넣은 것이다. 표본을 만들려면 F의 역함수에 U를 넣어야 한다."
+
+[[questions]]
+id = "rejection-acceptance"
+type = "numeric"
+objective = 2
+prompt = '''정규화된 밀도 $p$를 균등 제안분포 $q$와 envelope 상수 $M = 2.5$($p(x) \le 2.5\,q(x)$)로 기각 표집한다. 제안한 후보 중 받아들여지는 비율의 기댓값은?'''
+answer = 0.4
+tolerance = 0.005
+explanation = '''수용 확률은 $\mathbb{E}_q[p(X)/(Mq(X))] = \frac{1}{M}\int p(x)\,dx = 1/M = 0.4$다. 표본 하나를 얻는 데 평균 $M = 2.5$개의 후보가 필요하다. $M$을 필요 이상으로 크게 잡아도 분포는 맞지만 수용률이 떨어진다.'''
+
+[[questions]]
+id = "ess-weights"
+type = "numeric"
+objective = 1
+prompt = '''importance weight가 $(1, 1, 2)$인 가중 표본 세 개의 유효 표본 크기 $\mathrm{ESS} = (\sum w_i)^2 / \sum w_i^2$는? (소수 둘째 자리까지)'''
+answer = 2.67
+tolerance = 0.01
+explanation = '''$(1 + 1 + 2)^2 / (1 + 1 + 4) = 16/6 \approx 2.67$이다. 가중치가 모두 같으면 3, 하나만 0이 아니면 1이 된다. 가중치를 모두 같은 상수로 곱해도 ESS는 변하지 않으므로, 정규화 상수를 몰라도 계산할 수 있다.'''
+
+[[questions]]
+id = "is-proposal-tails"
+type = "single"
+objective = 1
+prompt = '''목표분포 $p = \mathcal{N}(0, 1)$에서 $\mathbb{E}_p[X^2]$를 importance sampling으로 추정한다. 다음 제안분포 중 가장 안전한 것은?'''
+explanation = '''제안분포의 꼬리가 목표보다 두꺼우면 가중치 $p/q$가 유계여서 분산이 유한하다. $\mathcal{N}(0, 0.5^2)$은 꼬리가 얇아 $\sigma_q^2 < \sigma_p^2/2$이므로 가중치 분산이 무한하다. 한 번의 실행에서 ESS가 괜찮아 보여도 추정은 체계적으로 작게 나오고 가끔 크게 튄다. 위치가 어긋난 $\mathcal{N}(2, 1)$은 ESS가 크게 떨어진다.'''
+
+[[questions.choices]]
+text = '''$\mathcal{N}(0, 2^2)$ — 목표보다 꼬리가 두껍다'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathcal{N}(0, 0.5^2)$ — 목표의 중심에 표본을 모은다'''
+feedback = "꼬리가 얇은 제안분포는 드물게 꼬리에 뽑힌 표본에 거대한 가중치를 준다. 가우시안끼리는 σ_q² < σ_p²/2이면 가중치 분산이 무한하다."
+
+[[questions.choices]]
+text = '''$\mathcal{N}(2, 1)$ — 폭이 목표와 같으므로 위치는 상관없다'''
+feedback = "위치가 어긋나면 목표의 중심 부근이 거의 표집되지 않아 가중치가 크게 치우친다. 이 경우 ESS/N이 3% 정도로 떨어진다."
+
+[[questions.choices]]
+text = "ESS가 가장 높게 나오는 제안분포라면 어느 것이든 안전하다."
+feedback = "ESS는 이미 뽑힌 표본으로만 계산한다. 제안분포가 방문하지 않는 꼬리의 문제는 ESS에 나타나지 않는다."
+
+[[questions]]
+id = "reparam-vs-score"
+type = "multiple"
+objective = 1
+prompt = '''$\nabla_\theta\, \mathbb{E}_{x \sim q_\theta}[f(x)]$를 추정하는 두 방법에 대해 옳은 것을 **모두** 고르시오.'''
+explanation = '''score function 추정량 $f(x)\nabla_\theta \log q_\theta(x)$는 $f$를 미분하지 않으므로 이산 변수나 미분할 수 없는 시뮬레이터에도 쓸 수 있다. 재매개변수화는 $x = g_\theta(\varepsilon)$로 쓸 수 있는 분포와 미분 가능한 $f$가 필요하지만, $f$의 기울기 정보를 써서 보통 분산이 훨씬 작다. 둘 다 불편 추정량이다. $\mathbb{E}[\nabla_\theta \log q_\theta] = 0$이므로 baseline을 빼도 기댓값은 그대로다.'''
+
+[[questions.choices]]
+text = "score function 추정량은 f가 미분 불가능하거나 x가 이산이어도 쓸 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "재매개변수화 추정량은 보통 score function 추정량보다 분산이 작다."
+correct = true
+
+[[questions.choices]]
+text = "score function 추정량에서 f 대신 f - b(상수 baseline)를 써도 기울기의 기댓값은 변하지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "score function 추정량은 편향되어 있어서, 표본을 늘려도 참 기울기로 가지 않는다."
+feedback = "score function 추정량은 불편이다. 문제는 편향이 아니라 큰 분산이다. 실험에서 세 추정량의 평균은 모두 참값 2 근처였다."

@@ -1,0 +1,6 @@
+title = "Chebyshev와 Hoeffding으로 필요한 표본 수 구하기"
+chapter = "probability/expectation-and-limits"
+objective = 2
+exec = "browser"
+entry = "hoeffding_n"
+timeout_s = 10

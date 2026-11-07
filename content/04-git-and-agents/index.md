@@ -3,7 +3,7 @@ id: git-and-agents
 title: "Git·협업·AI 에이전트"
 title_en: "Git, Collaboration, and AI Agents"
 track: research-infrastructure
-status: outline
+status: draft
 summary: "Git과 GitHub로 변경을 추적·협업하고, AI 코딩 도구와 에이전트를 검증 가능한 개발 과정에 통합한다."
 ---
 

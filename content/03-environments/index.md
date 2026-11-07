@@ -3,7 +3,7 @@ id: environments
 title: "실행 환경·패키지·컨테이너"
 title_en: "Environments, Packages, and Containers"
 track: research-infrastructure
-status: outline
+status: draft
 summary: "OS부터 GPU 드라이버, CUDA, Python, 패키지, 컨테이너까지 실행 환경을 계층별로 이해하고 재현 가능하게 만든다."
 ---
 

@@ -1,0 +1,6 @@
+title = "순서를 지키는 선형 시간 중복 제거"
+chapter = "python-and-computing/algorithms-and-complexity"
+objective = 1
+exec = "browser"
+entry = "dedup"
+timeout_s = 10

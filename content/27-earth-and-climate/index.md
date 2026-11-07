@@ -3,7 +3,7 @@ id: earth-and-climate
 title: "지구·기후"
 title_en: "Earth and Climate"
 track: domain-applications
-status: outline
+status: draft
 summary: "기상·기후 데이터의 기초, 데이터 기반 기상 예측, 다운스케일링과 기후 모델 에뮬레이션, 예측의 평가를 다룬다."
 ---
 

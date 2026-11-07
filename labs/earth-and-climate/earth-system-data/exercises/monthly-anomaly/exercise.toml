@@ -1,0 +1,6 @@
+title = "월별 기후값과 편차"
+chapter = "earth-and-climate/earth-system-data"
+objective = 3
+exec = "browser"
+entry = "monthly_anomaly"
+timeout_s = 10

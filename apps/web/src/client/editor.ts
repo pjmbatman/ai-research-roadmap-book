@@ -1,4 +1,4 @@
-// CodeMirror 6 편집기 공통 설정. 코드 배경은 테마와 상관없이 Midnight을 쓴다(design-system.md).
+// CodeMirror 6 편집기 공통 설정. 색은 디자인 토큰(--code, --foreground)과 GitHub 기본 테마 문법 색을 따른다.
 import { EditorView, keymap, lineNumbers, highlightActiveLine, drawSelection } from "@codemirror/view";
 import { EditorState, type Extension } from "@codemirror/state";
 import { history, defaultKeymap, historyKeymap, indentWithTab } from "@codemirror/commands";
@@ -6,32 +6,29 @@ import { python } from "@codemirror/lang-python";
 import { HighlightStyle, syntaxHighlighting, indentUnit, bracketMatching } from "@codemirror/language";
 import { tags as t } from "@lezer/highlight";
 
+// 문법 색은 CSS 변수(--syn-*)로 두어 라이트·다크 테마를 따른다(GitHub 기본 테마 색, global.css).
 const style = HighlightStyle.define([
-  { tag: [t.keyword, t.controlKeyword, t.definitionKeyword, t.moduleKeyword, t.operatorKeyword], color: "#ff8f80" },
-  { tag: [t.string, t.special(t.string)], color: "#a8d8b9" },
-  { tag: [t.number, t.bool, t.null], color: "#f5c27a" },
-  { tag: [t.comment, t.lineComment], color: "#7f8aa3", fontStyle: "italic" },
-  { tag: [t.function(t.variableName), t.function(t.propertyName)], color: "#9fc6ff" },
-  { tag: [t.definition(t.variableName), t.definition(t.function(t.variableName))], color: "#dce6f2", fontWeight: "600" },
-  { tag: t.className, color: "#c9b6ff" },
-  { tag: t.operator, color: "#b9c6d8" },
+  { tag: [t.keyword, t.controlKeyword, t.definitionKeyword, t.moduleKeyword, t.operatorKeyword], color: "var(--syn-keyword)" },
+  { tag: [t.string, t.special(t.string)], color: "var(--syn-string)" },
+  { tag: [t.number, t.bool, t.null], color: "var(--syn-number)" },
+  { tag: [t.comment, t.lineComment], color: "var(--syn-comment)", fontStyle: "italic" },
+  { tag: [t.function(t.variableName), t.function(t.propertyName)], color: "var(--syn-function)" },
+  { tag: [t.definition(t.variableName), t.definition(t.function(t.variableName))], color: "var(--syn-function)" },
+  { tag: t.className, color: "var(--syn-class)" },
 ]);
 
-const theme = EditorView.theme(
-  {
-    "&": { backgroundColor: "#0b1020", color: "#dce6f2" },
-    ".cm-content": { caretColor: "#ff6b5a", padding: "12px 0" },
-    ".cm-cursor": { borderLeftColor: "#ff6b5a" },
-    ".cm-gutters": { backgroundColor: "#0b1020", color: "#4d5874", border: "none" },
-    ".cm-activeLine": { backgroundColor: "rgba(220,230,242,0.04)" },
-    ".cm-activeLineGutter": { backgroundColor: "transparent", color: "#8d9ab0" },
-    "&.cm-focused .cm-selectionBackground, .cm-selectionBackground, ::selection": { backgroundColor: "rgba(255,107,90,0.25) !important" },
-    ".cm-matchingBracket": { backgroundColor: "rgba(220,230,242,0.12)", outline: "none" },
-  },
-  { dark: true },
-);
+const theme = EditorView.theme({
+  "&": { backgroundColor: "var(--code)", color: "var(--foreground)" },
+  ".cm-content": { caretColor: "var(--foreground)", padding: "12px 0", fontFamily: "var(--mono)" },
+  ".cm-cursor": { borderLeftColor: "var(--foreground)" },
+  ".cm-gutters": { backgroundColor: "var(--code)", color: "var(--muted-foreground)", border: "none" },
+  ".cm-activeLine": { backgroundColor: "color-mix(in srgb, var(--foreground) 4%, transparent)" },
+  ".cm-activeLineGutter": { backgroundColor: "transparent", color: "var(--foreground)" },
+  "&.cm-focused .cm-selectionBackground, .cm-selectionBackground, ::selection": { backgroundColor: "color-mix(in srgb, var(--chart-1) 45%, transparent) !important" },
+  ".cm-matchingBracket": { backgroundColor: "var(--muted)", outline: "none" },
+});
 
-export function createEditor(parent: HTMLElement, doc: string, opts: { onRun?: () => void; onChange?: (s: string) => void; label?: string } = {}) {
+export function createEditor(parent: HTMLElement, doc: string, opts: { onRun?: () => void; onChange?: (s: string) => void; label?: string; readOnly?: boolean } = {}) {
   const ext: Extension[] = [
     lineNumbers(), history(), drawSelection(), highlightActiveLine(), bracketMatching(), indentUnit.of("    "),
     python(), syntaxHighlighting(style), theme,
@@ -42,6 +39,7 @@ export function createEditor(parent: HTMLElement, doc: string, opts: { onRun?: (
     ]),
     EditorView.contentAttributes.of({ "aria-label": opts.label ?? "Python 코드 편집기" }),
   ];
+  if (opts.readOnly) ext.push(EditorState.readOnly.of(true), EditorView.editable.of(false));
   if (opts.onChange) ext.push(EditorView.updateListener.of((u) => { if (u.docChanged) opts.onChange!(u.state.doc.toString()); }));
   const view = new EditorView({ state: EditorState.create({ doc, extensions: ext }), parent });
   return {

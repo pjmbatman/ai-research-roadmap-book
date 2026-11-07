@@ -1,7 +1,7 @@
 // 손실함수가 고르는 대표값 (data/widgets.toml: loss-to-estimator).
 // 위: 조건부분포 p(y|x)와 세 손실의 최적 예측(평균·중앙값·τ 분위수). 아래: 고른 손실의 기대값 E[ℓ(ŷ, y)]를 ŷ의 함수로 그린 곡선.
 // 후보 예측 ŷ(점선)를 끌면 기대 손실이 어떻게 변하는지, 최소점이 어디인지 확인한다.
-import { frame, param, presets, readouts, el, C } from "../frame";
+import { frame, param, presets, readouts, el, C, reducedMotion } from "../frame";
 import { pageState } from "../../client/store";
 
 const X0 = -3, X1 = 6, N = 721;
@@ -22,6 +22,7 @@ export function mount(root: HTMLElement) {
   let p: number[] = [];
   let curve: number[] = [];
   let stats = { mean: 0, median: 0, q: 0, mode: 0 };
+  let shown = NaN; // 화면에 그려진 최적 예측의 위치(손실을 바꾸면 새 위치로 미끄러진다)
 
   const quantile = (prob: number) => { let c = 0; for (let i = 0; i < N; i++) { c += p[i] * dx; if (c >= prob) return xs[i]; } return X1; };
   const ell = (l: Loss, yhat: number, y: number) => {
@@ -41,7 +42,6 @@ export function mount(root: HTMLElement) {
   }
 
   const optimum = () => (loss === "mse" ? stats.mean : loss === "mae" ? stats.median : stats.q);
-  const LCOL: Record<Loss, string> = { mse: C.ink, mae: C.blue, pinball: C.edge };
 
   function draw() {
     const { ctx, width: W, height: H } = f;
@@ -67,27 +67,32 @@ export function mount(root: HTMLElement) {
     ctx.strokeStyle = C.ink; ctx.lineWidth = 2;
     ctx.beginPath(); xs.forEach((x, i) => (i ? ctx.lineTo(X(x), Y(p[i])) : ctx.moveTo(X(x), Y(p[i])))); ctx.stroke();
     ctx.fillStyle = C.mid; ctx.fillText("p(y | x)", pad + 4, top + 4);
-    // 대표값 표시
-    const marks: [string, number, string][] = [["평균 · MSE", stats.mean, C.ink], ["중앙값 · MAE", stats.median, C.blue], [`${Math.round(tau * 100)}% 분위수 · pinball`, stats.q, C.edge]];
-    marks.forEach(([label, x, col], k) => {
-      ctx.strokeStyle = col; ctx.lineWidth = loss === (["mse", "mae", "pinball"] as Loss[])[k] ? 2.4 : 1.2;
-      ctx.beginPath(); ctx.moveTo(X(x), top + 10); ctx.lineTo(X(x), split - 8); ctx.stroke();
-      ctx.fillStyle = col; ctx.font = "600 11px JetBrains Mono, monospace";
-      const tx = Math.min(X(x) + 5, W - pad - ctx.measureText(label).width);
-      ctx.fillText(label, tx, top + 16 + k * 14);
+    // 대표값: 고르지 않은 손실의 대표값은 흐린 선, 고른 손실의 최적 예측만 코랄(벤치마크 §3.4-15)
+    const names: Record<Loss, string> = { mse: "평균", mae: "중앙값", pinball: `${Math.round(tau * 100)}% 분위수` };
+    const at: Record<Loss, number> = { mse: stats.mean, mae: stats.median, pinball: stats.q };
+    (["mse", "mae", "pinball"] as Loss[]).filter((l) => l !== loss).forEach((l) => {
+      ctx.strokeStyle = C.mid; ctx.lineWidth = 1;
+      ctx.setLineDash([3, 4]);
+      ctx.beginPath(); ctx.moveTo(X(at[l]), top + 10); ctx.lineTo(X(at[l]), split - 8); ctx.stroke();
+      ctx.setLineDash([]);
     });
+    ctx.strokeStyle = C.edge; ctx.lineWidth = 2.6;
+    ctx.beginPath(); ctx.moveTo(X(shown), top + 4); ctx.lineTo(X(shown), split - 8); ctx.stroke();
+    ctx.fillStyle = C.edge; ctx.font = "600 12px Pretendard Variable, sans-serif";
+    const label = `${names[loss]} ${at[loss].toFixed(2)}`;
+    ctx.fillText(label, Math.min(X(shown) + 7, W - pad - ctx.measureText(label).width), top + 14);
     // 아래: 기대 손실 곡선
     const cx = xs.filter((_, i) => i % 3 === 0);
     const lo = Math.min(...curve), hi = Math.min(Math.max(...curve), lo + (loss === "mse" ? 12 : 4));
     const Y2 = (v: number) => bottom - ((Math.min(v, hi) - lo) / (hi - lo || 1)) * (bottom - split - 22);
     ctx.strokeStyle = C.faint; ctx.beginPath(); ctx.moveTo(pad, bottom); ctx.lineTo(W - pad, bottom); ctx.stroke();
-    ctx.strokeStyle = LCOL[loss]; ctx.lineWidth = 2;
+    ctx.strokeStyle = C.ink2; ctx.lineWidth = 2;
     ctx.beginPath(); cx.forEach((x, i) => (i ? ctx.lineTo(X(x), Y2(curve[i])) : ctx.moveTo(X(x), Y2(curve[i])))); ctx.stroke();
     const opt = optimum();
-    ctx.fillStyle = LCOL[loss];
+    ctx.fillStyle = C.edge;
     ctx.beginPath(); ctx.arc(X(opt), Y2(expected(loss, opt)), 5, 0, 7); ctx.fill();
     ctx.fillStyle = C.mid; ctx.font = "11px JetBrains Mono, monospace";
-    ctx.fillText(`E[ℓ(ŷ, y)] · ${loss === "mse" ? "제곱손실" : loss === "mae" ? "절댓값손실" : `pinball τ=${tau.toFixed(2)}`}`, pad + 4, split + 24);
+    ctx.fillText("기대 손실", pad + 4, split + 24);
     // 후보 예측
     ctx.setLineDash([5, 4]); ctx.strokeStyle = C.mid; ctx.lineWidth = 1.4;
     ctx.beginPath(); ctx.moveTo(X(cand), top); ctx.lineTo(X(cand), bottom); ctx.stroke(); ctx.setLineDash([]);
@@ -96,28 +101,37 @@ export function mount(root: HTMLElement) {
     ctx.fillText("ŷ", X(cand) + 6, bottom - 6);
   }
 
-  function update() {
+  let anim = 0;
+  function update(slide = false) {
     compute();
     const opt = optimum();
     ro.set("mean", `평균 ${stats.mean.toFixed(2)}`, loss === "mse" ? "hot" : "");
     ro.set("median", `중앙값 ${stats.median.toFixed(2)}`, loss === "mae" ? "hot" : "");
     ro.set("q", `${Math.round(tau * 100)}% 분위수 ${stats.q.toFixed(2)}`, loss === "pinball" ? "hot" : "");
-    ro.set("mode", `최빈값 ${stats.mode.toFixed(2)}`);
-    ro.set("cand", `ŷ = ${cand.toFixed(2)} · 기대 손실 ${expected(loss, cand).toFixed(3)} (최소 ${expected(loss, opt).toFixed(3)})`, Math.abs(cand - opt) < 0.05 ? "ok" : "");
+    ro.set("cand", `ŷ ${cand.toFixed(2)} · 기대 손실 ${expected(loss, cand).toFixed(3)}`, Math.abs(cand - opt) < 0.05 ? "ok" : "");
+    tauRow.hidden = loss !== "pinball";
     pageState.set("tau", tau, root);
     pageState.set("shape", shape, root);
-    draw();
+    cancelAnimationFrame(anim);
+    if (!slide || Number.isNaN(shown) || reducedMotion()) { shown = opt; draw(); return; }
+    const from = shown, t0 = performance.now();
+    const step = (now: number) => {
+      const k = Math.min(1, (now - t0) / 380), e = 1 - Math.pow(1 - k, 3);
+      shown = from + (opt - from) * e;
+      draw();
+      if (k < 1) anim = requestAnimationFrame(step);
+    };
+    anim = requestAnimationFrame(step);
   }
 
-  const shapeBtns = presets((Object.keys(SHAPES) as Shape[]).map((k) => ({ key: k, label: SHAPES[k].label })), (k) => { shape = k; update(); }, shape);
-  const lossBtns = presets<Loss>([{ key: "mse", label: "제곱손실" }, { key: "mae", label: "절댓값손실" }, { key: "pinball", label: "pinball" }], (k) => { loss = k; update(); }, loss);
+  const shapeBtns = presets((Object.keys(SHAPES) as Shape[]).map((k) => ({ key: k, label: SHAPES[k].label })), (k) => { shape = k; update(true); }, shape);
+  const lossBtns = presets<Loss>([{ key: "mse", label: "제곱손실" }, { key: "mae", label: "절댓값손실" }, { key: "pinball", label: "pinball" }], (k) => { loss = k; update(true); }, loss);
   const pt = param({ label: "τ", min: 0.05, max: 0.95, step: 0.05, value: tau, aria: "pinball loss의 τ", onInput: (v) => { tau = v; update(); } });
-  const pc = param({ label: "ŷ", min: X0, max: X1, step: 0.05, value: cand, aria: "후보 예측 ŷ", onInput: (v) => { cand = v; update(); } });
-  const grid = el("div", "param-grid");
-  grid.append(pt.row, pc.row);
+  const tauRow = el("div", "param-grid");
+  tauRow.append(pt.row);
   const ro = readouts();
   lossBtns.row.classList.add("segmented");
-  f.panel.append(shapeBtns.row, lossBtns.row, grid, ro.row);
+  f.panel.append(lossBtns.row, shapeBtns.row, tauRow, ro.row);
 
   // 그림 위에서 ŷ 끌기
   let dragging = false;
@@ -125,7 +139,6 @@ export function mount(root: HTMLElement) {
     const r = f.canvas.getBoundingClientRect();
     const x = X0 + ((e.clientX - r.left - 28) / (f.width - 56)) * (X1 - X0);
     cand = Math.round(Math.max(X0, Math.min(X1, x)) * 20) / 20;
-    pc.set(cand);
     update();
   };
   f.canvas.addEventListener("pointerdown", (e) => { dragging = true; f.canvas.setPointerCapture(e.pointerId); setFromEvent(e); });

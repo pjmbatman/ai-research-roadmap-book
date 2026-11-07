@@ -1,0 +1,6 @@
+title = "반복문 없는 쌍별 제곱 거리"
+chapter = "python-and-computing/scientific-python"
+objective = 2
+exec = "browser"
+entry = "pairwise_sq_dists"
+timeout_s = 10

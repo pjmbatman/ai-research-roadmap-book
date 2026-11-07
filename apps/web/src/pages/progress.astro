@@ -1,38 +1,40 @@
 ---
+// 내 진도 (shadcn/ui 대시보드): 숫자 카드 4개 + 트랙별 진행 + 최근에 본 장 + 기록 옮기기.
 import Shell from "../layouts/Shell.astro";
-import { loadBook, allChapters, str } from "../lib/book";
-const { parts, config } = loadBook();
-const passCount = (body: string) => {
-  const m = /^## 통과 기준\s*\n([\s\S]*?)(?=^## |$(?![\s\S]))/m.exec(body);
-  return m ? m[1].split("\n").filter((l) => l.startsWith("- ")).length : 0;
-};
+import { loadBook, allChapters } from "../lib/book";
+import { chapterSummary } from "../lib/site";
+const { config } = loadBook();
 const data = {
-  tracks: (config.tracks as any[]).map((t) => ({ key: t.key, code: t.code, name: t.name })),
-  chapters: allChapters().map((c) => ({
-    id: c.id, label: c.label, title: str(c.meta.title), url: c.url, status: str(c.meta.status),
-    track: str(parts.find((p) => p.slug === c.partSlug)?.meta.track),
-    quiz: c.quiz.length, ex: Object.keys(c.exercises).length, checks: passCount(c.body),
-  })),
+  tracks: (config.tracks as any[]).filter((t) => t.layer < 9).map((t) => ({ key: t.key, code: t.code, name: t.name })),
+  chapters: allChapters().map(chapterSummary),
 };
 ---
 <Shell title="내 진도" current="progress">
-  <div class="page" data-progress-page>
-    <h1 class="page-title">내 진도</h1>
-    <div class="bento">
-      <div class="tile dark"><small>읽은 장</small><div class="big"><span data-k="visited">0</span><span class="of" data-k="visited-of"></span></div></div>
-      <div class="tile"><small>퀴즈</small><div class="big"><span data-k="quiz">0</span><span class="of" data-k="quiz-of"></span></div></div>
-      <div class="tile"><small>연습문제</small><div class="big"><span data-k="ex">0</span><span class="of" data-k="ex-of"></span></div></div>
-      <div class="tile"><small>통과 기준</small><div class="big"><span data-k="checks">0</span><span class="of" data-k="checks-of"></span></div></div>
-      <div class="tile wide"><small>트랙</small><div class="tile-track" data-k="tracks"></div></div>
-      <div class="tile wide"><small>최근</small><div class="recent" data-k="recent"></div>
-        <div class="tile-actions">
+  <div data-progress-page>
+    <div class="page-head">
+      <h1>내 진도</h1>
+      <p>로그인 없이 이 브라우저에 저장된다. 다른 기기로 옮기려면 내보내기를 쓴다.</p>
+    </div>
+    <div class="stats">
+      <div class="tile stat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><div><div class="big"><span data-k="done">0</span><span class="of" data-k="done-of"></span></div><small>완료한 장</small></div></div>
+      <div class="tile stat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l3 8 6-16 3 8h4"/></svg></span><div><div class="big"><span data-k="learning">0</span></div><small>학습 중</small></div></div>
+      <div class="tile stat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg></span><div><div class="big"><span data-k="quiz">0</span><span class="of" data-k="quiz-of"></span></div><small>맞힌 퀴즈</small></div></div>
+      <div class="tile stat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></span><div><div class="big"><span data-k="ex">0</span><span class="of" data-k="ex-of"></span></div><small>통과한 연습문제</small></div></div>
+    </div>
+    <div class="two-col">
+      <div class="tile panel"><h2>트랙</h2><div class="track-rows" data-k="tracks"></div></div>
+      <div class="tile tile-dark panel">
+        <h2>최근에 본 장</h2>
+        <div class="recent" data-k="recent"></div>
+        <h2 style="margin-top:10px">기록 옮기기</h2>
+        <div class="panel-actions">
           <button class="btn" type="button" data-act="export">내보내기</button>
-          <label class="btn">가져오기<input type="file" accept="application/json" data-act="import" hidden /></label>
-          <button class="btn btn-ghost" type="button" data-act="reset">지우기</button>
-          <span data-k="msg" aria-live="polite"></span>
+          <label class="btn" style="cursor:pointer">가져오기<input type="file" accept="application/json" data-act="import" hidden /></label>
+          <button class="btn btn-ghost" type="button" data-act="reset">모두 지우기</button>
+          <span data-k="msg" aria-live="polite" class="muted" style="font-size:13px"></span>
         </div>
       </div>
     </div>
-    <script type="application/json" id="progress-data" set:html={JSON.stringify(data).replace(/</g, "\\u003c")} />
   </div>
+  <script type="application/json" id="progress-data" set:html={JSON.stringify(data).replace(/</g, "\\u003c")} />
 </Shell>

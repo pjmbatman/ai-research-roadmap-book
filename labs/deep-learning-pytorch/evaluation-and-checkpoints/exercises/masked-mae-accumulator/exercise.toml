@@ -1,0 +1,6 @@
+title = "mask가 있는 MAE를 batch 단위로 집계하기"
+chapter = "deep-learning-pytorch/evaluation-and-checkpoints"
+objective = 2
+exec = "browser"
+entry = "masked_mae"
+timeout_s = 10

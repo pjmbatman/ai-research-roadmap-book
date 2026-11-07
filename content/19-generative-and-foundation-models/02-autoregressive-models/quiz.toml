@@ -1,0 +1,105 @@
+# 19.2 자기회귀 모델 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "chain-rule-exact"
+type = "single"
+objective = 1
+prompt = '''자기회귀 모델 $p_\theta(\mathbf{x}) = \prod_i p_\theta(x_i \mid \mathbf{x}_{<i})$에서 근사가 들어가는 곳은 어디인가?'''
+explanation = '''chain rule 분해 $p(\mathbf{x}) = \prod_i p(x_i \mid \mathbf{x}_{<i})$는 어떤 순서에서도 성립하는 항등식이다. 근사는 각 조건부분포를 유한한 신경망 $p_\theta$로 표현하는 데서만 생긴다. 그래서 log-likelihood가 정확히 계산된다. 순서는 모델링 난이도를 바꿀 뿐 분해의 정확성을 바꾸지 않는다. 조건을 최근 $k$개로 자르는 Markov 가정을 추가로 하면 그때는 분해 자체가 근사가 된다.'''
+
+[[questions.choices]]
+text = "각 조건부분포를 신경망으로 표현하는 부분에만 있다. 분해 자체는 정확하다."
+correct = true
+
+[[questions.choices]]
+text = "변수를 특정 순서로 나열하는 부분. 자연스러운 순서가 아니면 분해가 틀린다."
+feedback = "chain rule은 어떤 순서에서도 성립한다. 순서는 각 조건부분포가 얼마나 배우기 쉬운지를 바꿀 뿐이다(본문 셀 1에서 두 순서 모두 결합분포를 정확히 복원)."
+
+[[questions.choices]]
+text = "결합분포를 곱으로 쓰는 부분. 변수들이 독립이라고 가정하기 때문이다."
+feedback = "독립 가정은 p(x) = ∏p(x_i)이다. 자기회귀 분해는 각 변수가 앞의 모든 변수에 의존하도록 허용하므로 독립을 가정하지 않는다."
+
+[[questions]]
+id = "ar-loglik-sum"
+type = "numeric"
+objective = 1
+prompt = '''세 토큰 서열에서 모델이 $p(x_1) = 0.5$, $p(x_2 \mid x_1) = 0.2$, $p(x_3 \mid x_1, x_2) = 0.8$을 주었다. 이 서열의 $\log p(\mathbf{x})$는? (자연로그, 소수 셋째 자리까지)'''
+answer = -2.526
+tolerance = 0.005
+explanation = '''$\log p(\mathbf{x}) = \log 0.5 + \log 0.2 + \log 0.8 = \log 0.08 \approx -2.526$이다. 자기회귀 모델의 log-likelihood는 조건부 로그확률의 합이고, 학습 손실(교차엔트로피)은 이 값에 음수를 붙인 것이다.'''
+
+[[questions]]
+id = "causal-mask-parallel"
+type = "single"
+objective = 1
+prompt = '''causal mask를 쓴 자기회귀 Transformer에서 학습은 서열 길이와 무관하게 순전파 한 번으로 모든 위치의 손실을 계산하지만, 생성은 순전파를 서열 길이만큼 반복해야 한다. 이유는?'''
+explanation = '''학습(teacher forcing)에서는 실제 데이터 서열 전체가 이미 주어져 있고, mask가 각 위치의 출력이 이전 입력에만 의존하도록 보장하므로 모든 위치의 조건부분포를 한 번에 계산할 수 있다. 생성할 때는 $x_i$를 뽑아야 $x_{i+1}$의 조건이 정해지므로 순서대로 뽑을 수밖에 없다.'''
+
+[[questions.choices]]
+text = "학습 때는 조건이 될 이전 값들이 데이터로 모두 주어지지만, 생성 때는 이전 값을 먼저 뽑아야 다음 조건이 정해지기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "생성 때는 mask를 벗겨 모든 위치를 동시에 봐야 하기 때문이다."
+feedback = "mask는 생성 때도 그대로다. 생성이 순차적인 것은 조건이 될 값이 아직 존재하지 않기 때문이다."
+
+[[questions.choices]]
+text = "학습 때는 손실의 근사값만 계산하고 생성 때는 정확한 값을 계산하기 때문이다."
+feedback = "teacher forcing의 손실은 근사가 아니라 정확한 음의 로그우도다. 차이는 계산의 근사 여부가 아니라 조건이 주어져 있는지에 있다."
+
+[[questions]]
+id = "nucleus-size"
+type = "numeric"
+objective = 2
+prompt = '''다음 토큰의 확률이 큰 순서로 $[0.5,\ 0.2,\ 0.15,\ 0.1,\ 0.05]$이다. nucleus sampling을 $p = 0.8$로 적용하면 후보로 남는 토큰은 몇 개인가?'''
+answer = 3
+tolerance = 0
+slider = { min = 1, max = 5, step = 1, unit = "개" }
+explanation = '''누적확률은 0.5, 0.7, 0.85, ...이고 처음으로 0.8 이상이 되는 것은 세 번째 토큰에서다. 남은 세 토큰의 확률을 0.85로 나눠 다시 정규화하면 $[0.588, 0.235, 0.176]$이 된다. 누적확률이 0.8을 넘지 않는 두 개만 남긴다고 착각하기 쉬운데, 그러면 남은 질량이 0.7로 $p$에 못 미친다.'''
+
+[[questions]]
+id = "temperature-limit"
+type = "single"
+objective = 2
+prompt = '''샘플링 온도 $T$에 대한 설명으로 옳은 것은?'''
+explanation = '''$p_i \propto \exp(z_i / T)$이므로 $T \to 0$이면 가장 큰 logit의 토큰에 확률이 모두 몰려 greedy와 같아지고, $T \to \infty$이면 모든 토큰의 확률이 같아진다. $T = 1$일 때만 학습한 모델의 분포 그대로다. 온도는 logit의 순위를 바꾸지 않으므로 가장 그럴듯한 토큰은 그대로다.'''
+
+[[questions.choices]]
+text = "T → 0이면 greedy와 같아지고, T = 1일 때만 학습한 분포 그대로다."
+correct = true
+
+[[questions.choices]]
+text = "T를 높이면 모델이 더 정확해진다."
+feedback = "온도는 학습된 분포를 평평하게 할 뿐 새로운 정보를 더하지 않는다. 다양성이 늘고 낮은 확률의 토큰이 더 자주 뽑힌다."
+
+[[questions.choices]]
+text = "T를 낮추면 확률 순위가 바뀌어 다른 토큰이 1등이 될 수 있다."
+feedback = "z/T는 z의 순서를 보존한다(T > 0). 온도는 분포의 뾰족함만 바꾼다."
+
+[[questions.choices]]
+text = "T를 아주 크게 하면 top-k = 1과 같아진다."
+feedback = "반대다. T가 커지면 균등분포에 가까워진다. top-k = 1(greedy)과 같아지는 것은 T → 0이다."
+
+[[questions]]
+id = "exposure-bias-symptom"
+type = "single"
+objective = 3
+prompt = '''teacher forcing으로 학습한 시계열 자기회귀 모델이 검증 데이터에서 1-step 예측 오차가 아주 작다. 그런데 초기값만 주고 수백 step을 자유 생성하면 진폭이 데이터보다 크게 부풀어 오른다. 가장 타당한 해석과 대응은?'''
+explanation = '''학습 때 모델은 언제나 실제 데이터의 이력을 조건으로 받았다. 자유 생성에서는 자기 표본이 만든 이력을 받는데, 작은 오차가 쌓이면 이 이력이 학습 데이터의 분포를 벗어나고, 모델은 그런 입력에서의 행동을 배운 적이 없다(노출 편향). 본문 실습에서 선형 AR(2)는 1-step RMSE 0.03이었지만 자유 생성 진폭이 55% 컸다. 1-step 지표만으로는 이 문제가 보이지 않으므로 자유 생성 결과를 데이터와 같은 통계로 비교해야 하고, multi-step 학습이나 scheduled sampling, 더 알맞은 모델 구조로 대응한다.'''
+
+[[questions.choices]]
+text = "생성 때 모델이 자기 출력이 만든, 학습 때 본 적 없는 이력을 조건으로 받아 오차가 쌓인다. rollout 통계로 평가하고 multi-step 학습 등을 검토한다."
+correct = true
+
+[[questions.choices]]
+text = "샘플링 난수 때문에 생기는 우연한 현상이다. 시드를 바꿔 다시 생성하면 된다."
+feedback = "진폭의 체계적인 부풀림은 경로 200개의 통계에서도 나타난다. 시드의 문제가 아니라 모델이 자기 출력 위에서 어떻게 행동하는지의 문제다."
+
+[[questions.choices]]
+text = "1-step 오차가 작으므로 모델은 정확하다. 데이터의 진폭이 측정 오류로 작게 기록되었을 가능성이 크다."
+feedback = "1-step 오차는 실제 이력이 주어졌을 때의 성능만 잰다. 생성 분포가 맞는지는 별도로 확인해야 하는 성질이다."
+
+[[questions.choices]]
+text = "샘플링 온도를 낮춰 진폭을 줄이면 해결된다."
+feedback = "온도를 낮추면 진폭이 조금 줄 수 있지만 다양성도 함께 사라지고, 원인(모델이 자기 출력 위에서 잘못 행동함)은 그대로다. 증상을 가리는 것이지 해결이 아니다."

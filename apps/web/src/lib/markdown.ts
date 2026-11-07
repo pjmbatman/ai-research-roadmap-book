@@ -10,11 +10,25 @@ import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import rehypeStringify from "rehype-stringify";
 import { visit } from "unist-util-visit";
-import { FIXED } from "./book";
+import path from "node:path";
+import { FIXED, loadBook } from "./book";
 
 export interface RenderContext {
   assetBase?: string;   // 상대 경로 그림의 URL 접두사
   quizSection?: boolean; // 통과 기준 앞에 전체 퀴즈 자리 삽입
+  fromDir?: string;      // 이 원고 파일의 디렉터리: 원고끼리의 상대 링크(…/index.md)를 사이트 주소로 바꾼다
+}
+
+/** 원고 파일 경로(…/NN-부/NN-장/index.md, …/NN-부/index.md)를 사이트 주소로 */
+function siteUrlOf(file: string): string | null {
+  const base = (import.meta as any).env?.BASE_URL ?? "/";
+  const dir = path.dirname(file);
+  for (const part of loadBook().parts) {
+    if (path.resolve(part.dir) === dir) return base + part.url;
+    const ch = part.chapters.find((c) => path.resolve(c.dir) === dir);
+    if (ch) return base + ch.url;
+  }
+  return null;
 }
 
 export const esc = (s: string) =>
@@ -96,6 +110,16 @@ function remarkBook(ctx: RenderContext) {
         }
       }
     });
+
+    // 원고끼리의 상대 링크 → 사이트 주소
+    if (ctx.fromDir) {
+      visit(tree, "link", (node: any) => {
+        const m = /^([^#?]+\.md)(#.*)?$/.exec(node.url || "");
+        if (!m || /^([a-z]+:|\/)/.test(node.url)) return;
+        const url = siteUrlOf(path.resolve(ctx.fromDir!, decodeURIComponent(m[1])));
+        if (url) node.url = url + (m[2] ?? "");
+      });
+    }
 
     // 상대 경로 그림
     visit(tree, "image", (node: any) => {

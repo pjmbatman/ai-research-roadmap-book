@@ -1,0 +1,6 @@
+title = "가우시안 근사의 Fréchet 거리"
+chapter = "generative-and-foundation-models/evaluating-generative-models"
+objective = 2
+exec = "browser"
+entry = "frechet_from_features"
+timeout_s = 10

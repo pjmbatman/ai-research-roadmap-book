@@ -1,0 +1,6 @@
+title = "불편 MMD² 추정량"
+chapter = "generative-and-foundation-models/evaluating-generative-models"
+objective = 2
+exec = "browser"
+entry = "mmd2_unbiased"
+timeout_s = 10

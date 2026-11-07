@@ -1,0 +1,6 @@
+title = "비어 있는 GPU를 골라 CUDA_VISIBLE_DEVICES 만들기"
+chapter = "linux-and-remote/shared-servers"
+objective = 1
+exec = "browser"
+entry = "pick_gpus"
+timeout_s = 10

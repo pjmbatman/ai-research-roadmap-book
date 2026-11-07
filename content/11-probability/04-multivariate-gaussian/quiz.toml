@@ -1,0 +1,97 @@
+# 11.4 다변량 가우시안 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "marginal-is-subblock"
+type = "single"
+objective = 1
+prompt = '''$(\mathbf{x}_a, \mathbf{x}_b) \sim \mathcal{N}\left(\begin{bmatrix}\boldsymbol{\mu}_a \\ \boldsymbol{\mu}_b\end{bmatrix}, \begin{bmatrix}\boldsymbol{\Sigma}_{aa} & \boldsymbol{\Sigma}_{ab} \\ \boldsymbol{\Sigma}_{ba} & \boldsymbol{\Sigma}_{bb}\end{bmatrix}\right)$일 때 $\mathbf{x}_a$의 주변분포는?'''
+explanation = '''가우시안의 주변화는 해당 성분의 평균과 공분산 블록을 **그대로 잘라 내는** 것이다: $\mathbf{x}_a \sim \mathcal{N}(\boldsymbol{\mu}_a, \boldsymbol{\Sigma}_{aa})$. $\mathbf{x}_a = [\mathbf{I}\ \mathbf{0}]\,\mathbf{x}$는 선형변환이고, 가우시안의 선형변환은 가우시안이며 공분산은 $\mathbf{M}\boldsymbol{\Sigma}\mathbf{M}^\top = \boldsymbol{\Sigma}_{aa}$이기 때문이다. Schur complement가 나오는 것은 주변화가 아니라 조건화다. 정밀도 행렬로 쓰면 반대로 조건화가 블록 잘라 내기이고 주변화에 Schur complement가 나온다.'''
+
+[[questions.choices]]
+text = '''$\mathcal{N}(\boldsymbol{\mu}_a, \boldsymbol{\Sigma}_{aa})$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathcal{N}(\boldsymbol{\mu}_a, \boldsymbol{\Sigma}_{aa} - \boldsymbol{\Sigma}_{ab}\boldsymbol{\Sigma}_{bb}^{-1}\boldsymbol{\Sigma}_{ba})$'''
+feedback = "이것은 x_b를 관측했을 때의 조건부 공분산이다. 주변분포는 x_b를 모르는 상태이므로 분산이 줄지 않는다."
+
+[[questions.choices]]
+text = '''$\mathcal{N}(\boldsymbol{\mu}_a, (\boldsymbol{\Sigma}^{-1})_{aa}^{-1})$'''
+feedback = "정밀도 행렬 블록의 역행렬은 조건부 공분산이다. 공분산 행렬과 정밀도 행렬의 블록을 혼동하면 주변화와 조건화가 뒤바뀐다."
+
+[[questions]]
+id = "conditional-variance-numeric"
+type = "numeric"
+objective = 1
+prompt = '''$(x_1, x_2)$가 평균 0, $\sigma_1 = 1$, $\sigma_2 = 2$, 상관계수 $\rho = 0.5$인 2차원 가우시안이다. $x_1 = 2$를 관측했을 때 $x_2$의 조건부 분산은?'''
+answer = 3.0
+tolerance = 0.01
+slider = { min = 0, max = 5, step = 0.25 }
+explanation = '''$\operatorname{Var}[x_2 \mid x_1] = \sigma_2^2(1 - \rho^2) = 4 \times 0.75 = 3$이다. 관측값 $x_1 = 2$는 조건부 **평균** $\rho\frac{\sigma_2}{\sigma_1}x_1 = 2$에만 들어가고, 조건부 분산에는 들어가지 않는다. 가우시안에서는 무엇을 관측했는지(어느 변수인지)만 분산을 줄이고, 관측값이 얼마였는지는 분산에 영향을 주지 않는다.'''
+
+[[questions]]
+id = "precision-zero-meaning"
+type = "single"
+objective = 1
+prompt = '''다변량 가우시안의 정밀도 행렬 $\boldsymbol{\Lambda} = \boldsymbol{\Sigma}^{-1}$에서 $\Lambda_{13} = 0$이다. 옳은 해석은?'''
+explanation = '''정밀도 행렬의 비대각 성분이 0이면 **나머지 모든 변수가 주어졌을 때** 두 변수가 조건부 독립이다. 주변적으로는 다른 변수를 거쳐 상관이 있을 수 있다. 본문의 AR(1) 사슬에서 $x_1$과 $x_3$의 상관계수는 0.64였지만 정밀도 행렬의 해당 성분은 0이었다. 공분산의 0이 주변 독립(가우시안에서), 정밀도의 0이 조건부 독립이다.'''
+
+[[questions.choices]]
+text = '''$x_1$과 $x_3$은 독립이다(상관계수 0).'''
+feedback = "주변 독립은 공분산 행렬의 성분이 0일 때다. 정밀도 행렬의 0은 다른 변수를 조건으로 했을 때의 독립을 뜻하고, 주변 상관은 0이 아닐 수 있다."
+
+[[questions.choices]]
+text = '''나머지 변수가 모두 주어지면 $x_1$과 $x_3$은 조건부 독립이다.'''
+correct = true
+
+[[questions.choices]]
+text = "수치 오차로 생긴 값이므로 의미가 없다."
+feedback = "정밀도 행렬의 0은 그래프 구조(어떤 변수가 직접 연결되었는가)를 나타내는 핵심 정보다. 희소 정밀도 행렬 추정(graphical lasso)이 이 구조를 찾는 방법이다."
+
+[[questions]]
+id = "linear-gaussian-posterior-mean"
+type = "numeric"
+objective = 2
+prompt = '''사전분포 $x \sim \mathcal{N}(0, 4)$, 측정 모델 $y = x + \varepsilon$, $\varepsilon \sim \mathcal{N}(0, 1)$이다. $y = 5$를 관측했을 때 사후 평균 $\mathbb{E}[x \mid y]$는?'''
+answer = 4.0
+tolerance = 0.01
+explanation = '''사후 정밀도는 사전 정밀도와 측정 정밀도의 합 $1/4 + 1/1 = 1.25$이고, 사후 분산은 $0.8$이다. 사후 평균은 정밀도로 가중한 평균 $\frac{0 \cdot (1/4) + 5 \cdot 1}{1.25} = 4$다. 측정이 사전보다 4배 정밀하므로 측정값 5 쪽으로 80% 움직였다. gain 형태로는 $K = 4/(4 + 1) = 0.8$, $\mathbb{E}[x \mid y] = 0 + 0.8(5 - 0) = 4$다.'''
+
+[[questions]]
+id = "posterior-covariance-data-free"
+type = "single"
+objective = 2
+prompt = '''선형-가우시안 모델 $\mathbf{x} \sim \mathcal{N}(\mathbf{m}_0, \mathbf{P}_0)$, $\mathbf{y} = \mathbf{A}\mathbf{x} + \boldsymbol{\varepsilon}$에서 사후 공분산 $\mathbf{P}$에 대해 옳은 것은?'''
+explanation = '''$\mathbf{P}^{-1} = \mathbf{P}_0^{-1} + \mathbf{A}^\top\mathbf{R}^{-1}\mathbf{A}$에는 $\mathbf{y}$가 없다. 사후 불확실성은 어떤 측정을 얼마나 정밀하게 하는지($\mathbf{A}$, $\mathbf{R}$)로만 정해지고, 측정값이 놀라운 값이었는지와는 무관하다. 그래서 측정하기 **전에** 측정 설계별 사후 불확실성을 계산할 수 있다. 실험 설계(25.3장)와 Kalman filter의 공분산 예측이 이 성질을 쓴다. 다만 이것은 모델이 맞다는 가정 아래의 결론이다. 예상 밖의 값이 반복되면 모델을 의심해야 한다.'''
+
+[[questions.choices]]
+text = '''관측값 $\mathbf{y}$에 의존하지 않으므로 측정 전에 계산할 수 있다.'''
+correct = true
+
+[[questions.choices]]
+text = '''관측값이 사전 평균에서 멀수록 사후 공분산이 커진다.'''
+feedback = "직관적으로 그럴 것 같지만 선형-가우시안 모델에서는 그렇지 않다. 놀라운 관측은 사후 평균을 크게 옮길 뿐, 공분산 공식에는 y가 들어가지 않는다."
+
+[[questions.choices]]
+text = '''측정 잡음 $\mathbf{R}$이 커지면 사후 공분산이 사전 공분산보다 커질 수 있다.'''
+feedback = "측정 정밀도 A^T R^{-1} A는 PSD이므로 사후 정밀도는 사전 정밀도보다 작아지지 않는다. 잡음이 커지면 정보가 줄 뿐, 불확실성이 사전보다 커지지는 않는다."
+
+[[questions]]
+id = "cholesky-sampling"
+type = "single"
+objective = 3
+prompt = '''$\mathbf{z} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ 표본으로 $\mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$ 표본을 만드는 올바른 방법은?'''
+explanation = '''$\mathbf{x} = \boldsymbol{\mu} + \mathbf{L}\mathbf{z}$의 공분산은 $\mathbf{L}\mathbf{I}\mathbf{L}^\top = \mathbf{L}\mathbf{L}^\top$이다. 따라서 $\boldsymbol{\Sigma} = \mathbf{L}\mathbf{L}^\top$인 $\mathbf{L}$, 예를 들어 Cholesky 인자를 쓰면 된다. $\boldsymbol{\Sigma}$를 그대로 곱하면 공분산이 $\boldsymbol{\Sigma}^2$이 되고, 성분별 제곱근은 상관을 반영하지 못한다. 대칭 제곱근 $\boldsymbol{\Sigma}^{1/2}$(고유분해로 계산)도 $\boldsymbol{\Sigma}^{1/2}(\boldsymbol{\Sigma}^{1/2})^\top = \boldsymbol{\Sigma}$이므로 맞지만, Cholesky가 더 빠르다.'''
+
+[[questions.choices]]
+text = '''$\mathbf{x} = \boldsymbol{\mu} + \boldsymbol{\Sigma}\mathbf{z}$'''
+feedback = "공분산이 Σ Σ^T = Σ²이 된다. 1차원에서 표준편차 대신 분산을 곱하는 실수와 같다."
+
+[[questions.choices]]
+text = '''$\mathbf{x} = \boldsymbol{\mu} + \sqrt{\boldsymbol{\Sigma}}\,\mathbf{z}$ (성분별 제곱근)'''
+feedback = "성분별 제곱근 행렬 B에 대해 B B^T는 일반적으로 Σ와 다르다. 대각 행렬일 때만 맞고, 상관이 있으면 틀린다."
+
+[[questions.choices]]
+text = '''$\boldsymbol{\Sigma} = \mathbf{L}\mathbf{L}^\top$인 Cholesky 인자로 $\mathbf{x} = \boldsymbol{\mu} + \mathbf{L}\mathbf{z}$'''
+correct = true

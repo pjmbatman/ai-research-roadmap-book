@@ -1,0 +1,6 @@
+title = "velocity Verlet 한 스텝"
+chapter = "chemistry-and-materials/interatomic-potentials"
+objective = 2
+exec = "browser"
+entry = "verlet_step"
+timeout_s = 10

@@ -1,0 +1,6 @@
+# Dockerfile 전용 ignore 파일(BuildKit은 <Dockerfile 이름>.dockerignore를 먼저 찾는다).
+# 빌드 context(labs/)에서 이미지에 들어가면 안 되는 것을 뺀다.
+**/.venv
+**/__pycache__
+**/outputs
+**/.pytest_cache

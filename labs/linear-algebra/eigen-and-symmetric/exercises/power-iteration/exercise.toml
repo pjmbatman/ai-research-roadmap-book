@@ -1,0 +1,6 @@
+title = "거듭제곱법"
+chapter = "linear-algebra/eigen-and-symmetric"
+objective = 1
+exec = "browser"
+entry = "power_iteration"
+timeout_s = 10

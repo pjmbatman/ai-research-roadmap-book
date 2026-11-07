@@ -3,7 +3,7 @@ id: architectures
 title: "신경망 아키텍처와 표현학습"
 title_en: "Neural Architectures and Representation Learning"
 track: ml-core
-status: outline
+status: draft
 summary: "귀납적 편향의 관점에서 MLP·CNN·순환·상태공간 모델·Transformer·언어모델·그래프 신경망·시계열 모델을 다루고, 학습된 표현을 분석한다."
 ---
 

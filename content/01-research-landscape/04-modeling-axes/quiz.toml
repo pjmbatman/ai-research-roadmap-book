@@ -1,0 +1,104 @@
+# 1.4 모델링을 나누는 여러 축 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "learning-signal"
+type = "single"
+objective = 1
+prompt = '''label이 없는 분광 스펙트럼 10만 개에서, 스펙트럼의 일부 구간을 가리고 가린 구간을 나머지로 맞히도록 모델을 학습한다. 이 학습 방식은?'''
+explanation = '''정답 label을 사람이 붙이지 않았지만, 데이터 자체에서 만든 예측 과제(가린 구간 맞히기)로 학습 신호를 얻는다. 이것이 자기지도학습이다. 비지도학습(군집화, 밀도 추정)과 달리 "입력의 일부 → 나머지"라는 지도학습 형태의 과제를 스스로 만든다는 점이 특징이다. 이렇게 학습한 표현을 적은 label 데이터로 미세조정하는 것이 사전학습 후 미세조정이다.'''
+
+[[questions.choices]]
+text = "지도학습"
+feedback = "사람이 붙인 label이 없다. 가린 구간은 데이터 자체에서 나온 학습 신호다."
+
+[[questions.choices]]
+text = "자기지도학습"
+correct = true
+
+[[questions.choices]]
+text = "강화학습"
+feedback = "환경과 상호작용하며 보상을 받는 구조가 없다."
+
+[[questions.choices]]
+text = "준지도학습"
+feedback = "준지도학습은 적은 label 데이터와 많은 무label 데이터를 함께 쓴다. 여기서는 label이 전혀 없다."
+
+[[questions]]
+id = "far-point-confidence"
+type = "single"
+objective = 1
+prompt = '''본문 예제에서 학습 데이터에서 아주 먼 점 $x = (12, 6)$에 대해 로지스틱 회귀는 $p(y=1 \mid x) = 1.0$, 생성 모델의 밀도는 $p(x) \approx 5 \times 10^{-25}$이었다. 올바른 해석은?'''
+explanation = '''판별 모델은 $p(y \mid x)$만 학습하므로, $x$가 학습 데이터에서 얼마나 먼지에 대한 정보가 출력에 없다. 결정 경계에서 멀리 떨어지면 확률은 1에 붙는다. 생성 모델은 $p(x)$도 학습하므로, 이 점이 학습 데이터가 거의 나오지 않는 곳에 있다는 사실을 알려 준다. 확률 1.0은 "이 점은 확실히 불량"이 아니라 "학습한 경계의 한쪽에 있다"는 뜻일 뿐이다(분포 밖 입력은 21.4장).'''
+
+[[questions.choices]]
+text = "두 모델 모두 이 점이 불량 시료라고 확신하므로 결론은 믿을 만하다."
+feedback = "p(y=1|x) = 1.0은 이 점이 경계의 어느 쪽에 있는지만 말한다. 학습 데이터가 없는 곳이라는 정보는 판별 모델의 출력에 들어 있지 않다."
+
+[[questions.choices]]
+text = "판별 모델의 확률은 데이터에서 먼 정도를 반영하지 않는다. 생성 모델의 p(x)는 이 점이 학습 분포 밖에 있음을 알려 준다."
+correct = true
+
+[[questions.choices]]
+text = "생성 모델의 p(x)가 작으므로 이 점은 정상 시료다."
+feedback = "p(x)는 두 클래스를 합친 밀도다. 값이 작다는 것은 어느 클래스로도 이런 측정이 나오기 어렵다는 뜻이지, 정상이라는 뜻이 아니다."
+
+[[questions.choices]]
+text = "로지스틱 회귀가 생성 모델보다 이 점에 대해 더 정확하다."
+feedback = "이 점에는 정답을 비교할 학습 데이터가 없다. 두 모델 모두 외삽하고 있고, 그 사실을 알려 주는 것은 p(x)다."
+
+[[questions]]
+id = "beta-posterior-mean"
+type = "numeric"
+objective = 1
+prompt = '''새로 합성한 시료 3개가 모두 안정성 시험을 통과했다. 통과 확률 $\theta$에 균등 사전분포 $\mathrm{Beta}(1, 1)$을 두면, 사후분포의 평균은 얼마인가? (최대우도 추정값은 1.0이다)'''
+answer = 0.8
+tolerance = 0.001
+slider = { min = 0.0, max = 1.0, step = 0.05 }
+explanation = '''$\mathrm{Beta}(a, b)$ 사전분포에서 성공 $k$번, 실패 $n-k$번을 관측하면 사후분포는 $\mathrm{Beta}(a+k, b+n-k)$다. 여기서는 $\mathrm{Beta}(4, 1)$이고 평균은 $4/(4+1) = 0.8$이다. 최대우도 추정 $3/3 = 1.0$은 "절대 실패하지 않는다"는 극단적인 결론이지만, 사후분포는 95% 구간 [0.398, 0.994]로 불확실성을 함께 보여 준다. 데이터가 300개로 늘면 두 관점의 답은 거의 같아진다.'''
+
+[[questions]]
+id = "axes-independent"
+type = "multiple"
+objective = 2
+prompt = '''모델링 축에 대한 설명으로 옳은 것을 모두 고르시오.'''
+explanation = '''축들은 서로 독립이다. 판별 모델도 $p(y \mid x)$를 분포로 출력할 수 있고(본문의 선형 회귀 + 잡음 분산), 생성 모델도 최대우도로 학습할 수 있다(본문의 LDA). 베이지안 로지스틱 회귀는 판별 모델이면서 베이지안이므로 "베이지안 = 생성 모델"은 틀렸다. 생성 모델이 점 예측에 쓰일 수도 있으므로 "점 예측 = 판별 모델"도 틀렸다.'''
+
+[[questions.choices]]
+text = "판별 모델도 예측분포 p(y|x)를 출력할 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "생성 모델도 베이지안 추론 없이 최대우도로 학습할 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "베이지안 모델은 반드시 생성 모델이다."
+feedback = "베이지안 로지스틱 회귀는 p(y|x)만 모델링하는 판별 모델이지만, 파라미터를 확률변수로 다룬다."
+
+[[questions.choices]]
+text = "점 예측을 출력하는 모델은 반드시 판별 모델이다."
+feedback = "생성 모델로 p(y|x)를 계산한 뒤 가장 확률이 큰 값 하나를 내면 점 예측이 된다. 출력의 형태와 모델의 종류는 다른 축이다."
+
+[[questions]]
+id = "training-configuration"
+type = "single"
+objective = 1
+prompt = '''열전달 방정식으로 계산한 온도에, 방정식이 놓친 효과를 보정하는 작은 신경망의 출력을 더해 최종 예측을 만든다. 신경망은 측정값과 방정식 계산값의 차이로 학습한다. 이 학습 구성은?'''
+explanation = '''알려진 물리 모델의 계산 위에 데이터로 학습한 보정 항을 더하는 구성은 물리-데이터 하이브리드다. 물리 모델이 큰 구조를 맡고, 신경망은 그 잔차만 배우므로 데이터가 적어도 되고 물리 모델이 맞는 범위 밖에서도 비교적 안정적이다. 대신 물리 모델이 체계적으로 틀린 영역에서는 보정 항이 학습 범위 밖으로 외삽해야 한다(24.5장).'''
+
+[[questions.choices]]
+text = "end-to-end 학습"
+feedback = "end-to-end는 입력에서 출력까지 하나의 모델이 데이터만으로 학습하는 구성이다. 여기서는 물리 방정식이 계산의 일부를 맡는다."
+
+[[questions.choices]]
+text = "사전학습 후 미세조정"
+feedback = "다른 과제로 미리 학습한 모델을 가져와 조정하는 구성이 아니다."
+
+[[questions.choices]]
+text = "물리-데이터 하이브리드"
+correct = true
+
+[[questions.choices]]
+text = "비지도학습"
+feedback = "신경망은 측정값과 계산값의 차이라는 정답으로 학습하므로 지도학습 신호를 쓴다. 학습 신호의 축과 학습 구성의 축은 다르다."

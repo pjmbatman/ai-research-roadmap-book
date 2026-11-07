@@ -1,0 +1,6 @@
+title = "다변량 가우시안의 조건부분포"
+chapter = "probability/multivariate-gaussian"
+objective = 1
+exec = "browser"
+entry = "condition"
+timeout_s = 10

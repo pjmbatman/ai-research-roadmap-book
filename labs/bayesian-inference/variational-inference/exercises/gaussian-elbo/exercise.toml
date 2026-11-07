@@ -1,0 +1,6 @@
+title = "가우시안 변분분포의 ELBO와 KL"
+chapter = "bayesian-inference/variational-inference"
+objective = 1
+exec = "browser"
+entry = "elbo_mc"
+timeout_s = 15

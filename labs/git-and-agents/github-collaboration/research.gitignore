@@ -1,0 +1,37 @@
+# 연구 프로젝트용 .gitignore 예시 (4.2). 저장소 루트에 .gitignore로 복사해 프로젝트에 맞게 고친다.
+# 확인: git check-ignore -v <경로>  — 어떤 규칙이 그 경로를 무시하는지 보여 준다.
+
+# --- 데이터: 저장소 밖(공유 storage·데이터 허브)에 두고, 내려받는 스크립트만 추적한다
+/data/*
+!/data/README.md
+
+# --- 실험 출력물: 다시 만들 수 있는 것
+/outputs/
+/runs/
+/wandb/
+/mlruns/
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+
+# --- 환경·캐시
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- 비밀정보: 실제 값은 .env에, 키 이름만 담은 .env.example은 추적한다
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- 편집기·OS
+.vscode/
+.idea/
+.DS_Store

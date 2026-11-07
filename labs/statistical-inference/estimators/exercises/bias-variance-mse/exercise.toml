@@ -1,0 +1,6 @@
+title = "시뮬레이션으로 bias·variance·MSE 재기"
+chapter = "statistical-inference/estimators"
+objective = 2
+exec = "browser"
+entry = "bias_variance_mse"
+timeout_s = 15

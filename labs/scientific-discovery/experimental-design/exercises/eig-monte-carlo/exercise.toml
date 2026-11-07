@@ -1,0 +1,6 @@
+title = "기대 정보 이득의 중첩 몬테카를로 추정"
+chapter = "scientific-discovery/experimental-design"
+objective = 2
+exec = "browser"
+entry = "eig_nmc"
+timeout_s = 15

@@ -1,0 +1,118 @@
+# 19.6 Flow Matching과 연속시간 생성모델 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "cfm-loss-floor"
+type = "single"
+objective = 1
+prompt = '''1차원 혼합 가우시안 데이터에서 참 주변 속도장 $v^\star$를 그대로 넣어도 조건부 flow matching 손실 $L_{\text{CFM}}$이 2.2 정도로 남았다. 가장 정확한 설명은?'''
+explanation = '''$L_{\text{CFM}} = L_{\text{FM}} + \mathbb{E}\,\operatorname{tr}\operatorname{Cov}[\mathbf{x}_1 - \mathbf{x}_0 \mid \mathbf{x}_t]$이다. 독립으로 뽑은 짝들의 직선이 교차하므로 같은 $\mathbf{x}_t$를 지나는 짝들의 속도 $\mathbf{x}_1 - \mathbf{x}_0$가 서로 다르고, 어떤 함수도 그 분산을 맞힐 수 없다. 참 속도장은 $L_{\text{FM}} = 0$을 달성하지만 $L_{\text{CFM}}$에는 이 상수가 남는다. reflow로 짝을 결정적으로 바꾸면 이 바닥이 거의 사라진다.'''
+
+[[questions.choices]]
+text = "속도장을 표현하는 모델의 용량이 부족하기 때문이다."
+feedback = "참 속도장 v*를 직접 넣었으므로 모델 용량과 무관하다. 어떤 함수로도 줄일 수 없는 바닥이다."
+
+[[questions.choices]]
+text = '''같은 $\mathbf{x}_t$를 지나는 여러 짝의 조건부 속도가 서로 달라서 생기는 조건부 분산이 손실의 바닥으로 남기 때문이다.'''
+correct = true
+
+[[questions.choices]]
+text = "test 표본이 유한해서 생기는 표집 잡음이다."
+feedback = "표본을 늘려도 손실은 0으로 가지 않고 E Var(x1 - x0 | x_t)로 수렴한다. 표집 잡음은 그 주변의 작은 흔들림일 뿐이다."
+
+[[questions.choices]]
+text = "Euler 방법의 이산화 오차가 손실에 섞였기 때문이다."
+feedback = "CFM 손실을 계산할 때는 ODE를 풀지 않는다(simulation-free). solver 오차는 샘플링 단계에서만 생긴다."
+
+[[questions]]
+id = "solver-vs-model-error"
+type = "single"
+objective = 3
+prompt = '''학습한 flow matching 모델로 Euler step 수를 1, 4, 32, 128로 바꿔 생성했더니 품질 지표 $W_1$이 1.55, 0.37, 0.087, 0.067이었다. 같은 조건에서 참 속도장은 1.67, 0.28, 0.037, 0.007이었다. 128 step에서 남은 0.067을 줄이려면 무엇을 바꿔야 하는가?'''
+explanation = '''참 속도장은 step을 늘리면 0으로 가므로, 128 step에서 solver 오차는 거의 없다. 학습한 모델이 0.067에서 멈추는 것은 속도장 자체가 틀렸기 때문이다(모델 오차). 따라서 모델·데이터·학습을 개선해야 한다. 반대로 1–4 step의 큰 값은 참 속도장에서도 나타나는 solver 오차이므로, 그 영역의 나쁜 품질을 근거로 모델을 바꾸는 것은 잘못이다.'''
+
+[[questions.choices]]
+text = "step 수를 1000으로 늘리거나 RK4 같은 고차 solver로 바꾼다."
+feedback = "참 속도장은 128 step에서 이미 0.007이다. solver를 바꿔도 학습한 속도장의 오차는 그대로 남는다."
+
+[[questions.choices]]
+text = "속도장 모델(구조·용량·학습 데이터·학습 시간)을 개선한다."
+correct = true
+
+[[questions.choices]]
+text = "1 step 생성에서 품질이 나쁘므로 모델이 실패한 것이다. 모델 계열을 바꾼다."
+feedback = "1 step의 나쁜 품질은 참 속도장에서도 나타나는 solver 오차다. 모델의 실패와 구분해야 한다."
+
+[[questions]]
+id = "reflow-tradeoff"
+type = "multiple"
+objective = 3
+prompt = '''독립 짝으로 학습한 흐름에 reflow를 한 번 적용했다. 이 장의 실험에 비추어 옳은 것을 모두 고르시오.'''
+explanation = '''reflow는 학습한 흐름이 만든 결정적 짝 $(\mathbf{z}_0, \mathbf{z}_1)$으로 다시 학습한다. ODE 궤적은 교차하지 않으므로 새 짝의 직선들도 덜 교차하고, CFM 손실의 바닥이 사라지며(2.256 → 0.011), 1 step 품질이 크게 좋아졌다(1.546 → 0.226). 하지만 1차 흐름의 표본을 정답으로 삼으므로 그 모델 오차를 물려받고 회귀 오차를 더한다. 실제로 32 step에서는 reflow가 더 나빴다(0.087 → 0.123).'''
+
+[[questions.choices]]
+text = "같은 점을 지나는 짝들의 속도가 거의 하나로 정해져 CFM 손실의 바닥이 크게 줄어든다."
+correct = true
+
+[[questions.choices]]
+text = "적은 step(1–2)의 생성 품질이 크게 좋아진다."
+correct = true
+
+[[questions.choices]]
+text = "1차 흐름의 모델 오차를 물려받으므로, 많은 step의 품질은 1차 흐름보다 좋아지지 않을 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "reflow는 데이터 분포에 더 가까워지는 절차이므로 모든 step 수에서 품질이 좋아진다."
+feedback = "reflow의 정답은 데이터가 아니라 1차 흐름의 표본이다. 이 장의 실험에서 32 step 품질은 오히려 나빠졌다."
+
+[[questions]]
+id = "velocity-from-eps"
+type = "numeric"
+objective = 2
+prompt = '''직선 경로 $\mathbf{x}_t = (1-t)\boldsymbol{\varepsilon} + t\,\mathbf{x}_1$에서 $t = 0.5$, $x_t = 1.0$인 점의 ε-예측이 $\hat{\varepsilon} = 0.4$이다. 이 점에서의 속도 $v$는? (1차원)'''
+answer = 1.2
+tolerance = 0.01
+explanation = '''먼저 깨끗한 데이터의 예측을 구한다: $\hat{x}_1 = (x_t - (1-t)\hat{\varepsilon})/t = (1.0 - 0.2)/0.5 = 1.6$. 직선 경로의 속도는 $v = \hat{x}_1 - \hat{\varepsilon} = 1.6 - 0.4 = 1.2$이다. 같은 값을 $(\hat{x}_1 - x_t)/(1 - t) = 0.6/0.5 = 1.2$로도, 정리한 식 $v = (x_t - \hat{\varepsilon})/t$로도 얻는다. 가우시안 경로에서는 ε-예측과 속도가 이렇게 서로 바뀐다.'''
+
+[[questions]]
+id = "fm-vs-diffusion"
+type = "multiple"
+objective = 2
+prompt = '''가우시안 경로 $\mathbf{x}_t = \alpha_t\mathbf{x}_1 + \sigma_t\boldsymbol{\varepsilon}$를 쓰는 flow matching과 확산 모델의 관계로 옳은 것을 모두 고르시오.'''
+explanation = '''가우시안 경로에서 ε-예측·denoiser·score·속도는 닫힌 식으로 서로 바뀐다. 그래서 완벽하게 학습된 두 모델은 같은 경로를 쓰는 한 같은 정보를 담고, 같은 주변 분포를 만드는 ODE를 정의한다. 실제 차이는 경로($\alpha_t, \sigma_t$), 예측 대상(시간별 손실 가중치), 샘플러의 선택에 있다. flow matching의 틀은 잡음 분포가 가우시안이 아니거나 짝이 독립이 아닌 경우까지 다룰 수 있다는 점에서 더 넓다. 어느 쪽이 항상 낫다는 것은 틀에서 나오지 않는다.'''
+
+[[questions.choices]]
+text = "ε-예측 모델의 출력을 닫힌 식으로 속도로 바꿀 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "두 계열의 실제 차이는 경로, 예측 대상(시간별 가중치), 샘플러 같은 선택에 있다."
+correct = true
+
+[[questions.choices]]
+text = "flow matching은 확산 모델보다 항상 적은 step으로 더 좋은 표본을 만든다."
+feedback = "틀 자체의 성질이 아니라 특정 선택 조합의 실험 결과다. 이 장의 2차원 실험에서도 적은 step에서는 삼각(VP류) 경로가 직선 경로보다 나았다."
+
+[[questions.choices]]
+text = "확산 모델은 score를 학습하므로 결정적인 ODE 샘플러를 쓸 수 없다."
+feedback = "score로 속도장을 만들 수 있으므로 확산 모델도 probability flow ODE로 결정적 샘플링을 한다(19.5장)."
+
+[[questions]]
+id = "loss-across-paths"
+type = "single"
+objective = 2
+prompt = '''같은 데이터와 같은 MLP로 직선 경로와 삼각 경로의 flow matching을 학습했더니 끝 손실이 각각 1.94, 3.11이었다. 이 숫자로 말할 수 있는 것은?'''
+explanation = '''두 경로는 목표 속도의 크기와 조건부 분산(손실의 바닥)이 다르다. 그래서 손실 값은 경로 사이에서 비교할 수 없다. 이 장의 실험에서 1 step 품질은 손실이 더 큰 삼각 경로가 오히려 나았다. 경로를 비교하려면 생성된 표본의 품질을 같은 지표·같은 step 수로 잰다.'''
+
+[[questions.choices]]
+text = "직선 경로 모델이 더 잘 학습되었으므로 더 좋은 표본을 만든다."
+feedback = "손실의 바닥이 경로마다 다르다. 표본 품질은 생성해서 재야 한다."
+
+[[questions.choices]]
+text = "두 손실은 목표의 크기와 바닥이 달라 서로 비교할 수 없다. 표본 품질을 직접 재야 한다."
+correct = true
+
+[[questions.choices]]
+text = "삼각 경로는 손실이 커서 학습이 수렴하지 않았다."
+feedback = "손실의 절댓값으로 수렴 여부를 판단할 수 없다. 수렴은 같은 경로의 손실 곡선이 평평해졌는지로 본다."

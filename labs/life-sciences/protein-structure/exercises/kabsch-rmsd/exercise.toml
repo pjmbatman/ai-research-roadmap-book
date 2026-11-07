@@ -1,0 +1,6 @@
+title = "Kabsch 정렬 RMSD"
+chapter = "life-sciences/protein-structure"
+objective = 3
+exec = "browser"
+entry = "kabsch_rmsd"
+timeout_s = 10

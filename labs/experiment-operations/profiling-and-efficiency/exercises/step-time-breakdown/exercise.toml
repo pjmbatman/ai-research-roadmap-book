@@ -1,0 +1,6 @@
+title = "step 시간 분해하기"
+chapter = "experiment-operations/profiling-and-efficiency"
+objective = 2
+exec = "browser"
+entry = "summarize_steps"
+timeout_s = 10

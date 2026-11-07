@@ -1,0 +1,112 @@
+# 13.7 Gaussian Process — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "lengthscale-crossings"
+type = "single"
+objective = 1
+prompt = '''RBF 커널 GP 사전분포에서 길이척도 $\ell$을 1에서 0.25로 줄였다. 구간 $[0, 10]$에서 사전 표본 함수가 0을 지나는 평균 횟수는 어떻게 되는가?'''
+explanation = '''RBF 커널 GP의 표본 함수가 단위 길이당 0을 지나는 기대 횟수는 $1/(\pi\ell)$로, $\ell$에 반비례한다(Rice 공식). $\ell$을 1/4로 줄이면 약 $3.2$회에서 $12.7$회로 4배가 된다. 진폭은 $\sigma_f$가 정하므로 그대로다. 길이척도는 "함수가 얼마나 떨어진 입력까지 비슷한 값을 가지는가"를 정한다.'''
+
+[[questions.choices]]
+text = "약 4배로 늘어난다. 함수가 더 짧은 거리에서 변한다."
+correct = true
+
+[[questions.choices]]
+text = "그대로다. 길이척도는 함수의 진폭만 바꾼다."
+feedback = "진폭은 신호 분산 $\\sigma_f^2$가 정한다. 길이척도는 입력 방향의 변화 속도를 정한다."
+
+[[questions.choices]]
+text = "약 1/4로 줄어든다. 길이척도가 작으면 함수가 평평해진다."
+feedback = "반대다. 작은 길이척도는 가까운 입력끼리만 상관되게 하므로 함수가 빨리 흔들린다."
+
+[[questions.choices]]
+text = "16배로 늘어난다. 커널이 거리의 제곱에 의존하기 때문이다."
+feedback = "커널 안의 $r^2/\\ell^2$은 $r/\\ell$의 함수일 뿐이라, 입력 축을 $\\ell$배 늘린 것과 같다. 교차 횟수는 $1/\\ell$에 비례한다."
+
+[[questions]]
+id = "prior-sd-far-away"
+type = "numeric"
+objective = 2
+prompt = '''RBF 커널 $k(x, x') = \sigma_f^2 \exp\!\big(-(x - x')^2/(2\ell^2)\big)$, $\sigma_f = 2$, $\ell = 1$인 영평균 GP로 $[0, 5]$의 데이터를 학습했다. $x = 100$에서 잠재함수 $f$의 사후 표준편차는? (소수 둘째 자리까지)'''
+answer = 2.0
+tolerance = 0.01
+slider = { min = 0, max = 4, step = 0.1 }
+explanation = '''학습 점에서 아주 먼 곳에서는 $\mathbf{k}_*\approx \mathbf{0}$이라 사후분산 $k(x_*, x_*) - \mathbf{k}_*^\top(\mathbf{K} + \sigma_n^2 \mathbf{I})^{-1}\mathbf{k}_*$가 사전분산 $\sigma_f^2 = 4$로 돌아가고, 표준편차는 2다. 사후 평균도 사전 평균 0으로 돌아간다. 외삽 영역에서 GP의 불확실성은 사전분포가 정한 크기 이상으로 커지지 않는다는 뜻이고, 사전분포가 틀렸다면(예: 추세가 있는데 영평균) 이 구간도 틀린다.'''
+
+[[questions]]
+id = "posterior-var-independent-of-y"
+type = "single"
+objective = 2
+prompt = '''하이퍼파라미터 $(\ell, \sigma_f, \sigma_n)$를 고정한 GP 회귀에서, 학습 입력 $\mathbf{X}$는 그대로 두고 관측값 $\mathbf{y}$만 바꾸면 사후분산 $\sigma^2(x_*)$는?'''
+explanation = '''사후분산 $k(x_*, x_*) - \mathbf{k}_*^\top(\mathbf{K} + \sigma_n^2\mathbf{I})^{-1}\mathbf{k}_*$에는 $\mathbf{y}$가 없다. 입력의 배치와 하이퍼파라미터만으로 정해진다. 그래서 하이퍼파라미터를 고정한 GP는 "실험을 어디서 할지"를 결과를 보기 전에 계획할 수 있다(25.3장 실험 설계). 실제로는 하이퍼파라미터를 $\mathbf{y}$로 추정하므로 간접적으로 $\mathbf{y}$에 의존한다.'''
+
+[[questions.choices]]
+text = "변하지 않는다. 사후분산은 입력 위치와 하이퍼파라미터만으로 정해진다."
+correct = true
+
+[[questions.choices]]
+text = "관측값이 클수록 커진다."
+feedback = "사후분산 식에 $\\mathbf{y}$가 없다. 값의 크기는 사후 평균만 바꾼다."
+
+[[questions.choices]]
+text = "관측값이 학습 점 사이에서 많이 흔들릴수록 커진다."
+feedback = "그런 효과는 하이퍼파라미터를 다시 추정할 때만(길이척도가 짧아지거나 잡음이 커져서) 간접적으로 나타난다."
+
+[[questions]]
+id = "single-point-variance"
+type = "numeric"
+objective = 2
+prompt = '''$\sigma_f^2 = 1$인 GP에서 입력 $x_0$에서 관측을 하나 얻었다. 관측 잡음 분산은 $\sigma_n^2 = 1$이다. 같은 위치 $x_0$에서 잠재함수 $f(x_0)$의 사후분산은?'''
+answer = 0.5
+tolerance = 0.01
+slider = { min = 0, max = 1, step = 0.05 }
+explanation = '''$\sigma^2(x_0) = k(x_0, x_0) - k(x_0, x_0)^2/(k(x_0, x_0) + \sigma_n^2) = 1 - 1/2 = 0.5$. 잡음이 있으면 관측한 위치에서도 사후분산이 0이 되지 않는다. 사전 정밀도 1과 관측 정밀도 1이 더해져 사후 정밀도 2가 된 것과 같다. 잡음이 0이면 사후분산은 0(보간)이 된다.'''
+
+[[questions]]
+id = "lml-short-lengthscale"
+type = "single"
+objective = 3
+prompt = '''로그 주변우도 $\log p(\mathbf{y} \mid \mathbf{X}, \ell) = -\tfrac12 \mathbf{y}^\top \mathbf{K}_y^{-1}\mathbf{y} - \tfrac12 \log\det \mathbf{K}_y - \tfrac{N}{2}\log 2\pi$로 길이척도를 고른다. 길이척도를 매우 작게 하면 로그 주변우도가 낮아지는 주된 이유는?'''
+explanation = '''길이척도가 작으면 모든 점이 서로 거의 독립인 모델이 되어, 임의의 데이터를 설명할 수 있는 유연한 모델이 된다. 그만큼 이 특정 데이터에 주는 확률이 퍼져 있어 $-\tfrac12\log\det\mathbf{K}_y$ 항(복잡도 항)이 크게 불리해진다. 주변우도는 파라미터를 적분했기 때문에 별도의 정규화 없이도 이 Occam 효과를 가진다. 적합 항은 크게 나빠지지 않거나 오히려 좋아질 수 있으므로, 적합 항만 보면 작은 길이척도를 고르게 된다. 본문의 예에서 길이척도 0.05와 1.0의 적합 항은 $-13.7$과 $-13.2$로 비슷하지만 복잡도 항은 2.2와 42.3으로 크게 다르다.'''
+
+[[questions.choices]]
+text = "모델이 너무 유연해서 데이터 하나하나에 확률을 넓게 나눠 주므로, 복잡도 항($\\log\\det$ 항)이 크게 불리해지기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "학습 데이터를 잘 맞추지 못해 적합 항이 나빠지기 때문이다."
+feedback = "작은 길이척도에서도 적합 항은 크게 나빠지지 않는다. 손해의 대부분은 모델이 너무 많은 데이터를 설명할 수 있다는 데서(복잡도 항) 온다."
+
+[[questions.choices]]
+text = "Cholesky 분해가 수치적으로 불안정해지기 때문이다."
+feedback = "수치 불안정은 길이척도가 **클** 때(행렬이 거의 특이) 생긴다. 작은 길이척도의 $\\mathbf{K}$는 단위행렬에 가깝다."
+
+[[questions]]
+id = "isotropic-scaling"
+type = "single"
+objective = 3
+prompt = '''온도(K, 300–400)와 압력(Pa, $10^5$–$5\times10^5$)을 입력으로 하는 대리모델에, 입력을 원래 단위 그대로 둔 등방성 RBF 커널(길이척도 하나)을 맞췄다. 최적 길이척도가 약 $7\times 10^4$로 나왔다. 가장 그럴듯한 결과는?'''
+explanation = '''등방성 커널은 모든 입력 축에 같은 길이척도를 쓴다. 압력 축의 변화를 설명하려면 길이척도가 $10^4$–$10^5$ 규모여야 하는데, 그 길이척도에서 온도 100 K 차이는 거리 0과 다름없다. 모델은 온도의 영향을 전혀 보지 못하고, 온도가 만든 변동을 잡음으로 흡수해 잡음 분산과 예측 구간이 부풀려진다. 입력을 표준화하거나 축마다 길이척도를 두는 ARD 커널을 쓴다.'''
+
+[[questions.choices]]
+text = "온도의 영향을 무시하고, 온도가 만든 변동을 잡음으로 흡수해 예측 오차와 구간이 커진다."
+correct = true
+
+[[questions.choices]]
+text = "길이척도가 크므로 매우 매끄럽고 정확한 대리모델이 된다."
+feedback = "길이척도는 입력 단위로 읽어야 한다. 압력 단위로는 적당해도 온도 단위로는 사실상 무한대라, 온도 방향으로 상수인 함수가 된다."
+
+[[questions.choices]]
+text = "주변우도 최적화가 알아서 축마다 다른 척도를 찾아 준다."
+feedback = "길이척도가 하나뿐인 등방성 커널은 축마다 다른 척도를 표현할 수 없다. ARD 커널이나 입력 표준화가 필요하다."
+
+[[questions]]
+id = "cubic-cost"
+type = "numeric"
+objective = 2
+prompt = '''정확한 GP 회귀의 학습 비용은 Cholesky 분해 때문에 $O(N^3)$이다. 학습 점 수를 $N = 2000$에서 $N = 8000$으로 늘리면 학습 시간은 대략 몇 배가 되는가?'''
+answer = 64
+tolerance = 0
+slider = { min = 1, max = 128, step = 1, unit = "배" }
+explanation = '''$(8000/2000)^3 = 4^3 = 64$배다. 메모리는 $O(N^2)$로 16배가 된다. 수만 점 이상에서는 유도점(inducing point)을 쓰는 sparse GP 같은 근사가 필요하다.'''

@@ -1,0 +1,126 @@
+# 1.5 첫 번째 연구 파이프라인 완주하기 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "read-the-table"
+type = "single"
+objective = 1
+prompt = '''본문의 결과 표(테스트 RMSE: 평균 예측 0.5941, 선형 회귀 0.0760, 작은 진폭 공식 0.1305, 물리 특징 + 선형 회귀 0.0089, MLP 0.0190 s)가 지지하는 결론은?'''
+explanation = '''같은 분할·같은 지표에서 MLP는 입력을 그대로 쓴 선형 회귀보다 오차가 작다. 그러나 진자 주기 공식에서 온 특징을 쓴 선형 회귀가 MLP보다 두 배 이상 좋고, 측정 잡음(0.01 s) 수준에 도달했다. 따라서 "MLP가 최고"나 "신경망이 물리보다 낫다"는 결론은 표가 지지하지 않는다. 또 이 표는 데이터 하나·분할 하나·MLP 초기화 하나의 결과이므로 "항상"을 말할 수 없다.'''
+
+[[questions.choices]]
+text = "이 문제에서 MLP가 가장 좋은 모델이다."
+feedback = "물리 특징 + 선형 회귀의 테스트 RMSE(0.0089 s)가 MLP(0.0190 s)보다 작다. baseline을 하나만 두었다면 놓쳤을 결론이다."
+
+[[questions.choices]]
+text = "이 분할에서 MLP는 입력을 그대로 쓴 선형 회귀보다 오차가 작지만, 물리 지식으로 만든 특징의 선형 회귀보다는 크다."
+correct = true
+
+[[questions.choices]]
+text = "신경망은 물리 공식보다 항상 정확하다."
+feedback = "MLP가 이긴 것은 작은 진폭 공식(진폭 효과를 무시한 공식)이고, 진폭 효과를 넣은 물리 특징에는 졌다. 그리고 표 하나로 '항상'을 말할 수 없다."
+
+[[questions.choices]]
+text = "작은 진폭 공식은 데이터를 쓰지 않으므로 비교 대상으로 의미가 없다."
+feedback = "학습 없이 분야의 지식만으로 얻는 성능은 중요한 기준선이다. 학습한 모델이 이보다 나빠야 할 이유가 없다는 하한을 준다."
+
+[[questions]]
+id = "standardize-train-only"
+type = "single"
+objective = 1
+prompt = '''본문은 입력과 출력의 표준화 평균·표준편차를 **학습 데이터에서만** 계산한다. 그 이유로 가장 적절한 것은?'''
+explanation = '''표준화 통계도 데이터에서 추정한 값, 즉 학습의 일부다. 검증·테스트 데이터를 포함해 계산하면 평가 데이터의 정보가 학습에 새어 들어간다(1.3장의 정보의 시점). 이 데이터처럼 분포가 같고 표본이 충분하면 효과가 작을 수 있지만, 시간 분할이나 그룹 분할에서는 결과를 눈에 띄게 바꿀 수 있다. 추론 시점에 새 입력 하나가 들어오면 그 입력만으로는 평균을 계산할 수도 없다.'''
+
+[[questions.choices]]
+text = "학습 데이터가 가장 커서 통계가 가장 정확하기 때문이다."
+feedback = "크기는 부차적이다. 핵심은 평가 데이터의 정보를 학습에 쓰지 않는 것이다."
+
+[[questions.choices]]
+text = "평가 데이터의 정보가 학습에 새어 들어가지 않게 하고, 추론 시점에도 같은 변환을 쓸 수 있게 하려는 것이다."
+correct = true
+
+[[questions.choices]]
+text = "표준화하지 않으면 신경망이 전혀 학습되지 않기 때문이다."
+feedback = "표준화는 학습을 안정시키지만, 그것이 학습 데이터에서만 통계를 계산하는 이유는 아니다. 전체 데이터로 계산해도 학습은 된다. 문제는 평가가 오염된다는 것이다."
+
+[[questions.choices]]
+text = "검증 데이터와 테스트 데이터는 단위가 다르기 때문이다."
+feedback = "같은 측정에서 나눈 데이터이므로 단위는 같다."
+
+[[questions]]
+id = "mlp-param-count"
+type = "numeric"
+objective = 1
+prompt = '''본문의 MLP는 입력 2개(줄 길이, 진폭), tanh 은닉 뉴런 32개, 출력 1개다. 학습하는 파라미터(가중치와 bias)는 모두 몇 개인가?'''
+answer = 129
+tolerance = 0
+explanation = '''$\mathbf{W}_1$은 $2 \times 32 = 64$개, $\mathbf{b}_1$은 32개, $\mathbf{W}_2$는 $32 \times 1 = 32$개, $\mathbf{b}_2$는 1개로 모두 129개다. 학습 데이터는 180개다. 파라미터 수가 데이터 수에 가까운 모델은 학습 오차가 검증 오차보다 작아지기 쉽다(본문 표에서 MLP 학습 0.0180, 검증 0.0232 s). 물리 특징 + 선형 회귀는 파라미터 4개로 더 좋은 성능을 냈다.'''
+
+[[questions]]
+id = "tanh-derivative-factor"
+type = "single"
+objective = 1
+prompt = '''본문 학습 루프의 backward에서 `d_h = (d_out @ W2.T) * (1 - h ** 2)`의 `(1 - h ** 2)`는 무엇인가?'''
+explanation = '''$h = \tanh(a)$이고 $\tanh'(a) = 1 - \tanh^2(a) = 1 - h^2$이다. 연쇄법칙으로 은닉층 출력에 대한 gradient를 은닉층 입력 $a$에 대한 gradient로 바꾸려면 활성화 함수의 도함수를 곱해야 한다. 이 곱을 빠뜨리면 gradient가 틀리지만 코드는 오류 없이 돌아가고 loss도 어느 정도 줄 수 있다. 그래서 gradient는 수치미분으로 확인한다(이 장의 연습문제, 8.4장).'''
+
+[[questions.choices]]
+text = "tanh의 도함수: 연쇄법칙에서 은닉층 활성화를 거슬러 갈 때 곱한다."
+correct = true
+
+[[questions.choices]]
+text = "MSE loss의 도함수"
+feedback = "MSE의 도함수는 d_out = 2 * (out - ys) / N에서 이미 계산했다."
+
+[[questions.choices]]
+text = "과적합을 막는 정규화 항"
+feedback = "정규화 항은 loss에 더하는 별도의 항이다. 이 식에는 loss에 더한 것이 없다."
+
+[[questions.choices]]
+text = "학습률을 step마다 줄이는 감쇠 계수"
+feedback = "학습률은 update 단계에서만 쓰인다. backward는 gradient만 계산한다."
+
+[[questions]]
+id = "suspicious-results"
+type = "multiple"
+objective = 1
+prompt = '''다음 중 결과를 믿기 전에 원인부터 의심해야 할 상황을 모두 고르시오.'''
+explanation = '''테스트 데이터가 충분히 큰데 테스트 오차가 측정 잡음보다 훨씬 작다면, 정답이 입력에 새고 있을 가능성이 크다(1.3장). 학습 loss가 첫 몇 step 만에 0에 가까워지는 것도 누수나 정답 열이 입력에 들어간 신호다. 반대로 seed를 바꾸면 숫자가 조금 달라지는 것은 정상이고, 그 흔들림의 크기를 재는 것이 할 일이다. 물리 특징 모델이 잡음 수준에 도달한 것은 모델이 참 관계를 거의 정확히 표현할 수 있기 때문이고, 테스트 60개에서 잡음 표준편차보다 약간 작게 나오는 것은 표본 변동의 범위 안이다.'''
+
+[[questions.choices]]
+text = "테스트 데이터 수천 개에서 RMSE가 측정 잡음 표준편차의 절반 이하로 나왔다."
+correct = true
+
+[[questions.choices]]
+text = "학습 loss가 첫 10 step 만에 거의 0이 되었다."
+correct = true
+
+[[questions.choices]]
+text = "MLP 초기화 seed를 바꿔 다시 실행했더니 검증 RMSE가 0.023에서 0.027로 바뀌었다."
+feedback = "초기화가 달라지면 도달하는 해가 달라지므로 숫자가 흔들리는 것은 정상이다. 할 일은 흔들림의 크기를 재고, 모델 간 차이가 그보다 큰지 보는 것이다."
+
+[[questions.choices]]
+text = "진자 주기 공식에서 온 특징의 선형 회귀가 테스트 60개에서 측정 잡음 수준(0.0089 s)에 도달했다."
+feedback = "모델이 참 관계를 거의 정확히 표현할 수 있으면 오차는 잡음 수준까지 내려간다. 60개 표본에서는 잡음만으로도 RMSE가 0.01 s보다 0.001 s쯤 작게 나올 수 있다."
+
+[[questions]]
+id = "where-next"
+type = "single"
+objective = 2
+prompt = '''MLP의 검증 RMSE가 초기화 seed에 따라 0.023–0.031 s로 흔들린다. 두 모델의 차이가 이 흔들림보다 의미 있게 큰지 판단하는 방법을 깊게 다루는 곳은?'''
+explanation = '''여러 seed와 여러 분할의 결과로 두 모델의 차이가 우연으로 설명되는지 판단하는 것은 모델 비교의 통계(12.5장)의 주제다. 재현성(22.2장)은 같은 seed로 같은 숫자를 다시 얻는 문제로, 흔들림을 없애는 것이 아니라 고정하는 것이다. seed를 고정해 같은 숫자를 얻어도, 그 숫자가 다른 seed에서도 나올지는 여전히 모른다.'''
+
+[[questions.choices]]
+text = "12.5장 모델 비교의 통계"
+correct = true
+
+[[questions.choices]]
+text = "22.2장 재현성: seed를 고정하면 흔들림이 사라진다."
+feedback = "seed를 고정하면 같은 숫자가 다시 나오지만, 다른 seed에서의 흔들림은 그대로다. 재현성과 통계적 비교는 다른 질문이다."
+
+[[questions.choices]]
+text = "17.9장 학습 실패 진단: seed마다 다른 결과는 버그다."
+feedback = "초기화가 다르면 결과가 조금 다른 것은 버그가 아니라 정상이다. 버그를 의심할 것은 seed 하나에서만 크게 다른 결과가 나올 때다."
+
+[[questions.choices]]
+text = "6.3장 설정 관리"
+feedback = "설정 관리는 seed 같은 값을 코드 밖에서 기록·변경하는 방법을 다룬다. 흔들림의 크기를 통계적으로 해석하는 방법은 아니다."

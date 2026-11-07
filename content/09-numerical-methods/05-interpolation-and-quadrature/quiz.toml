@@ -1,0 +1,126 @@
+# 9.5 보간·근사·수치적분 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+# 계산으로 확인할 수 있는 정답은 labs/numerical-methods/interpolation-and-quadrature/test_quiz.py가 검증한다.
+
+[[questions]]
+id = "runge-more-nodes"
+type = "single"
+objective = 1
+prompt = '''$f(x) = 1/(1+25x^2)$를 $[-1, 1]$의 **등간격** 노드 $n+1$개로 다항식 보간한다. $n$을 5, 10, 20으로 늘리면 구간 전체의 최대 오차는 어떻게 되는가?'''
+explanation = '''등간격 노드의 고차 다항식 보간은 구간 양 끝 근처에서 크게 진동하고, 그 진동은 $n$이 커질수록 커진다(Runge 현상). 본문 계산에서 최대 오차는 $n = 5, 10, 20$에서 약 0.43, 1.9, 60이었다. 원인은 반올림이 아니라 노드 배치다. 같은 수의 Chebyshev 노드를 쓰면 오차가 줄어든다.'''
+
+[[questions.choices]]
+text = "데이터가 많아지므로 오차가 줄어든다."
+feedback = "점을 늘려도 등간격 노드에서는 양 끝의 진동이 커진다. 데이터가 많다는 것과 보간 다항식이 좋아진다는 것은 다른 문제다."
+
+[[questions.choices]]
+text = "구간 양 끝 근처에서 진동이 커져 최대 오차가 커진다."
+correct = true
+
+[[questions.choices]]
+text = "구간 가운데에서 오차가 커지고 양 끝은 정확해진다."
+feedback = "반대다. 등간격 보간의 오차는 양 끝에서 가장 크다. 오차 공식의 노드 다항식 ∏(x − x_i)가 양 끝에서 크기 때문이다."
+
+[[questions.choices]]
+text = "다항식 계산의 반올림 오차 때문에 커지며, 정확한 산술을 쓰면 0으로 수렴한다."
+feedback = "Runge 현상은 정확한 산술에서도 일어나는 근사 이론의 현상이다. 반올림과 무관하게 등간격 보간 다항식 자체가 수렴하지 않는다."
+
+[[questions]]
+id = "extrapolation-guarantee"
+type = "single"
+objective = 1
+prompt = '''$[0, 10]$ s에서 측정한 신호를 cubic spline으로 보간했고, 측정 구간 안에서 참값과의 오차가 작다는 것을 확인했다. $t = 10.5$ s의 값에 대해 옳은 것은?'''
+explanation = '''보간의 오차 보장은 노드 사이에서만 성립한다. 구간 밖에서 spline은 끝 조각의 3차식을 연장할 뿐이고, 그 값은 마지막 몇 개 점의 잡음과 기울기에 크게 좌우된다. 본문 실습에서 구간 안 RMS 오차가 0.03 수준인 spline의 $t = 10.5$ s 오차는 2.5였다. 구간 밖 값이 필요하면 외삽임을 밝히고, 물리 모델이나 불확실성 추정을 따로 쓴다.'''
+
+[[questions.choices]]
+text = "구간 안의 오차가 작았으므로 10.5 s에서도 비슷한 크기의 오차를 기대할 수 있다."
+feedback = "보간 오차의 보장은 노드 사이에만 있다. 구간 밖은 외삽이고, 오차가 거리와 함께 빠르게 커진다."
+
+[[questions.choices]]
+text = "외삽이므로 구간 안의 오차로는 아무것도 보장되지 않는다. 별도의 모델이나 검증이 필요하다."
+correct = true
+
+[[questions.choices]]
+text = "spline 대신 측정점 전체를 지나는 고차 다항식을 쓰면 외삽이 더 정확해진다."
+feedback = "고차 다항식은 구간 밖에서 가장 빨리 발산한다. 본문 실습에서 40개 점을 지나는 다항식의 외삽 오차는 10^12 단위였다."
+
+[[questions]]
+id = "interpolate-noisy-data"
+type = "single"
+objective = 2
+prompt = '''잡음(표준편차 0.05)이 섞인 측정값 21개를 20차 다항식으로 맞추니 데이터 잔차가 0이 되었다. 이 결과를 어떻게 해석해야 하는가?'''
+explanation = '''점 21개는 20차 다항식으로 정확히 보간된다. 잔차 0은 잡음까지 그대로 따라갔다는 뜻이다. 본문 계산에서 이 다항식과 참함수의 최대 오차는 100 이상이었다. 4차 최소제곱 근사는 데이터 잔차(RMS 0.026)가 0이 되지 않았지만 참함수와의 최대 오차는 0.027이었다. 잡음이 있으면 잔차가 잡음 수준으로 남는 낮은 차수의 근사를 고른다.'''
+
+[[questions.choices]]
+text = "잔차가 0이므로 가장 정확한 모델이다."
+feedback = "잔차 0은 잡음까지 맞췄다는 뜻이다. 데이터에 대한 오차와 참함수에 대한 오차는 다르다."
+
+[[questions.choices]]
+text = "잡음까지 보간한 것이다. 노드 사이, 특히 양 끝에서 참함수와 크게 어긋날 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "단항식 대신 Chebyshev 기저로 같은 20차 다항식을 맞추면 문제가 사라진다."
+feedback = "기저를 바꾸면 행렬의 조건수가 좋아져 계산이 안정해지지만, 21개 점을 지나는 20차 다항식은 하나뿐이다. 잡음을 따라가는 문제는 그대로다."
+
+[[questions]]
+id = "simpson-halving"
+type = "numeric"
+objective = 3
+prompt = '''매끄러운 함수의 적분을 합성 Simpson 규칙으로 계산한다. 구간 폭 $h$를 절반으로 줄이면 오차는 대략 몇 분의 1로 줄어드는가?'''
+answer = 16
+tolerance = 1
+slider = { min = 2, max = 32, step = 1, unit = "분의 1" }
+explanation = '''합성 Simpson 규칙의 오차는 $O(h^4)$이므로 $h$를 절반으로 하면 오차는 $2^4 = 16$분의 1이 된다. 본문의 $\int_0^1 e^x\,dx$에서 $n = 4 \to 8 \to 16$일 때 오차는 $3.70\times10^{-5} \to 2.33\times10^{-6} \to 1.46\times10^{-7}$로, 비율이 약 16이다. 사다리꼴 규칙은 $O(h^2)$이라 4분의 1로 준다.'''
+
+[[questions]]
+id = "gauss-exact-degree"
+type = "numeric"
+objective = 3
+prompt = '''3점 Gauss–Legendre 구적은 $[-1, 1]$에서 최대 몇 차 다항식까지 정확히 적분하는가?'''
+answer = 5
+tolerance = 0
+slider = { min = 1, max = 9, step = 1, unit = "차" }
+explanation = '''$n$점 Gauss 구적은 노드 $n$개와 가중치 $n$개, 모두 $2n$개의 자유도를 써서 $2n-1$차까지의 다항식을 정확히 적분한다. $n = 3$이면 5차다. 6차 단항식 $x^6$에서는 정확값 $2/7$과 어긋난다. 같은 3점이라도 노드를 고정한 Simpson 규칙은 3차까지만 정확하다.'''
+
+[[questions]]
+id = "sqrt-singularity-order"
+type = "single"
+objective = 3
+prompt = '''$\int_0^1 \sqrt{x}\,dx$를 합성 Simpson 규칙으로 계산하면서 $h$를 절반씩 줄였다. 오차 감소에 대해 옳은 것은?'''
+explanation = '''Simpson 규칙의 $O(h^4)$는 피적분함수의 4계 도함수가 유계라는 가정에서 나온다. $\sqrt{x}$는 $x = 0$에서 도함수가 무한대이므로 이 가정이 깨지고, 오차는 첫 구간이 지배해 $O(h^{1.5})$로 줄어든다. $h$를 절반으로 하면 오차는 약 $2^{1.5} \approx 2.8$분의 1이 된다. 특이점이 있으면 변수변환($x = u^2$)이나 특이점을 다루는 적응 구적(`scipy.integrate.quad`)을 쓴다.'''
+
+[[questions.choices]]
+text = "Simpson 규칙이므로 오차는 매번 약 16분의 1로 준다."
+feedback = "차수 4는 피적분함수가 충분히 매끄러울 때의 결과다. √x는 x = 0에서 도함수가 발산한다."
+
+[[questions.choices]]
+text = "x = 0의 특이성 때문에 수렴 차수가 떨어져 오차가 약 2.8분의 1씩만 준다."
+correct = true
+
+[[questions.choices]]
+text = "피적분함수가 x = 0에서 발산하므로 Simpson 규칙은 수렴하지 않는다."
+feedback = "√x 자체는 x = 0에서 유한(0)하다. 발산하는 것은 도함수다. 그래서 수렴은 하지만 느리다."
+
+[[questions]]
+id = "monte-carlo-dimension"
+type = "multiple"
+objective = 3
+prompt = '''$[0,1]^d$ 위의 적분에 대해 옳은 것을 모두 고르시오.'''
+explanation = '''축마다 $m$점을 쓰는 격자는 $m^d$개의 점이 필요하므로, 점 $N$개로는 축마다 $N^{1/d}$점밖에 쓰지 못한다. 중점 규칙의 오차 $O(m^{-2}) = O(N^{-2/d})$는 $d$가 커지면 급격히 나빠진다. Monte Carlo 오차는 $\sigma/\sqrt{N}$로 $d$가 비율에 들어가지 않고, 같은 표본의 표준편차로 오차를 추정할 수 있다. 1차원에서는 격자 규칙이 훨씬 정확하다(본문: 같은 4096점에서 중점 규칙 $2\times10^{-9}$, MC $2\times10^{-3}$).'''
+
+[[questions.choices]]
+text = "축마다 m점을 쓰는 격자 규칙은 m^d개의 점을 계산해야 한다."
+correct = true
+
+[[questions.choices]]
+text = "Monte Carlo 오차는 표본 수 N에 대해 1/√N으로 줄고, 이 비율은 차원 d와 무관하다."
+correct = true
+
+[[questions.choices]]
+text = "Monte Carlo는 차원과 상관없이 격자 규칙보다 정확하다."
+feedback = "저차원에서는 반대다. 1차원에서 같은 4096점으로 중점 규칙의 오차는 MC보다 백만 배 작았다. 교차점은 함수의 매끄러움과 차원에 따라 다르다."
+
+[[questions.choices]]
+text = "Monte Carlo 추정의 표준오차는 같은 표본의 표준편차를 √N으로 나누어 추정할 수 있다."
+correct = true

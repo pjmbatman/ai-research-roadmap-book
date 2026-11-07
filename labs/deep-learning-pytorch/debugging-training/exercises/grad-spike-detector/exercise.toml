@@ -1,0 +1,6 @@
+title = "gradient norm 로그에서 이상 step 찾기"
+chapter = "deep-learning-pytorch/debugging-training"
+objective = 1
+exec = "browser"
+entry = "find_spikes"
+timeout_s = 10

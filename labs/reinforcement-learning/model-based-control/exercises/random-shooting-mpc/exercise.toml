@@ -1,0 +1,6 @@
+title = "랜덤 슈팅 MPC"
+chapter = "reinforcement-learning/model-based-control"
+objective = 2
+exec = "browser"
+entry = "random_shooting"
+timeout_s = 10

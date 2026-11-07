@@ -1,0 +1,6 @@
+title = "1차원 GMM의 E-step과 M-step"
+chapter = "bayesian-inference/latent-variables-and-em"
+objective = 2
+exec = "browser"
+entry = "e_step"
+timeout_s = 10

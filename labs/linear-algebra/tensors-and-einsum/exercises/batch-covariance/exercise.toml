@@ -1,0 +1,6 @@
+title = "batch 공분산을 축 규약대로"
+chapter = "linear-algebra/tensors-and-einsum"
+objective = 3
+exec = "browser"
+entry = "batch_cov"
+timeout_s = 10

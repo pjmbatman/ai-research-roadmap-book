@@ -3,7 +3,7 @@ id: research-landscape
 title: "AI 연구의 지도"
 title_en: "The Landscape of AI Research"
 track: orientation
-status: outline
+status: draft
 summary: "AI 연구가 어떤 단계와 결정으로 이루어지는지 전체 지도를 그리고, 문제를 수학적으로 정의하는 법을 익힌다."
 ---
 

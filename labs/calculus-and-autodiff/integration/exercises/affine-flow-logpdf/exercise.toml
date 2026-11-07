@@ -1,0 +1,6 @@
+title = "아핀 flow의 로그밀도"
+chapter = "calculus-and-autodiff/integration"
+objective = 3
+exec = "browser"
+entry = "affine_flow_logpdf"
+timeout_s = 10

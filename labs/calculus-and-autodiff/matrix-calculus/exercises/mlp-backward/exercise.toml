@@ -1,0 +1,6 @@
+title = "2층 MLP의 gradient를 손으로 구현하기"
+chapter = "calculus-and-autodiff/matrix-calculus"
+objective = 3
+exec = "browser"
+entry = "mlp_grads"
+timeout_s = 15

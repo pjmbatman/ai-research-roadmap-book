@@ -1,0 +1,6 @@
+title = "damped Newton으로 연립방정식 풀기"
+chapter = "numerical-methods/nonlinear-equations"
+objective = 2
+exec = "browser"
+entry = "damped_newton"
+timeout_s = 10

@@ -1,0 +1,126 @@
+# 20.2 가치 기반·정책 기반 강화학습 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "td-vs-mc"
+type = "single"
+objective = 1
+prompt = '''정책 평가에서 Monte Carlo 목표 $G_t$와 TD(0) 목표 $r_{t+1} + \gamma V(s_{t+1})$를 비교한 설명으로 옳은 것은?'''
+explanation = '''$G_t$는 $V^\pi(s_t)$의 불편 추정량이지만 에피소드 끝까지의 무작위성이 모두 쌓여 분산이 크다. TD 목표는 한 step의 무작위성만 담아 분산이 작지만, 아직 틀린 추정치 $V(s_{t+1})$를 쓰므로(bootstrapping) 편향이 있다. 편향이 있다고 수렴하지 않는 것은 아니다. 표 형태에서는 학습률을 적절히 줄이면 TD도 $V^\pi$로 수렴하고, 본문의 무작위 보행에서는 같은 에피소드 수로 TD의 오차가 더 작았다.'''
+
+[[questions.choices]]
+text = "MC 목표는 불편이지만 분산이 크고, TD 목표는 편향이 있지만 분산이 작다."
+correct = true
+
+[[questions.choices]]
+text = "TD 목표는 편향이 있으므로 참 가치로 수렴하지 않는다."
+feedback = "bootstrapping의 편향은 추정치가 좋아질수록 줄어든다. 표 형태 TD(0)는 학습률 조건 아래 V^π로 수렴한다."
+
+[[questions.choices]]
+text = "MC 목표는 실제 이득이므로 TD보다 항상 빨리 수렴한다."
+feedback = "불편이어도 분산이 크면 같은 표본 수에서 오차가 클 수 있다. 본문의 무작위 보행에서는 TD가 더 정확했다."
+
+[[questions.choices]]
+text = "두 목표 모두 전이확률을 알아야 계산할 수 있다."
+feedback = "두 목표 모두 경험한 표본(r, s')만으로 계산한다. 그래서 model-free 방법이다."
+
+[[questions]]
+id = "q-update-numeric"
+type = "numeric"
+objective = 1
+prompt = '''Q-learning에서 현재 $Q(s, a) = 2$이고, 행동 뒤 보상 $r = 1$과 다음 상태 $s'$를 관측했다. $\max_{a'} Q(s', a') = 3$, $\gamma = 0.9$, 학습률 $\alpha = 0.5$일 때 갱신된 $Q(s, a)$는?'''
+answer = 2.85
+tolerance = 0.001
+explanation = '''TD 목표는 $r + \gamma \max_{a'} Q(s', a') = 1 + 0.9 \times 3 = 3.7$이고, TD 오차는 $3.7 - 2 = 1.7$이다. 갱신은 $2 + 0.5 \times 1.7 = 2.85$다. 목표 3.7로 바로 바꾸는 것이 아니라 학습률만큼만 옮긴다. 할인을 빠뜨리면 목표가 4가 되어 3.0이 나온다.'''
+
+[[questions]]
+id = "q-vs-sarsa-cliff"
+type = "single"
+objective = 1
+prompt = '''절벽 걷기에서 ε-greedy($\varepsilon = 0.1$)로 학습하면 Q-learning은 절벽 바로 위의 최단 경로를, SARSA는 절벽에서 떨어진 경로를 배운다. 그 이유로 가장 알맞은 것은?'''
+explanation = '''Q-learning의 목표 $r + \gamma\max_{a'}Q(s', a')$는 다음 상태에서 탐욕적으로 행동한다고 가정하므로, 탐욕 정책의 가치(off-policy)를 배운다. 탐욕 정책에게는 절벽 옆길이 최적이다. SARSA는 실제로 고른 $a'$를 목표에 넣어, 가끔 무작위로 움직이는 ε-greedy 정책 자신의 가치(on-policy)를 배운다. 이 정책에게 절벽 옆은 위험하므로 돌아가는 길을 고른다. 학습률이나 수렴 여부의 문제가 아니라 무엇의 가치를 배우느냐의 차이다.'''
+
+[[questions.choices]]
+text = "Q-learning은 탐욕 정책의 가치를, SARSA는 탐험을 포함한 실제 행동 정책의 가치를 배우기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "SARSA가 아직 수렴하지 않아서 최적 경로를 찾지 못했기 때문이다."
+feedback = "SARSA는 ε-greedy 정책 아래에서의 최적, 즉 탐험의 위험을 반영한 경로로 수렴한 것이다. 더 학습해도 ε이 고정이면 같은 경로를 고른다."
+
+[[questions.choices]]
+text = "Q-learning은 절벽의 −100 보상을 학습에 쓰지 않기 때문이다."
+feedback = "두 알고리즘 모두 같은 보상을 쓴다. 차이는 다음 상태의 가치를 max로 쓰는지, 실제 다음 행동으로 쓰는지다."
+
+[[questions.choices]]
+text = "SARSA는 학습률이 작아서 보수적인 경로를 고른다."
+feedback = "본문에서 두 알고리즘의 학습률은 같다(0.5). 경로 차이는 갱신 목표의 정의에서 온다."
+
+[[questions]]
+id = "baseline-unbiased"
+type = "multiple"
+objective = 1
+prompt = '''REINFORCE의 기울기 추정량에서 이득 $G_t$ 대신 $G_t - b$를 쓰는 baseline에 대해 옳은 것을 모두 고르시오.'''
+explanation = '''$\mathbb{E}_{a \sim \pi}[\nabla_\theta \log\pi_\theta(a \mid s)] = 0$이므로 행동에 의존하지 않는 $b(s)$를 빼도 기울기의 기댓값은 그대로다. 상태에 의존하는 것은 괜찮다. 대표적인 선택 $b(s) = V(s)$는 advantage를 추정하게 하고 분산을 크게 줄인다. 본문 실험에서 보상에 상수 10을 더하면 baseline 없는 추정량의 분산은 100배 넘게 커졌지만, 기대 보상을 baseline으로 빼자 상수와 무관하게 같은 분산으로 돌아왔다. $b$가 행동 $a$에 의존하면 일반적으로 편향이 생긴다.'''
+
+[[questions.choices]]
+text = "행동에 의존하지 않는 baseline은 기울기의 기댓값을 바꾸지 않는다."
+correct = true
+
+[[questions.choices]]
+text = '''baseline은 상태 $s$에 의존해도 된다. 흔한 선택은 $V(s)$다.'''
+correct = true
+
+[[questions.choices]]
+text = "baseline은 분산을 줄이는 대가로 기울기에 편향을 들인다."
+feedback = "행동에 의존하지 않는 baseline은 편향이 없다. score의 기댓값이 0이기 때문이다."
+
+[[questions.choices]]
+text = '''가장 좋은 baseline은 선택한 행동의 가치 $Q(s, a)$다.'''
+feedback = "행동에 의존하는 b는 score와 곱해진 항의 기댓값이 0이 아니게 되어 편향을 만든다. 기댓값 보존 논리는 b가 a와 무관할 때만 성립한다."
+
+[[questions]]
+id = "ppo-clip"
+type = "single"
+objective = 1
+prompt = '''PPO의 대리 목적 $\min\big(\rho_t\hat{A}_t, \operatorname{clip}(\rho_t, 1 - \epsilon, 1 + \epsilon)\hat{A}_t\big)$에서 확률비 $\rho_t$를 자르는 주된 목적은?'''
+explanation = '''policy gradient는 한 번의 갱신으로 정책이 크게 바뀌면, 그 정책이 모으는 다음 데이터가 나빠져 학습이 무너질 수 있다. 자르기는 확률비가 $[1-\epsilon, 1+\epsilon]$ 밖으로 나가면 목적을 더 키워 주지 않아, 같은 데이터로 여러 번 갱신해도 정책이 데이터를 모은 정책 근처에 머물게 한다. 보상 척도나 탐험과는 다른 문제다.'''
+
+[[questions.choices]]
+text = "한 번의 갱신에서 정책이 데이터를 모은 정책으로부터 너무 멀리 바뀌지 않게 한다."
+correct = true
+
+[[questions.choices]]
+text = "보상의 크기를 일정 범위로 잘라 분산을 줄인다."
+feedback = "자르는 것은 보상이 아니라 새 정책과 이전 정책의 확률비다."
+
+[[questions.choices]]
+text = "정책의 엔트로피를 높여 탐험을 늘린다."
+feedback = "엔트로피를 목적에 넣는 것은 SAC의 방식이다. PPO의 clip은 갱신 크기를 제한한다."
+
+[[questions.choices]]
+text = "확률비가 1에서 멀어진 표본을 데이터에서 제거해 off-policy 학습을 가능하게 한다."
+feedback = "PPO는 표본을 제거하지 않고, 그 표본의 목적이 더 커지지 않게 할 뿐이다. 데이터는 직전 정책으로 모은 것만 쓰는 on-policy 방법이다."
+
+[[questions]]
+id = "seed-reporting"
+type = "single"
+objective = 2
+prompt = '''두 RL 설정 A와 B를 각각 seed 30개로 학습했다. 성공률은 A 0.67, B 0.50이고, 차이의 95% 신뢰구간은 $[-0.08, 0.42]$다. seed 0에서는 B만 성공했다. 가장 알맞은 결론은?'''
+explanation = '''차이의 구간이 0을 포함하므로 이 실험으로는 A와 B 중 어느 쪽이 낫다고 말할 수 없다. 점추정은 A가 높지만 불확실성이 크다. seed 0 하나의 결과는 30개 중 한 표본일 뿐이고, 결과를 본 뒤 유리한 seed를 고르면 어느 쪽 결론이든 만들 수 있다. 결론을 내리려면 seed를 늘리거나 분산을 줄인 설계가 필요하다.'''
+
+[[questions.choices]]
+text = "A가 평균이 높으므로 A가 더 좋은 설정이다."
+feedback = "점추정의 차이(0.17)보다 불확실성이 크다. 구간이 0을 포함하면 차이의 부호도 확신할 수 없다."
+
+[[questions.choices]]
+text = "seed 0에서 B만 성공했으므로 B가 더 좋은 설정이다."
+feedback = "seed 하나는 분포의 한 표본이다. 본문의 사슬 실험에서도 seed 0의 비교는 30 seed 평균과 반대였다."
+
+[[questions.choices]]
+text = "이 실험만으로는 차이를 판정할 수 없다. 모든 seed의 결과와 구간을 보고하고, 필요하면 seed를 늘린다."
+correct = true
+
+[[questions.choices]]
+text = "실패한 seed는 학습 오류이므로 성공한 seed만으로 다시 비교한다."
+feedback = "같은 설정에서 실패하는 seed도 그 알고리즘의 결과다. 성공한 seed만 고르면 학습 절차의 신뢰성을 과대평가한다."

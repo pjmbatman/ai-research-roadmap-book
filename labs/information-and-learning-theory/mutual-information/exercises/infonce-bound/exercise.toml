@@ -1,0 +1,6 @@
+title = "점수 행렬에서 InfoNCE 계산하기"
+chapter = "information-and-learning-theory/mutual-information"
+objective = 3
+exec = "browser"
+entry = "infonce"
+timeout_s = 10

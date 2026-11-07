@@ -1,0 +1,6 @@
+title = "보고된 단일 실행값이 재현 범위 안에 있는가"
+chapter = "research-practice/reproducing-papers"
+objective = 1
+exec = "browser"
+entry = "is_consistent"
+timeout_s = 15

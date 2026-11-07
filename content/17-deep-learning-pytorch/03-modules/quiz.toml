@@ -1,0 +1,126 @@
+# 17.3 nn.Module과 모델 구성 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "list-not-registered"
+type = "single"
+objective = 1
+prompt = '''`__init__`에서 `self.layers = [nn.Linear(64, 64) for _ in range(4)]`로 층을 만들고 `forward`에서 차례로 호출했다. 학습은 오류 없이 돌지만 손실이 거의 줄지 않는다. 원인으로 가장 가능성이 높은 것은?'''
+explanation = '''`nn.Module`은 속성에 대입된 값이 `nn.Module`이나 `nn.Parameter`일 때만 하위 모듈·파라미터로 등록한다. 일반 list는 둘 다 아니므로 그 안의 층은 `model.parameters()`에 나타나지 않는다. optimizer가 이 층들을 갱신하지 않으므로 무작위 초기값 그대로 남는다. `.to(device)`, `state_dict()`, `train()`/`eval()` 전환에서도 빠진다. `nn.ModuleList`를 쓴다.'''
+
+[[questions.choices]]
+text = "list 안의 층이 등록되지 않아 optimizer가 그 파라미터를 갱신하지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "층 4개가 같은 객체를 공유해 가중치가 묶여 있다."
+feedback = "리스트 컴프리헨션은 반복마다 새 nn.Linear를 만든다. 공유는 같은 객체를 여러 번 넣었을 때의 문제다."
+
+[[questions.choices]]
+text = "list에 넣으면 forward에서 gradient가 계산되지 않는다."
+feedback = "gradient는 계산된다. 텐서의 requires_grad는 그대로이기 때문이다. 문제는 그 파라미터가 optimizer에 전달되지 않는다는 것이다."
+
+[[questions.choices]]
+text = "층이 4개라 gradient가 소실되었다."
+feedback = "4층 MLP는 깊지 않다. 이 증상은 구조가 아니라 등록 문제다. 먼저 sum(p.numel() for p in model.parameters())로 파라미터 수를 확인한다."
+
+[[questions]]
+id = "call-not-forward"
+type = "single"
+objective = 1
+prompt = '''모델을 실행할 때 `model.forward(x)` 대신 `model(x)`를 써야 하는 이유로 가장 정확한 것은?'''
+explanation = '''`model(x)`는 `nn.Module.__call__`을 거치며, 이 과정에서 등록된 forward pre-hook·forward hook·backward hook을 실행하고 그 사이에 `forward`를 호출한다. `forward`를 직접 부르면 계산 결과는 같아도 hook이 실행되지 않는다. 활성값 기록, 일부 프로파일링·분산 학습 도구가 hook에 의존하므로 조용히 동작하지 않게 된다.'''
+
+[[questions.choices]]
+text = "model(x)는 등록된 hook을 실행한 뒤 forward를 호출한다. forward를 직접 부르면 hook이 건너뛰어진다."
+correct = true
+
+[[questions.choices]]
+text = "model(x)만 gradient를 기록하고, forward(x)는 no_grad로 실행된다."
+feedback = "gradient 기록은 텐서 연산 수준에서 일어나며 어느 호출 방식이든 같다."
+
+[[questions.choices]]
+text = "model(x)가 자동으로 model.eval()을 호출한다."
+feedback = "__call__은 모드를 바꾸지 않는다. train/eval 전환은 사용자가 직접 해야 한다."
+
+[[questions.choices]]
+text = "차이가 없다. 단지 관례다."
+feedback = "계산 결과는 같을 수 있지만 hook 실행 여부가 다르다. 관례 이상의 이유가 있다."
+
+[[questions]]
+id = "batchnorm-buffers"
+type = "multiple"
+objective = 2
+prompt = '''`nn.BatchNorm1d(8)`의 state_dict 항목 중 **buffer**(학습되지 않지만 저장되는 상태)인 것을 모두 고르시오.'''
+explanation = '''`weight`($\gamma$)와 `bias`($\beta$)는 gradient로 학습되는 파라미터다. `running_mean`, `running_var`, `num_batches_tracked`는 forward 중에 갱신되는 통계로, gradient로 학습되지 않지만 eval 동작에 필요하므로 buffer로 등록되어 state_dict에 저장된다.'''
+
+[[questions.choices]]
+text = "weight"
+feedback = "weight(감마)는 optimizer가 갱신하는 학습 파라미터다."
+
+[[questions.choices]]
+text = "bias"
+feedback = "bias(베타)도 학습 파라미터다."
+
+[[questions.choices]]
+text = "running_mean"
+correct = true
+
+[[questions.choices]]
+text = "running_var"
+correct = true
+
+[[questions.choices]]
+text = "num_batches_tracked"
+correct = true
+
+[[questions]]
+id = "plain-tensor-attribute"
+type = "single"
+objective = 2
+prompt = '''입력 표준화용 평균을 `self.mean = torch.tensor([300.0, 1e5])`처럼 일반 속성으로 저장한 모델을 `model.to("cuda")`로 옮기고 체크포인트를 저장했다. 어떤 문제가 생기는가?'''
+explanation = '''일반 텐서 속성은 파라미터도 buffer도 아니므로 `.to(device)`가 옮기지 않고(CPU에 남아 device 불일치 오류가 난다), `state_dict()`에도 들어가지 않는다(체크포인트에서 복원되지 않는다). 학습하지 않는 상태는 `register_buffer("mean", ...)`로 등록한다.'''
+
+[[questions.choices]]
+text = "mean은 CPU에 남고 state_dict에도 저장되지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "mean이 파라미터로 등록되어 학습 중에 바뀐다."
+feedback = "nn.Parameter로 감싸지 않은 텐서는 파라미터로 등록되지 않는다."
+
+[[questions.choices]]
+text = "문제없다. 모듈의 모든 텐서 속성은 함께 옮겨지고 저장된다."
+feedback = "옮겨지고 저장되는 것은 등록된 파라미터와 buffer뿐이다."
+
+[[questions]]
+id = "state-dict-key-count"
+type = "numeric"
+objective = 3
+prompt = '''`nn.Sequential(nn.Linear(3, 16), nn.LayerNorm(16), nn.Linear(16, 16), nn.BatchNorm1d(16), nn.Linear(16, 1))`의 `state_dict()`에는 키가 몇 개인가? (집필 시점 PyTorch 기본 설정)'''
+explanation = '''Linear 세 개가 각각 weight·bias로 6개, LayerNorm이 weight·bias로 2개, BatchNorm1d가 weight·bias·running_mean·running_var·num_batches_tracked로 5개다. 합계 13개다. 파라미터만 세면 10개이고, 나머지 3개는 BatchNorm의 buffer다.'''
+answer = 13
+tolerance = 0
+
+[[questions]]
+id = "strict-false-silent"
+type = "single"
+objective = 3
+prompt = '''다른 코드가 저장한 체크포인트를 `model.load_state_dict(sd, strict=False)`로 불렀더니 오류 없이 끝났다. 그런데 평가 성능이 무작위 수준이다. 가장 먼저 할 일은?'''
+explanation = '''`strict=False`는 이름이 맞지 않는 키를 오류 없이 건너뛴다. 키에 `module.` 같은 접두사가 붙어 있으면 **아무것도** 로드되지 않을 수 있다. `load_state_dict`가 돌려주는 `missing_keys`와 `unexpected_keys`를 출력해 무엇이 로드되지 않았는지 확인하고, 이름을 맞춘 뒤 `strict=True`로 다시 불러온다.'''
+
+[[questions.choices]]
+text = "load_state_dict의 반환값에서 missing_keys와 unexpected_keys를 확인한다."
+correct = true
+
+[[questions.choices]]
+text = "학습률을 낮춰 미세조정(fine-tuning)을 다시 한다."
+feedback = "가중치가 로드되지 않았을 가능성을 확인하지 않고 학습을 바꾸면 원인을 놓친다."
+
+[[questions.choices]]
+text = "model.eval()을 호출한다."
+feedback = "eval 누락도 성능을 떨어뜨리지만, 무작위 수준의 성능과 strict=False 조합은 로드 실패를 먼저 의심하게 한다."
+
+[[questions.choices]]
+text = "체크포인트 파일이 손상되었으니 다시 내려받는다."
+feedback = "손상된 파일은 대개 torch.load 단계에서 오류를 낸다. 오류 없이 무작위 성능이면 이름 불일치가 더 흔한 원인이다."

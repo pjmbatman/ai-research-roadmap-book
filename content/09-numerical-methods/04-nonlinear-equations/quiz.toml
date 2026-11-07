@@ -1,0 +1,127 @@
+# 9.4 비선형 방정식과 반복법 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "bisection-iterations"
+type = "numeric"
+objective = 1
+prompt = '''구간 $[0, 1]$에서 부호가 바뀌는 연속함수의 근을 이분법으로 찾는다. 구간 폭이 $10^{-6}$ 이하가 되려면 구간을 몇 번 절반으로 줄여야 하는가?'''
+answer = 20
+tolerance = 0
+slider = { min = 1, max = 40, step = 1, unit = "번" }
+explanation = '''$k$번 줄이면 폭은 $2^{-k}$이다. $2^{-19} \approx 1.9 \times 10^{-6}$은 아직 크고 $2^{-20} \approx 9.5 \times 10^{-7}$에서 처음으로 $10^{-6}$ 이하가 된다. 이분법은 함수의 모양과 무관하게 매번 정확히 한 비트씩 정보를 얻는다. 그래서 반복 수를 미리 알 수 있고, float64의 정밀도 끝까지 가도 50여 번이면 끝난다.'''
+
+[[questions]]
+id = "secant-efficiency"
+type = "single"
+objective = 1
+prompt = '''도함수를 해석적으로 구할 수 없고 $f$ 한 번 계산에 수 초가 걸리는 시뮬레이션이다. 근 근처에서 Newton 방법(도함수는 유한차분으로, $f$ 계산 1번 추가)과 secant 방법을 비교한 설명으로 옳은 것은?'''
+explanation = '''secant 방법은 직전 두 점을 지나는 직선의 근을 다음 점으로 삼아, 반복마다 $f$를 한 번만 새로 계산하고 수렴 차수가 약 1.618이다. Newton은 반복당 차수 2지만 $f$와 도함수(여기서는 $f$ 한 번 더)를 계산해야 하므로, $f$ 계산 한 번당으로 환산하면 오차 지수가 $\sqrt{2} \approx 1.41$배씩 줄어든다. 계산 비용이 $f$ 호출 수로 정해지는 문제에서는 secant가 대개 더 효율적이다. 둘 다 근에서 멀면 발산할 수 있으므로 실무에서는 이분법과 결합한 Brent 방법 같은 안전장치를 쓴다.'''
+
+[[questions.choices]]
+text = "secant는 반복마다 f를 한 번만 계산하고 차수가 약 1.618이라, f 호출 수당으로는 Newton보다 효율적인 경우가 많다."
+correct = true
+
+[[questions.choices]]
+text = "secant는 도함수를 쓰지 않으므로 선형 수렴밖에 하지 못한다."
+feedback = "secant는 직전 두 점으로 도함수를 근사해 초선형(차수 약 1.618)으로 수렴한다. 이 장의 실험에서 차수 추정값이 1.58, 1.61, 1.62로 나왔다."
+
+[[questions.choices]]
+text = "Newton은 2차 수렴이므로 함수 호출 비용과 관계없이 항상 더 빠르다."
+feedback = "반복 수와 비용은 다르다. Newton의 한 반복은 f 두 번 계산에 해당하므로, 호출 한 번당 수렴 속도는 secant보다 느릴 수 있다."
+
+[[questions.choices]]
+text = "secant는 근을 감싸는 구간이 있어야 하므로 이분법과 같은 속도다."
+feedback = "구간을 유지하는 것은 이분법(과 regula falsi)이다. secant는 구간을 유지하지 않아 발산할 수도 있지만, 수렴하면 초선형이다."
+
+[[questions]]
+id = "fixed-point-rearrangement"
+type = "single"
+objective = 1
+prompt = '''방정식 $x^3 - 2x - 5 = 0$(실근 $x^* \approx 2.0946$)을 고정점 문제 $x = g(x)$로 바꿔 $x_{k+1} = g(x_k)$를 $x_0 = 2$에서 반복한다. 근으로 수렴하는 변형은?'''
+explanation = '''고정점 반복은 $|g'(x^*)| < 1$이면 근 근처에서 수렴하고, 오차가 매번 약 $|g'(x^*)|$배가 된다(선형 수렴). $g(x) = (2x+5)^{1/3}$은 $g'(x^*) = \tfrac{2}{3}(2x^*+5)^{-2/3} \approx 0.152$로 수축한다. $g(x) = (x^3-5)/2$는 $g'(x^*) = \tfrac{3}{2}(x^*)^2 \approx 6.58$, $g(x) = 5/(x^2-2)$는 $|g'(x^*)| \approx 3.7$로 팽창해 근에서 멀어진다. 모든 변형이 같은 고정점을 가지지만 수렴 여부는 기울기가 정한다.'''
+
+[[questions.choices]]
+text = '''$g(x) = (2x + 5)^{1/3}$'''
+correct = true
+
+[[questions.choices]]
+text = '''$g(x) = (x^3 - 5)/2$'''
+feedback = "근에서 |g'| ≈ 6.58 > 1이라 오차가 매번 약 6.6배로 커진다. 실제로 x0 = 2에서 1.5, -0.81, -2.77, -13.1, -1128로 발산한다."
+
+[[questions.choices]]
+text = '''$g(x) = 5/(x^2 - 2)$'''
+feedback = "근에서 |g'(x*)| = 10x*/((x*)^2 - 2)^2 ≈ 3.7 > 1이라 팽창한다."
+
+[[questions.choices]]
+text = "세 변형 모두 같은 근을 고정점으로 가지므로 모두 수렴한다."
+feedback = "고정점이 같다는 것은 수렴의 필요조건일 뿐이다. 수렴은 고정점에서 g의 기울기 크기가 1보다 작은지에 달려 있다."
+
+[[questions]]
+id = "double-root-linear"
+type = "single"
+objective = 2
+prompt = '''$f(x) = (x - 1)^2(x + 2)$의 근 $x = 1$ 근처에서 Newton 방법을 쓰면 수렴은 어떻게 되는가?'''
+explanation = '''$x = 1$은 중근이라 $f'(1) = 0$이다. Newton의 2차 수렴 증명은 $f'(x^*) \neq 0$을 가정하므로 여기서는 성립하지 않는다. 중복도 $m$인 근에서 Newton은 오차가 매번 약 $(m-1)/m$배가 되는 선형 수렴을 하고, $m = 2$이면 매번 절반이다. 중복도를 알면 step에 $m$을 곱하는 수정 Newton으로 2차 수렴을 되찾을 수 있다.'''
+
+[[questions.choices]]
+text = "선형 수렴하며 오차가 매번 약 절반이 된다."
+correct = true
+
+[[questions.choices]]
+text = "근 근처에서 Newton은 항상 2차 수렴하므로 맞는 자릿수가 매번 두 배가 된다."
+feedback = "2차 수렴에는 f'(x*) ≠ 0(단순근)이라는 조건이 필요하다. 중근에서는 이 조건이 깨진다."
+
+[[questions.choices]]
+text = "f'(1) = 0이므로 0으로 나누게 되어 근 근처에서 반드시 실패한다."
+feedback = "반복점은 근에 정확히 도달하지 않으므로 f'(x_k)는 0이 아니다. 나눗셈은 되지만 f와 f'이 함께 0으로 가서 수렴이 느려질 뿐이다."
+
+[[questions.choices]]
+text = "3차 수렴한다. 중근에서는 f가 더 평평해서 더 빨리 수렴한다."
+feedback = "평평할수록 Newton의 접선이 근을 덜 정확히 가리킨다. 중근에서는 오히려 선형 수렴으로 느려진다."
+
+[[questions]]
+id = "newton-arctan-damping"
+type = "single"
+objective = 2
+prompt = '''$f(x) = \arctan x$의 근 $x = 0$을 Newton 방법으로 $x_0 = 1.5$에서 찾으면 반복점이 $1.5, -1.69, 2.32, -5.11, 32.3, \dots$로 발산한다. 가장 적절한 고침은?'''
+explanation = '''Newton step은 접선의 근으로 가는데, $\arctan$은 원점에서 멀어질수록 평평해서 접선의 근이 반대쪽으로 더 멀리 튄다($|x_0| \gtrsim 1.39$이면 발산). step 방향은 맞지만 길이가 너무 길다. backtracking line search는 $|f|$가 실제로 줄어들 때까지 step을 절반씩 줄이므로, 근에서 멀 때는 짧은 step으로 안전하게 다가가고 근 근처에서는 전체 step($t = 1$)을 써서 2차 수렴을 그대로 얻는다. 이 장의 실험에서 damped Newton은 $1.5 \to -0.097 \to 6 \times 10^{-4} \to 10^{-10}$으로 수렴했다.'''
+
+[[questions.choices]]
+text = "|f|가 줄어들 때까지 step을 줄이는 backtracking line search(damping)를 쓴다."
+correct = true
+
+[[questions.choices]]
+text = "최대 반복 수를 늘려 Newton이 수렴할 시간을 더 준다."
+feedback = "반복점의 크기가 매번 커지고 있어 반복을 늘려도 더 멀어질 뿐이다."
+
+[[questions.choices]]
+text = "정지 조건의 허용 오차를 키운다."
+feedback = "허용 오차는 언제 멈출지를 정할 뿐, 발산하는 반복을 수렴하게 만들지 못한다."
+
+[[questions.choices]]
+text = "float64 대신 float32로 계산해 큰 step을 잘라 낸다."
+feedback = "정밀도는 step의 크기를 제한하지 않는다. 발산은 반올림 오차가 아니라 Newton step 자체가 너무 긴 데서 온다."
+
+[[questions]]
+id = "implicit-euler-newton"
+type = "single"
+objective = 2
+prompt = '''stiff ODE $\mathbf{y}' = \mathbf{f}(\mathbf{y})$를 backward Euler $\mathbf{y}_{n+1} = \mathbf{y}_n + h\,\mathbf{f}(\mathbf{y}_{n+1})$로 풀 때, Newton 방법이 하는 일로 옳은 것은?'''
+explanation = '''backward Euler의 한 step은 미지수 $\mathbf{y}_{n+1}$에 대한 비선형 방정식 $\mathbf{G}(\mathbf{y}) = \mathbf{y} - \mathbf{y}_n - h\,\mathbf{f}(\mathbf{y}) = \mathbf{0}$이다. Newton 방법은 이를 풀며, Jacobian은 $\mathbf{I} - h\,\mathbf{J}_{\mathbf{f}}$이다. 초기값으로 직전 값 $\mathbf{y}_n$이나 명시적 예측값을 쓰면 $h$가 작을수록 근에 가까워 보통 몇 번이면 수렴한다. 실제 solver는 Jacobian(또는 그 LU 분해)을 여러 step에 재사용하고, Newton이 잘 수렴하지 않으면 step $h$를 줄인다.'''
+
+[[questions.choices]]
+text = "매 step마다 y − y_n − h f(y) = 0을 풀며, Jacobian은 I − h J_f이고 직전 값을 초기값으로 쓴다."
+correct = true
+
+[[questions.choices]]
+text = "f의 값을 계산하는 데 쓰인다. 명시적 방법으로는 f를 계산할 수 없기 때문이다."
+feedback = "f의 계산은 어느 방법에서나 같다. 암시적 방법이 다른 점은 아직 모르는 y_{n+1}에서 f를 평가해야 해서 방정식을 풀어야 한다는 것이다."
+
+[[questions.choices]]
+text = "step 크기 h를 정하는 데만 쓰이고, 상태 업데이트는 명시적으로 한다."
+feedback = "step 크기 조절은 오차 추정이 하고, Newton은 암시적 업데이트 방정식 자체를 푼다. Newton이 수렴하지 않을 때 h를 줄이는 것은 그 결과에 대한 대응이다."
+
+[[questions.choices]]
+text = "Jacobian은 f의 Jacobian J_f 그대로이며, 초기값은 원점에서 시작한다."
+feedback = "풀어야 하는 함수는 G(y) = y − y_n − h f(y)라 Jacobian은 I − h J_f다. 원점에서 시작하면 근에서 멀어 수렴이 느리거나 실패할 수 있다. 직전 값이 훨씬 좋은 초기값이다."

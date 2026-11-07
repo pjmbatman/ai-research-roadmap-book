@@ -1,0 +1,6 @@
+title = "receptive field 계산하기"
+chapter = "architectures/cnn"
+objective = 1
+exec = "browser"
+entry = "receptive_field"
+timeout_s = 10

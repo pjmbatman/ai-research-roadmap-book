@@ -1,0 +1,6 @@
+title = "image 참조 해석하기"
+chapter = "environments/docker"
+objective = 1
+exec = "browser"
+entry = "parse"
+timeout_s = 10

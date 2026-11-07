@@ -1,0 +1,6 @@
+title = "docstring과 코드의 어긋남 찾기"
+chapter = "research-code-engineering/documentation"
+objective = 2
+exec = "browser"
+entry = "doc_drift"
+timeout_s = 10

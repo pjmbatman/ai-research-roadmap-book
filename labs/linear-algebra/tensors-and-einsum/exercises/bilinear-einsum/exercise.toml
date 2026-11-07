@@ -1,0 +1,6 @@
+title = "bilinear layer를 einsum 한 줄로"
+chapter = "linear-algebra/tensors-and-einsum"
+objective = 2
+exec = "browser"
+entry = "bilinear"
+timeout_s = 10

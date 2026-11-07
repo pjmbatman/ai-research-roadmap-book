@@ -1,0 +1,6 @@
+title = "UCB로 팔 고르기"
+chapter = "reinforcement-learning/bandits-and-offline-rl"
+objective = 1
+exec = "browser"
+entry = "ucb_select"
+timeout_s = 10

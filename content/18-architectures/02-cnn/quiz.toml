@@ -1,0 +1,97 @@
+# 18.2 CNN과 공간 구조 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "conv-output-size"
+type = "numeric"
+objective = 1
+prompt = '''높이 50인 입력에 kernel 크기 5, stride 2, padding 1(위아래 각 1칸), dilation 1인 합성곱을 적용한다. 출력의 높이는?'''
+answer = 24
+tolerance = 0
+slider = { min = 20, max = 30, step = 1 }
+explanation = '''$H_{\text{out}} = \lfloor (H + 2p - d(k-1) - 1)/s \rfloor + 1 = \lfloor (50 + 2 - 4 - 1)/2 \rfloor + 1 = \lfloor 23.5 \rfloor + 1 = 24$. 나눗셈이 나누어떨어지지 않으면 내림한다. 마지막 창이 입력을 벗어나는 위치는 계산하지 않기 때문이다. 내림을 빼고 반올림하거나 $+1$을 빠뜨리는 것이 흔한 실수다.'''
+
+[[questions]]
+id = "receptive-field-with-stride"
+type = "numeric"
+objective = 1
+prompt = '''3×3 합성곱 세 층을 쌓는다. 첫째와 둘째 층은 stride 2, 셋째 층은 stride 1이고 dilation은 모두 1이다. 셋째 층 출력 한 칸의 receptive field는 입력에서 한 변이 몇 칸인가?'''
+answer = 15
+tolerance = 0
+slider = { min = 5, max = 25, step = 1 }
+explanation = '''$r = 1 + \sum_l (k_l - 1) d_l \prod_{i<l} s_i$로 계산한다. 첫 층은 $2 \times 1 = 2$, 둘째 층은 앞 층 stride가 2이므로 $2 \times 2 = 4$, 셋째 층은 앞 두 층 stride의 곱 4가 곱해져 $2 \times 4 = 8$을 더한다. $r = 1 + 2 + 4 + 8 = 15$다. stride를 무시하고 $1 + 2 \times 3 = 7$로 계산하면 깊은 층의 receptive field를 크게 과소평가한다.'''
+
+[[questions]]
+id = "stride-breaks-equivariance"
+type = "single"
+objective = 1
+prompt = '''stride 2인 합성곱 층(원형 경계)에 입력을 **한 칸** 밀어 넣었다. 출력에 대한 설명으로 옳은 것은?'''
+explanation = '''stride 2 합성곱의 출력은 stride 1 출력에서 짝수 번째 칸만 고른 것이다. 입력을 한 칸 밀면 stride 1 출력도 한 칸 밀리고, 그 짝수 칸은 원래 출력의 홀수 칸이 된다. 원래 출력에 없던 값들이므로 출력은 원래 출력을 이동한 것이 아니다. 두 칸을 밀면 출력이 한 칸 밀린다. stride·pooling이 있는 CNN의 이동 등변성은 stride의 배수 이동에서만 정확하다.'''
+
+[[questions.choices]]
+text = "출력은 일반적으로 원래 출력을 이동한 것이 아니다. 두 칸 이동에서만 출력이 한 칸 이동한다."
+correct = true
+
+[[questions.choices]]
+text = "합성곱은 이동 등변이므로 출력도 반 칸 이동한다."
+feedback = "출력 격자에는 반 칸 위치가 없다. stride 2는 stride 1 출력의 절반을 버리고, 입력을 한 칸 밀면 버리는 칸이 바뀐다."
+
+[[questions.choices]]
+text = "출력이 정확히 한 칸 이동한다."
+feedback = "출력 한 칸은 입력 두 칸에 해당한다. 입력 한 칸 이동은 출력 격자에서 정수 칸 이동으로 나타나지 않는다."
+
+[[questions.choices]]
+text = "kernel의 가중치를 공유하므로 stride와 무관하게 출력은 변하지 않는다."
+feedback = "가중치 공유가 주는 것은 불변이 아니라 등변(출력이 함께 이동)이고, 그마저 stride의 배수 이동에서만 정확하다."
+
+[[questions]]
+id = "same-padding-dilated"
+type = "numeric"
+objective = 1
+prompt = '''stride 1, kernel 크기 7, dilation 2인 1차원 합성곱에서 출력 길이를 입력 길이와 같게 하려면 양쪽에 각각 몇 칸을 padding해야 하는가?'''
+answer = 6
+tolerance = 0
+slider = { min = 0, max = 12, step = 1 }
+explanation = '''stride 1이면 $T_{\text{out}} = T + 2p - d(k-1)$이므로 $T_{\text{out}} = T$이려면 $p = d(k-1)/2 = 2 \times 6 / 2 = 6$이다. dilation을 빼고 $(k-1)/2 = 3$으로 계산하면 출력이 6칸 짧아진다. dilation이 kernel의 실제 폭을 $d(k-1)+1 = 13$으로 늘리기 때문이다.'''
+
+[[questions]]
+id = "effective-receptive-field"
+type = "single"
+objective = 1
+prompt = '''3×1 합성곱 64층을 쌓아 이론 receptive field가 129칸인 1차원 CNN을 만들었다. 출력이 129칸 전체의 입력을 고르게 활용한다고 기대할 수 있는가?'''
+explanation = '''이론 receptive field는 출력에 영향을 줄 **수 있는** 입력의 범위다. 실제 영향은 가운데에 몰려 있다. 같은 kernel을 $L$번 합성한 impulse response는 중심극한정리에 따라 Gaussian 모양으로 수렴하고, 그 폭은 $L$이 아니라 $\sqrt{L}$에 비례한다. 본문의 계산에서 64층의 이론 RF는 129칸이지만 영향의 95%는 가운데 27칸에 있다(유효 receptive field). 학습이 이 분포를 바꿀 수는 있지만, 필요한 맥락을 이론 RF가 겨우 덮는 설계는 위험하다.'''
+
+[[questions.choices]]
+text = "기대할 수 없다. 영향은 가운데에 몰려 있고, 그 폭은 깊이의 제곱근 정도로만 자란다."
+correct = true
+
+[[questions.choices]]
+text = "기대할 수 있다. receptive field 안의 모든 입력은 출력에 같은 크기로 기여한다."
+feedback = "가장자리 입력은 출력까지 가는 경로가 하나뿐이고, 가운데 입력은 경로가 매우 많다. 경로 수의 차이가 기여의 차이가 된다."
+
+[[questions.choices]]
+text = "기대할 수 있다. 층이 깊을수록 비선형성이 커져 먼 입력의 영향이 커진다."
+feedback = "깊이가 늘면 이론 RF는 선형으로 늘지만 유효 RF는 제곱근으로 늘어 둘의 비율은 오히려 작아진다."
+
+[[questions]]
+id = "unet-skip-role"
+type = "single"
+objective = 2
+prompt = '''영상 분할에 쓰는 U-Net에서 encoder의 특징 지도를 같은 해상도의 decoder로 바로 이어 붙이는(skip connection) 주된 이유는?'''
+explanation = '''encoder는 해상도를 줄여 가며 receptive field를 넓히고 넓은 맥락을 모은다. 대신 위치의 세밀한 정보가 해상도를 줄일 때 사라진다. 픽셀마다 라벨을 내야 하는 분할에서는 경계 위치가 중요하므로, 해상도가 높은 encoder 특징을 decoder에 직접 넘겨 넓은 맥락과 세밀한 위치를 함께 쓴다.'''
+
+[[questions.choices]]
+text = "downsampling에서 사라진 세밀한 공간 정보를 decoder에 직접 전달하기 위해"
+correct = true
+
+[[questions.choices]]
+text = "receptive field를 넓히기 위해"
+feedback = "receptive field를 넓히는 것은 encoder의 downsampling이다. 해상도가 높은 층을 이어 붙이는 skip connection은 넓은 맥락이 아니라 세밀한 위치 정보를 준다."
+
+[[questions.choices]]
+text = "파라미터 수를 줄이기 위해"
+feedback = "이어 붙이면 decoder 층의 입력 채널이 늘어 파라미터는 오히려 는다."
+
+[[questions.choices]]
+text = "합성곱의 이동 등변성을 정확하게 만들기 위해"
+feedback = "skip connection은 등변성과 무관하다. stride·pooling이 등변성을 근사적으로 만드는 것은 skip이 있어도 그대로다."

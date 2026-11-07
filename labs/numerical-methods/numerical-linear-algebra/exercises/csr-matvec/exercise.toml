@@ -1,0 +1,6 @@
+title = "CSR 형식의 행렬–벡터 곱"
+chapter = "numerical-methods/numerical-linear-algebra"
+objective = 2
+exec = "browser"
+entry = "csr_matvec"
+timeout_s = 10

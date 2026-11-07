@@ -1,0 +1,116 @@
+# 14.3 목적함수 설계의 원리 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "known-noise-weights"
+type = "single"
+objective = 1
+prompt = '''측정마다 표준편차 $\sigma_i$가 알려진 가우시안 잡음 $y_i \sim \mathcal{N}(f_\theta(x_i), \sigma_i^2)$를 가정한다. 우도에서 유도한 손실은?'''
+explanation = '''NLL은 $\sum_i \big[(y_i - f_\theta(x_i))^2 / (2\sigma_i^2) + \log\sigma_i\big]$ + 상수다. $\sigma_i$가 알려진 상수이면 $\log\sigma_i$ 항은 최적화에 영향이 없고, 남는 것은 가중치 $1/\sigma_i^2$인 가중 최소제곱이다. 잡음이 큰 측정일수록 작은 가중치를 받는다. 가중치를 $\sigma_i$나 $1/\sigma_i$로 두면 우도와 맞지 않고 추정량의 효율이 떨어진다.'''
+
+[[questions.choices]]
+text = '''$\sum_i (y_i - f_\theta(x_i))^2 / \sigma_i^2$ (가중치 $1/\sigma_i^2$인 가중 최소제곱)'''
+correct = true
+
+[[questions.choices]]
+text = '''$\sum_i (y_i - f_\theta(x_i))^2$ (모든 측정에 같은 가중치)'''
+feedback = "불편 추정량이긴 하지만 잡음이 큰 측정을 정밀한 측정과 같이 믿으므로 분산이 커진다. 본문 실험에서 표준편차가 10배 컸다."
+
+[[questions.choices]]
+text = '''$\sum_i (y_i - f_\theta(x_i))^2 / \sigma_i$ (가중치 $1/\sigma_i$)'''
+feedback = "가우시안 NLL의 제곱항은 분산 σ²으로 나뉜다. 1/σ는 우도에서 나오지 않는 가중치다."
+
+[[questions.choices]]
+text = '''$\sum_i \sigma_i^2 (y_i - f_\theta(x_i))^2$ (잡음이 큰 측정에 큰 가중치)'''
+feedback = "방향이 반대다. 잡음이 큰 측정일수록 덜 믿어야 한다."
+
+[[questions]]
+id = "nll-difference-kl"
+type = "single"
+objective = 1
+prompt = '''같은 시험 데이터에서 모델 A의 평균 NLL이 1.30 nat, 모델 B가 1.18 nat이다. 데이터 분포의 엔트로피 $H(p)$는 모른다. 이 숫자로 말할 수 있는 것은?'''
+explanation = '''평균 NLL은 $H(p) + D_{\mathrm{KL}}(p \,\|\, q)$의 추정이다. $H(p)$를 모르므로 각 모델의 KL은 알 수 없지만, 두 모델의 차이에서는 $H(p)$가 약분되어 $D_{\mathrm{KL}}(p \,\|\, q_A) - D_{\mathrm{KL}}(p \,\|\, q_B) \approx 0.12$ nat이다. 같은 데이터·같은 단위에서 NLL로 모델을 비교할 수 있는 이유다.'''
+
+[[questions.choices]]
+text = "B가 데이터 분포에 KL로 약 0.12 nat 더 가깝다. 각 모델의 KL 자체는 알 수 없다."
+correct = true
+
+[[questions.choices]]
+text = "B의 KL은 1.18 nat이다."
+feedback = "평균 NLL은 KL이 아니라 H(p) + KL이다. H(p)를 모르면 KL 자체는 알 수 없다."
+
+[[questions.choices]]
+text = "H(p)를 모르므로 두 모델을 비교할 수 없다."
+feedback = "차이를 내면 H(p)가 약분된다. 같은 데이터에서 계산한 NLL의 차이는 KL의 차이다."
+
+[[questions]]
+id = "elbo-gap"
+type = "numeric"
+objective = 1
+prompt = '''잠재변수 모델에서 어떤 관측 $x$의 로그 우도가 $\log p_\theta(x) = -2.20$이고, 근사 사후분포 $q$와 참 사후분포 사이의 $D_{\mathrm{KL}}(q(z) \,\|\, p_\theta(z \mid x)) = 0.25$이다. 이 $q$로 계산한 ELBO는?'''
+answer = -2.45
+tolerance = 0.005
+slider = { min = -4, max = 0, step = 0.05 }
+explanation = '''$\log p_\theta(x) = \mathrm{ELBO}(q) + D_{\mathrm{KL}}(q \,\|\, p_\theta(z \mid x))$이므로 $\mathrm{ELBO} = -2.20 - 0.25 = -2.45$다. ELBO는 하한이므로 로그 우도보다 작거나 같아야 한다. $-1.95$는 KL을 더한 것으로, 하한이 로그 우도보다 커지는 모순이 생긴다.'''
+
+[[questions]]
+id = "contrastive-baseline"
+type = "numeric"
+objective = 1
+prompt = '''batch 크기 $K = 128$로 contrastive 손실(행마다 진짜 짝을 정답으로 하는 softmax cross-entropy의 평균)을 계산한다. critic의 점수가 모든 짝에 똑같아 아무 정보도 주지 않을 때 손실 값은 몇 nat인가? (소수 둘째 자리까지)'''
+answer = 4.85
+tolerance = 0.01
+slider = { min = 0, max = 8, step = 0.01, unit = "nat" }
+explanation = '''점수가 모두 같으면 softmax가 균등분포 $1/K$이므로 손실은 $-\log(1/K) = \log 128 \approx 4.852$ nat이다. 이것이 contrastive 손실의 기준선이고, $\log K - L$이 InfoNCE 하한이다. 그래서 batch 크기가 다른 실험의 손실 값은 그대로 비교할 수 없다. 7은 log₂ 128(bit)과 혼동한 것이다.'''
+
+[[questions]]
+id = "unit-dependent-sum"
+type = "single"
+objective = 2
+prompt = '''공통 파라미터로 온도 [K]와 압력을 함께 예측하는 모델을 손실의 단순 합 $L_T + L_p$로 학습한다. 압력의 단위를 Pa에서 kPa로 바꾸면 어떻게 되는가? (두 과제가 원하는 파라미터는 조금 다르다.)'''
+explanation = '''kPa로 바꾸면 압력 잔차가 1000분의 1, 제곱오차는 100만분의 1이 된다. 단순 합에서 압력 손실의 비중이 그만큼 줄어 해가 온도 과제 쪽으로 이동한다. 각 손실을 자기 잡음 분산으로 나누어(가우시안 NLL) 무차원으로 만들면 단위와 무관한 해를 얻는다. optimizer를 바꿔도 손실 사이의 상대적 비중은 그대로 남는다.'''
+
+[[questions.choices]]
+text = "압력 손실의 비중이 100만분의 1로 줄어, 학습된 파라미터가 온도 과제가 원하는 값 쪽으로 이동한다."
+correct = true
+
+[[questions.choices]]
+text = "단위는 표기의 문제일 뿐이므로 학습 결과는 같다."
+feedback = "단순 합에서는 각 손실의 크기가 단위에 따라 바뀌므로 두 과제 사이의 상대 가중치가 바뀐다. 본문 실험에서 w가 1.103에서 1.014로 바뀌었다."
+
+[[questions.choices]]
+text = "Adam을 쓰면 gradient 크기가 정규화되므로 단위 문제는 사라진다."
+feedback = "Adam은 손실 전체에 곱한 상수에는 거의 둔감하지만, 두 손실 사이의 상대적 비중은 바꾸지 못한다."
+
+[[questions.choices]]
+text = "압력 손실의 비중이 1000배 커진다."
+feedback = "방향이 반대다. kPa 값은 Pa 값보다 1000배 작고, 제곱오차는 100만 배 작아진다."
+
+[[questions]]
+id = "padding-mean"
+type = "numeric"
+objective = 3
+prompt = '''batch에 길이 4와 2인 시퀀스 두 개가 있고, 길이 4로 padding했다. 실제 token의 손실은 모두 1.0이고 padding 위치의 손실은 0으로 두었다. padding을 포함해 $2 \times 4$개 전체를 평균하면 손실 값은?'''
+answer = 0.75
+tolerance = 0.001
+slider = { min = 0, max = 1.5, step = 0.05 }
+explanation = '''실제 token은 4 + 2 = 6개이고 손실 합은 6.0이다. padding까지 8칸으로 나누면 $6/8 = 0.75$로, 실제 손실 1.0보다 작다. mask로 실제 token만 세면 1.0이다. padding이 길수록 손실이 더 희석되므로, batch마다 padding 길이가 다르면 손실과 gradient 크기가 무작위로 흔들린다.'''
+
+[[questions]]
+id = "sum-reduction-lr"
+type = "single"
+objective = 3
+prompt = '''SGD로 학습하는 코드에서 손실을 batch에 대해 **합**(sum)으로 집계하고 있다. 학습률을 그대로 두고 batch 크기를 32에서 128로 늘리면 무슨 일이 생기는가?'''
+explanation = '''sum 손실의 gradient는 $\sum_i \nabla\ell_i$이므로 크기가 batch 크기에 비례한다. $\eta\nabla L_{\text{sum}} = (\eta B)\nabla L_{\text{mean}}$이므로, batch를 4배로 늘리면 실질 학습률도 4배가 된다. 학습이 불안정해지거나 발산할 수 있다. mean으로 집계하면 gradient 크기가 batch 크기와 무관해진다.'''
+
+[[questions.choices]]
+text = "gradient의 크기가 약 4배가 되어, 실질 학습률이 4배로 커진 것과 같다."
+correct = true
+
+[[questions.choices]]
+text = "batch가 커지면 gradient 잡음이 줄 뿐, step의 크기는 같다."
+feedback = "그것은 mean 집계의 경우다. sum 집계에서는 gradient 자체가 batch 크기에 비례해 커진다."
+
+[[questions.choices]]
+text = "gradient의 크기가 1/4로 줄어 학습이 느려진다."
+feedback = "합을 쓰면 항이 늘어나므로 gradient는 커진다. 1/4로 주는 것은 없다."

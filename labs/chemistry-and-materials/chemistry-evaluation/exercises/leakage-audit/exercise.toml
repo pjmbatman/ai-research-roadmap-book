@@ -1,0 +1,6 @@
+title = "분할 간 근접 중복 누수 감사"
+chapter = "chemistry-and-materials/chemistry-evaluation"
+objective = 1
+exec = "browser"
+entry = "leaked_fraction"
+timeout_s = 10

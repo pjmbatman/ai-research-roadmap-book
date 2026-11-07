@@ -1,0 +1,140 @@
+# 10.7 특수한 최적화 문제 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "pareto-dominance"
+type = "multiple"
+objective = 1
+prompt = '''두 목적을 모두 **최소화**한다. 후보 다섯 개의 목적값이 A $(1, 5)$, B $(2, 3)$, C $(3, 3)$, D $(4, 1)$, E $(2, 4)$일 때, Pareto 최적인 후보를 모두 고르시오.'''
+explanation = '''어떤 후보보다 모든 목적에서 같거나 좋고 적어도 하나에서 더 좋은 후보가 있으면 지배당한다. C $(3, 3)$은 B $(2, 3)$에, E $(2, 4)$는 B $(2, 3)$에 지배당한다. A, B, D는 서로 지배하지 않는다. A는 첫 목적이 가장 좋고, D는 둘째 목적이 가장 좋으며, B는 그 사이의 trade-off다. Pareto 최적은 "가장 좋은 하나"가 아니라 "더 나아질 여지가 다른 목적을 희생해야만 있는" 후보들의 집합이다.'''
+
+[[questions.choices]]
+text = "A (1, 5)"
+correct = true
+
+[[questions.choices]]
+text = "B (2, 3)"
+correct = true
+
+[[questions.choices]]
+text = "C (3, 3)"
+feedback = "B (2, 3)은 첫 목적에서 더 좋고 둘째 목적에서 같으므로 C를 지배한다."
+
+[[questions.choices]]
+text = "D (4, 1)"
+correct = true
+
+[[questions.choices]]
+text = "E (2, 4)"
+feedback = "B (2, 3)은 첫 목적에서 같고 둘째 목적에서 더 좋으므로 E를 지배한다."
+
+[[questions]]
+id = "weighted-sum-nonconvex"
+type = "single"
+objective = 1
+prompt = '''Pareto front가 $f_2 = 1 - f_1^2$($0 \le f_1 \le 1$, 두 목적 모두 최소화)처럼 바깥으로 불룩한(볼록이 아닌) 모양이다. 가중치 $w$를 0부터 1까지 바꾸며 $w f_1 + (1 - w) f_2$를 최소화하면?'''
+explanation = '''$w f_1 + (1 - w)(1 - f_1^2)$은 $f_1$에 대해 오목한 함수라 최솟값이 항상 구간의 끝 $f_1 = 0$ 또는 $f_1 = 1$에 있다. 그래서 가중치를 아무리 촘촘히 바꿔도 front의 양 끝 두 점만 나온다(본문 셀 1). 가중합 scalarization은 front의 볼록 껍질 위의 점만 찾을 수 있다. 중간의 trade-off를 보려면 $\varepsilon$-제약법처럼 한 목적을 제약으로 바꾸는 방법을 쓴다.'''
+
+[[questions.choices]]
+text = "front의 양 끝 두 점만 얻는다."
+correct = true
+
+[[questions.choices]]
+text = "가중치를 촘촘히 바꾸면 front 전체를 고르게 얻는다."
+feedback = "front가 볼록일 때만 그렇다. 이 front에서는 가중합의 최솟값이 항상 구간의 끝에 있다."
+
+[[questions.choices]]
+text = "w = 0.5에서 front의 가운데 점 f1 = 0.5를 얻는다."
+feedback = "w = 0.5이면 0.5 f1 + 0.5(1 - f1^2)는 양 끝 f1 = 0과 f1 = 1에서 0.5로 가장 작고, 가운데 점 f1 = 0.5의 값(0.625)이 더 크다."
+
+[[questions.choices]]
+text = "가중합은 Pareto 최적이 아닌 점을 낸다."
+feedback = "양의 가중치의 가중합 최솟점은 항상 Pareto 최적이다. 문제는 틀린 점이 아니라 front의 일부만 보인다는 것이다."
+
+[[questions]]
+id = "implicit-hypergradient"
+type = "single"
+objective = 1
+prompt = '''ridge 회귀의 정규화 강도 $\lambda$를 검증 손실로 고르는 이중수준 문제에서, 안쪽 해 $\mathbf{w}^\star(\lambda)$의 최적성 조건 $(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})\mathbf{w}^\star = \mathbf{X}^\top\mathbf{y}$을 $\lambda$로 미분해 hypergradient를 구했다. 이 **암시적 미분**의 장점으로 옳은 것은?'''
+explanation = '''최적성 조건을 미분하면 $(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})\,d\mathbf{w}^\star/d\lambda = -\mathbf{w}^\star$로, 안쪽 최적화를 어떻게 풀었는지(반복 횟수, 경로)와 무관하게 해에서의 연립방정식 하나로 도함수를 얻는다. 안쪽 반복을 모두 펼쳐 역전파하면 반복 수에 비례하는 메모리가 든다. 대신 안쪽 문제가 정확히 풀려 최적성 조건이 성립해야 하고, 안쪽 해가 유일해야 한다. 본문 셀 2에서 이 값은 유한 차분과 소수 여섯째 자리까지 일치했다.'''
+
+[[questions.choices]]
+text = "안쪽 최적화의 반복 과정을 저장하거나 역전파하지 않고, 해에서의 최적성 조건만으로 도함수를 얻는다."
+correct = true
+
+[[questions.choices]]
+text = "안쪽 문제를 대충 풀어도 정확한 hypergradient를 준다."
+feedback = "반대다. 최적성 조건이 성립한다는 가정을 쓰므로 안쪽 해가 부정확하면 hypergradient도 부정확하다."
+
+[[questions.choices]]
+text = "바깥 문제가 볼록이 아니어도 전역 최적의 λ를 보장한다."
+feedback = "hypergradient는 경사하강에 쓰는 국소 정보일 뿐이다. 바깥 문제의 전역 최적은 보장하지 않는다."
+
+[[questions.choices]]
+text = "검증 데이터가 필요 없다."
+feedback = "바깥 목적함수가 검증 손실이므로 검증 데이터가 반드시 필요하다."
+
+[[questions]]
+id = "grid-distinct-values"
+type = "numeric"
+objective = 1
+prompt = '''하이퍼파라미터 2개를 평가 16번으로 탐색한다. 실제로는 그중 하나만 성능에 영향을 준다. $4 \times 4$ 격자 탐색은 그 중요한 하이퍼파라미터에 대해 서로 다른 값을 몇 개 시험하는가? (같은 16번의 random search는 거의 확실히 16개를 시험한다.)'''
+answer = 4
+tolerance = 0
+slider = { min = 1, max = 16, step = 1, unit = "개" }
+explanation = '''격자는 각 축에 4개 값만 쓰고, 같은 값을 다른 축의 값 4개와 조합하므로 중요한 축에서는 4개 값만 시험한다. 16번 중 12번은 중요하지 않은 축만 바꾼 중복이다. random search는 매번 두 축을 모두 새로 뽑으므로 중요한 축에서 16개의 서로 다른 값을 본다. 성능을 좌우하는 차원이 적은 문제에서 random search가 격자보다 효율적인 이유다(Bergstra, Bengio, 2012). 본문 셀 3의 평가 9번 실험이 같은 상황이다.'''
+
+[[questions]]
+id = "ei-exploration"
+type = "single"
+objective = 2
+prompt = '''최소화 문제의 베이지안 최적화에서 지금까지의 최솟값이 $f^{+} = 0$이다. 두 후보의 GP 예측이 P: 평균 0.5, 표준편차 0.1 / Q: 평균 0.5, 표준편차 1.0이다. expected improvement(EI)는 어느 쪽이 큰가?'''
+explanation = '''두 후보 모두 평균은 현재 최선보다 나쁘다. P는 불확실성이 작아 0 아래로 내려갈 확률이 사실상 0이고(5 표준편차), EI는 거의 0이다. Q는 같은 평균이지만 불확실성이 커서 0보다 낮을 확률이 약 31%이고 EI는 약 0.198이다. EI는 평균이 좋은 곳(활용)과 불확실성이 큰 곳(탐색)을 함께 선호한다. 평균만 보는 획득 규칙은 이미 아는 곳 근처만 다시 평가하다 갇힌다.'''
+
+[[questions.choices]]
+text = "Q. 평균이 같으면 불확실성이 큰 쪽이 개선 가능성이 크다."
+correct = true
+
+[[questions.choices]]
+text = "P. 예측이 확실한 쪽이 더 안전하다."
+feedback = "P의 예측은 '확실히 현재 최선보다 나쁘다'는 것이다. 개선의 기댓값은 거의 0이다."
+
+[[questions.choices]]
+text = "같다. EI는 평균만으로 정해진다."
+feedback = "EI = (f+ - μ)Φ(z) + σφ(z)로 σ가 직접 들어간다. 평균만 보는 것은 탐색을 하지 않는 규칙이다."
+
+[[questions.choices]]
+text = "둘 다 0이다. 평균이 현재 최선보다 나쁘기 때문이다."
+feedback = "평균이 나빠도 실제 값이 최선보다 낮을 확률이 0이 아니면 EI는 양수다."
+
+[[questions]]
+id = "ei-at-incumbent"
+type = "numeric"
+objective = 2
+prompt = '''최소화 문제에서 어떤 후보의 GP 예측 평균이 현재 최솟값과 같고($\mu = f^{+}$), 표준편차가 $\sigma = 1$이다. $\xi = 0$일 때 expected improvement는? (소수 셋째 자리까지)'''
+answer = 0.399
+tolerance = 0.001
+explanation = '''$z = (f^{+} - \mu)/\sigma = 0$이므로 $\mathrm{EI} = 0 \cdot \Phi(0) + \sigma\,\varphi(0) = 1/\sqrt{2\pi} \approx 0.399$다. 평균적으로는 개선이 없지만, 절반의 확률로 개선되고 그때의 평균 개선량이 양수이기 때문에 EI가 양수다. 같은 상황에서 $\sigma$를 두 배로 하면 EI도 두 배가 된다.'''
+
+[[questions]]
+id = "lp-relaxation-bound"
+type = "single"
+objective = 3
+prompt = '''0–1 knapsack(가치 최대화) 문제에서 $x_i \in \{0, 1\}$을 $0 \le x_i \le 1$로 완화한 LP relaxation을 풀었다. 옳은 것은?'''
+explanation = '''완화하면 feasible set이 넓어지므로(정수 해는 모두 LP의 feasible 점이다) 최대화 문제의 LP 최적값은 정수 최적값 이상이다. 그래서 LP 값은 정수 최적값의 **상한**이 되고, branch and bound는 이 상한으로 탐색 가지를 자른다. LP 해를 반올림하면 예산을 넘을 수 있고(본문 셀 5에서 비용 22 > 예산 21), 내림하면 feasible하지만 최적이 아닐 수 있다(34 < 38).'''
+
+[[questions.choices]]
+text = "LP 최적값은 정수 최적값 이상이고, LP 해를 반올림하면 제약을 어길 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "LP 해를 반올림하면 항상 정수 최적해가 된다."
+feedback = "본문 셀 5에서 반올림한 해는 예산을 넘었다. 반올림은 feasible도 최적도 보장하지 않는다."
+
+[[questions.choices]]
+text = "LP 최적값은 정수 최적값 이하다."
+feedback = "최대화 문제에서 제약을 완화하면 더 좋은 값이 가능해질 뿐 나빠지지 않는다. LP 값은 상한이다."
+
+[[questions.choices]]
+text = "LP 해를 내림하면 항상 정수 최적해가 된다."
+feedback = "내림하면 feasible하지만, 본문 셀 5에서 가치 34로 정수 최적 38보다 낮았다."

@@ -1,182 +1,730 @@
 # 인터랙티브 위젯 레지스트리.
 # 본문에서 `::widget{name="..."}`로 삽입한다. name은 이 파일에 등록되어 있어야 한다(check가 검증).
-# 프론트엔드 구현: apps/web/src/widgets/<name>/ (status = implemented가 되면 존재해야 함)
+# 프론트엔드 구현: apps/web/src/widgets/<name>/
+# 화면·조작 규칙은 editorial/design-system.md(ADR 0010)를 따른다. 위젯별 조작 명세는 구현할 때 이 파일이 아니라 장 명세에 쓴다.
 #
 # 필드
-#   name        kebab-case 고유 이름 (= 구현 디렉터리 이름)
-#   title       한국어 이름
-#   chapters    사용하는 장 id 목록 (첫 번째가 주 사용처)
-#   status      planned | prototype | implemented
-#   kind        manipulate | stepper | simulate | compare  (인터랙션 틀, editorial/design-system.md §8)
-#   interaction 학습자가 하는 일(직접 조작 → 관찰)
-#   binds       페이지 상태로 내보내는 변수. 같은 페이지의 코드 셀·수식·다른 위젯과 공유된다
-#   motion      애니메이션이 설명하는 과정 (없으면 생략)
+#   name      kebab-case 고유 이름 (= 구현 디렉터리 이름). 진도 기록의 키이므로 바꾸지 않는다
+#   title     한국어 이름
+#   chapters  사용하는 장 id 목록 (첫 번째가 주 사용처)
+#   status    planned | prototype | implemented
 
 [[widgets]]
 name = "linear-map-2d"
-kind = "manipulate"
 title = "2차원 선형·아핀 사상"
 chapters = ["linear-algebra/vector-spaces", "linear-algebra/affine-and-nonlinear"]
 status = "prototype"
-interaction = "basis 벡터를 끌거나 행렬 성분·bias를 입력하면 격자와 도형이 변형된다. bias를 켜고 끄며 원점 보존 여부를 본다"
-binds = ["A", "b"]
-motion = "항등 사상에서 목표 사상으로 격자가 연속적으로 변형되는 보간"
 
 [[widgets]]
 name = "relu-regions"
-kind = "manipulate"
 title = "ReLU 신경망의 조각별 아핀 영역"
 chapters = ["linear-algebra/affine-and-nonlinear", "deep-learning-pytorch/neural-network-components"]
 status = "prototype"
-interaction = "뉴런 수와 가중치를 바꾸면 2차원 입력 공간이 선형 영역으로 나뉘는 모습과 영역 수가 갱신된다"
-binds = ["weights"]
 
 [[widgets]]
 name = "svd-explorer"
-kind = "stepper"
 title = "SVD: 회전–스케일–회전"
 chapters = ["linear-algebra/svd-and-pca"]
-status = "planned"
-interaction = "행렬을 고르면 단위원이 세 단계로 타원이 되는 과정을 단계별로 재생하고, rank-k 근사의 오차를 본다"
-binds = ["A", "k"]
-motion = "V^T 회전 → Σ 스케일 → U 회전의 3단계 애니메이션"
+status = "prototype"
 
 [[widgets]]
 name = "autodiff-graph"
-kind = "stepper"
 title = "계산 그래프와 역전파"
 chapters = ["calculus-and-autodiff/automatic-differentiation"]
-status = "planned"
-interaction = "식을 입력하면 계산 그래프가 그려지고, forward 값과 backward gradient를 한 노드씩 진행한다"
-binds = ["expression"]
-motion = "forward 값이 왼쪽→오른쪽, gradient가 오른쪽→왼쪽으로 흐르는 단계 재생"
+status = "prototype"
 
 [[widgets]]
 name = "float-precision"
-kind = "manipulate"
 title = "부동소수점 비트 구조"
 chapters = ["numerical-methods/floating-point"]
-status = "planned"
-interaction = "수를 입력하면 fp32·fp16·bf16의 부호·지수·가수 비트와 반올림 오차가 표시된다"
-binds = ["x"]
+status = "prototype"
 
 [[widgets]]
 name = "ode-stability"
-kind = "compare"
 title = "ODE solver의 step 크기와 안정성"
-chapters = ["numerical-methods/ode-solvers"]
-status = "planned"
-interaction = "step 크기와 방법(explicit/implicit)을 바꾸어 stiff 문제의 해가 발산·수렴하는 모습을 비교한다"
-binds = ["h", "method"]
+chapters = ["numerical-methods/ode-solvers", "scientific-ml/neural-ode-and-differentiable-simulation"]
+status = "prototype"
 
 [[widgets]]
 name = "optimizer-landscape"
-kind = "simulate"
 title = "손실 지형 위의 optimizer 궤적"
 chapters = ["optimization/first-order-methods", "optimization/adaptive-methods"]
-status = "planned"
-interaction = "등고선 위에서 시작점·학습률·momentum·optimizer를 바꾸어 궤적을 비교한다"
-binds = ["lr", "momentum", "optimizer"]
-motion = "여러 optimizer가 동시에 이동하는 궤적 재생(일시정지·한 step씩 가능)"
+status = "prototype"
 
 [[widgets]]
 name = "distribution-explorer"
-kind = "manipulate"
 title = "분포 탐색기"
 chapters = ["probability/distributions", "probability/random-variables"]
-status = "planned"
-interaction = "분포와 파라미터를 바꾸어 PDF·CDF·샘플 히스토그램을 함께 본다"
-binds = ["dist", "params", "samples"]
+status = "prototype"
 
 [[widgets]]
 name = "gaussian-conditioning"
-kind = "manipulate"
 title = "다변량 가우시안의 조건부분포"
 chapters = ["probability/multivariate-gaussian"]
-status = "planned"
-interaction = "2차원 가우시안의 공분산을 조절하고, x1 값을 끌어 조건부분포 p(x2|x1)의 이동을 본다"
-binds = ["mu", "Sigma", "x1"]
+status = "prototype"
 
 [[widgets]]
 name = "loss-to-estimator"
-kind = "manipulate"
 title = "손실함수가 고르는 대표값"
 chapters = ["statistical-inference/distributional-formulation"]
 status = "prototype"
-interaction = "조건부분포 모양(단봉·쌍봉·비대칭)을 바꾸고 MSE·MAE·pinball 손실의 최적 예측이 어디에 놓이는지 본다"
-binds = ["tau", "shape"]
 
 [[widgets]]
 name = "bayesian-update"
-kind = "stepper"
 title = "순차적 베이지안 갱신"
 chapters = ["bayesian-inference/bayesian-thinking", "bayesian-inference/conjugate-models"]
-status = "planned"
-interaction = "관측을 하나씩 추가하며 사전분포가 사후분포로 바뀌는 과정을 본다. 사전 강도를 조절한다"
-binds = ["prior", "observations"]
-motion = "관측 하나마다 사후분포가 갱신되는 전이"
+status = "prototype"
 
 [[widgets]]
 name = "gp-regression"
-kind = "manipulate"
 title = "Gaussian process 회귀"
-chapters = ["bayesian-inference/gaussian-processes"]
-status = "planned"
-interaction = "점을 클릭해 관측을 추가하고 커널·길이척도·잡음을 바꾸어 사후 평균과 신뢰 띠를 본다"
-binds = ["X", "y", "kernel"]
+chapters = ["bayesian-inference/gaussian-processes", "scientific-ml/hybrid-and-surrogate-models", "scientific-discovery/experimental-design", "scientific-discovery/autonomous-experimentation"]
+status = "prototype"
 
 [[widgets]]
 name = "split-leakage"
-kind = "compare"
 title = "데이터 분할과 누수"
-chapters = ["data/splitting-and-leakage"]
-status = "planned"
-interaction = "셀·시간 축으로 배열된 샘플에 random·group·time split을 적용하고, 누수된 샘플과 성능 추정의 차이를 본다"
-binds = ["split"]
+chapters = ["data/splitting-and-leakage", "classical-ml/model-selection", "classical-ml/time-series-analysis", "battery-ai/battery-data"]
+status = "prototype"
 
 [[widgets]]
 name = "training-loop-stepper"
-kind = "stepper"
 title = "학습 루프 단계 재생기"
 chapters = ["deep-learning-pytorch/training-loop"]
-status = "planned"
-interaction = "작은 MLP의 한 step을 forward → loss → backward → optimizer update로 나누어 진행하며 각 텐서의 shape와 값을 확인한다"
-binds = ["lr", "batch"]
-motion = "데이터 흐름과 gradient 흐름을 단계별로 강조"
+status = "prototype"
 
 [[widgets]]
 name = "attention-visualizer"
-kind = "manipulate"
 title = "Attention 계산"
 chapters = ["architectures/transformers"]
-status = "planned"
-interaction = "토큰을 입력하고 Q·K·V, score, mask, softmax 결과를 행렬 단위로 살펴본다. causal·padding mask를 토글한다"
-binds = ["tokens", "mask"]
+status = "prototype"
 
 [[widgets]]
 name = "diffusion-process"
-kind = "stepper"
 title = "확산 과정의 forward와 reverse"
 chapters = ["generative-and-foundation-models/diffusion-models"]
-status = "planned"
-interaction = "2차원 데이터에 잡음 스케줄을 적용하고 시간 t를 끌어 forward·reverse 과정을 본다"
-binds = ["t", "schedule"]
-motion = "데이터 분포가 가우시안으로 흩어졌다가 다시 모이는 과정"
+status = "prototype"
 
 [[widgets]]
 name = "calibration-diagram"
-kind = "manipulate"
 title = "Calibration과 reliability diagram"
-chapters = ["reliability/evaluating-predictive-distributions"]
-status = "planned"
-interaction = "모델 출력에 temperature를 적용하며 reliability diagram·ECE·coverage가 어떻게 바뀌는지 본다"
-binds = ["temperature"]
+chapters = ["reliability/evaluating-predictive-distributions", "earth-and-climate/climate-evaluation"]
+status = "prototype"
 
 [[widgets]]
 name = "battery-ecm"
-kind = "simulate"
 title = "등가회로 모델 시뮬레이터"
-chapters = ["battery-ai/battery-models", "battery-ai/battery-fundamentals"]
-status = "planned"
-interaction = "전류 프로파일과 R·RC 파라미터를 바꾸어 단자 전압 응답을 본다"
-binds = ["current_a", "r0_ohm", "rc_pairs"]
+chapters = ["battery-ai/battery-models", "battery-ai/battery-fundamentals", "battery-ai/parameter-estimation"]
+status = "prototype"
+
+[[widgets]]
+name = "coulomb-matrix-invariance"
+title = "Coulomb 행렬 고윳값의 불변성"
+chapters = ["chemistry-and-materials/molecular-representations"]
+status = "prototype"
+
+[[widgets]]
+name = "scaffold-split-explorer"
+title = "무작위 분할 vs scaffold 분할"
+chapters = ["chemistry-and-materials/property-prediction"]
+status = "prototype"
+
+[[widgets]]
+name = "md-energy-conservation"
+title = "분자동역학 에너지 보존"
+chapters = ["chemistry-and-materials/interatomic-potentials"]
+status = "prototype"
+
+[[widgets]]
+name = "predictor-exploitation"
+title = "예측 모델 착취와 적용 영역"
+chapters = ["chemistry-and-materials/molecular-design"]
+status = "prototype"
+
+[[widgets]]
+name = "leakage-threshold"
+title = "근접 중복 누수 임계 탐색"
+chapters = ["chemistry-and-materials/chemistry-evaluation"]
+status = "prototype"
+
+[[widgets]]
+name = "split-unit-forecast"
+title = "분할 단위와 예측 지평"
+chapters = ["research-landscape/problem-formulation"]
+status = "prototype"
+
+[[widgets]]
+name = "seed-variance"
+title = "seed마다 흔들리는 검증 점수"
+chapters = ["research-landscape/first-pipeline"]
+status = "prototype"
+
+[[widgets]]
+name = "tmux-anatomy"
+title = "tmux 세션·창·패널"
+chapters = ["linux-and-remote/processes-and-monitoring"]
+status = "prototype"
+
+[[widgets]]
+name = "ssh-tunnel"
+title = "SSH 포트 포워딩 방향"
+chapters = ["linux-and-remote/ssh"]
+status = "prototype"
+
+[[widgets]]
+name = "preemption-checkpoint"
+title = "선점과 체크포인트 간격"
+chapters = ["linux-and-remote/shared-servers"]
+status = "prototype"
+
+[[widgets]]
+name = "cuda-version-stack"
+title = "드라이버·CUDA·프레임워크 호환"
+chapters = ["environments/software-stack"]
+status = "prototype"
+
+[[widgets]]
+name = "docker-layer-cache"
+title = "Dockerfile 레이어 캐시"
+chapters = ["environments/docker"]
+status = "prototype"
+
+[[widgets]]
+name = "commit-dag"
+title = "merge·rebase·reset과 커밋 그래프"
+chapters = ["git-and-agents/git-fundamentals"]
+status = "prototype"
+
+[[widgets]]
+name = "selection-bias"
+title = "시도 횟수와 test 낙관 편향"
+chapters = ["git-and-agents/agentic-workflow"]
+status = "prototype"
+
+[[widgets]]
+name = "broadcasting-shapes"
+title = "브로드캐스팅 규칙"
+chapters = ["python-and-computing/scientific-python"]
+status = "prototype"
+
+[[widgets]]
+name = "strides-cache"
+title = "메모리 배치와 캐시 라인"
+chapters = ["python-and-computing/computer-architecture"]
+status = "prototype"
+
+[[widgets]]
+name = "roofline"
+title = "roofline 모델"
+chapters = ["python-and-computing/computer-architecture"]
+status = "prototype"
+
+[[widgets]]
+name = "config-merge"
+title = "설정 계층 병합"
+chapters = ["research-code-engineering/configuration"]
+status = "prototype"
+
+[[widgets]]
+name = "argparse-sandbox"
+title = "CLI 인자에서 설정으로"
+chapters = ["research-code-engineering/cli-design"]
+status = "prototype"
+
+[[widgets]]
+name = "power-iteration"
+title = "반복 적용과 고유벡터"
+chapters = ["linear-algebra/eigen-and-symmetric"]
+status = "prototype"
+
+[[widgets]]
+name = "projection-lstsq"
+title = "사영과 최소제곱"
+chapters = ["linear-algebra/inner-products-and-projection"]
+status = "prototype"
+
+[[widgets]]
+name = "einsum-axes"
+title = "einsum 축 표기"
+chapters = ["linear-algebra/tensors-and-einsum"]
+status = "prototype"
+
+[[widgets]]
+name = "slerp-vs-lerp"
+title = "구면 위 보간"
+chapters = ["linear-algebra/manifolds-and-geometry"]
+status = "prototype"
+
+[[widgets]]
+name = "basis-expansion"
+title = "기저 전개와 해상도"
+chapters = ["linear-algebra/function-spaces"]
+status = "prototype"
+
+[[widgets]]
+name = "equivariance-check"
+title = "등변성 검사"
+chapters = ["linear-algebra/symmetry-and-groups"]
+status = "prototype"
+
+[[widgets]]
+name = "gradient-hessian-contour"
+title = "기울기와 Hessian 고유벡터"
+chapters = ["calculus-and-autodiff/multivariable-calculus"]
+status = "prototype"
+
+[[widgets]]
+name = "condition-ellipse"
+title = "조건수와 섭동 증폭"
+chapters = ["numerical-methods/conditioning-and-stability"]
+status = "prototype"
+
+[[widgets]]
+name = "iterative-solver-race"
+title = "반복법 수렴 비교"
+chapters = ["numerical-methods/numerical-linear-algebra"]
+status = "prototype"
+
+[[widgets]]
+name = "newton-basins"
+title = "Newton 끌개 영역"
+chapters = ["numerical-methods/nonlinear-equations"]
+status = "prototype"
+
+[[widgets]]
+name = "runge-interpolation"
+title = "Runge 현상"
+chapters = ["numerical-methods/interpolation-and-quadrature"]
+status = "prototype"
+
+[[widgets]]
+name = "cfl-advection"
+title = "CFL 조건"
+chapters = ["numerical-methods/pde-and-dae"]
+status = "prototype"
+
+[[widgets]]
+name = "loss-slice"
+title = "손실 단면과 보간 경로"
+chapters = ["optimization/nonconvex-landscape"]
+status = "prototype"
+
+[[widgets]]
+name = "bayes-opt-1d"
+title = "1D 베이지안 최적화"
+chapters = ["optimization/special-optimization"]
+status = "prototype"
+
+[[widgets]]
+name = "base-rate"
+title = "기저율과 자연 빈도"
+chapters = ["probability/conditional-probability"]
+status = "prototype"
+
+[[widgets]]
+name = "clt-sampler"
+title = "중심극한정리와 꼬리"
+chapters = ["probability/expectation-and-limits"]
+status = "prototype"
+
+[[widgets]]
+name = "importance-weights"
+title = "중요도 가중과 ESS"
+chapters = ["probability/sampling"]
+status = "prototype"
+
+[[widgets]]
+name = "metropolis-chain"
+title = "Metropolis 혼합"
+chapters = ["probability/stochastic-processes"]
+status = "prototype"
+
+[[widgets]]
+name = "ci-coverage"
+title = "신뢰구간 포함률"
+chapters = ["statistical-inference/intervals-and-testing"]
+status = "prototype"
+
+[[widgets]]
+name = "bootstrap-resampler"
+title = "부트스트랩 단위"
+chapters = ["statistical-inference/comparing-models"]
+status = "prototype"
+
+[[widgets]]
+name = "residual-diagnostics"
+title = "잔차 진단"
+chapters = ["statistical-inference/regression-models"]
+status = "prototype"
+
+[[widgets]]
+name = "partial-pooling"
+title = "부분 풀링과 수축"
+chapters = ["bayesian-inference/hierarchical-models"]
+status = "prototype"
+
+[[widgets]]
+name = "gmm-em"
+title = "GMM EM 단계"
+chapters = ["bayesian-inference/latent-variables-and-em"]
+status = "prototype"
+
+[[widgets]]
+name = "kl-direction"
+title = "forward vs reverse KL"
+chapters = ["information-and-learning-theory/entropy-and-kl"]
+status = "prototype"
+
+[[widgets]]
+name = "mi-histogram-bias"
+title = "MI 추정 편향"
+chapters = ["information-and-learning-theory/mutual-information"]
+status = "prototype"
+
+[[widgets]]
+name = "double-descent"
+title = "double descent"
+chapters = ["information-and-learning-theory/modern-generalization"]
+status = "prototype"
+
+[[widgets]]
+name = "doe-coverage"
+title = "표집 설계 커버리지"
+chapters = ["data/synthetic-data"]
+status = "prototype"
+
+[[widgets]]
+name = "window-overlap-leak"
+title = "window 겹침 누수"
+chapters = ["architectures/time-series-deep-learning"]
+status = "prototype"
+
+[[widgets]]
+name = "robust-outlier"
+title = "z와 robust z"
+chapters = ["data/preprocessing-and-eda"]
+status = "prototype"
+
+[[widgets]]
+name = "regularization-path"
+title = "정규화 경로"
+chapters = ["classical-ml/linear-models"]
+status = "prototype"
+
+[[widgets]]
+name = "knn-rbf-scale"
+title = "kNN과 RBF 길이척도"
+chapters = ["classical-ml/kernels-and-neighbors"]
+status = "prototype"
+
+[[widgets]]
+name = "tree-boosting-overfit"
+title = "트리 깊이와 boosting"
+chapters = ["classical-ml/trees-and-ensembles"]
+status = "prototype"
+
+[[widgets]]
+name = "tsne-perplexity"
+title = "t-SNE perplexity"
+chapters = ["classical-ml/unsupervised-learning"]
+status = "prototype"
+
+[[widgets]]
+name = "kaplan-meier"
+title = "Kaplan–Meier와 중도절단"
+chapters = ["classical-ml/survival-and-causal"]
+status = "prototype"
+
+[[widgets]]
+name = "smoothing-illusion"
+title = "곡선 smoothing 착시"
+chapters = ["deep-learning-pytorch/dashboards"]
+status = "prototype"
+
+[[widgets]]
+name = "learning-curve-reader"
+title = "학습 곡선 진단"
+chapters = ["deep-learning-pytorch/debugging-training"]
+status = "prototype"
+
+[[widgets]]
+name = "receptive-field"
+title = "수용 영역"
+chapters = ["architectures/cnn"]
+status = "prototype"
+
+[[widgets]]
+name = "ssm-kernel"
+title = "상태공간 모델 커널"
+chapters = ["architectures/recurrent-and-ssm"]
+status = "prototype"
+
+[[widgets]]
+name = "sampling-temperature"
+title = "temperature와 top-k·top-p"
+chapters = ["architectures/language-models"]
+status = "prototype"
+
+[[widgets]]
+name = "over-smoothing"
+title = "GNN over-smoothing"
+chapters = ["architectures/graph-networks"]
+status = "prototype"
+
+[[widgets]]
+name = "probe-vs-pca"
+title = "PCA 시각화 vs 선형 프로브"
+chapters = ["architectures/representation-analysis"]
+status = "prototype"
+
+[[widgets]]
+name = "gan-dynamics"
+title = "GAN 학습 동역학"
+chapters = ["generative-and-foundation-models/gan-and-flows"]
+status = "prototype"
+
+[[widgets]]
+name = "coupling-flow"
+title = "affine coupling 흐름"
+chapters = ["generative-and-foundation-models/gan-and-flows"]
+status = "prototype"
+
+[[widgets]]
+name = "vae-collapse"
+title = "VAE posterior collapse"
+chapters = ["generative-and-foundation-models/vae"]
+status = "prototype"
+
+[[widgets]]
+name = "flow-paths"
+title = "flow matching 경로"
+chapters = ["generative-and-foundation-models/flow-matching"]
+status = "prototype"
+
+[[widgets]]
+name = "gen-metric-failures"
+title = "생성 지표의 실패"
+chapters = ["generative-and-foundation-models/evaluating-generative-models"]
+status = "prototype"
+
+[[widgets]]
+name = "contrastive-collapse"
+title = "대조학습 붕괴"
+chapters = ["generative-and-foundation-models/self-supervised-learning"]
+status = "prototype"
+
+[[widgets]]
+name = "lora-rank"
+title = "LoRA 랭크"
+chapters = ["generative-and-foundation-models/foundation-models"]
+status = "prototype"
+
+[[widgets]]
+name = "gridworld-vi"
+title = "격자 세계 가치 반복"
+chapters = ["reinforcement-learning/mdp-and-dp"]
+status = "prototype"
+
+[[widgets]]
+name = "bandit-regret"
+title = "밴딧 누적 후회"
+chapters = ["reinforcement-learning/bandits-and-offline-rl"]
+status = "prototype"
+
+[[widgets]]
+name = "lqr-mpc"
+title = "LQR과 제약 MPC"
+chapters = ["reinforcement-learning/model-based-control"]
+status = "prototype"
+
+[[widgets]]
+name = "conformal-coverage"
+title = "split conformal 포함률"
+chapters = ["reliability/conformal-prediction"]
+status = "prototype"
+
+[[widgets]]
+name = "cost-threshold"
+title = "비용 비율과 임계값"
+chapters = ["reliability/decision-making"]
+status = "prototype"
+
+[[widgets]]
+name = "checkpoint-tradeoff"
+title = "gradient checkpointing"
+chapters = ["experiment-operations/memory-management"]
+status = "prototype"
+
+[[widgets]]
+name = "ring-allreduce"
+title = "ring all-reduce"
+chapters = ["experiment-operations/distributed-training"]
+status = "prototype"
+
+[[widgets]]
+name = "batching-latency"
+title = "배치 크기와 지연·처리량"
+chapters = ["experiment-operations/inference-and-deployment"]
+status = "prototype"
+
+[[widgets]]
+name = "citation-pagerank"
+title = "인용 그래프 PageRank"
+chapters = ["research-practice/literature-search"]
+status = "prototype"
+
+[[widgets]]
+name = "power-vs-seeds"
+title = "검정력과 seed 수"
+chapters = ["research-practice/experimental-design"]
+status = "prototype"
+
+[[widgets]]
+name = "factorial-effects"
+title = "2^k 요인 효과"
+chapters = ["research-practice/reproducing-papers"]
+status = "prototype"
+
+[[widgets]]
+name = "error-bars"
+title = "SD·SE·CI 오차막대"
+chapters = ["research-practice/analyzing-results"]
+status = "prototype"
+
+[[widgets]]
+name = "axis-lie-factor"
+title = "축 범위와 lie factor"
+chapters = ["research-practice/figures-and-tables"]
+status = "prototype"
+
+[[widgets]]
+name = "colormap-lightness"
+title = "컬러맵 밝기"
+chapters = ["research-practice/figures-and-tables"]
+status = "prototype"
+
+[[widgets]]
+name = "pinn-loss-balance"
+title = "PINN 손실 균형"
+chapters = ["scientific-ml/pinn"]
+status = "prototype"
+
+[[widgets]]
+name = "spectral-conv"
+title = "스펙트럼 합성곱과 해상도"
+chapters = ["scientific-ml/neural-operators"]
+status = "prototype"
+
+[[widgets]]
+name = "kalman-1d"
+title = "1D 칼만 필터"
+chapters = ["scientific-ml/system-identification-and-estimation"]
+status = "prototype"
+
+[[widgets]]
+name = "l-curve"
+title = "Tikhonov L-curve"
+chapters = ["scientific-ml/inverse-problems-and-uq"]
+status = "prototype"
+
+[[widgets]]
+name = "abc-tolerance"
+title = "ABC 허용 오차"
+chapters = ["scientific-discovery/simulation-based-inference"]
+status = "prototype"
+
+[[widgets]]
+name = "eig-design"
+title = "측정 설계와 기대 정보 이득"
+chapters = ["scientific-discovery/experimental-design"]
+status = "prototype"
+
+[[widgets]]
+name = "pareto-front"
+title = "다목적 Pareto front"
+chapters = ["scientific-discovery/autonomous-experimentation"]
+status = "prototype"
+
+[[widgets]]
+name = "grid-resolution-re"
+title = "격자 해상도와 셀 Péclet 수"
+chapters = ["physics-and-engineering/simulation-fundamentals"]
+status = "prototype"
+
+[[widgets]]
+name = "pod-energy"
+title = "POD 에너지와 외삽"
+chapters = ["physics-and-engineering/surrogate-modeling"]
+status = "prototype"
+
+[[widgets]]
+name = "closure-apriori"
+title = "closure 사전·사후 평가"
+chapters = ["physics-and-engineering/turbulence-and-closure"]
+status = "prototype"
+
+[[widgets]]
+name = "beam-pareto"
+title = "빔 설계 Pareto"
+chapters = ["physics-and-engineering/design-optimization"]
+status = "prototype"
+
+[[widgets]]
+name = "rollout-spectrum"
+title = "rollout 오차와 스펙트럼"
+chapters = ["physics-and-engineering/physics-benchmarks"]
+status = "prototype"
+
+[[widgets]]
+name = "area-weighting"
+title = "위도 가중 평균"
+chapters = ["earth-and-climate/earth-system-data"]
+status = "prototype"
+
+[[widgets]]
+name = "spread-skill"
+title = "spread–skill과 rank histogram"
+chapters = ["earth-and-climate/weather-forecasting"]
+status = "prototype"
+
+[[widgets]]
+name = "energy-spectrum-blur"
+title = "흐릿함과 에너지 스펙트럼"
+chapters = ["earth-and-climate/climate-evaluation"]
+status = "prototype"
+
+[[widgets]]
+name = "homology-split"
+title = "상동성 기준 분할"
+chapters = ["life-sciences/bio-evaluation"]
+status = "prototype"
+
+[[widgets]]
+name = "kabsch-align"
+title = "Kabsch 정렬과 RMSD"
+chapters = ["life-sciences/protein-structure"]
+status = "prototype"
+
+[[widgets]]
+name = "batch-correction"
+title = "배치 효과와 보정"
+chapters = ["life-sciences/omics-and-single-cell"]
+status = "prototype"
+
+[[widgets]]
+name = "soc-filter"
+title = "쿨롱 카운팅 vs EKF"
+chapters = ["battery-ai/state-and-lifetime-prediction"]
+status = "prototype"
+
+[[widgets]]
+name = "charge-pareto"
+title = "다단계 충전 Pareto"
+chapters = ["battery-ai/charging-optimization"]
+status = "prototype"
+
+[[widgets]]
+name = "competency-radar"
+title = "역량 레이더"
+chapters = ["capstone/competency-assessment"]
+status = "prototype"

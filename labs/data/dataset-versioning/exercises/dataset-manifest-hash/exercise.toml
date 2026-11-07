@@ -1,0 +1,6 @@
+title = "데이터셋 manifest와 해시 만들기"
+chapter = "data/dataset-versioning"
+objective = 1
+exec = "browser"
+entry = "dataset_manifest"
+timeout_s = 10

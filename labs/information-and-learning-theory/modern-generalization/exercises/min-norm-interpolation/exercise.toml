@@ -1,0 +1,6 @@
+title = "최소 노름 보간과 경사하강의 도착점"
+chapter = "information-and-learning-theory/modern-generalization"
+objective = 1
+exec = "browser"
+entry = "gd_limit"
+timeout_s = 10

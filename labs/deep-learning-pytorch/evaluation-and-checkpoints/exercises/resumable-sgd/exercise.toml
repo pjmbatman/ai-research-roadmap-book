@@ -1,0 +1,6 @@
+title = "정확히 재개되는 optimizer 만들기"
+chapter = "deep-learning-pytorch/evaluation-and-checkpoints"
+objective = 3
+exec = "browser"
+entry = "MomentumSGD"
+timeout_s = 10

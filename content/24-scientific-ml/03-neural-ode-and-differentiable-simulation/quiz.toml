@@ -1,0 +1,116 @@
+# 24.3 Neural ODE와 미분가능 시뮬레이션 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+# 계산으로 확인할 수 있는 정답은 labs/scientific-ml/neural-ode-and-differentiable-simulation/test_quiz.py가 검증한다.
+
+[[questions]]
+id = "adjoint-cost"
+type = "single"
+objective = 1
+prompt = '''상태 차원 $d = 10$인 ODE의 오른쪽 항이 파라미터 $P = 10^4$개인 신경망이고, 손실은 궤적에서 계산한 스칼라 하나다. gradient $dL/d\theta$를 구하는 방법으로 비용 면에서 적절한 것은?'''
+explanation = '''순방향 민감도는 $\partial \mathbf{y}/\partial\theta$, 즉 $d \times P = 10^5$개의 양을 상태와 함께 적분해야 하므로 비용이 파라미터 수에 비례한다. adjoint 방법은 스칼라 손실에 대해 크기 $d$인 adjoint 변수 하나를 역방향으로 적분하고, 그 길에서 $\lambda^\top \partial f/\partial\theta$를 누적한다. 비용이 파라미터 수와 거의 무관해, 신경망처럼 파라미터가 많고 출력이 스칼라인 경우에 맞는다. 8.4장의 forward mode와 reverse mode의 선택과 같은 원리다. 반대로 파라미터가 몇 개이고 많은 출력의 민감도가 필요하면 순방향 민감도가 낫다.'''
+
+[[questions.choices]]
+text = "순방향 민감도: 파라미터마다 민감도 방정식을 함께 적분한다."
+feedback = "d × P = 10^5개의 민감도를 적분해야 한다. 비용이 파라미터 수에 비례하므로 파라미터가 많을 때 불리하다."
+
+[[questions.choices]]
+text = "adjoint(reverse mode): 크기 d인 adjoint 변수를 역방향으로 한 번 적분하며 모든 파라미터의 gradient를 누적한다."
+correct = true
+
+[[questions.choices]]
+text = "중심차분: 파라미터마다 손실을 두 번씩 계산한다."
+feedback = "2P = 2 × 10^4번의 ODE 풀이가 필요하고, 본문 셀 1처럼 solver tolerance와 차분 간격에 따라 정확도도 떨어진다."
+
+[[questions]]
+id = "backprop-vs-adjoint-memory"
+type = "single"
+objective = 1
+prompt = '''고정 step solver의 연산을 자동미분으로 그대로 역전파하는 방법(직접 역전파)과 연속 adjoint 방법을 비교한 설명으로 옳은 것은?'''
+explanation = '''직접 역전파는 solver가 실제로 한 계산의 정확한 gradient를 주지만, 모든 step의 중간값을 저장해야 하므로 메모리가 step 수에 비례한다. 연속 adjoint는 상태를 역방향으로 다시 적분하거나 dense output·checkpoint에서 복원하므로 메모리가 적게 들지만, 계산한 gradient는 연속 문제의 gradient를 다시 근사한 것이라 solver tolerance만큼의 오차가 있다(본문 셀 3에서 rtol = 1e-3이면 dL/dc가 4% 틀렸다). 감쇠가 있는 계를 역방향으로 다시 적분하면 감쇠가 증폭으로 바뀌어 상태 복원 자체가 불안정해질 수 있다.'''
+
+[[questions.choices]]
+text = "직접 역전파는 이산 계산의 정확한 gradient를 주지만 메모리가 step 수에 비례하고, adjoint는 메모리가 적지만 gradient에 solver tolerance만큼의 오차가 들어간다."
+correct = true
+
+[[questions.choices]]
+text = "adjoint는 언제나 직접 역전파보다 정확하다."
+feedback = "adjoint의 gradient는 연속 문제의 gradient를 역방향 solver로 다시 근사한 것이다. tolerance가 느슨하면 이산 손실의 gradient와도, 참 gradient와도 다르다."
+
+[[questions.choices]]
+text = "두 방법은 같은 gradient를 같은 메모리로 계산하며 이름만 다르다."
+feedback = "이산화와 미분의 순서가 다르다. 직접 역전파는 이산화한 다음 미분하고, 연속 adjoint는 미분한 다음 이산화한다. 결과도 메모리도 다르다."
+
+[[questions]]
+id = "loose-tolerance-gradient"
+type = "single"
+objective = 3
+prompt = '''본문 셀 1에서 solver의 rtol을 $10^{-3}$으로 두고 중심차분으로 $dL/dc$를 구했더니 차분 간격 $h = 10^{-2}$와 $10^{-6}$ 모두 약 $-0.0299$였고, rtol $= 10^{-10}$에서는 $-0.0322$였다. 옳은 해석은?'''
+explanation = '''차분 간격을 바꿔도 값이 같으므로 차분의 절단 오차가 문제가 아니다. 느슨한 tolerance의 solver가 만든 손실 함수 자체가 참 손실과 다르고, 그 기울기도 다르다. 즉 "solver 출력의 gradient"는 정확히 계산할 수 있어도 "물리 모델의 gradient"와는 다를 수 있다. gradient를 쓰는 학습·추정에서는 tolerance를 바꿔 gradient가 수렴하는지 확인한다. 이 경우 오차가 7%라 경사하강의 방향은 대체로 맞지만, 최적점 근처에서는 gradient가 작아져 상대 오차가 더 커진다.'''
+
+[[questions.choices]]
+text = "차분 간격이 너무 커서 생긴 절단 오차다."
+feedback = "h를 10^-2에서 10^-6으로 줄여도 값이 거의 바뀌지 않았다. 절단 오차가 아니다."
+
+[[questions.choices]]
+text = "느슨한 tolerance로 계산한 손실 함수 자체가 참 손실과 달라, 그 기울기가 참 gradient와 다르다."
+correct = true
+
+[[questions.choices]]
+text = "부동소수점 상쇄 오차 때문이며 h를 더 줄이면 해결된다."
+feedback = "상쇄 오차는 h가 작을수록 커진다. 그리고 h = 10^-2에서도 같은 값이 나왔으므로 상쇄 오차가 원인이 아니다."
+
+[[questions]]
+id = "ude-structure"
+type = "single"
+objective = 2
+prompt = '''마찰 법칙을 모르는 진자의 데이터로 universal differential equation(UDE)을 만들려고 한다. 가장 UDE다운 모델은? ($N_\phi$는 학습되는 신경망)'''
+explanation = '''UDE는 알려진 물리 항을 그대로 두고, 모르는 부품만 신경망으로 바꾼 미분방정식이다. 중력 항 $-(g/L)\sin\theta$는 확실하므로 남기고, 마찰만 $N_\phi(\omega)$로 둔다. 학습된 $N_\phi$는 나중에 그래프로 그리거나 기호 회귀로 식을 찾아 해석할 수 있다. 오른쪽 항 전체를 신경망으로 두면 순수 neural ODE이고, 해 $\theta(t)$를 직접 출력하는 신경망은 미분방정식 모델이 아니다.'''
+
+[[questions.choices]]
+text = '''$\dot{\theta} = \omega$, $\dot{\omega} = -(g/L)\sin\theta - N_\phi(\omega)$'''
+correct = true
+
+[[questions.choices]]
+text = '''$(\dot{\theta}, \dot{\omega}) = N_\phi(\theta, \omega)$'''
+feedback = "오른쪽 항 전체를 학습하는 순수 neural ODE다. 알고 있는 중력 항까지 데이터로 다시 배워야 하고, 학습 범위 밖에서 그 항을 보장하지 못한다."
+
+[[questions.choices]]
+text = '''$\theta(t) = N_\phi(t)$'''
+feedback = "시간에서 각도로 가는 회귀 모델이다. 동역학 구조가 없어 초기 조건이 바뀌면 쓸 수 없다."
+
+[[questions.choices]]
+text = '''$\theta(t) = N_\phi(t)$를 운동 방정식 잔차로 학습'''
+feedback = "24.2장의 PINN이다. 해를 신경망으로 표현할 뿐 방정식의 모르는 부품을 학습하는 구조가 아니다(잔차에 마찰 항이 필요한데 그것이 미지다)."
+
+[[questions]]
+id = "explicit-gradient-limit"
+type = "numeric"
+objective = 3
+prompt = '''$y' = -\kappa\,(y - \cos t)$를 explicit Euler, step $h = 0.05$로 풀어 손실을 계산하고 $\kappa$를 학습한다. 학습 중 $\kappa$가 어떤 값을 넘으면 시뮬레이션과 gradient가 발산하기 시작하는가?'''
+answer = 40
+tolerance = 0.5
+slider = { min = 0, max = 100, step = 0.5 }
+explanation = '''explicit Euler의 증폭 인자는 $1 - h\kappa$이고, $|1 - h\kappa| \le 1$이려면 $h\kappa \le 2$, 즉 $\kappa \le 2/h = 40$이어야 한다(9.6장). 본문 셀 5에서 $\kappa = 39$까지는 유한하지만 41에서 손실이 50, 60에서 $10^{24}$로 폭발했고 gradient도 같이 폭발했다. 파라미터가 학습 중에 이 경계를 넘어가면 손실 지형에 절벽이 생긴다. implicit Euler는 모든 $\kappa > 0$에서 안정하다.'''
+
+[[questions]]
+id = "ude-extrapolation"
+type = "multiple"
+objective = 2
+prompt = '''본문 셀 6에서 초기 각 1 rad 궤적의 앞 5초로 학습한 뒤 초기 각 2 rad로 외삽했더니, UDE의 RMS 오차(0.19 rad)는 순수 neural ODE(0.52 rad)보다 작았지만 0은 아니었다. 이 결과를 설명하는 것을 모두 고르시오.'''
+explanation = '''UDE는 중력 항 $-9.81\sin\theta$를 모든 $\theta$에서 정확히 쓰므로, 진폭이 커져도 그 항은 틀리지 않는다. 순수 neural ODE는 학습 궤적이 지나간 상태 영역 밖에서 오른쪽 항 전체를 추측해야 한다. 그러나 UDE의 감쇠 신경망도 학습 궤적이 지나간 각속도 범위(약 $|\omega| \le 2.7$ rad/s) 밖에서는 근거가 없다. 2 rad 진자는 각속도가 4.5 rad/s에 이르는데, 학습된 감쇠는 $\omega = 3$ rad/s에서 0.84(참값 1.5), 5 rad/s에서 1.04(참값 3.5)로 크게 다르다. 파라미터 수는 UDE가 더 적다.'''
+
+[[questions.choices]]
+text = "UDE는 중력 항을 학습 범위와 무관하게 정확히 알고 있다."
+correct = true
+
+[[questions.choices]]
+text = "UDE의 감쇠 신경망은 학습 데이터에 없던 큰 각속도에서 근거 없이 외삽한다."
+correct = true
+
+[[questions.choices]]
+text = "순수 neural ODE는 학습 궤적 밖의 상태에서 오른쪽 항 전체를 추측해야 한다."
+correct = true
+
+[[questions.choices]]
+text = "UDE가 파라미터가 더 많아서 표현력이 크다."
+feedback = "UDE의 신경망은 입력 1개, 출력 1개로 순수 neural ODE(입력 2개, 출력 2개)보다 파라미터가 적다. 차이는 표현력이 아니라 알고 있는 물리 구조다."

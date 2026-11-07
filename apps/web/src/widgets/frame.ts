@@ -1,10 +1,35 @@
-// 위젯 공통 틀(design-system.md §8): 머리(제목·종류) → 무대(canvas) → 조작 패널(슬라이더·프리셋·읽음값).
-// 무대 배경은 테마와 무관하게 Midnight이고, 그 위의 선은 Glacier, 지금 볼 곳만 Coral로 칠한다.
-export const C = {
-  bg: "#0b1020", ink: "#dce6f2", faint: "rgba(220,230,242,0.14)", mid: "rgba(220,230,242,0.45)",
-  edge: "#ff6b5a", edgeSoft: "rgba(255,107,90,0.18)", good: "#3fc79a", blue: "#9fc6ff",
-};
-const KIND: Record<string, string> = { manipulate: "직접 조작", stepper: "단계별 보기", simulate: "시뮬레이션", compare: "비교" };
+// 위젯 틀 (design-system.md §4): Card 안에 머리(제목·초기화) → 그림(canvas) → 조작(ToggleGroup·Slider·Switch·읽음값).
+// 그림의 색은 디자인 토큰에서 읽어 라이트·다크 테마를 따른다.
+// 색은 디자인 토큰(design-system.md §4)에서 읽는다: 바탕 = --card, 축·격자 = --border·--muted-foreground,
+// 주된 데이터 = --chart-3, 보조 데이터 = --chart-1. 테마가 바뀌면 다시 읽고 다시 그린다.
+export const C = { bg: "", ink: "", mid: "", faint: "", edge: "", ink2: "", good: "", edgeSoft: "", grid2: "", fill: "" };
+const probe = typeof document !== "undefined" ? document.createElement("canvas").getContext("2d", { willReadFrequently: true }) : null;
+/** CSS 색(oklch 포함)을 [r, g, b]로 바꾼다. */
+export function rgbOf(css: string): [number, number, number] {
+  if (!probe) return [0, 0, 0];
+  probe.clearRect(0, 0, 1, 1);
+  probe.fillStyle = "#000";
+  probe.fillStyle = css;
+  probe.fillRect(0, 0, 1, 1);
+  const d = probe.getImageData(0, 0, 1, 1).data;
+  return [d[0], d[1], d[2]];
+}
+export const alpha = (css: string, a: number) => { const [r, g, b] = rgbOf(css); return `rgba(${r},${g},${b},${a})`; };
+export function refreshColors() {
+  const s = getComputedStyle(document.documentElement);
+  const v = (n: string) => s.getPropertyValue(n).trim();
+  Object.assign(C, {
+    bg: v("--card"), ink: v("--foreground"), mid: v("--muted-foreground"), faint: v("--border"),
+    edge: v("--chart-3"), ink2: v("--chart-1"), good: v("--success"),
+    edgeSoft: alpha(v("--chart-1"), 0.35), grid2: alpha(v("--muted-foreground"), 0.35), fill: alpha(v("--chart-1"), 0.25),
+  });
+}
+if (typeof window !== "undefined") {
+  refreshColors();
+  const again = () => { refreshColors(); window.dispatchEvent(new CustomEvent("widget-recolor")); };
+  window.addEventListener("theme-change", again);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", again);
+}
 
 export interface Frame {
   root: HTMLElement; stage: HTMLElement; canvas: HTMLCanvasElement; ctx: CanvasRenderingContext2D; panel: HTMLElement;
@@ -16,7 +41,7 @@ export function frame(root: HTMLElement, title: string, kind: string, aspect = 0
   const wrap = el("div", "wframe");
   const head = el("div", "wframe-head");
   head.innerHTML = `<b></b>`;
-  head.dataset.kind = KIND[kind] ?? kind;
+  void kind;
   head.querySelector("b")!.textContent = title;
   const stage = el("div", "wframe-stage");
   const canvas = document.createElement("canvas");
@@ -42,6 +67,7 @@ export function frame(root: HTMLElement, title: string, kind: string, aspect = 0
     listeners.forEach((fn) => fn());
   };
   new ResizeObserver(() => fit()).observe(stage);
+  window.addEventListener("widget-recolor", () => listeners.forEach((fn) => fn()));
   fit();
   return f;
 }

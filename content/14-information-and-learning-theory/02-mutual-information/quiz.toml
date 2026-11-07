@@ -1,0 +1,119 @@
+# 14.2 상호정보량과 표현 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "zero-correlation-mi"
+type = "single"
+objective = 1
+prompt = '''$X$가 $\{-1, 0, 1\}$에서 같은 확률로 나오고 $Y = X^2$이다. $\mathrm{Cov}(X, Y) = 0$이다. $I(X; Y)$에 대해 옳은 것은?'''
+explanation = '''$Y$는 $X$의 함수이므로 $H(Y \mid X) = 0$이고 $I(X; Y) = H(Y) - H(Y \mid X) = H(Y) \approx 0.637$ nat이다. 공분산은 선형 관계만 재므로 이 관계를 놓친다. MI가 0이 되는 것은 두 변수가 독립일 때뿐이다.'''
+
+[[questions.choices]]
+text = '''$I(X; Y) = H(Y) > 0$이다. $X$를 알면 $Y$가 완전히 정해지기 때문이다.'''
+correct = true
+
+[[questions.choices]]
+text = '''공분산이 0이므로 $I(X; Y) = 0$이다.'''
+feedback = "공분산(상관) 0은 독립을 뜻하지 않는다. MI가 0인 것은 독립일 때뿐이고, 여기서는 Y가 X의 함수다."
+
+[[questions.choices]]
+text = '''$I(X; Y) = H(X)$이다.'''
+feedback = "Y를 알아도 X의 부호(−1인지 1인지)는 모른다. 그래서 H(X | Y) > 0이고 I(X; Y) = H(X) − H(X | Y) < H(X)다."
+
+[[questions.choices]]
+text = '''$Y$가 $X$의 결정적 함수이므로 $I(X; Y)$는 무한대다.'''
+feedback = "이산 변수에서는 I(X; Y) ≤ min(H(X), H(Y))로 유한하다. 무한대 문제는 연속 변수를 단사 함수로 보낼 때 생긴다."
+
+[[questions]]
+id = "data-processing"
+type = "multiple"
+objective = 1
+prompt = '''측정 $Y$가 대상 $X$에 대해 $I(X; Y) = 0.45$ nat의 정보를 담는다. $Y$만 보고 만든 다음 양들 중 $X$와의 MI가 **0.45 nat을 넘을 수 없는** 것을 모두 고르시오.'''
+explanation = '''$X \to Y \to Z$가 Markov 사슬이면 $I(X; Z) \le I(X; Y)$다(data processing inequality). $Y$를 결정적 함수로 가공하든, 무작위 잡음을 섞든, 신경망 encoder를 통과시키든 $Z$가 $Y$만 보고 만들어지는 한 모두 해당한다. 반면 $X$를 다시 측정한 새 센서 값은 $Y$만 보고 만든 것이 아니므로 이 부등식의 대상이 아니다.'''
+
+[[questions.choices]]
+text = "Y를 두 묶음으로 양자화한 값"
+correct = true
+
+[[questions.choices]]
+text = "Y에 무작위 잡음을 더한 값"
+correct = true
+
+[[questions.choices]]
+text = "Y를 입력으로 받는 학습된 신경망 encoder의 출력"
+correct = true
+
+[[questions.choices]]
+text = "X를 독립적으로 한 번 더 측정한 두 번째 센서 값"
+feedback = "두 번째 센서는 Y가 아니라 X를 직접 본다. X → Y → Z 사슬이 아니므로 부등식이 적용되지 않는다. 독립적인 측정을 더하면 정보가 늘 수 있다."
+
+[[questions]]
+id = "histogram-bias"
+type = "single"
+objective = 2
+prompt = '''서로 **독립인** 연속 변수 두 개에서 표본 200개를 뽑아, 2차원 히스토그램(각 축 50 bin)으로 plug-in MI를 추정했다. 추정값에 대해 예상할 수 있는 것은?'''
+explanation = '''칸이 $50 \times 50 = 2500$개인데 표본이 200개뿐이면 대부분의 칸이 비고, 우연히 몰린 칸들이 의존성처럼 보인다. plug-in MI는 위로 편향되어 참값 0보다 크게 나온다(본문 실험에서 약 1.79 nat). 편향을 진단하려면 한 변수를 무작위로 섞은 데이터에서 같은 추정량을 돌려 기준선을 만든다.'''
+
+[[questions.choices]]
+text = "참값 0보다 크게 나온다. 칸이 표본보다 훨씬 많아 우연한 몰림이 의존성처럼 보이기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "독립이므로 0에 가깝게 나온다."
+feedback = "plug-in 추정량은 칸당 표본이 적으면 크게 위로 편향된다. 독립인 변수에서도 양수, 이 설정에서는 1 nat 이상이 나온다."
+
+[[questions.choices]]
+text = "bin을 잘게 나눌수록 양자화 손실이 줄어 참값에 가까워진다."
+feedback = "양자화 손실(아래 방향 편향)은 줄지만, 칸당 표본이 줄어 위 방향 편향이 훨씬 커진다. bin을 늘리는 것이 늘 정확해지는 방향은 아니다."
+
+[[questions.choices]]
+text = "MI는 음수가 될 수 없으므로 0보다 작게 나올 수는 없지만, 평균적으로는 0이다."
+feedback = "plug-in 추정값은 항상 0 이상이므로 평균도 0보다 크다. 이것 자체가 편향이다."
+
+[[questions]]
+id = "infonce-ceiling"
+type = "numeric"
+objective = 2
+prompt = '''batch 크기 $K = 256$으로 InfoNCE를 계산한다. 두 변수의 참 MI가 10 nat이고 critic이 최적이라 해도, InfoNCE 값이 넘을 수 없는 상한은 몇 nat인가? (소수 둘째 자리까지)'''
+answer = 5.55
+tolerance = 0.01
+slider = { min = 0, max = 12, step = 0.01, unit = "nat" }
+explanation = '''InfoNCE의 로그 안 분수 $e^{f(x_i, y_i)} / \frac{1}{K}\sum_j e^{f(x_i, y_j)}$는 분모의 합에 분자 자신이 들어 있어 $K$를 넘을 수 없다. 따라서 $I_{\text{NCE}} \le \log K = \log 256 \approx 5.545$ nat이다. 참 MI 10 nat이 이보다 크므로, 값이 5.5 근처에 머무는 것은 critic이 나빠서가 아니라 천장 때문이다. 10을 답하면 InfoNCE를 MI의 추정값으로 본 것이고, 8은 log₂ 256(bit)과 혼동한 것이다.'''
+
+[[questions]]
+id = "deterministic-ib"
+type = "single"
+objective = 3
+prompt = '''연속 입력 $X$를 받는 **결정적** 신경망의 은닉층 $T = f(X)$에 대해, 학습 중 $I(X; T)$가 줄어드는 "압축 단계"를 보고한 결과를 해석할 때 가장 먼저 확인할 것은?'''
+explanation = '''$f$가 단사인 결정적 함수이면 연속 $X$에 대해 $I(X; T)$는 무한대이거나 정의되지 않는다. 유한한 값을 얻으려면 활성화를 binning하거나 잡음을 더해야 하고, 그 선택이 "압축"의 존재를 좌우할 수 있다(tanh가 포화하면 같은 bin에 몰린다). 그래서 MI를 어떻게 정의·추정했는지부터 확인한다.'''
+
+[[questions.choices]]
+text = "MI를 유한하게 만들기 위해 쓴 binning이나 잡음 설정, 즉 MI를 어떻게 정의하고 추정했는가"
+correct = true
+
+[[questions.choices]]
+text = "압축 단계가 있었으므로 이 신경망은 일반화가 잘된다고 결론 내려도 된다."
+feedback = "압축과 일반화 사이의 인과관계는 확인되지 않았고(Saxe 외, 2018), 압축 자체가 추정 방식의 산물일 수 있다."
+
+[[questions.choices]]
+text = "data processing inequality에 따라 I(X; T)는 학습 중 항상 줄어들어야 하므로 확인할 것이 없다."
+feedback = "data processing inequality는 같은 시점의 층 순서(X → T1 → T2)에 대한 부등식이다. 학습 시간에 따라 같은 층의 MI가 어떻게 변하는지는 말하지 않는다."
+
+[[questions]]
+id = "contrastive-batch-size"
+type = "single"
+objective = 3
+prompt = '''contrastive 자기지도학습에서 batch 크기를 256에서 4096으로 늘렸더니 InfoNCE 하한 값이 5.2에서 7.9 nat으로 올랐다. 이 관찰에서 이끌어 낼 수 있는 가장 정확한 결론은?'''
+explanation = '''InfoNCE의 상한은 $\log K$이므로 $K = 256$이면 5.55, $K = 4096$이면 8.32 nat이다. 두 값 모두 천장 가까이에 있으므로, 값의 증가는 대부분 천장이 올라간 결과일 수 있다. 참 MI나 표현의 품질이 그만큼 좋아졌다고 말하려면 같은 $K$에서 비교하거나 downstream 평가가 필요하다.'''
+
+[[questions.choices]]
+text = "두 값 모두 log K 천장에 가까우므로, 증가의 상당 부분은 천장이 올라간 효과일 수 있다. 표현이 좋아졌는지는 따로 평가해야 한다."
+correct = true
+
+[[questions.choices]]
+text = "두 view 사이의 MI가 2.7 nat 증가했다."
+feedback = "InfoNCE는 MI의 하한이고 batch 크기에 따라 천장이 바뀐다. 다른 K에서 얻은 하한 값의 차이를 MI의 차이로 읽을 수 없다."
+
+[[questions.choices]]
+text = "MI가 커졌으므로 downstream 성능도 반드시 좋아진다."
+feedback = "MI는 가역 변환에 불변이어서, 같은 MI라도 downstream에 쓰기 좋은 정도는 크게 다를 수 있다."

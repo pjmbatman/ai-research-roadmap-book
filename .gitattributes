@@ -1,0 +1,2 @@
+# 여러 집필 브랜치가 참고 문헌을 동시에 덧붙이므로 줄 단위로 합친다
+data/references.bib merge=union

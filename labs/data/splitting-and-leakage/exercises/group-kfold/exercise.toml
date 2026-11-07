@@ -1,0 +1,6 @@
+title = "그룹 K-fold 분할 만들기"
+chapter = "data/splitting-and-leakage"
+objective = 1
+exec = "browser"
+entry = "group_kfold"
+timeout_s = 10

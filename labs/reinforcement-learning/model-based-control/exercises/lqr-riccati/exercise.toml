@@ -1,0 +1,6 @@
+title = "LQR을 Riccati 반복으로 풀기"
+chapter = "reinforcement-learning/model-based-control"
+objective = 1
+exec = "browser"
+entry = "dlqr"
+timeout_s = 10

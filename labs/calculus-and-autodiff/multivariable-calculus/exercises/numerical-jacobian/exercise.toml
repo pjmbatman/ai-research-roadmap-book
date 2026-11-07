@@ -1,0 +1,6 @@
+title = "중앙차분으로 Jacobian 만들기"
+chapter = "calculus-and-autodiff/multivariable-calculus"
+objective = 1
+exec = "browser"
+entry = "jacobian"
+timeout_s = 10

@@ -1,0 +1,126 @@
+# 13.1 베이지안 사고방식 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "posterior-predictive-next"
+type = "numeric"
+objective = 1
+prompt = '''동전의 앞면 확률 $\theta$에 사전분포 $\mathrm{Beta}(2, 2)$를 두고, 20번 던져 앞면 7번을 관측했다. 사후분포는 $\mathrm{Beta}(9, 15)$다. **다음 한 번**을 던졌을 때 앞면이 나올 사후예측확률 $p(\tilde{y} = 1 \mid \mathcal{D})$는? (소수 셋째 자리까지)'''
+answer = 0.375
+tolerance = 0.001
+explanation = '''$p(\tilde{y} = 1 \mid \mathcal{D}) = \int \theta\, p(\theta \mid \mathcal{D})\, d\theta = \mathbb{E}[\theta \mid \mathcal{D}] = 9/(9+15) = 0.375$다. 앞면 확률이 $\theta$일 때 앞면이 나올 확률 $\theta$를 사후분포로 평균한 것이다. MLE를 꽂은 0.35나 MAP $8/22 \approx 0.364$와 다르다.'''
+
+[[questions]]
+id = "evidence-role"
+type = "single"
+objective = 1
+prompt = '''Bayes 정리 $p(\theta \mid \mathcal{D}) = p(\mathcal{D} \mid \theta)\,p(\theta)\,/\,p(\mathcal{D})$의 분모 $p(\mathcal{D})$(evidence)에 대한 설명으로 옳은 것은?'''
+explanation = '''$p(\mathcal{D}) = \int p(\mathcal{D} \mid \theta)\,p(\theta)\,d\theta$는 우도를 사전분포로 평균한 값이다. $\theta$에 의존하지 않으므로 한 모델 안에서 사후분포의 모양을 바꾸지 않는 정규화 상수다. 그러나 "이 모델(사전분포 포함)이 관측 데이터를 얼마나 잘 예측했는가"를 재므로, 서로 다른 모델이나 사전분포를 비교할 때는 핵심 양이 된다(13.2장).'''
+
+[[questions.choices]]
+text = "사후분포의 모양에는 영향이 없는 정규화 상수이지만, 모델 전체가 데이터를 얼마나 잘 예측했는지를 재므로 모델 비교에 쓰인다."
+correct = true
+
+[[questions.choices]]
+text = "우도의 최댓값 $\\max_\\theta p(\\mathcal{D} \\mid \\theta)$이다."
+feedback = "evidence는 우도를 사전분포로 평균(적분)한 값이지 최댓값이 아니다. 최댓값은 MLE에서의 우도다."
+
+[[questions.choices]]
+text = "$\\theta$가 참일 확률이다."
+feedback = "evidence는 $\\theta$에 의존하지 않는다. $\\theta$에 대한 확률은 사후분포가 말한다."
+
+[[questions.choices]]
+text = "정규화 상수이므로 어떤 계산에서도 무시해도 된다."
+feedback = "사후분포의 모양만 볼 때는 무시할 수 있지만, 모델이나 사전분포를 비교할 때는 바로 이 값을 비교한다."
+
+[[questions]]
+id = "predictive-wider"
+type = "single"
+objective = 1
+prompt = '''20번 중 앞면 7번을 본 뒤 다음 20번의 앞면 수를 예측한다. 사후예측분포(Beta-Binomial)의 표준편차가 plug-in 예측 $\mathrm{Binomial}(20, 0.35)$보다 큰 이유는?'''
+explanation = '''plug-in 예측은 $\theta = 0.35$가 정확히 참이라고 가정하고 동전 자체의 무작위성만 반영한다. 사후예측분포는 $\theta$를 사후분포에서 뽑은 뒤 그 $\theta$로 던지는 과정이므로, 관측 잡음에 파라미터 불확실성이 더해진다. 데이터가 많아져 사후분포가 좁아지면 두 예측은 같아진다.'''
+
+[[questions.choices]]
+text = "동전의 무작위성에 더해, 20번의 관측으로는 $\\theta$를 정확히 알 수 없다는 파라미터 불확실성까지 반영하기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "사전분포가 관측 잡음을 추가로 더하기 때문이다."
+feedback = "사전분포는 관측에 잡음을 더하지 않는다. 폭이 늘어나는 것은 θ를 하나로 고정하지 않고 사후분포로 평균하기 때문이다."
+
+[[questions.choices]]
+text = "사전분포가 균등분포이면 두 예측은 같아진다."
+feedback = "균등 사전에서도 사후분포는 폭이 있으므로 사후예측분포가 더 넓다. 두 예측이 같아지는 것은 데이터가 많아 사후분포가 한 점으로 모일 때다."
+
+[[questions.choices]]
+text = "Beta-Binomial은 꼬리가 두꺼운 분포라 평균도 plug-in보다 항상 크기 때문이다."
+feedback = "평균이 다른 이유는 사전분포가 사후평균을 0.5 쪽으로 당겼기 때문이고, 폭이 넓은 이유와는 별개다."
+
+[[questions]]
+id = "combine-two-days"
+type = "single"
+objective = 1
+prompt = '''사전분포 $\mathrm{Beta}(2, 2)$로 시작한다. 첫날 4번 던져 앞면 3번, 둘째 날 6번 던져 앞면 2번을 관측했다. 두 날의 데이터를 모두 반영한 사후분포는?'''
+explanation = '''첫날의 사후 $\mathrm{Beta}(2+3, 2+1) = \mathrm{Beta}(5, 3)$이 둘째 날의 사전이 되고, 여기에 앞면 2번과 뒷면 4번을 더하면 $\mathrm{Beta}(7, 7)$이다. 한꺼번에 계산해도 $\mathrm{Beta}(2+5, 2+5)$로 같다. 날마다 같은 사전분포로 따로 계산한 두 사후분포 $\mathrm{Beta}(5, 3)$과 $\mathrm{Beta}(4, 6)$을 곱하면 사전분포가 두 번 들어가 $\mathrm{Beta}(8, 8)$이 된다.'''
+
+[[questions.choices]]
+text = '''$\mathrm{Beta}(7, 7)$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathrm{Beta}(8, 8)$'''
+feedback = "날마다 사전분포 Beta(2, 2)를 넣어 구한 두 사후분포를 곱한 결과다. 사전분포를 두 번 센 것이다."
+
+[[questions.choices]]
+text = '''$\mathrm{Beta}(5, 5)$'''
+feedback = "관측만 센 값(앞면 5, 뒷면 5)이다. 사전분포 Beta(2, 2)의 계수를 더해야 한다."
+
+[[questions.choices]]
+text = "두 날의 사후평균 0.625와 0.4를 평균한 0.5125를 평균으로 하는 분포"
+feedback = "사후분포를 평균하는 것은 갱신이 아니다. 둘째 날 관측이 더 많으므로 단순 평균은 두 날의 정보를 잘못 가중한다."
+
+[[questions]]
+id = "credible-vs-confidence"
+type = "multiple"
+objective = 2
+prompt = '''95% 신뢰구간(빈도주의)과 95% 신용구간(베이지안)에 대한 설명으로 옳은 것을 모두 고르시오.'''
+explanation = '''신뢰구간은 모든 고정된 $\theta$에서 반복 실험의 95%가 $\theta$를 덮도록 만든 절차이고, 계산된 구간 하나에 대해 "참값이 있을 확률 95%"라고 말하지 않는다. 신용구간은 이 데이터와 사전분포 아래에서 $\theta$가 구간 안에 있을 확률이 95%라는 뜻이며, 특정한 $\theta$에서 반복 실험의 포함률은 보장하지 않는다(본문 실험에서 $\theta = 0.05$일 때 0.921). 사전분포가 넓고 데이터가 많으면 두 구간의 숫자는 비슷해지지만 질문은 다르다.'''
+
+[[questions.choices]]
+text = "신용구간은 '이 데이터와 사전분포 아래에서 θ가 구간 안에 있을 확률이 95%'라고 읽을 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "신뢰구간은 어떤 고정된 θ에서든 반복 실험의 95% 이상이 θ를 덮도록 만든 절차다."
+correct = true
+
+[[questions.choices]]
+text = "95% 신용구간도 어떤 고정된 θ에서든 반복 실험의 95%가 θ를 덮는다."
+feedback = "신용구간의 95%는 θ가 사전분포를 따라 바뀌는 상황을 평균한 약속이다. 특정 θ에서는 95%보다 낮을 수 있다."
+
+[[questions.choices]]
+text = "이미 계산된 신뢰구간 [0.2, 0.5]에 대해 '참값이 이 안에 있을 확률이 95%'라고 말할 수 있다."
+feedback = "빈도주의에서 θ는 고정된 값이라 계산된 구간은 참값을 덮거나 덮지 않거나 둘 중 하나다. 이 문장이 필요하면 신용구간을 계산한다."
+
+[[questions]]
+id = "map-not-bayesian"
+type = "single"
+objective = 3
+prompt = '''사후분포가 $\mathrm{Beta}(5, 2)$일 때 $\theta$ 공간의 MAP는 0.8이다. 같은 사후분포를 log-odds $\phi = \log\frac{\theta}{1-\theta}$ 공간의 밀도로 바꿔 최빈값을 구하고 $\theta$로 되돌리면 $5/7 \approx 0.714$가 나온다. 이 현상에 대한 설명으로 옳은 것은?'''
+explanation = '''확률밀도는 변수를 바꾸면 Jacobian $\lvert d\theta/d\phi \rvert = \theta(1-\theta)$가 곱해져 모양이 바뀌고, 최빈값의 위치도 움직인다. 그래서 MAP는 같은 믿음을 어떻게 매개변수화하느냐에 따라 달라진다. 중앙값 같은 분위수는 단조 변환을 그대로 따라가므로 두 공간에서 같다(0.736). MAP는 사후분포의 한 점만 남기는 점추정이고, 베이지안 추론의 결과는 분포 전체다.'''
+
+[[questions.choices]]
+text = "밀도는 변수 변환 때 Jacobian이 곱해지므로 최빈값의 위치가 움직인다. MAP는 매개변수화에 의존하는 점추정이다."
+correct = true
+
+[[questions.choices]]
+text = "격자가 거칠어서 생긴 수치 오차이고, 격자를 촘촘히 하면 두 값이 같아진다."
+feedback = "닫힌 형태로도 θ 공간의 최빈값은 (a-1)/(a+b-2) = 0.8, φ 공간의 최빈값은 θ = a/(a+b) = 5/7이다. 수치 오차가 아니다."
+
+[[questions.choices]]
+text = "φ 공간에서는 사후분포가 달라지므로 다른 데이터를 본 것과 같다."
+feedback = "같은 데이터, 같은 믿음을 다른 좌표로 적었을 뿐이다. 분위수는 두 공간에서 같다."
+
+[[questions.choices]]
+text = "사후평균도 같은 이유로 바뀌지만 MAP는 바뀌지 않는다."
+feedback = "반대다. 이 예에서 바뀐 것은 MAP다. (사후평균도 비선형 변환에서는 E[g(θ)] ≠ g(E[θ])이지만, 문제의 현상은 MAP의 매개변수화 의존성이다.)"

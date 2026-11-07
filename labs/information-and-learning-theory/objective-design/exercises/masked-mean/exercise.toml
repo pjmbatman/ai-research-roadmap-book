@@ -1,0 +1,6 @@
+title = "mask로 손실 집계하기"
+chapter = "information-and-learning-theory/objective-design"
+objective = 3
+exec = "browser"
+entry = "masked_token_mean"
+timeout_s = 10

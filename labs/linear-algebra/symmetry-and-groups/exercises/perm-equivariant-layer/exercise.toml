@@ -1,0 +1,6 @@
+title = "순열 등변 층 만들고 검증하기"
+chapter = "linear-algebra/symmetry-and-groups"
+objective = 2
+exec = "browser"
+entry = "equivariant_layer"
+timeout_s = 10

@@ -1,0 +1,6 @@
+title = "순차적 임계 최소제곱(STLSQ)"
+chapter = "scientific-discovery/equation-discovery"
+objective = 1
+exec = "browser"
+entry = "stlsq"
+timeout_s = 10

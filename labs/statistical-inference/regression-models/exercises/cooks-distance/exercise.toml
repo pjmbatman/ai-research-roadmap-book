@@ -1,0 +1,6 @@
+title = "leverage와 Cook's distance로 영향점 찾기"
+chapter = "statistical-inference/regression-models"
+objective = 2
+exec = "browser"
+entry = "cooks_distance"
+timeout_s = 10

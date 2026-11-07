@@ -1,0 +1,6 @@
+title = "roofline으로 실행 시간의 하한과 병목 판정하기"
+chapter = "python-and-computing/computer-architecture"
+objective = 3
+exec = "browser"
+entry = "roofline"
+timeout_s = 10

@@ -1,0 +1,6 @@
+title = "forward 과정의 사후분포 q(x_{t-1} | x_t, x_0)"
+chapter = "generative-and-foundation-models/diffusion-models"
+objective = 2
+exec = "browser"
+entry = "posterior"
+timeout_s = 15

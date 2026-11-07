@@ -1,0 +1,6 @@
+title = "스펙트럼 합성곱 층"
+chapter = "scientific-ml/neural-operators"
+objective = 2
+exec = "browser"
+entry = "spectral_conv1d"
+timeout_s = 10

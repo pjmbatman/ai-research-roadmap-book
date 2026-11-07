@@ -1,0 +1,6 @@
+title = "Lennard-Jones 힘 구현하기"
+chapter = "chemistry-and-materials/interatomic-potentials"
+objective = 1
+exec = "browser"
+entry = "lj_forces"
+timeout_s = 10

@@ -1,0 +1,98 @@
+# 부록 F 템플릿 모음 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "plan-before-results"
+type = "single"
+objective = 2
+prompt = '''실험 계획서의 "결과별 결론" 절(성공·작은 개선·중단·보류 각각에서 내릴 결론)을 실험을 **실행하기 전에** 쓰라고 하는 가장 중요한 이유는?'''
+explanation = '''결과를 본 뒤에는 어떤 결과든 정당화할 수 있다. 개선이 작으면 "일관된 개선", 구간이 0을 걸치면 "개선 경향"이라고 쓰게 된다. 판정 기준과 그에 따른 결론을 미리 적어 두면 결과가 그 기준으로 판정되고, 실패 시의 결론을 쓸 수 없다면 그 실험이 가설을 검증하지 못한다는 사실이 실행 전에 드러난다(23.4장, 23.5장). 문서의 형식이나 심사 규정은 부차적인 이유다.'''
+
+[[questions.choices]]
+text = "결과를 본 뒤에는 판단 기준이 결과 쪽으로 움직이므로, 판정과 결론을 결과와 독립적으로 정해 두기 위해서다."
+correct = true
+
+[[questions.choices]]
+text = "학회가 투고 때 실험 계획서 제출을 요구하기 때문이다."
+feedback = "대부분의 ML 학회는 계획서를 요구하지 않는다. 계획서는 제출용이 아니라 결과를 보기 전의 자신이 결과를 본 뒤의 자신에게 하는 약속이다."
+
+[[questions.choices]]
+text = "결론을 미리 써 두면 실험이 성공할 가능성이 커지기 때문이다."
+feedback = "결론을 미리 쓰는 것은 결과에 영향을 주지 않는다. 바뀌는 것은 결과를 해석하는 방식이다."
+
+[[questions.choices]]
+text = "실행 후에 쓰면 실험 숫자를 잊어버리기 때문이다."
+feedback = "숫자는 실험 추적 기록에 남는다. 사라지는 것은 숫자가 아니라 결과를 보기 전의 판단 기준이다."
+
+[[questions]]
+id = "readme-expected-results"
+type = "single"
+objective = 1
+prompt = '''README의 "결과 재현" 표에 들어갈 행으로 가장 좋은 것은?'''
+explanation = '''README를 따라 한 사람은 출력이 나왔을 때 성공했는지 스스로 판단할 수 있어야 한다. 그러려면 정확한 명령과 함께 기대 결과(숫자, 단위, 변동 범위와 그 근거가 된 seed 수)와 대략의 실행 시간·자원이 필요하다(6.7장). 명령만 있거나 "비슷한 값"처럼 범위가 없으면 판단할 수 없고, 자원이 없으면 어디서 멈춰야 할지 모른다.'''
+
+[[questions.choices]]
+text = "표 2, 1행 | `bash scripts/reproduce_table2.sh` | test MAE 0.031 ± 0.002 K (seed 5개 평균 ± 표준편차) | GPU 1장 약 20분"
+correct = true
+
+[[questions.choices]]
+text = "표 2, 1행 | `bash scripts/reproduce_table2.sh` | 논문과 비슷한 값이 나온다 | —"
+feedback = "\"비슷한\"의 범위가 없으면 0.035가 나왔을 때 성공인지 알 수 없다. 숫자와 허용 범위, 실행 시간을 쓴다."
+
+[[questions.choices]]
+text = "표 2, 1행 | 학습한 뒤 평가 스크립트를 실행한다 | test MAE 0.031 K | GPU 1장 약 20분"
+feedback = "명령이 복사해서 실행할 수 있는 형태가 아니다. 그리고 seed에 따라 흔들리는 결과에 범위가 없다."
+
+[[questions.choices]]
+text = "표 2, 1행 | `bash scripts/reproduce_table2.sh` | test MAE 0.0312847 K | GPU 1장 약 20분"
+feedback = "자릿수가 많다고 기대 결과가 되지는 않는다. seed 변동보다 작은 자릿수는 정보가 아니고, 따라 한 사람은 0.0315가 맞는지 판단할 수 없다."
+
+[[questions]]
+id = "adr-superseded"
+type = "single"
+objective = 3
+prompt = '''`docs/decisions/0003-split-by-sample.md`(데이터를 시료 단위로 분할한다, 상태: 채택)를 쓴 지 넉 달 뒤, 측정 날짜 단위 분할로 바꾸기로 했다. 결정 기록을 어떻게 다루는가?'''
+explanation = '''ADR은 결정을 바꾸지 않는 문서다. 새 결정은 새 ADR(예: 0007)로 쓰고 맥락·결정·검토한 대안·결과를 적는다. 이전 ADR은 내용을 그대로 두고 상태만 "대체됨(superseded by 0007)"으로 바꾼다. 그래야 넉 달 동안 나온 결과가 어떤 분할에서 나왔는지, 예전에는 왜 다르게 했는지에 답할 수 있다(6.7장). git 이력에 옛 내용이 남는다는 것만으로는 부족하다. 문서를 읽는 사람이 결정의 이력을 바로 볼 수 있어야 한다.'''
+
+[[questions.choices]]
+text = "0003의 본문을 새 결정으로 고쳐 쓴다. 옛 내용은 git 이력에 남는다."
+feedback = "git 이력에는 남지만, 문서를 읽는 사람은 결정이 바뀌었다는 사실도, 그 사이의 결과가 어떤 분할에서 나왔는지도 알 수 없다."
+
+[[questions.choices]]
+text = "새 ADR 0007을 쓰고, 0003은 내용을 두고 상태만 \"대체됨(superseded by 0007)\"으로 바꾼다."
+correct = true
+
+[[questions.choices]]
+text = "0003을 삭제하고 0007을 쓴다. 더는 유효하지 않은 결정이기 때문이다."
+feedback = "지우면 이전 결과의 조건과 결정이 바뀐 이유가 사라진다. 결정의 이력이 결정 기록의 핵심이다."
+
+[[questions.choices]]
+text = "노트에 한 줄만 남기고 ADR은 그대로 둔다. ADR은 처음 결정만 기록하는 문서다."
+feedback = "그러면 ADR이 현재와 다른 결정을 \"채택\" 상태로 보여 준다. 읽는 사람은 지금도 시료 단위로 나눈다고 믿게 된다."
+
+[[questions]]
+id = "model-card-out-of-scope"
+type = "multiple"
+objective = 2
+prompt = '''25 °C와 45 °C에서 측정한 NMC 셀 데이터로만 학습한 배터리 SOH 추정 모델을 다른 팀에 넘긴다. 모델 카드에 **반드시** 들어가야 할 것을 모두 고르시오.'''
+explanation = '''모델 카드의 핵심은 받는 쪽이 모델을 범위 밖에서 쓰거나 단위를 바꿔 읽는 실수를 막는 것이다. 입력·출력의 shape과 단위, 학습 데이터의 조건 범위, 조건별 성능, 그리고 평가하지 않은 조건(저온, 다른 화학조성)과 권장하지 않는 용도가 그것이다(6.7장, 23.12장). 가장 좋은 seed 하나의 성능은 변동을 숨기고, 탐색한 모든 하이퍼파라미터 조합은 실험 기록에 둘 내용이다.'''
+
+[[questions.choices]]
+text = "입력과 출력의 shape과 단위(예: SOH를 비율로 내는지 %로 내는지)"
+correct = true
+
+[[questions.choices]]
+text = "평가하지 않은 조건과 권장하지 않는 용도(예: 0 °C 운용, LFP 셀)"
+correct = true
+
+[[questions.choices]]
+text = "온도 조건별 성능과 그 구간"
+correct = true
+
+[[questions.choices]]
+text = "가장 좋은 seed 하나의 test 성능"
+feedback = "seed 하나의 최고값은 변동을 숨긴다. 여러 seed의 평균과 변동, 조건별 성능을 쓴다."
+
+[[questions.choices]]
+text = "탐색한 모든 하이퍼파라미터 조합과 각각의 검증 점수"
+feedback = "탐색 기록은 실험 추적과 노트에 둔다. 모델 카드의 독자에게 필요한 것은 최종 모델이 어디서 얼마나 믿을 만한가다."

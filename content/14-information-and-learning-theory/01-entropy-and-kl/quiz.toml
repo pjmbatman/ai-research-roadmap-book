@@ -1,0 +1,123 @@
+# 14.1 엔트로피·교차엔트로피·KL — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "uniform-entropy-bits"
+type = "numeric"
+objective = 1
+prompt = '''16가지 결과가 모두 같은 확률로 나오는 실험이 있다. 이 결과의 엔트로피는 몇 bit인가?'''
+answer = 4
+tolerance = 0
+slider = { min = 0, max = 16, step = 1, unit = "bit" }
+explanation = '''균등분포의 엔트로피는 $\log_2 K$다. $-\sum_{x} \frac{1}{16}\log_2\frac{1}{16} = \log_2 16 = 4$ bit. 결과마다 4 bit 부호를 주면 정확히 이 길이를 달성한다. 16(결과의 수)을 고르는 것은 가능한 결과의 수와 그것을 구별하는 데 필요한 정보량을 혼동한 것이다.'''
+
+[[questions]]
+id = "differential-entropy-facts"
+type = "multiple"
+objective = 1
+prompt = '''연속 확률변수의 미분 엔트로피 $h(p) = -\int p(x)\log p(x)\,dx$에 대해 옳은 것을 모두 고르시오.'''
+explanation = '''밀도는 1보다 클 수 있으므로 $h$는 음수가 될 수 있다(표준편차 2 mm 잡음을 m 단위로 쓰면 약 $-4.79$ nat). $Y = cX$이면 $h(Y) = h(X) + \log\lvert c\rvert$이므로 단위를 바꾸면 값이 바뀐다. 반면 KL divergence는 밀도의 비 $p/q$만 보므로 단위를 바꿔도 변하지 않는다. 이산 엔트로피의 성질($0 \le H \le \log K$)을 연속 변수에 그대로 옮기면 안 된다.'''
+
+[[questions.choices]]
+text = "음수가 될 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "변수의 단위를 m에서 mm로 바꾸면 값이 바뀐다."
+correct = true
+
+[[questions.choices]]
+text = "이산 엔트로피처럼 항상 0 이상이다."
+feedback = "밀도는 1보다 클 수 있어서 -log p(x)가 음수인 영역이 생긴다. 분포가 좁을수록(단위가 클수록) h는 음수가 되기 쉽다."
+
+[[questions.choices]]
+text = '''같은 데이터에서 계산한 두 분포 사이의 KL divergence도 단위를 바꾸면 같은 양만큼 바뀐다.'''
+feedback = "KL은 밀도의 비 p/q로 정의되므로 단위 변환의 야코비안이 약분된다. 단위에 따라 바뀌는 것은 각각의 미분 엔트로피와 교차엔트로피다."
+
+[[questions]]
+id = "ce-equals-kl"
+type = "single"
+objective = 1
+prompt = '''고정된 데이터 분포 $p$에 대해 모델 $q_\theta$의 교차엔트로피 $H(p, q_\theta)$를 최소화하는 것이 $D_{\mathrm{KL}}(p \,\|\, q_\theta)$를 최소화하는 것과 같은 이유는?'''
+explanation = '''$H(p, q_\theta) = H(p) + D_{\mathrm{KL}}(p \,\|\, q_\theta)$이고 $H(p)$는 $\theta$와 무관한 상수다. 그래서 두 목적함수의 최솟점이 같다. 값은 다르다. 교차엔트로피의 최솟값은 0이 아니라 $H(p)$다. 경험분포를 $p$로 쓰면 교차엔트로피는 평균 NLL이 되므로, 이것이 MLE와도 같은 문제다.'''
+
+[[questions.choices]]
+text = '''$H(p, q_\theta)$와 $D_{\mathrm{KL}}(p \,\|\, q_\theta)$의 차이 $H(p)$가 $\theta$에 의존하지 않기 때문이다.'''
+correct = true
+
+[[questions.choices]]
+text = '''두 양이 항상 같은 값이기 때문이다.'''
+feedback = "값은 H(p)만큼 다르다. 레이블에 잡음이 있으면 H(p) > 0이어서 교차엔트로피 손실은 0까지 내려가지 않는다."
+
+[[questions.choices]]
+text = '''KL이 대칭이어서 $D_{\mathrm{KL}}(q_\theta \,\|\, p)$를 최소화하는 것과도 같기 때문이다.'''
+feedback = "KL은 대칭이 아니다. 교차엔트로피 최소화와 같은 것은 forward 방향 KL(p||q)뿐이다."
+
+[[questions.choices]]
+text = '''$H(p)$가 0이기 때문이다.'''
+feedback = "데이터 분포의 엔트로피는 일반적으로 양수다. 0일 필요 없이, θ와 무관하기만 하면 최솟점이 같다."
+
+[[questions]]
+id = "reverse-kl-mode"
+type = "single"
+objective = 2
+prompt = '''봉우리가 $-2$와 $+2$에 있는 대칭인 쌍봉 분포 $p$를 가우시안 하나 $q = \mathcal{N}(\mu, \sigma^2)$로 근사한다. **reverse KL** $D_{\mathrm{KL}}(q \,\|\, p)$를 최소화한 $q$는 어떤 모양에 가까운가?'''
+explanation = '''reverse KL은 기댓값을 $q$로 잰다. $q$가 질량을 둔 곳에서 $p$가 0에 가까우면 $\log(q/p)$가 커지므로, $q$는 $p$가 없는 영역(두 봉우리 사이)을 피하고 한 봉우리 안에 들어간다(mode-seeking). 그래서 최적 $q$는 한 봉우리에 맞는 좁은 가우시안이다. 두 봉우리를 덮는 넓은 가우시안은 forward KL의 답이다.'''
+
+[[questions.choices]]
+text = "봉우리 하나에 맞춘 좁은 가우시안(예: 평균 −2 근처, 표준편차는 봉우리 폭 정도)"
+correct = true
+
+[[questions.choices]]
+text = "평균 0, 표준편차가 p의 표준편차와 같은 넓은 가우시안"
+feedback = "이것은 forward KL(p||q)의 답이다. 지수족에서 forward KL 최소화는 모멘트 맞추기가 된다."
+
+[[questions.choices]]
+text = "평균 0에 아주 좁은 가우시안"
+feedback = "평균 0 근처는 p의 밀도가 거의 0인 곳이다. reverse KL에서는 q가 p가 없는 곳에 질량을 두는 것이 가장 크게 벌을 받는다."
+
+[[questions.choices]]
+text = "KL은 방향과 상관없이 같으므로 forward KL과 같은 답"
+feedback = "KL은 비대칭이다. 두 방향은 질적으로 다른 근사(평균 맞추기와 모드 찾기)를 준다."
+
+[[questions]]
+id = "mle-is-forward-kl"
+type = "single"
+objective = 2
+prompt = '''데이터 $x_1, \dots, x_N$으로 확률모형 $q_\theta$를 최대우도로 학습한다. 데이터 분포 $p$가 모델족 안에 없을 때, 학습된 모델에 대해 예상할 수 있는 것은?'''
+explanation = '''MLE는 forward KL $D_{\mathrm{KL}}(p \,\|\, q_\theta)$를 최소화한다. 이 방향은 $p$가 질량을 둔 곳에서 $q$가 0에 가까우면 크게 벌하므로, 모델은 데이터가 나온 모든 영역을 덮으려 한다(mass-covering). 용량이 부족하면 그 대가로 데이터가 거의 없는 영역(모드 사이)에도 확률을 준다. 한 모드만 정확히 맞추는 것은 reverse KL의 성격이다.'''
+
+[[questions.choices]]
+text = "데이터가 나온 영역을 모두 덮으려 하고, 그 대가로 데이터가 드문 영역에도 확률을 줄 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "데이터의 가장 큰 모드 하나만 정확히 맞추고 나머지 모드는 무시한다."
+feedback = "이것은 reverse KL(q||p)의 성격이다. MLE는 forward KL(p||q)를 최소화하므로 데이터가 있는 곳에 q가 0이면 무한대 벌점을 받는다."
+
+[[questions.choices]]
+text = "모델족 안에 참 분포가 없으면 MLE는 정의되지 않는다."
+feedback = "MLE는 여전히 정의되고, 모델족 안에서 KL(p||q)가 가장 작은 분포로 수렴한다(12.2장의 모형 오지정)."
+
+[[questions]]
+id = "disjoint-support"
+type = "single"
+objective = 3
+prompt = '''같은 모양의 두 이산분포 $p$, $q$가 있고, $q$는 $p$를 오른쪽으로 옮긴 것이다. 지지집합이 겹치지 않는 범위에서 이동 거리를 2칸에서 6칸으로 늘릴 때, 세 척도의 변화로 옳은 것은?'''
+explanation = '''지지집합이 겹치지 않으면 $p > 0$인 곳에서 $q = 0$이므로 KL은 계속 무한대다. JS는 중간 분포 $m$ 기준으로 재므로 유한하지만, 겹치지 않는 한 항상 최댓값 $\log 2$다. 두 척도 모두 밀도의 비만 보기 때문에 거리를 구별하지 못한다. 1-Wasserstein 거리는 질량을 옮기는 거리를 재므로 2에서 6으로 커진다.'''
+
+[[questions.choices]]
+text = '''KL은 계속 $\infty$, JS는 계속 $\log 2$, $W_1$은 2에서 6으로 커진다.'''
+correct = true
+
+[[questions.choices]]
+text = '''세 척도 모두 이동 거리에 따라 커진다.'''
+feedback = "KL과 JS는 밀도의 비 p/q만 본다. 지지집합이 겹치지 않으면 거리와 상관없이 값이 같다."
+
+[[questions.choices]]
+text = '''KL은 계속 $\infty$이고, JS와 $W_1$은 이동 거리에 따라 커진다.'''
+feedback = "JS는 유한하지만 겹치지 않는 한 최댓값 log 2에 붙어 있다. 거리 정보를 주는 것은 W1뿐이다."
+
+[[questions.choices]]
+text = '''JS는 대칭이므로 거리처럼 이동 거리에 비례한다.'''
+feedback = "대칭성과 위치를 보는 성질은 별개다. JS는 대칭이지만 f-divergence의 하나여서 밀도의 비만 보고 위치는 보지 않는다."

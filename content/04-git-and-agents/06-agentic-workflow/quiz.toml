@@ -1,0 +1,131 @@
+# 4.6 에이전트 기반 연구 워크플로 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "test-set-selection"
+type = "single"
+objective = 1
+prompt = '''에이전트가 하이퍼파라미터 설정 20개를 시도하고, 각각을 test set(200개)으로 평가해 가장 좋은 설정을 골랐다. 고른 설정의 test 정확도는 0.76이고, 20개 설정의 평균은 0.70이었다. 이 결과에 대한 해석으로 옳은 것은?'''
+explanation = '''20개 중 최고를 test 결과로 고르면, 그 최고값에는 실제 성능 차이와 함께 **test 표본의 우연한 변동**이 섞인다. 모든 설정의 실제 정확도가 똑같이 0.70이어도, 200개 표본에서 20개 중 최고는 평균적으로 0.76 근처가 나온다(본문 시뮬레이션). 그래서 0.76은 고른 설정의 성능 추정치로 쓸 수 없다. 설정 선택은 validation(또는 train 안의 교차검증)으로 하고, test는 계획을 확정한 뒤 한 번만 쓴다. 이미 test로 골랐다면 새 holdout 데이터로 다시 평가해야 한다.'''
+
+[[questions.choices]]
+text = "test 결과로 골랐으므로 0.76은 낙관적으로 편향되어 있다. 선택은 validation으로 하고 test는 한 번만 쓴다."
+correct = true
+
+[[questions.choices]]
+text = "고른 설정은 다른 설정보다 실제로 0.06 더 정확하다."
+feedback = "실제 차이가 전혀 없어도 20개 중 최고는 평균보다 크게 나온다. 차이의 일부 또는 전부가 선택 편향일 수 있다."
+
+[[questions.choices]]
+text = "설정을 100개로 늘려 다시 고르면 결과를 더 믿을 수 있다."
+feedback = "시도가 많을수록 최고값의 낙관 편향은 커진다(본문 cell 2: 100개 중 최고는 평균 약 0.78)."
+
+[[questions.choices]]
+text = "test set은 학습에 쓰지 않았으므로 누수가 아니다. 0.76을 그대로 보고한다."
+feedback = "학습에 쓰지 않아도 선택에 쓰면 test 정보가 결과에 들어간다. 이것도 누수의 한 형태다."
+
+[[questions]]
+id = "approval-points"
+type = "multiple"
+objective = 1
+prompt = "에이전트에게 실험을 맡기는 계획 → 구현 → 검증 → 리뷰 흐름에서, 사람이 **승인하는 지점**으로 두기에 적절한 것을 모두 고르시오."
+explanation = '''승인 지점은 되돌리기 어렵거나 비용이 크거나 결론을 정하는 곳에 둔다. 계획 승인은 긴 실행과 잘못된 방향의 구현을 막고, main으로의 merge는 공식 이력과 이후 모든 실험의 기준을 바꾸며, 최종 test 평가는 한 번밖에 할 수 없다. 파일을 읽거나 자기 작업 공간에서 단위 테스트를 돌리는 일마다 승인하게 하면 승인이 형식이 되어, 정작 중요한 승인도 읽지 않고 누르게 된다.'''
+
+[[questions.choices]]
+text = "구현을 시작하기 전, 에이전트가 제안한 실험 계획(조건·비교 기준·실행 명령)"
+correct = true
+
+[[questions.choices]]
+text = "에이전트의 branch를 main에 merge하기 전"
+correct = true
+
+[[questions.choices]]
+text = "최종 test 평가를 실행하기 전"
+correct = true
+
+[[questions.choices]]
+text = "에이전트가 저장소의 파일을 하나 읽을 때마다"
+feedback = "읽기는 되돌릴 필요가 없는 행동이다. 너무 잦은 승인은 승인을 형식으로 만든다."
+
+[[questions.choices]]
+text = "에이전트가 자기 worktree에서 단위 테스트를 실행할 때마다"
+feedback = "격리된 작업 공간의 테스트 실행은 검증을 위해 오히려 자주 하게 두는 편이 좋다."
+
+[[questions]]
+id = "worktree-object-db"
+type = "numeric"
+objective = 2
+prompt = '''저장소 하나에서 `git worktree add`로 작업 폴더 세 개를 더 만들어, 원래 폴더까지 네 곳에서 에이전트 네 개가 각자의 branch로 작업한다. 이때 Git 객체 데이터베이스(commit·tree·blob이 저장되는 곳)는 모두 몇 개인가?'''
+answer = 1
+tolerance = 0
+slider = { min = 1, max = 4, step = 1, unit = "개" }
+explanation = '''worktree는 같은 저장소에 working tree(와 index, HEAD)를 여러 개 붙이는 기능이다. 객체 데이터베이스와 branch 등의 ref는 하나를 공유한다. 그래서 한 worktree에서 만든 commit을 다른 worktree에서 바로 merge할 수 있고, clone을 여러 개 만드는 것보다 디스크를 덜 쓴다. 대신 같은 branch를 두 worktree에서 동시에 checkout할 수는 없고, stash처럼 저장소 단위로 공유되는 것도 있으므로 주의한다.'''
+
+[[questions]]
+id = "parallel-isolation"
+type = "single"
+objective = 2
+prompt = "에이전트 두 개에게 같은 저장소에서 서로 다른 실험 변경을 동시에 맡기려 한다. 가장 적절한 격리 방법은?"
+explanation = '''각 에이전트가 자기 branch를 checkout한 별도의 worktree에서 작업하면, 파일 변경·빌드 산출물·실험 출력이 섞이지 않고, 결과는 각자의 branch에 commit으로 남아 나중에 비교·merge할 수 있다. 실행 환경까지 달라야 하면(의존성 버전, GPU 할당) 컨테이너를 더한다. 같은 디렉터리를 공유하면 한 에이전트의 `git switch`가 다른 에이전트가 고치던 파일을 바꿔 버린다.'''
+
+[[questions.choices]]
+text = "에이전트마다 별도의 branch와 worktree를 주고, 실험 출력 경로도 worktree별로 나눈다."
+correct = true
+
+[[questions.choices]]
+text = "같은 작업 디렉터리에서 두 에이전트가 필요할 때마다 `git switch`로 자기 branch로 바꿔 가며 작업한다."
+feedback = "작업 디렉터리는 하나뿐이다. 한쪽이 branch를 바꾸면 다른 쪽이 고치던 파일과 실행 중인 코드가 바뀐다."
+
+[[questions.choices]]
+text = "같은 branch에서 둘 다 작업하되, 서로 다른 파일만 고치라고 지침에 쓴다."
+feedback = "지침은 강제가 아니고, 공통 파일(설정, 유틸리티)을 둘 다 고칠 일이 생긴다. 어느 변경이 어느 실험의 것인지도 구분할 수 없다."
+
+[[questions.choices]]
+text = "한 에이전트가 끝날 때까지 다른 에이전트를 기다리게 한다."
+feedback = "안전하지만 병렬의 이점을 버린다. 격리하면 동시에 진행할 수 있다."
+
+[[questions]]
+id = "auto-allowed-action"
+type = "single"
+objective = 3
+prompt = "에이전트에게 **사람 승인 없이** 허용하기에 가장 적절한 행동은?"
+explanation = '''승인 경계는 행동의 영향 범위와 되돌릴 수 있는지로 정한다. 자기 worktree 안에서 테스트를 실행하는 일은 결과가 그 작업 공간에 머물고 되돌리기 쉽다. 공유 원격 저장소로의 push, 연구실 메신저로의 메시지 전송, 공유 storage의 파일 삭제는 다른 사람에게 영향을 주고 되돌리기 어렵거나 불가능한 **외부 작업**이다. 이런 행동은 사람이 확인한 뒤 실행하거나, 아예 에이전트의 자격 증명에서 권한을 빼 둔다.'''
+
+[[questions.choices]]
+text = "자기 worktree 안에서 단위 테스트와 smoke test를 실행하는 것"
+correct = true
+
+[[questions.choices]]
+text = "작업 branch를 공유 원격 저장소에 push하는 것"
+feedback = "push는 다른 사람이 보는 공간을 바꾸는 외부 작업이다. 특히 force push는 되돌리기 어렵다."
+
+[[questions.choices]]
+text = "실험 결과 요약을 연구실 메신저 채널에 올리는 것"
+feedback = "보낸 메시지는 회수하기 어렵고, 검증 전의 결과가 사실처럼 퍼질 수 있다."
+
+[[questions.choices]]
+text = "공유 storage에서 오래된 checkpoint를 정리(삭제)하는 것"
+feedback = "다른 사람이 쓰는 파일일 수 있고, 삭제는 되돌릴 수 없다."
+
+[[questions]]
+id = "execution-location"
+type = "single"
+objective = 3
+prompt = "로컬 컴퓨터 대신 클라우드에서 실행되는 에이전트 세션에 연구실 서버의 비공개 측정 데이터를 분석하게 하려 한다. 가장 먼저 확인할 것은?"
+explanation = '''실행 위치가 바뀌면 코드가 실행되는 컴퓨터, 데이터가 머무는 곳, 세션이 가진 자격 증명이 바뀐다. 비공개 데이터라면 그 데이터를 기관 밖의 컴퓨터로 옮기거나 그곳에서 처리해도 되는지(데이터 사용 계약, 개인정보·보안 규정)를 먼저 확인하고, 세션에 주는 자격 증명과 네트워크 접근 범위를 최소로 둔다. 모델의 성능이나 조작하는 기기는 그다음 문제다.'''
+
+[[questions.choices]]
+text = "코드와 데이터가 실제로 어느 컴퓨터에서 처리되는지, 그 데이터를 그곳에서 처리해도 되는지, 세션에 어떤 자격 증명이 주어지는지"
+correct = true
+
+[[questions.choices]]
+text = "로컬과 같은 모델을 쓰는지. 모델이 같으면 다른 차이는 없다."
+feedback = "같은 모델이어도 실행 위치에 따라 데이터의 이동, 접근할 수 있는 네트워크와 파일, 자격 증명이 달라진다."
+
+[[questions.choices]]
+text = "세션을 원격 조작할 휴대 기기의 화면 크기"
+feedback = "조작하는 기기는 세션이 실행되는 위치와 다르다. 데이터와 권한의 문제가 먼저다."
+
+[[questions.choices]]
+text = "확인할 것은 없다. 데이터 경로만 알려 주면 에이전트가 알아서 접근한다."
+feedback = "접근할 수 있다는 것과 접근해도 된다는 것은 다르다. 데이터 정책과 권한은 사람이 정한다."

@@ -1,0 +1,6 @@
+title = "Gram 행렬로 CKA 계산하기"
+chapter = "architectures/representation-analysis"
+objective = 1
+exec = "browser"
+entry = "cka_gram"
+timeout_s = 10

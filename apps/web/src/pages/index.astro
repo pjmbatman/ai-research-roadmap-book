@@ -1,56 +1,93 @@
 ---
+// 홈 = 메인 (Bento, ADR 0012): 한 화면에 타일 일곱 개. 스크롤 없이 지금 할 일과 전체 진행을 본다.
+// 이어서 학습(퀘스트로 들어가는 큰 타일) · 이번 주 · 전체 규모 · 본문이 있는 장 · 실습실 · 트랙 진행 · 숫자.
 import Shell from "../layouts/Shell.astro";
 import { loadBook, allChapters, str } from "../lib/book";
-const { parts, config } = loadBook();
+import { chapterSummary, isReady, trackKeyOf, trackCodeOf } from "../lib/site";
+import { coverSVG, TRACK_COLORS } from "../lib/cover";
+import { questOf } from "../lib/quest";
+const { config } = loadBook();
 const u = (p: string) => import.meta.env.BASE_URL + p;
-const layers = (config.layers as any[]).filter((l) => l.level < 9).sort((a, b) => b.level - a.level);
-const tracks = config.tracks as any[];
-const chaptersOfTrack = (key: string) => parts.filter((p) => str(p.meta.track) === key).flatMap((p) => p.chapters);
-const stackData = layers.map((l) => ({
-  level: l.level, name: l.name, desc: l.description,
-  tracks: tracks.filter((t) => t.layer === l.level).map((t) => ({ key: t.key, code: t.code, name: t.name, n: chaptersOfTrack(t.key).length })),
-}));
-const ready = allChapters().filter((c) => ["draft", "review", "done"].includes(str(c.meta.status)) && c.partSlug !== "appendices");
+const all = allChapters();
+const summary = all.map(chapterSummary);
+const ready = all.filter(isReady);
+const first = ready.find((c) => c.partSlug !== "appendices") ?? ready[0] ?? all[0];
+const firstS = summary.find((s) => s.id === first.id)!;
+const nodes = isReady(first) ? questOf(first).nodes : [];
+const labCh = ready.find((c) => Object.keys(c.exercises).length) ?? all.find((c) => Object.keys(c.exercises).length);
+const tracks = (config.tracks as any[]).filter((t) => t.layer < 9);
+const layers = (config.layers as any[]).filter((l) => l.level < 9).length;
+const [c1, c2] = TRACK_COLORS[trackKeyOf(first)] ?? TRACK_COLORS.reference;
+const quizTotal = summary.reduce((s, c) => s + c.quiz, 0);
+const exTotal = summary.reduce((s, c) => s + c.ex, 0);
 ---
 <Shell title="AI for Science 로드맵" current="home">
-  <div class="page home">
-    <section class="hero">
+  <div class="bento" data-dashboard>
+    <a class="tile b-hero" href={u(first.url)} data-hero style={`--t1:${c1};--t2:${c2}`}>
+      <span class="lbl" data-h="crumb">{firstS.crumb}</span>
+      <div class="num tabular" data-h="label">{first.label}</div>
+      <h2 data-h="title">{str(first.meta.title)}</h2>
+      <p data-h="lead" set:html={firstS.lead} />
+      <div class="mini-path" data-h="path" aria-hidden="true">{nodes.map((n, i) => <Fragment>{i > 0 && <span />}<i class={i === 0 ? "cur" : ""} /></Fragment>)}</div>
+      <div class="hero-cta"><span class="go"><span data-h="go">퀘스트 시작</span> <span aria-hidden="true">→</span></span><small data-h="next">{nodes.length}단계 · 퀴즈 {first.quiz.length} · 연습문제 {Object.keys(first.exercises).length}</small></div>
+    </a>
+
+    <section class="tile b-week" style="--d:60ms">
       <div>
-        <h1>과학 문제를 <em>AI로</em><br />정의하고 검증하는 법.</h1>
-        <p>읽고, 조작하고, 브라우저에서 바로 실행하며 배우는 오픈소스 로드맵.</p>
-        <div class="hero-cta">
-          <a class="btn btn-primary btn-lg" href={u("orientation/how-to-read/")}>시작하기</a>
-          <a class="btn btn-lg" href={u("map/")}>지도</a>
-        </div>
-        {ready.length > 0 && (
-          <div class="ready-row">
-            {ready.map((c) => (
-              <a class="ready-card" href={u(c.url)} data-chapter-link={c.id}>
-                <span class="n">{c.label}</span>
-                <b>{str(c.meta.title)}</b>
-                <span class="go" aria-hidden="true">→</span>
-              </a>
-            ))}
-          </div>
-        )}
+        <span class="lbl">이번 주</span>
+        <div class="big tabular"><span data-k="week">0</span><small>/5장</small></div>
+        <p>지난 7일 동안 연 장. 한 주에 다섯 장이 목표다.</p>
       </div>
-      <div class="stack-wrap" data-stack={JSON.stringify(stackData)}>
-        <div class="stack-legend" role="group" aria-label="레이어">
-          {stackData.map((l) => <button type="button" data-level={l.level} aria-pressed="false">L{l.level} {l.name}</button>)}
-        </div>
-        <div class="stack" aria-hidden="true">
-          {[...stackData].reverse().map((l, i) => (
-            <div class="plane" style={`--i:${i}`} data-level={l.level}>
-              {Array.from({ length: 8 }, (_, k) => <i class={k < l.tracks.length ? "t" : ""} />)}
-            </div>
-          ))}
-        </div>
-        <div class="stack-card" aria-live="polite">
-          <span class="layer-label" data-stack-title></span>
-          <span data-stack-desc></span>
-          <div class="tracks" data-stack-tracks></div>
-        </div>
+      <svg class="ring" viewBox="0 0 128 128" aria-hidden="true"><circle class="bg" cx="64" cy="64" r="52" /><circle class="fg" data-k="ring" cx="64" cy="64" r="52" stroke-dasharray="0 400" transform="rotate(-90 64 64)" /></svg>
+    </section>
+
+    <section class="tile tile-dark b-count" style="--d:120ms">
+      <span class="lbl">전체 로드맵</span>
+      <div class="big" data-count={all.length}>{all.length}</div>
+      <p>개의 장 · {tracks.length}개 트랙 · {layers}개 레이어</p>
+    </section>
+
+    <section class="tile b-ready" style="--d:180ms">
+      <span class="lbl">지금 본문이 있는 장</span>
+      <ul>
+        {ready.map((c) => (
+          <li><a href={u(c.url)} data-chapter-link={c.id}>
+            <span class="thumb" set:html={coverSVG({ id: c.id, track: trackKeyOf(c), code: "", ratio: 1 })} />
+            <span style="min-width:0"><b>{str(c.meta.title)}</b><small>{c.label} · {trackCodeOf(trackKeyOf(c))}</small></span>
+            <i class="state-dot" data-state-of={c.id} />
+          </a></li>
+        ))}
+      </ul>
+    </section>
+
+    {labCh && (
+      <a class="tile b-lab" href={u(labCh.url + "lab/")} data-labtile style="--d:240ms">
+        <span class="lbl">실습실 · {labCh.label}</span>
+        <h3>연습문제 {Object.keys(labCh.exercises).length}개</h3>
+        <pre data-k="labpre" data-ex={JSON.stringify(Object.keys(labCh.exercises))} data-ch={labCh.id}></pre>
+        <span class="go">실습실 열기 →</span>
+      </a>
+    )}
+
+    <section class="tile b-tracks" style="--d:300ms">
+      <span class="lbl">트랙 진행</span>
+      <div class="heat">
+        {tracks.map((t) => (
+          <a href={u(`tracks/${t.key}/`)} title={t.name} style={`--c:${(TRACK_COLORS[t.key] ?? TRACK_COLORS.reference)[0]}`} data-heat={t.key}>
+            <b>{t.code}</b><span data-heat-pct={t.key}>0%</span>
+          </a>
+        ))}
       </div>
     </section>
+
+    <section class="tile b-stats" style="--d:360ms">
+      <span class="lbl">지금까지</span>
+      <dl>
+        <div><dt>완료한 장</dt><dd><span data-k="done">0</span></dd></div>
+        <div><dt>맞힌 퀴즈</dt><dd><span data-k="quiz">0</span><small>/{quizTotal}</small></dd></div>
+        <div><dt>통과한 연습</dt><dd><span data-k="ex">0</span><small>/{exTotal}</small></dd></div>
+      </dl>
+    </section>
   </div>
+  <script type="application/json" id="chapters-data" set:html={JSON.stringify(summary).replace(/</g, "\\u003c")} />
 </Shell>

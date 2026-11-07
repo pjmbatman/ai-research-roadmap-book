@@ -1,11 +1,13 @@
+/// <reference types="vite/client" />
 // 위젯 등록부. 구현이 있는 위젯만 동적으로 불러오고, 아직 없는 위젯(status = planned)은 무엇을 하게 될지 안내하는 자리만 그린다.
 import type { PageData } from "../client/main";
 
-const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Record<string, string>) => void }>> = {
-  "linear-map-2d": () => import("./linear-map-2d/index"),
-  "relu-regions": () => import("./relu-regions/index"),
-  "loss-to-estimator": () => import("./loss-to-estimator/index"),
-};
+type WidgetModule = { mount: (root: HTMLElement, attrs: Record<string, string>) => void };
+// 위젯 폴더(<name>/index.ts)를 자동으로 찾는다. 새 위젯은 폴더만 만들면 등록된다.
+const MODULES = import.meta.glob<WidgetModule>("./*/index.ts");
+const IMPL: Record<string, () => Promise<WidgetModule>> = Object.fromEntries(
+  Object.entries(MODULES).map(([p, load]) => [p.split("/")[1], load]),
+);
 
 export function mountWidgets(page: PageData) {
   const nodes = [...document.querySelectorAll<HTMLElement>(".widget[data-widget]")];
@@ -30,7 +32,22 @@ async function load(node: HTMLElement, page: PageData) {
     return;
   }
   try {
-    (await impl()).mount(node, attrs);
+    const mod = await impl();
+    // 모든 위젯에 초기화(benchmarks.md §3.4-16): 처음 상태로 다시 그린다.
+    const mountWithReset = () => {
+      mod.mount(node, attrs);
+      const head = node.querySelector(".wframe-head");
+      if (!head) return;
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "icon-btn";
+      b.setAttribute("aria-label", "처음 상태로");
+      b.title = "처음 상태로";
+      b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>';
+      b.addEventListener("click", mountWithReset);
+      head.append(b);
+    };
+    mountWithReset();
     node.dataset.ready = "true";
   } catch (err) {
     node.textContent = `위젯을 불러오지 못했다: ${String(err)}`;

@@ -1,0 +1,112 @@
+# 13.2 켤레 모델과 베이지안 선형회귀 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "gamma-poisson-posterior"
+type = "numeric"
+objective = 1
+prompt = '''검출기의 계수율 $\lambda$ [1/s]에 사전분포 $\mathrm{Gamma}(2, 1)$(shape 2, rate 1)을 두었다. 노출 시간이 1 s, 3 s인 두 측정에서 각각 2개, 8개를 셌다. 사후분포의 평균 $\mathbb{E}[\lambda \mid \mathcal{D}]$는 몇 /s인가?'''
+answer = 2.4
+tolerance = 0.001
+explanation = '''Poisson 우도 $\prod_i (\lambda t_i)^{y_i} e^{-\lambda t_i}$는 $\lambda$에 대해 $\lambda^{\sum y_i} e^{-\lambda \sum t_i}$ 꼴이므로, 사후분포는 $\mathrm{Gamma}(2 + 10,\ 1 + 4) = \mathrm{Gamma}(12, 5)$이고 평균은 $12/5 = 2.4$ /s다. 사전분포는 "1 s 동안 2개를 센 가상의 측정"처럼 작용한다. MLE는 $10/4 = 2.5$ /s다.'''
+
+[[questions]]
+id = "conjugacy-meaning"
+type = "single"
+objective = 1
+prompt = '''"Beta 분포는 Bernoulli 우도의 켤레 사전분포다"라는 말의 뜻으로 옳은 것은?'''
+explanation = '''켤레성은 사전분포 족과 우도의 짝에 대한 성질이다. Beta 사전분포에 Bernoulli 우도를 곱하면 $\theta^{a-1+h}(1-\theta)^{b-1+n-h}$로 다시 Beta 꼴이 되므로, 사후분포가 같은 족 안에 머물고 갱신은 파라미터 계산으로 끝난다. 사전분포와 우도가 같은 분포라는 뜻도, 아무 사전분포나 닫힌 형태가 된다는 뜻도 아니다.'''
+
+[[questions.choices]]
+text = "Beta 사전분포에 Bernoulli 우도를 곱해 정규화하면 사후분포도 Beta 분포가 되어, 갱신이 파라미터 계산으로 끝난다."
+correct = true
+
+[[questions.choices]]
+text = "사전분포와 우도가 같은 종류의 분포라는 뜻이다."
+feedback = "Bernoulli는 데이터의 분포이고 Beta는 파라미터의 분포다. 켤레성은 '사전과 사후가 같은 족'이라는 뜻이다."
+
+[[questions.choices]]
+text = "Beta 사전분포를 쓰면 데이터가 사후분포에 영향을 주지 않는다."
+feedback = "데이터는 Beta의 두 파라미터에 앞면 수와 뒷면 수로 더해진다. 사후분포가 같은 족이라는 것이지 같은 분포라는 뜻이 아니다."
+
+[[questions.choices]]
+text = "어떤 우도와 짝지어도 Beta 사전분포의 사후분포는 닫힌 형태로 나온다."
+feedback = "켤레성은 특정 우도와의 짝에서만 성립한다. 예를 들어 θ가 로지스틱 회귀의 출력이면 Beta 사전분포여도 사후분포는 닫힌 형태가 아니다."
+
+[[questions]]
+id = "normal-normal-weight"
+type = "numeric"
+objective = 1
+prompt = '''센서 bias $b$에 사전분포 $\mathcal{N}(0, 0.25^2)$를 두고, 잡음 표준편차가 $\sigma = 0.3$ °C로 알려진 측정 9번의 표본평균이 0.5 °C였다. 사후평균은 몇 °C인가? (소수 셋째 자리까지)'''
+answer = 0.431
+tolerance = 0.002
+explanation = '''사후 정밀도는 사전 정밀도 $1/0.25^2 = 16$과 데이터 정밀도 $n/\sigma^2 = 9/0.09 = 100$의 합 116이다. 사후평균은 정밀도로 가중한 평균 $(100 \times 0.5 + 16 \times 0)/116 \approx 0.431$ °C다. 데이터에 주는 가중치는 $100/116 \approx 0.862$이고, 측정이 늘수록 1에 가까워진다.'''
+
+[[questions]]
+id = "predictive-variance-parts"
+type = "multiple"
+objective = 2
+prompt = '''베이지안 선형회귀의 예측분포 분산 $\sigma^2 + \boldsymbol\phi(x)^\top \mathbf{S}\, \boldsymbol\phi(x)$에 대해 옳은 것을 모두 고르시오. ($\mathbf{S}$는 가중치의 사후 공분산)'''
+explanation = '''첫 항 $\sigma^2$은 관측 잡음(aleatoric)이라 데이터를 늘려도 줄지 않는다. 둘째 항은 가중치 불확실성(epistemic)이 입력 $x$에서 만드는 분산으로, 데이터가 많은 곳에서는 작고 데이터가 없는 곳(빈 구간, 데이터 밖)에서는 커진다. 둘째 항이 0 이상이므로 예측 표준편차는 $\sigma$보다 작아질 수 없다.'''
+
+[[questions.choices]]
+text = '''$\sigma^2$ 항은 데이터를 아무리 늘려도 줄지 않는다.'''
+correct = true
+
+[[questions.choices]]
+text = '''$\boldsymbol\phi^\top \mathbf{S}\boldsymbol\phi$ 항은 학습 데이터가 없는 입력 영역에서 커진다.'''
+correct = true
+
+[[questions.choices]]
+text = '''데이터가 충분히 많으면 예측 표준편차가 $\sigma$보다 작아진다.'''
+feedback = "둘째 항은 0 이상이므로 예측 분산은 σ² 아래로 내려갈 수 없다. 데이터가 줄여 주는 것은 가중치 불확실성뿐이다."
+
+[[questions.choices]]
+text = '''$\boldsymbol\phi^\top \mathbf{S}\boldsymbol\phi$ 항은 입력 $x$와 무관한 상수다.'''
+feedback = "φ(x)에 따라 달라진다. 본문 예제에서 epistemic 표준편차는 데이터 구간에서 0.03, 빈 구간에서 0.10, 데이터 밖 x = 4에서 0.80이었다."
+
+[[questions]]
+id = "fixed-noise-overconfident"
+type = "single"
+objective = 2
+prompt = '''실제 측정 잡음이 0.2인데 장비 사양서의 값 0.05로 $\sigma$를 고정하고 베이지안 선형회귀를 했다. 예상되는 결과는?'''
+explanation = '''$\sigma$가 작으면 예측 분산의 첫 항이 16배 작아진다. 또 사후 공분산 $\mathbf{S} = (\alpha\mathbf{I} + \boldsymbol\Phi^\top\boldsymbol\Phi/\sigma^2)^{-1}$도 작아져, 모델은 데이터를 실제보다 정확한 측정으로 믿고 가중치까지 확신한다. 두 효과 모두 예측 구간을 좁혀 포함률이 크게 떨어진다(실습에서 90% 구간의 포함률이 약 0.32). 잡음 분산도 데이터에서 추정해야 한다(empirical Bayes 또는 사전분포).'''
+
+[[questions.choices]]
+text = "관측 잡음 항과 가중치 사후 공분산이 모두 작아져, 예측 구간이 지나치게 좁아지고 실제 포함률이 크게 떨어진다."
+correct = true
+
+[[questions.choices]]
+text = "잡음 항만 작아지고 가중치의 불확실성은 그대로이므로, 빈 구간의 예측 구간은 영향을 받지 않는다."
+feedback = "S도 σ²에 의존한다. σ가 작으면 데이터 하나하나를 더 정확하다고 믿으므로 가중치 사후분포도 좁아진다."
+
+[[questions.choices]]
+text = "σ를 작게 잡는 것은 보수적인 선택이므로 구간이 더 넓어진다."
+feedback = "반대다. σ는 예측 분산에 직접 들어가므로, 작게 잡으면 구간이 좁아진다."
+
+[[questions.choices]]
+text = "사후평균만 바뀌고 예측 구간의 폭은 그대로다."
+feedback = "σ는 사후평균(정규화 강도 λ = σ²α)과 구간의 폭 모두에 영향을 준다. 폭에 미치는 영향이 훨씬 크다."
+
+[[questions]]
+id = "evidence-occam"
+type = "single"
+objective = 3
+prompt = '''다항식 차수를 0에서 9까지 늘리면 학습 RMSE는 계속 줄지만, 사전분포를 고정한 log evidence $\log p(\mathbf{y} \mid \text{차수})$는 3차에서 가장 크고 그 뒤로 줄었다. 그 이유로 가장 알맞은 것은?'''
+explanation = '''evidence $p(\mathbf{y}) = \int p(\mathbf{y} \mid \mathbf{w})\,p(\mathbf{w})\,d\mathbf{w}$는 사전분포에서 뽑은 가중치들로 데이터를 얼마나 잘 예측했는지의 평균이다. 고차 모델은 가능한 데이터셋을 훨씬 많이 설명할 수 있으므로, 확률 질량(합이 1)을 넓게 펼치고 관측된 데이터셋 하나에 주는 확률은 작아진다. 이 자동적인 복잡도 벌점을 Occam의 면도날이라 부른다. AIC처럼 파라미터 수에 고정된 벌점을 더하는 것이 아니고, 사전분포의 폭에 따라 벌점이 달라진다.'''
+
+[[questions.choices]]
+text = "evidence는 우도를 사전분포로 평균한 값이라, 많은 데이터셋을 설명할 수 있는 복잡한 모델은 관측된 데이터셋 하나에 주는 확률이 작아진다."
+correct = true
+
+[[questions.choices]]
+text = "evidence는 시험 데이터에서 계산한 우도이므로 과적합한 모델이 낮게 나온다."
+feedback = "evidence는 학습 데이터만으로 계산한다. 시험 데이터 없이도 복잡도를 벌하는 것이 evidence의 특징이다."
+
+[[questions.choices]]
+text = "evidence는 파라미터 하나마다 정해진 크기의 벌점을 빼는 AIC와 같은 양이다."
+feedback = "벌점의 크기는 고정되어 있지 않다. 사전분포가 넓을수록 같은 파라미터 수에도 벌점이 커진다."
+
+[[questions.choices]]
+text = "고차 다항식에서 행렬 계산의 수치 오차가 커지기 때문이다."
+feedback = "수치 문제가 아니다. 공분산 σ²I + ΦΦᵀ/α를 정확히 계산해도 같은 결과가 나온다."

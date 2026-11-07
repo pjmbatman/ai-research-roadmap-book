@@ -1,0 +1,112 @@
+# 16.6 모델 선택과 평가 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "kfold-vs-group"
+type = "single"
+objective = 1
+prompt = '''셀 30개에서 셀마다 20번 측정한 데이터로 회귀 모델을 만든다. 목표는 **새로 생산될 셀**의 성능 예측이다. 샘플 단위 5-fold CV에서 $R^2 = 0.63$, 셀 단위 5-fold CV에서 $R^2 = -0.05$가 나왔다. 옳은 해석은?'''
+explanation = '''샘플 단위 $k$-fold에서는 같은 셀의 다른 측정이 학습에 들어 있어, 모델이 셀 고유의 특징과 편차를 외워 시험 fold를 맞힐 수 있다. 연구가 일반화하려는 단위는 셀이므로 셀 단위로 나눈 CV가 목표에 맞는 추정이다. 이 장의 예에서 처음 보는 셀 200개에서의 실제 $R^2$는 $-0.30$이었고, 셀 식별 특징을 뺀 모델이 오히려 나았다. 분할 방식은 숫자뿐 아니라 어떤 모델을 고를지도 바꾼다.'''
+
+[[questions.choices]]
+text = "샘플 단위 CV는 같은 셀의 측정이 학습·시험에 섞여 낙관적이다. 새 셀에 대한 성능은 셀 단위 CV가 추정하며, 이 모델은 새 셀에서 쓸모가 없을 가능성이 높다."
+correct = true
+
+[[questions.choices]]
+text = "두 값의 평균인 약 0.29가 가장 공정한 추정이다."
+feedback = "두 CV는 서로 다른 질문(새 샘플 대 새 셀)에 답한다. 평균은 어느 질문의 답도 아니다."
+
+[[questions.choices]]
+text = "셀 단위 CV는 fold마다 학습 데이터가 적어 비관적이므로 샘플 단위 결과를 믿는다."
+feedback = "두 방식 모두 데이터의 80%로 학습한다. 차이는 학습 데이터의 양이 아니라 같은 셀의 측정이 학습에 있느냐다."
+
+[[questions.choices]]
+text = "R²가 음수인 것은 계산 오류다. R²는 0과 1 사이의 값이다."
+feedback = "시험 데이터에서 R²는 평균만 예측하는 것보다 나쁘면 음수가 된다. 오류가 아니라 중요한 정보다."
+
+[[questions]]
+id = "mape-near-zero"
+type = "numeric"
+objective = 2
+prompt = '''참값이 0.5와 10.0인 두 샘플을 각각 1.0과 10.5로 예측했다. MAPE(%)는?'''
+answer = 52.5
+tolerance = 0.1
+explanation = '''샘플별 상대오차는 $|0.5 - 1.0|/0.5 = 100\%$, $|10.0 - 10.5|/10.0 = 5\%$이고, 평균은 $52.5\%$다. 두 샘플의 절대오차는 똑같이 0.5인데, 참값이 0에 가까운 샘플 하나가 MAPE를 지배한다. MAE는 0.5다. 참값이 0 근처를 지나는 양이나 원점이 임의인 양(°C)에서는 MAPE를 쓰지 않는다.'''
+
+[[questions]]
+id = "accuracy-imbalanced"
+type = "single"
+objective = 2
+prompt = '''불량률이 1%인 공정에서 불량 탐지 분류기의 정확도가 0.992, ROC-AUC가 0.93, PR-AUC가 0.35, threshold 0.5에서 recall이 0.14다. 이 결과에 대한 설명으로 옳은 것은?'''
+explanation = '''"전부 정상"이라고 답해도 정확도가 0.99이므로 0.992는 거의 정보가 없다. ROC-AUC 0.93은 분류기가 불량과 정상을 순위로는 잘 구별한다는 뜻이고, PR-AUC 0.35는 양성이 드물어 높은 점수 구간에도 정상이 많이 섞인다는 뜻이다. recall 0.14는 threshold 0.5에서 불량의 86%를 놓친다는 뜻이다. threshold를 비용에 맞게 낮추면 recall을 크게 올릴 수 있다. 어느 숫자 하나만으로는 판단할 수 없다.'''
+
+[[questions.choices]]
+text = "순위 매기는 능력은 좋지만(ROC-AUC), threshold 0.5에서는 불량 대부분을 놓친다. 정확도는 '전부 정상'(0.99)과 거의 같아 정보가 없다."
+correct = true
+
+[[questions.choices]]
+text = "정확도가 99%를 넘으므로 배포해도 된다."
+feedback = "불량률 1%에서 아무것도 하지 않는 분류기도 정확도 0.99를 낸다. recall 0.14는 불량의 86%를 놓친다는 뜻이다."
+
+[[questions.choices]]
+text = "PR-AUC가 0.35로 낮으므로 분류기는 무작위 수준이다."
+feedback = "무작위 분류기의 PR-AUC는 양성 비율, 즉 0.01이다. 0.35는 무작위보다 훨씬 높다. PR-AUC는 양성 비율과 함께 읽어야 한다."
+
+[[questions.choices]]
+text = "ROC-AUC와 PR-AUC가 크게 다르므로 둘 중 하나는 잘못 계산되었다."
+feedback = "같은 점수에서도 양성이 드물면 PR-AUC는 낮아지고 ROC-AUC는 거의 변하지 않는다. 두 metric은 다른 질문에 답한다."
+
+[[questions]]
+id = "cost-threshold-value"
+type = "numeric"
+objective = 2
+prompt = '''보정된 확률 $p$를 내는 분류기가 있다. 불량을 놓치는 비용이 50, 정상을 불량으로 판정해 재검사하는 비용이 1, 맞힌 경우의 비용은 0이다. 기대 비용을 최소화하는 threshold(이 값 이상이면 불량으로 판정)는? 소수로 답한다.'''
+answer = 0.0196
+tolerance = 0.001
+explanation = '''불량으로 판정하면 기대 비용은 $(1-p)\cdot 1$, 정상으로 판정하면 $p \cdot 50$이다. $50p > 1 - p$, 즉 $p > 1/51 \approx 0.0196$이면 불량으로 판정한다. threshold 0.5를 그대로 쓰면 이 장의 예에서 비용이 거의 두 배였다. 이 식은 확률이 보정되어 있을 때만 맞으므로, 그렇지 않으면 검증 데이터에서 비용을 직접 최소화하는 threshold를 고른다.'''
+
+[[questions]]
+id = "best-score-is-optimistic"
+type = "single"
+objective = 3
+prompt = '''데이터 40개로 50가지 설정을 5-fold CV로 탐색했더니 가장 좋은 설정의 CV 정확도가 0.70이었다. 이 0.70을 논문에 최종 성능으로 보고해도 되는가?'''
+explanation = '''0.70은 50개 후보 중 **가장 높은** CV 점수이므로, 그 fold들에서 운이 좋았던 몫이 섞여 있다. 이 장의 예에서는 label이 특징과 무관해 참 정확도가 0.5인 데이터에서도 탐색 최고 점수가 평균 0.695였다. 최종 성능은 선택에 쓰지 않은 시험 데이터나 nested CV로 추정한다. CV가 각 설정에 대해서는 거의 불편이라는 사실은 "최댓값을 고른 뒤"에는 성립하지 않는다.'''
+
+[[questions.choices]]
+text = "안 된다. 여러 후보 중 최댓값을 골랐으므로 낙관적으로 편향되어 있다. 선택에 쓰지 않은 데이터(시험 세트, nested CV)로 따로 추정해야 한다."
+correct = true
+
+[[questions.choices]]
+text = "된다. 교차검증 점수는 학습에 쓰지 않은 fold에서 계산했으므로 편향이 없다."
+feedback = "각 설정의 CV 점수는 거의 불편이지만, 그중 최댓값을 고르는 순간 선택 편향이 생긴다. 시험 fold가 '선택'에 쓰였다."
+
+[[questions.choices]]
+text = "된다. 다만 5-fold 대신 10-fold로 다시 계산하면 편향이 사라진다."
+feedback = "fold 수를 바꿔도 최댓값을 고르는 선택 편향은 남는다. 선택과 평가에 다른 데이터를 써야 한다."
+
+[[questions.choices]]
+text = "안 된다. 0.70에서 후보 수로 보정한 값 0.70 − 0.01 × 50 = 0.20을 보고해야 한다."
+feedback = "편향의 크기는 후보 수만으로 정해지는 공식이 없다. 데이터 크기, 점수의 분산, 후보들의 상관에 따라 달라지므로 nested CV나 독립 시험 데이터로 직접 추정한다."
+
+[[questions]]
+id = "nested-cv-estimates-procedure"
+type = "single"
+objective = 3
+prompt = '''nested CV에서 바깥 fold 5개가 각각 다른 정규화 강도 $\lambda$를 골랐다. nested CV 점수가 추정하는 것은?'''
+explanation = '''nested CV는 "안쪽 CV로 $\lambda$를 골라 학습하는 **절차 전체**"의 일반화 성능을 추정한다. 바깥 fold마다 다른 $\lambda$가 골라지는 것은 정상이며, 그 변동 자체가 선택이 데이터에 얼마나 민감한지를 보여 준다. 최종 모델은 전체 데이터로 같은 절차(안쪽 CV로 $\lambda$ 선택 후 학습)를 한 번 더 실행해 만든다.'''
+
+[[questions.choices]]
+text = "안쪽 CV로 λ를 고른 뒤 학습하는 절차 전체가 새 데이터에서 낼 성능"
+correct = true
+
+[[questions.choices]]
+text = "가장 많이 고른 λ 하나로 학습한 모델의 성능"
+feedback = "바깥 fold마다 다른 λ로 평가했으므로 특정 λ의 성능이 아니다. 특정 λ를 고른 뒤 그 점수를 보고하면 다시 선택 편향이 생긴다."
+
+[[questions.choices]]
+text = "λ가 fold마다 다르므로 nested CV가 실패했고 점수는 의미가 없다."
+feedback = "λ 선택이 fold마다 달라지는 것은 흔하고 정상이다. 점수는 여전히 절차의 성능에 대한 거의 편향 없는 추정이다."
+
+[[questions.choices]]
+text = "다섯 λ의 평균값으로 학습한 모델의 성능"
+feedback = "λ를 평균하는 단계는 절차에 없다. 평가한 것은 각 바깥 fold에서 고른 λ로 학습한 모델들이다."
