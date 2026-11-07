@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 302문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 326문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -190,16 +190,16 @@ _수식을 정확하고 효율적인 코드로 옮기기 위한 Python 언어, �
 
 _디렉터리 구조, 네이밍, 설정 파일, CLI, 로깅, 테스트, 문서화까지 수정·검증·협업 가능한 연구 코드의 규칙을 세운다._
 
-- **6.1** [연구 프로젝트 구조](content/06-research-code-engineering/01-project-structure/index.md) · `필수`
+- **6.1** [연구 프로젝트 구조](content/06-research-code-engineering/01-project-structure/index.md) · `필수` · 퀴즈 6
   - 책임 분리 · 표준 디렉터리 구조 · 진입점 · notebook의 자리 · 데이터와 출력의 위치 · 추상화의 균형
   - 선수: 5.2 모듈·패키지·import 시스템
-- **6.2** [네이밍·코딩 컨벤션](content/06-research-code-engineering/02-naming-and-style/index.md) · `필수`
+- **6.2** [네이밍·코딩 컨벤션](content/06-research-code-engineering/02-naming-and-style/index.md) · `필수` · 퀴즈 6
   - 이름 규칙 · 의미를 드러내는 이름 · 코드 스타일 · 자동화 도구 · 연구실 스타일 가이드
   - 선수: 6.1 연구 프로젝트 구조
-- **6.3** [설정 관리](content/06-research-code-engineering/03-configuration/index.md) · `필수`
+- **6.3** [설정 관리](content/06-research-code-engineering/03-configuration/index.md) · `필수` · 퀴즈 6
   - 왜 설정을 분리하는가 · 설정 형식 · 설정 객체 · 조합과 override · 기록 · 경로 처리
   - 선수: 6.1 연구 프로젝트 구조
-- **6.4** [CLI 설계](content/06-research-code-engineering/04-cli-design/index.md) · `필수`
+- **6.4** [CLI 설계](content/06-research-code-engineering/04-cli-design/index.md) · `필수` · 퀴즈 6
   - argparse · subcommand · 다른 도구 · 설정과 CLI의 병합 · 진입점 등록
   - 선수: 6.3 설정 관리
 - **6.5** [로깅과 오류 처리](content/06-research-code-engineering/05-logging-and-errors/index.md) · `필수`
