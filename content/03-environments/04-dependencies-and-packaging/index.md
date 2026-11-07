@@ -114,6 +114,8 @@ build-backend = "hatchling.build"
 | `uv.lock` | `uv lock` (또는 `uv add`·`uv sync`가 자동으로) | 여러 플랫폼·Python 버전을 함께 푼 **universal** lockfile. 해시 포함 |
 | conda-lock 파일 | `conda-lock` 도구 | conda 환경을 플랫폼별로 고정 |
 
+universal lockfile의 예가 이 책의 `labs/uv.lock`이다. `requires-python = ">=3.11"`인 이 프로젝트의 lockfile에는 NumPy가 두 번 기록되어 있다. Python 3.12 미만용 2.4.6과 3.12 이상용 2.5.4다. 집필 시점 NumPy 2.5는 Python 3.12 이상만 지원하므로, resolver가 Python 버전에 따라 해를 나누어(fork) 기록한 것이다. 어느 Python으로 `uv sync`를 하든 같은 lockfile에서 맞는 항목이 골라진다.
+
 `pip freeze`는 "지금 이 환경에 설치된 것"을 적을 뿐, 그것이 어떤 선언에서 나왔는지 모른다. 반면 `uv.lock`은 `pyproject.toml`의 선언에서 나온 결과임을 알고, 선언이 바뀌면 다시 풀어야 한다는 것도 안다. 표준 lockfile 형식(`pylock.toml`)도 정해져 일부 도구가 지원하기 시작했다(집필 시점).
 
 uv에서 lock과 환경 동기화는 두 단계다(집필 시점 예시).

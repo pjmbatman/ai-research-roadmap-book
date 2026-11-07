@@ -1,0 +1,150 @@
+# 3.5 Docker와 컨테이너 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "image-vs-container"
+type = "single"
+objective = 1
+prompt = "같은 image로 컨테이너 세 개를 띄웠다. 그중 하나에서 `/opt/config.yaml`을 수정했다. 무엇이 바뀌는가?"
+explanation = "image는 읽기 전용 layer들의 묶음이고, 컨테이너는 그 위에 자기만의 쓰기 가능한 layer를 얹어 실행한 것이다. 한 컨테이너의 수정은 그 컨테이너의 쓰기 layer에만 기록된다. image와 다른 컨테이너는 그대로이고, 그 컨테이너를 지우면 수정도 사라진다."
+
+[[questions.choices]]
+text = "수정한 컨테이너의 쓰기 layer만 바뀐다. image와 다른 두 컨테이너는 그대로다."
+correct = true
+
+[[questions.choices]]
+text = "image가 바뀌어, 세 컨테이너 모두에 수정이 반영된다."
+feedback = "image는 읽기 전용이다. 컨테이너 안의 변경은 image에 기록되지 않는다."
+
+[[questions.choices]]
+text = "image가 바뀌어, 앞으로 이 image로 띄우는 컨테이너에만 반영된다."
+feedback = "image를 바꾸는 방법은 Dockerfile을 고쳐 다시 빌드하는 것이다. 실행 중인 컨테이너의 변경은 image에 들어가지 않는다."
+
+[[questions.choices]]
+text = "컨테이너는 읽기 전용이라 파일을 수정할 수 없다."
+feedback = "컨테이너에는 쓰기 가능한 layer가 있어 수정할 수 있다. 다만 그 수정은 컨테이너와 함께 사라진다."
+
+[[questions]]
+id = "tag-vs-digest"
+type = "single"
+objective = 1
+prompt = "논문 부록에 실험 환경을 `lab/proj:latest`라고 적었다. 1년 뒤 다른 사람이 같은 image를 받을 수 있도록 하려면 무엇을 함께 적어야 하는가?"
+explanation = "tag는 registry에서 언제든 다른 image를 가리키도록 옮길 수 있는 이름이다. digest(`sha256:...`)는 image 내용의 해시라서, 같은 digest는 항상 같은 내용을 가리킨다. 기록에는 `이름@sha256:...` 형식의 digest를 남긴다. 단, registry에서 그 image가 지워지면 digest로도 받을 수 없으므로 보관 정책도 함께 정한다."
+
+[[questions.choices]]
+text = "image의 digest(`sha256:...`)"
+correct = true
+
+[[questions.choices]]
+text = "pull한 날짜"
+feedback = "날짜를 알아도 그 시점에 tag가 가리키던 image를 다시 찾을 방법이 없다."
+
+[[questions.choices]]
+text = "`latest` 대신 `v1` 같은 버전 tag를 붙이면 충분하다."
+feedback = "버전 tag도 결국 tag다. 누군가 같은 tag로 다시 push하면 다른 내용을 가리킨다. 사람이 읽기 좋은 이름일 뿐 내용을 보증하지 않는다."
+
+[[questions.choices]]
+text = "Dockerfile만 있으면 언제든 같은 image를 다시 빌드할 수 있으므로 따로 적을 필요가 없다."
+feedback = "Dockerfile의 base image tag, apt 패키지, 내려받는 파일이 시간에 따라 바뀌므로, 같은 Dockerfile도 나중에 빌드하면 다른 image가 될 수 있다."
+
+[[questions]]
+id = "layer-order"
+type = "single"
+objective = 2
+prompt = "Dockerfile이 `COPY . /app` 다음 줄에서 `RUN uv sync --locked`로 의존성을 설치한다. 코드 한 줄을 고칠 때마다 빌드에 몇 분씩 걸린다. 가장 효과적인 수정은?"
+explanation = "Docker는 각 줄의 결과를 layer로 cache하고, 어떤 줄의 입력이 바뀌면 그 줄과 그 뒤의 모든 줄을 다시 실행한다. 코드 전체를 먼저 복사하면 코드가 바뀔 때마다 의존성 설치가 다시 실행된다. 의존성 기록(`pyproject.toml`, `uv.lock`)만 먼저 복사해 설치하고, 코드는 그다음에 복사하면 코드 수정 시 의존성 layer는 cache에서 재사용된다."
+
+[[questions.choices]]
+text = "`pyproject.toml`과 `uv.lock`만 먼저 복사해 의존성을 설치하고, 코드 복사는 그 뒤로 옮긴다."
+correct = true
+
+[[questions.choices]]
+text = "`--no-cache` 옵션으로 매번 깨끗하게 빌드한다."
+feedback = "cache를 끄면 모든 줄을 다시 실행하므로 더 느려진다."
+
+[[questions.choices]]
+text = "의존성 설치를 컨테이너 실행 시점(`CMD`)으로 옮긴다."
+feedback = "그러면 컨테이너를 띄울 때마다 설치가 일어나고, 실행 시점의 패키지 상태에 따라 환경이 달라진다. image에 환경을 고정하는 의미가 사라진다."
+
+[[questions.choices]]
+text = "모든 명령을 하나의 `RUN`으로 합친다."
+feedback = "줄 수를 줄여도 코드가 바뀌면 그 줄 전체가 다시 실행된다. 문제는 줄의 수가 아니라 순서다."
+
+[[questions]]
+id = "host-driver"
+type = "single"
+objective = 2
+prompt = "GPU 학습용 image를 만든다. NVIDIA 드라이버와 CUDA에 대해 옳은 설계는?"
+explanation = "컨테이너는 호스트의 kernel을 공유하므로 kernel 모듈인 드라이버는 호스트의 것을 쓴다. NVIDIA Container Toolkit이 `--gpus`로 실행할 때 호스트 드라이버의 사용자 공간 라이브러리를 컨테이너에 넣어 준다. image에는 CUDA runtime(PyTorch wheel이 가져오는 것 등)만 두고, 그 버전이 호스트 드라이버가 지원하는 범위 안에 있어야 한다."
+
+[[questions.choices]]
+text = "드라이버는 호스트의 것을 쓰고, image 안의 CUDA runtime 버전이 호스트 드라이버가 지원하는 범위 안에 있게 한다."
+correct = true
+
+[[questions.choices]]
+text = "image 안에 호스트와 같은 버전의 NVIDIA 드라이버를 설치한다."
+feedback = "드라이버의 핵심은 kernel 모듈이고, 컨테이너는 호스트 kernel을 공유한다. image에 드라이버를 넣으면 호스트 드라이버와 충돌하거나 버전 불일치 오류가 난다."
+
+[[questions.choices]]
+text = "image 안의 CUDA 버전이 호스트의 nvcc 버전과 정확히 같아야 한다."
+feedback = "호스트에는 toolkit이 없어도 된다. 기준은 호스트 드라이버가 지원하는 CUDA 범위다."
+
+[[questions.choices]]
+text = "컨테이너는 호스트와 격리되어 있으므로 호스트 드라이버 버전과 무관하게 어떤 CUDA든 쓸 수 있다."
+feedback = "컨테이너는 kernel과 드라이버를 호스트와 공유한다. 호스트 드라이버가 지원하지 않는 CUDA runtime은 컨테이너 안에서도 실패한다."
+
+[[questions]]
+id = "shm-batches"
+type = "numeric"
+objective = 2
+prompt = "DataLoader를 `num_workers=4`, `prefetch_factor=2`로 쓴다. batch 하나가 shared memory에서 16 MiB를 차지한다고 할 때, worker들이 미리 준비해 두는 batch가 동시에 차지하는 shared memory는 대략 몇 MiB인가?"
+answer = 128
+tolerance = 0
+slider = { min = 0, max = 256, step = 16, unit = "MiB" }
+explanation = "worker마다 최대 `prefetch_factor`개의 batch를 미리 만들어 두므로 대기하는 batch는 4 × 2 = 8개, 8 × 16 MiB = 128 MiB다. Docker 컨테이너의 기본 `/dev/shm`은 64 MiB라서 이 설정만으로도 넘친다. `--shm-size`로 늘리거나 `--ipc=host`를 쓴다. 실제 사용량은 다른 텐서와 오버헤드 때문에 이보다 클 수 있으므로 여유를 둔다."
+
+[[questions]]
+id = "results-outside"
+type = "single"
+objective = 3
+prompt = "`docker run --rm lab/train`으로 학습을 돌렸고, 코드는 checkpoint를 컨테이너 안의 `/app/outputs`에 저장했다. 학습이 끝난 뒤 checkpoint는 어디에 있는가?"
+explanation = "`--rm`은 컨테이너가 끝나면 컨테이너와 그 쓰기 layer를 지운다. 마운트하지 않은 경로에 쓴 파일은 쓰기 layer에 있었으므로 함께 사라진다. 결과를 남기려면 호스트 디렉터리를 bind mount(`-v \"$PWD/outputs:/app/outputs\"`)하거나 volume을 마운트한 경로에 쓴다."
+
+[[questions.choices]]
+text = "컨테이너와 함께 삭제되어 남아 있지 않다."
+correct = true
+
+[[questions.choices]]
+text = "image 안의 `/app/outputs`에 저장되어, 같은 image로 다시 띄우면 보인다."
+feedback = "컨테이너 안에서 쓴 파일은 image가 아니라 컨테이너의 쓰기 layer에 기록된다."
+
+[[questions.choices]]
+text = "호스트의 현재 디렉터리 아래 `outputs/`에 자동으로 저장된다."
+feedback = "마운트하지 않은 경로는 호스트와 연결되어 있지 않다. 호스트에 남기려면 명시적으로 마운트해야 한다."
+
+[[questions.choices]]
+text = "Docker가 삭제 전에 자동으로 volume에 백업한다."
+feedback = "그런 자동 백업은 없다. volume은 마운트했을 때만 쓰인다."
+
+[[questions]]
+id = "data-in-image"
+type = "multiple"
+objective = 3
+prompt = "50 GB 학습 데이터를 Dockerfile의 `COPY data/ /data/`로 image에 넣으려 한다. 이 방식의 문제를 모두 고르시오."
+explanation = "image는 환경(코드가 실행되는 조건)을 담는 것이고, 데이터는 따로 관리한다. 데이터를 넣으면 image가 데이터 크기만큼 커져 빌드·전송·저장이 느려지고, 데이터가 바뀔 때마다 그 layer부터 다시 빌드된다. image를 공유하면 데이터까지 함께 퍼지므로 공개할 수 없는 데이터라면 문제가 된다. 데이터는 bind mount나 volume으로 실행 시점에 연결한다. 컨테이너가 큰 파일을 읽지 못한다는 제한은 없다."
+
+[[questions.choices]]
+text = "image가 데이터 크기만큼 커져 빌드·push·pull이 느려진다."
+correct = true
+
+[[questions.choices]]
+text = "데이터가 바뀔 때마다 그 layer부터 다시 빌드해야 한다."
+correct = true
+
+[[questions.choices]]
+text = "image를 공유하면 데이터까지 함께 배포된다."
+correct = true
+
+[[questions.choices]]
+text = "컨테이너 안에서는 수 GB 이상의 파일을 읽을 수 없다."
+feedback = "그런 제한은 없다. 문제는 읽을 수 있느냐가 아니라 데이터와 환경을 한 덩어리로 묶는다는 것이다."
