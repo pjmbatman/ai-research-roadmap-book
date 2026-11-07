@@ -1,0 +1,6 @@
+title = "전이행렬의 정상분포 구하기"
+chapter = "probability/stochastic-processes"
+objective = 1
+exec = "browser"
+entry = "stationary_distribution"
+timeout_s = 10
