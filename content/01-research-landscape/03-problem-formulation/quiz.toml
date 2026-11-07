@@ -1,0 +1,127 @@
+# 1.3 문제를 수학적으로 정의하기 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "variable-roles"
+type = "single"
+objective = 1
+prompt = '''배터리 충전 실험에서 다음 중 **제어입력** $u$에 해당하는 것은?'''
+explanation = '''제어입력은 연구자나 제어기가 **고를 수 있는** 변수다. 충전 전류 프로파일은 실험자가 정한다. 단자 전압은 측정되는 관측(모델의 입력 $x$나 출력 $y$로 쓰인다), 확산 계수는 셀이 가진 고정된 성질인 파라미터 $\theta$, 전극 안의 리튬 농도 분포는 시간에 따라 변하지만 직접 볼 수 없는 숨은 상태 $s$다.'''
+
+[[questions.choices]]
+text = "단자 전압의 측정값"
+feedback = "측정값은 관측이다. 고를 수 있는 값이 아니라 결과로 나오는 값이다."
+
+[[questions.choices]]
+text = "실험자가 정한 충전 전류 프로파일"
+correct = true
+
+[[questions.choices]]
+text = "전극 재료의 확산 계수"
+feedback = "셀마다 정해져 있고 실험 중 바뀌지 않는 성질이므로 파라미터 θ다."
+
+[[questions.choices]]
+text = "전극 내부의 리튬 농도 분포"
+feedback = "시간에 따라 변하지만 직접 측정할 수 없는 숨은 상태 s다."
+
+[[questions]]
+id = "noise-floor-leak"
+type = "numeric"
+objective = 2
+prompt = '''센서 측정값이 $y_t = T_t + \varepsilon_t$, $\varepsilon_t \sim \mathcal{N}(0, 0.3^2)$ °C이고 잡음은 시각마다 독립이다. 시각 $t$까지의 정보만 쓰는 예측기가 다음 측정값 $y_{t+1}$을 예측할 때, 참 온도 $T_{t+1}$을 정확히 안다고 해도 넘을 수 없는 MAE의 하한은 약 몇 °C인가? (소수 둘째 자리까지)'''
+answer = 0.24
+tolerance = 0.01
+slider = { min = 0.0, max = 0.6, step = 0.01, unit = "°C" }
+explanation = '''$y_{t+1}$에는 시각 $t$까지의 정보와 독립인 잡음 $\varepsilon_{t+1}$이 들어 있다. 참 온도를 정확히 맞혀도 오차는 $\varepsilon_{t+1}$이 남고, 그 절댓값의 평균은 $0.3\sqrt{2/\pi} \approx 0.239$ °C다. 본문의 "중심 5개 평균" 입력은 테스트 MAE 0.222 °C로 이 하한보다 작았다. 과거 정보만으로는 불가능한 숫자이므로, 입력에 미래 측정값($y_{t+1}$ 자신)이 섞였다는 신호다.'''
+
+[[questions]]
+id = "inference-time-info"
+type = "multiple"
+objective = 2
+prompt = '''배터리 셀의 **처음 100 사이클** 데이터로 그 셀의 수명(용량이 80%가 되는 사이클)을 예측하는 모델을 만든다. 예측 시점(100 사이클 직후)에 입력으로 쓸 수 있는 것을 모두 고르시오.'''
+explanation = '''예측 시점에 이미 존재하는 정보만 입력이 될 수 있다. 처음 100 사이클의 용량·전압 곡선과 시험 전에 정한 챔버 온도는 그 시점에 존재한다. 시험이 끝난 뒤 측정한 내부저항이나, 전체 수명 동안의 평균으로 정규화한 값은 미래 정보를 담고 있어 예측 시점에는 계산할 수 없다. 학습 데이터에는 이런 값이 모두 있어서 실수로 넣기 쉽다.'''
+
+[[questions.choices]]
+text = "처음 100 사이클 동안 측정한 방전 용량 곡선"
+correct = true
+
+[[questions.choices]]
+text = "시험 시작 전에 정한 챔버 설정 온도"
+correct = true
+
+[[questions.choices]]
+text = "수명 시험이 끝난 뒤 측정한 내부저항"
+feedback = "시험이 끝나야 측정할 수 있다. 예측 시점에는 존재하지 않는 정보다."
+
+[[questions.choices]]
+text = "셀의 전체 수명 동안의 평균 용량으로 나눈 100 사이클 용량"
+feedback = "정규화에 쓴 평균이 전체 수명 데이터에서 계산되었다. 값 자체는 100 사이클 시점의 것이지만 미래 정보가 섞여 있다."
+
+[[questions]]
+id = "problem-type"
+type = "single"
+objective = 3
+prompt = '''전기차 운행 중에 지금까지 측정한 전압·전류·온도로 **지금 이 순간의** 충전 상태(SOC)를 추정한다. SOC는 직접 측정할 수 없다. 이 문제의 유형은?'''
+explanation = '''직접 볼 수 없는 현재의 상태 $s_t$를 지금까지의 관측 $y_{\le t}$로 추정하므로 상태 추정(그중에서도 filtering)이다. 시계열 예측은 미래의 관측을, 역문제는 시간에 따라 변하지 않는 파라미터를 추정한다. 같은 데이터라도 무엇을 언제 추정하는지에 따라 유형이 달라진다.'''
+
+[[questions.choices]]
+text = "시계열 예측"
+feedback = "시계열 예측은 미래 시각의 값을 예측한다. 여기서는 현재 시각의 숨은 상태를 추정한다."
+
+[[questions.choices]]
+text = "상태 추정"
+correct = true
+
+[[questions.choices]]
+text = "역문제"
+feedback = "역문제는 보통 시간에 따라 변하지 않는 파라미터 θ를 관측에서 거꾸로 추정한다. SOC는 매 순간 변하는 상태다."
+
+[[questions.choices]]
+text = "정적 예측"
+feedback = "정적 예측은 시간 구조 없이 x에서 y를 예측한다. 이 문제는 지금까지의 시계열 전체가 정보가 된다."
+
+[[questions]]
+id = "control-vs-optimization"
+type = "single"
+objective = 3
+prompt = '''충전 중 매 순간 측정한 전압과 온도를 보고 다음 1초 동안의 충전 전류를 정하는 **규칙**을 학습하려 한다. 이 문제의 유형은?'''
+explanation = '''관측에 따라 매 순간 입력 $u_t$를 정하는 규칙(정책) $u_t = \pi(y_{\le t})$를 찾는 것은 제어다. 충전 프로토콜 하나(고정된 전류 순서)를 미리 정해 놓고 그 순서를 최적화하는 것이라면 최적화 문제다. 제어는 관측에 반응하는 되먹임(feedback)이 있다는 점에서 최적화와 구분된다.'''
+
+[[questions.choices]]
+text = "최적화: 가장 좋은 충전 전류 값 하나를 찾는다."
+feedback = "고정된 값이나 순서를 찾는 것이 아니라, 관측에 따라 달라지는 규칙을 찾는다."
+
+[[questions.choices]]
+text = "제어: 관측에 따라 매 순간 입력을 정하는 규칙을 찾는다."
+correct = true
+
+[[questions.choices]]
+text = "시계열 예측: 다음 1초의 전압을 예측한다."
+feedback = "다음 전압을 예측하는 모델은 제어에 쓰일 수 있지만, 이 문제의 출력은 전압이 아니라 충전 전류(제어입력)다."
+
+[[questions.choices]]
+text = "생성: 그럴듯한 충전 전류 프로파일을 만든다."
+feedback = "그럴듯한 프로파일이 아니라, 목표(빠르고 안전한 충전)를 달성하는 규칙을 찾는다."
+
+[[questions]]
+id = "split-for-new-cells"
+type = "single"
+objective = 2
+prompt = '''본문의 배터리 예제에서 무작위 분할의 테스트 MAE는 0.0070, 셀 단위 분할은 0.0240이었다. 이 모델을 **처음 보는 셀**에 쓸 때의 오차 추정으로 적절한 것은?'''
+explanation = '''처음 보는 셀에 쓸 때 모델은 그 셀의 측정을 한 번도 본 적이 없다. 셀 단위 분할이 이 조건을 재현한다. 무작위 분할에서는 같은 셀의 다른 측정이 학습에 있어, 모델이 초기 용량으로 셀을 알아보고 그 셀의 열화 속도를 기억할 수 있다. 0.0070은 측정 잡음의 MAE(약 0.004)에 가까운, 이미 본 셀에 대한 성능이다.'''
+
+[[questions.choices]]
+text = "0.0070: 더 많은 데이터로 학습했으므로 더 정확하다."
+feedback = "두 분할의 학습 데이터 양은 비슷하다(약 600개). 차이는 테스트 셀을 학습에서 본 적이 있느냐에서 온다."
+
+[[questions.choices]]
+text = "0.0240: 테스트 셀의 측정을 학습에서 전혀 보지 않은 조건이 실제 사용 조건과 같다."
+correct = true
+
+[[questions.choices]]
+text = "두 값의 평균 0.0155"
+feedback = "두 분할은 서로 다른 질문(이미 본 셀인가, 새 셀인가)에 답한다. 평균은 어느 질문의 답도 아니다."
+
+[[questions.choices]]
+text = "0.0070: 셀 단위 분할은 테스트 셀이 5개뿐이라 믿을 수 없다."
+feedback = "테스트 셀이 적으면 추정이 불확실해지는 것은 맞다. 그러나 그 해결책은 여러 셀 묶음으로 반복해 평가하는 것이지, 다른 질문에 답하는 무작위 분할을 쓰는 것이 아니다."
