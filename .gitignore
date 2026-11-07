@@ -38,3 +38,6 @@ labs/**/runs/
 
 # 사이트 빌드 시 원고에서 복사되는 그림(apps/web/scripts/sync-assets.mjs)
 apps/web/public/content-assets/
+
+# 에이전트 작업 폴더(git worktree)
+.claude/worktrees/
