@@ -1,0 +1,135 @@
+# 10.6 비볼록 최적화와 손실 지형 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "saddle-plateau"
+type = "single"
+objective = 1
+prompt = '''full-batch 학습에서 손실 곡선이 수백 step 동안 거의 평평하고 gradient 노름도 $10^{-4}$ 수준으로 작다가, 갑자기 다시 크게 떨어졌다. 평평한 구간에 대한 설명으로 가장 그럴듯한 것은?'''
+explanation = '''gradient가 작은 것은 stationary point **근처**에 있다는 뜻일 뿐, 그 점이 최솟점이라는 뜻이 아니다. 안장점 근처에서는 불안정한 방향의 성분이 매 step 일정한 비율로만 커지므로, 처음 성분이 작을수록 오래 머문다(본문 셀 1: 시작 성분 $10^{-9}$에서 212 step). 그동안 손실과 gradient는 거의 변하지 않아 수렴처럼 보인다. 국소 최솟점이었다면 full-batch 경사하강은 다시 내려가지 않는다.'''
+
+[[questions.choices]]
+text = "국소 최솟점에 수렴했다가 수치 오차로 튀어나왔다."
+feedback = "국소 최솟점에서는 모든 방향의 곡률이 양수라 작은 섭동이 다시 줄어든다. 스스로 벗어나 크게 떨어지는 것은 음의 곡률 방향이 있다는 신호다."
+
+[[questions.choices]]
+text = "안장점 근처를 지나며 불안정한 방향의 작은 성분이 천천히 커지는 동안 정체했다."
+correct = true
+
+[[questions.choices]]
+text = "학습률이 너무 커서 진동하고 있었다."
+feedback = "학습률이 안정 한계를 넘으면 손실이 오르내리거나 커진다. gradient가 작고 손실이 평평한 정체와는 모양이 다르다."
+
+[[questions.choices]]
+text = "gradient가 작으므로 그 구간의 파라미터가 이미 최적해였다."
+feedback = "gradient가 작은 점에는 최솟점뿐 아니라 안장점도 포함된다(10.1장). 손실이 다시 크게 떨어졌다는 것은 그 점이 최적해가 아니었다는 증거다."
+
+[[questions]]
+id = "saddle-escape-steps"
+type = "numeric"
+objective = 1
+prompt = '''안장점에서 곡률이 $-1$인 방향의 성분 $y$는 학습률 $\eta = 0.1$의 경사하강에서 매 step $(1 + \eta) = 1.1$배가 된다(선형 근사). $y_0 = 10^{-6}$에서 시작해 $y$가 0.5를 넘기까지 대략 몇 step이 걸리는가? 가장 가까운 정수로 답한다.'''
+answer = 138
+tolerance = 3
+explanation = '''$1.1^k \cdot 10^{-6} \ge 0.5$에서 $k \ge \ln(5 \times 10^5)/\ln 1.1 \approx 137.7$이므로 약 138 step이다. 본문 셀 1의 실제 반복(4차 항 포함)은 139 step이었다. 정체 시간은 $\log(1/y_0)$에 비례한다. 시작 성분을 1000배 줄이면 정체가 $\ln 1000/\ln 1.1 \approx 72$ step 길어진다. 음의 곡률이 클수록($\lvert\lambda_{\min}\rvert$가 클수록) 빨리 벗어난다.'''
+
+[[questions]]
+id = "sharpness-reparametrization"
+type = "single"
+objective = 1
+prompt = '''ReLU 모델 $f(x) = w_2\,\mathrm{ReLU}(w_1 x)$에서 $(w_1, w_2)$를 $(\alpha w_1,\ w_2/\alpha)$($\alpha > 0$)로 바꿨다. 옳은 것은?'''
+explanation = '''$\mathrm{ReLU}(\alpha z) = \alpha\,\mathrm{ReLU}(z)$($\alpha > 0$)이므로 함수와 손실은 그대로다. 그러나 Hessian은 파라미터 좌표에 의존하므로 최대 고윳값이 바뀐다. 본문 셀 3에서 같은 함수의 sharpness가 0.70에서 70까지 달라졌다. 따라서 "날카로운 최솟점은 일반화가 나쁘다"는 주장을 Hessian 고윳값만으로 검증할 수 없다(Dinh 외, 2017). 비교하려면 매개화를 고정하거나 매개화에 덜 민감한 척도를 써야 한다.'''
+
+[[questions.choices]]
+text = "함수와 손실은 같지만 Hessian 최대 고윳값(sharpness)은 달라질 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "함수가 바뀌므로 손실도 바뀐다."
+feedback = "α > 0이면 ReLU(αz) = α ReLU(z)라서 w2/α와 곱하면 원래 함수가 된다."
+
+[[questions.choices]]
+text = "함수가 같으므로 Hessian 고윳값도 같다."
+feedback = "Hessian은 파라미터에 대한 2계 도함수라 좌표를 바꾸면 달라진다. 본문에서 같은 함수의 최대 고윳값이 100배 차이 났다."
+
+[[questions.choices]]
+text = "α가 커질수록 최솟점이 평평해지므로 일반화가 좋아진다."
+feedback = "함수가 같으므로 시험 데이터에서의 예측도 똑같다. sharpness 값은 바뀌어도 일반화는 바뀌지 않는다."
+
+[[questions]]
+id = "sam-objective"
+type = "single"
+objective = 1
+prompt = '''SAM(sharpness-aware minimization)이 최소화하려는 목적함수는?'''
+explanation = '''SAM은 $\min_\theta \max_{\lVert\boldsymbol{\epsilon}\rVert \le \rho} L(\theta + \boldsymbol{\epsilon})$, 즉 반경 $\rho$ 안의 최악 손실을 최소화한다. 날카로운 골은 조금만 벗어나도 손실이 크게 오르므로 이 목적함수에서 불리하다. 본문 셀 3에서 $\rho = 0.1$만으로 최소점이 깊고 날카로운 골($w = -1$)에서 얕고 평평한 골($w = 1.44$)로 옮겨 갔다. 실제 구현은 안쪽 최대화를 gradient 방향 한 step($\boldsymbol{\epsilon} = \rho\,\mathbf{g}/\lVert\mathbf{g}\rVert$)으로 근사한다.'''
+
+[[questions.choices]]
+text = '''반경 $\rho$ 안에서 파라미터를 흔들었을 때의 최악 손실 $\max_{\lVert\boldsymbol{\epsilon}\rVert \le \rho} L(\theta + \boldsymbol{\epsilon})$'''
+correct = true
+
+[[questions.choices]]
+text = '''원래 손실에 Hessian 최대 고윳값을 벌점으로 더한 값'''
+feedback = "SAM은 Hessian을 직접 계산하지 않는다. 최악 섭동의 손실을 쓰고, 그것이 결과적으로 sharpness에 민감할 뿐이다."
+
+[[questions.choices]]
+text = '''파라미터에 무작위 잡음을 더한 손실의 평균'''
+feedback = "무작위 잡음의 평균은 다른 목적함수다. SAM은 평균이 아니라 반경 안의 최악(최대)을 본다."
+
+[[questions.choices]]
+text = '''원래 손실에 $\rho\lVert\theta\rVert^2$을 더한 L2 정규화 손실'''
+feedback = "L2 정규화는 파라미터의 크기를 줄일 뿐, 주변 손실이 얼마나 가파른지와는 무관하다."
+
+[[questions]]
+id = "edge-of-stability-threshold"
+type = "numeric"
+objective = 1
+prompt = '''full-batch 경사하강을 학습률 $\eta = 0.01$로 돌린다. 이차 근사에 따르면, 학습이 안정하게 머물 수 있는 최솟점의 sharpness(Hessian 최대 고윳값)의 상한은 얼마인가?'''
+answer = 200
+tolerance = 0
+explanation = '''10.3장의 안정 조건 $\eta < 2/\lambda_{\max}$를 뒤집으면 $\lambda_{\max} < 2/\eta = 200$이다. 학습률이 정한 이 한계보다 날카로운 최솟점에서는 경사하강이 머물지 못하고 튕겨 나간다. 본문 셀 4에서 학습률을 키우면 도착점의 sharpness가 항상 $2/\eta$ 아래였고, 실습에서는 학습 중 sharpness가 오르다가 $2/\eta$ 근처에서 멈추는 edge of stability 현상이 보였다.'''
+
+[[questions]]
+id = "permutation-barrier"
+type = "single"
+objective = 2
+prompt = '''학습된 MLP의 은닉 뉴런 순서만 바꾼 파라미터 $\theta'$를 만들었다. $\theta$와 $\theta'$를 잇는 선분 위에서 손실을 재면?'''
+explanation = '''뉴런 순서를 바꾸면 같은 함수이므로 양 끝 손실은 정확히 같다. 그러나 선분의 중간점은 서로 다른 뉴런의 가중치를 평균한 것이라 다른 함수이고, 손실이 크게 오른다. 본문 셀 5에서 이 장벽은 1.73으로, 서로 다른 시드의 두 해 사이 장벽(3.40)과 같은 자릿수였다. 따라서 선형 경로의 장벽만으로 "두 해가 다른 종류의 해"라고 결론 내릴 수 없다. 대칭을 맞춘(정렬한) 뒤에 비교하거나, 곡선 경로를 찾아야 한다.'''
+
+[[questions.choices]]
+text = "양 끝 손실은 같지만 경로 중간에서 손실이 크게 오를 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "같은 함수이므로 경로 전체에서 손실이 일정하다."
+feedback = "양 끝은 같은 함수지만 중간점은 서로 다른 뉴런의 가중치를 섞은 다른 함수다."
+
+[[questions.choices]]
+text = "양 끝의 손실부터 다르다."
+feedback = "은닉 뉴런의 순서는 출력에 영향을 주지 않는다. 입력 쪽과 출력 쪽 가중치를 같은 순서로 바꾸면 함수가 똑같다."
+
+[[questions.choices]]
+text = "장벽이 있으므로 두 파라미터는 서로 다른 함수를 표현한다."
+feedback = "선형 경로의 장벽은 파라미터 공간의 기하를 말할 뿐, 양 끝 함수가 다르다는 증거가 아니다. 이 경우 두 함수는 정확히 같다."
+
+[[questions]]
+id = "slice-interpretation"
+type = "multiple"
+objective = 2
+prompt = '''파라미터가 $10^5$개인 신경망의 해 주변에서 무작위 두 방향으로 자른 2차원 손실 단면을 그렸다. 이 그림으로 말할 수 **있는** 것을 모두 고르시오.'''
+explanation = '''2차원 단면은 $10^5$차원 중 두 방향의 정보만 담는다. 단면 안에 중심보다 낮은 점이 보이면, 적어도 그 방향으로는 중심이 최솟점이 아니라는 확실한 반례가 된다. 방향 벡터의 길이를 어떻게 정하느냐(정규화 방식)에 따라 같은 해가 날카롭게도 평평하게도 보이므로 비교할 때는 정규화를 맞춰야 한다. 반면 단면이 볼록해 보여도 다른 방향에는 음의 곡률이 있을 수 있고(무작위 방향은 소수의 큰 고윳값 방향과 거의 직교한다), 단면에 다른 골이 없다는 것이 전역 최소의 증거도 아니다.'''
+
+[[questions.choices]]
+text = "단면 안에 중심보다 손실이 낮은 점이 있으면, 중심은 그 평면 안에서 최솟점이 아니다."
+correct = true
+
+[[questions.choices]]
+text = "방향 벡터의 크기를 바꾸면 같은 해가 더 날카롭거나 평평하게 보일 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "단면이 그릇 모양이면 해 근처의 손실 지형은 모든 방향으로 볼록하다."
+feedback = "무작위 두 방향은 Hessian의 큰 고윳값 방향이나 음의 곡률 방향을 거의 지나지 않는다. 나머지 수만 개 방향은 그림에 없다."
+
+[[questions.choices]]
+text = "단면에 다른 골이 보이지 않으면 이 해가 전역 최솟점이다."
+feedback = "다른 골은 그림에 없는 방향에 있을 수 있다. 2차원 단면은 전역 구조에 대해 거의 아무것도 보장하지 않는다."

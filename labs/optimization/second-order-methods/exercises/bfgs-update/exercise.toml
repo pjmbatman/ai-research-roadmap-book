@@ -1,0 +1,6 @@
+title = "BFGS 역Hessian 갱신 구현하기"
+chapter = "optimization/second-order-methods"
+objective = 1
+exec = "browser"
+entry = "bfgs_update"
+timeout_s = 10

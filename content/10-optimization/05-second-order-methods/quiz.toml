@@ -1,0 +1,141 @@
+# 10.5 2차 방법과 준뉴턴 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "newton-quadratic-one-step"
+type = "numeric"
+objective = 1
+prompt = '''Hessian의 고윳값이 $1$과 $10^6$인(조건수 $\kappa = 10^6$) 이차함수 $f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^\top\mathbf{H}\mathbf{x} - \mathbf{b}^\top\mathbf{x}$를 step 크기 1인 순수 Newton 방법으로 최소화한다. 반올림 오차를 무시하면, 임의의 시작점에서 최솟점에 정확히 도달하는 데 몇 step이 필요한가?'''
+answer = 1
+tolerance = 0
+slider = { min = 1, max = 10, step = 1, unit = "step" }
+explanation = '''Newton step은 2차 근사의 최솟점으로 간다. 이차함수는 2차 근사가 자기 자신이므로 $\mathbf{x}_1 = \mathbf{x}_0 - \mathbf{H}^{-1}(\mathbf{H}\mathbf{x}_0 - \mathbf{b}) = \mathbf{H}^{-1}\mathbf{b}$로 한 step에 끝난다. 조건수는 반복 수에 영향을 주지 않는다. 10.3장의 경사하강은 같은 문제에서 $\kappa$에 비례하는 반복이 필요했다. 조건수가 영향을 주는 곳은 $\mathbf{H}\mathbf{d} = -\mathbf{g}$를 푸는 선형대수의 반올림 오차다(본문 셀에서 $\kappa = 10^6$일 때 남은 gradient가 $10^{-10}$ 수준).'''
+
+[[questions]]
+id = "newton-quadratic-rate"
+type = "single"
+objective = 1
+prompt = '''Newton 방법의 오차가 최솟점 근처에서 $\lVert \mathbf{e}_{k+1} \rVert \approx \lVert \mathbf{e}_k \rVert^2$을 따른다고 하자. 어느 step의 오차가 $10^{-1}$, 다음 step의 오차가 $10^{-2}$였다면, 그다음 step의 오차는 대략 얼마인가?'''
+explanation = '''2차 수렴에서는 오차가 매 step 제곱된다. $10^{-2}$의 제곱은 $10^{-4}$이고, 그다음은 $10^{-8}$, $10^{-16}$이다. 맞는 자릿수가 매 step 두 배가 되므로, 최솟점 근처에 들어온 뒤에는 몇 step 만에 기계 정밀도에 닿는다. 본문 셀 1의 마지막 단계($9 \times 10^{-3} \to 10^{-3} \to 3 \times 10^{-6} \to 10^{-10}$)가 이 모습이다. 오차가 매번 같은 비율로 줄어드는 것은 1차 방법의 선형 수렴이다.'''
+
+[[questions.choices]]
+text = '''$10^{-3}$'''
+feedback = "매 step 같은 비율(10분의 1)로 줄어드는 것은 선형 수렴이다. 2차 수렴은 오차를 제곱한다."
+
+[[questions.choices]]
+text = '''$10^{-4}$'''
+correct = true
+
+[[questions.choices]]
+text = '''$5 \times 10^{-3}$'''
+feedback = "수렴이 느려진다고 볼 근거가 없다. 최솟점 근처의 Newton 방법은 가까워질수록 더 빨라진다."
+
+[[questions.choices]]
+text = '''$10^{-8}$'''
+feedback = "한 step을 더 간 값이다. 10^-2를 한 번 제곱하면 10^-4다."
+
+[[questions]]
+id = "newton-saddle"
+type = "single"
+objective = 1
+prompt = '''비볼록 함수에서 Hessian이 양의 정부호가 아닌 영역에서 시작해 step 크기 1인 순수 Newton 방법을 반복했다. 가장 정확한 설명은?'''
+explanation = '''Newton 방법은 $\nabla f = \mathbf{0}$의 근을 찾는 방법이라 2차 근사의 stationary point로 간다. Hessian이 음의 고윳값을 가지면 그 점은 2차 근사의 최솟점이 아니라 안장점(또는 최대점)이고, Newton 방향은 그 방향으로 **올라가는** 방향일 수 있다. 본문 셀 2에서 순수 Newton은 기울어진 이중 우물의 안장점 $x \approx 0.209$로 수렴했고, 같은 점에서 시작한 경사하강은 국소 최솟점으로 갔다. 실용적인 Newton 구현은 Hessian을 양의 정부호로 보정하거나 trust region을 써서 이를 막는다.'''
+
+[[questions.choices]]
+text = "Newton 방향은 항상 함수값을 줄이므로 결국 국소 최솟점에 도착한다."
+feedback = "Newton 방향이 내려가는 방향이려면 Hessian이 양의 정부호여야 한다. 음의 곡률 방향에서는 올라갈 수 있다."
+
+[[questions.choices]]
+text = "Newton 방법은 gradient가 0인 점을 찾으므로, 안장점이나 최대점으로 수렴할 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "Hessian이 정부호가 아니면 Newton 방향을 계산할 수 없으므로 즉시 멈춘다."
+feedback = "Hessian이 부정부호(indefinite)여도 가역이면 방향은 계산된다. 문제는 계산이 아니라 그 방향의 의미다."
+
+[[questions.choices]]
+text = "2차 수렴 덕분에 시작점과 무관하게 전역 최솟점으로 간다."
+feedback = "2차 수렴은 해 근처에서의 국소적 성질이다. 어느 stationary point로 갈지는 시작점이 정한다."
+
+[[questions]]
+id = "gauss-newton-approximation"
+type = "multiple"
+objective = 1
+prompt = '''비선형 최소제곱 $\frac{1}{2}\lVert \mathbf{r}(\theta) \rVert^2$의 Hessian을 Gauss–Newton 근사 $\mathbf{J}^\top\mathbf{J}$로 바꾸는 것에 대해 옳은 것을 모두 고르시오.'''
+explanation = '''정확한 Hessian은 $\mathbf{J}^\top\mathbf{J} + \sum_i r_i\nabla^2 r_i$이고, Gauss–Newton은 둘째 항을 버린다. 그래서 잔차의 2계 도함수가 필요 없고, $\mathbf{J}^\top\mathbf{J}$는 언제나 양의 준정부호다. 버린 항에는 $r_i$가 곱해져 있으므로 해에서 잔차가 작거나(모델이 데이터를 잘 설명) 모델이 파라미터에 거의 선형이면 근사가 정확하다. 반대로 시작점이 나쁘면 근사가 틀려 발산할 수 있고(본문 셀 3), 이를 보완한 것이 Levenberg–Marquardt다.'''
+
+[[questions.choices]]
+text = '''잔차의 2계 도함수 항 $\sum_i r_i\nabla^2 r_i$를 버린다.'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathbf{J}^\top\mathbf{J}$는 항상 양의 준정부호다.'''
+correct = true
+
+[[questions.choices]]
+text = "해에서 잔차가 작거나 모델이 파라미터에 거의 선형이면 정확한 Hessian에 가깝다."
+correct = true
+
+[[questions.choices]]
+text = "잔차의 2계 도함수를 계산해야 하므로 Newton 방법보다 비싸다."
+feedback = "반대다. Gauss–Newton은 1계 도함수(Jacobian)만 쓴다. 2계 도함수가 필요 없다는 것이 장점이다."
+
+[[questions.choices]]
+text = "근사 Hessian이 양의 준정부호이므로 어떤 시작점에서도 수렴한다."
+feedback = "방향이 내려가는 방향인 것과 step 크기가 적절한 것은 다르다. 본문 셀 3에서 Gauss–Newton은 나쁜 시작점에서 발산했다."
+
+[[questions]]
+id = "lm-damping"
+type = "single"
+objective = 2
+prompt = '''Levenberg–Marquardt에서 step이 손실을 줄이지 못해 감쇠 계수 $\lambda$를 10배 키웠다. 다음 step은 어떻게 바뀌는가?'''
+explanation = '''$(\mathbf{J}^\top\mathbf{J} + \lambda\mathbf{I})\boldsymbol{\delta} = -\mathbf{J}^\top\mathbf{r}$에서 $\lambda$가 커지면 $\lambda\mathbf{I}$가 지배해 $\boldsymbol{\delta} \approx -\mathbf{J}^\top\mathbf{r}/\lambda$, 즉 gradient 반대 방향의 짧은 step이 된다. 2차 근사를 덜 믿고 1차 정보에 기대는 셈이다. $\lambda \to 0$이면 Gauss–Newton step으로 돌아간다. 그래서 LM은 해에서 멀 때는 경사하강처럼 안전하게, 해 근처에서는 Gauss–Newton처럼 빠르게 움직인다.'''
+
+[[questions.choices]]
+text = "step이 짧아지고 방향이 gradient 반대 방향(경사하강)에 가까워진다."
+correct = true
+
+[[questions.choices]]
+text = "step이 길어져 손실 지형을 더 멀리 탐색한다."
+feedback = "λ는 분모 쪽에 더해지는 감쇠다. 키울수록 step은 짧아진다."
+
+[[questions.choices]]
+text = "방향은 Gauss–Newton과 같고 길이만 1/10이 된다."
+feedback = "λI를 더하면 방향도 바뀐다. 곡률이 작은 방향의 성분이 특히 많이 줄어 gradient 방향으로 돌아간다."
+
+[[questions.choices]]
+text = "Hessian 근사가 정확한 Hessian으로 바뀐다."
+feedback = "λ는 근사 Hessian에 대한 신뢰를 줄이는 장치일 뿐, 2계 도함수 항을 되살리지 않는다."
+
+[[questions]]
+id = "lbfgs-memory"
+type = "numeric"
+objective = 1
+prompt = '''파라미터가 $n = 10^6$개인 문제에 기억 크기 $m = 10$인 L-BFGS를 쓴다. 곡률 쌍 $(\mathbf{s}_i, \mathbf{y}_i)$를 저장하는 데 $n$차원 벡터가 몇 개 필요한가?'''
+answer = 20
+tolerance = 0
+slider = { min = 0, max = 40, step = 1, unit = "개" }
+explanation = '''L-BFGS는 최근 $m$개의 쌍 $(\mathbf{s}_i, \mathbf{y}_i)$만 저장하므로 $n$차원 벡터 $2m = 20$개, 실수 $2 \times 10^7$개다. 같은 문제에서 BFGS의 $n \times n$ 역Hessian 근사는 실수 $10^{12}$개(배정밀도로 약 8 TB)다. 두 방법은 같은 갱신 공식을 쓰지만, L-BFGS는 행렬을 만들지 않고 two-loop recursion으로 행렬–벡터 곱만 계산한다.'''
+
+[[questions]]
+id = "lbfgs-minibatch"
+type = "single"
+objective = 2
+prompt = '''신경망 학습 코드에서 optimizer만 L-BFGS로 바꾸고 mini-batch 학습 루프는 그대로 두었다. 손실이 일정 수준에서 더 내려가지 않았다. 가장 근본적인 원인은?'''
+explanation = '''L-BFGS는 결정론적 함수를 가정한다. line search는 함수값 비교로 step을 정하고, 곡률 쌍 $\mathbf{y} = \nabla f(\mathbf{x}_{k+1}) - \nabla f(\mathbf{x}_k)$는 같은 함수의 gradient 차이여야 곡률을 나타낸다. mini-batch에서는 매 step 함수가 바뀌므로 step마다 그 batch의 최솟점 근처로 크게 뛰고, 잡음을 평균하는 장치(감소하는 학습률)가 없다. 실습에서 batch 10의 L-BFGS는 300회와 3000회의 손실이 거의 같았고, 학습률을 줄인 Adam은 계속 내려갔다. 확률적 준뉴턴 방법은 batch를 크게 키우거나 곡률 추정을 따로 안정화하는 장치를 둔다.'''
+
+[[questions.choices]]
+text = "line search와 곡률 쌍이 batch마다 바뀌는 함수의 잡음을 그대로 믿어, 잡음을 평균하지 못한다."
+correct = true
+
+[[questions.choices]]
+text = "L-BFGS의 기억 크기 m이 너무 작아서다."
+feedback = "본문의 실험에서 기억 크기는 m = 3 이후 반복 수를 거의 바꾸지 않았다. 문제는 저장된 곡률 정보 자체가 잡음이라는 점이다."
+
+[[questions.choices]]
+text = "2차 방법은 비볼록 함수에서 쓸 수 없어서다."
+feedback = "L-BFGS는 비볼록 문제에서도 흔히 쓴다(실습의 진동자 모델도 비볼록이다). 같은 문제를 전체 batch로 풀면 잘 수렴했다."
+
+[[questions.choices]]
+text = "학습률을 지정하지 않아서다."
+feedback = "L-BFGS는 line search로 step 크기를 정하므로 고정 학습률이 없다. 그 line search가 잡음이 있는 함수값을 비교하는 것이 문제다."
