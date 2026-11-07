@@ -1,0 +1,6 @@
+title = "Euler–Maruyama로 OU 과정 시뮬레이션하기"
+chapter = "probability/stochastic-processes"
+objective = 3
+exec = "browser"
+entry = "simulate_ou"
+timeout_s = 15

@@ -1,0 +1,125 @@
+# 11.7 확률과정 기초 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "stationary-two-state"
+type = "numeric"
+objective = 1
+prompt = '''두 상태(0: 정상, 1: 고장) 장비의 하루 단위 전이행렬이 $\mathbf{P} = \begin{bmatrix} 0.9 & 0.1 \\ 0.3 & 0.7 \end{bmatrix}$이다(행 = 오늘, 열 = 내일). 오랜 시간이 지난 뒤 장비가 정상 상태에 있을 확률 $\pi_0$은?'''
+answer = 0.75
+tolerance = 0.005
+explanation = '''정상분포는 $\boldsymbol{\pi}\mathbf{P} = \boldsymbol{\pi}$를 만족한다. 두 상태에서는 들어오는 흐름과 나가는 흐름이 같아야 하므로 $\pi_0 \times 0.1 = \pi_1 \times 0.3$이고, $\pi_0 + \pi_1 = 1$과 함께 풀면 $\pi_0 = 0.3/(0.1 + 0.3) = 0.75$다. 대각 성분 0.9를 답으로 고르거나, 열 방향으로 읽어 $0.1/(0.1+0.3) = 0.25$를 고르는 실수가 흔하다.'''
+
+[[questions]]
+id = "metropolis-normalizer"
+type = "single"
+objective = 1
+prompt = '''Metropolis 알고리즘이 정규화 상수 $Z$를 모르는 분포 $p(x) = \tilde{p}(x)/Z$에서도 표집할 수 있는 이유는?'''
+explanation = '''대칭 제안분포에서 수용 확률은 $\min\big(1, p(x')/p(x)\big) = \min\big(1, \tilde{p}(x')/\tilde{p}(x)\big)$로, 밀도의 **비**만 쓴다. $Z$는 분자와 분모에서 약분된다. 이 수용 규칙이 detailed balance를 만족하므로 체인의 정상분포가 $p$가 된다. 다만 표본은 서로 상관되어 있고, 체인이 정상분포에 도달했는지는 따로 확인해야 한다.'''
+
+[[questions.choices]]
+text = "수용 확률이 밀도의 비 p(x')/p(x)에만 의존해서 Z가 약분되기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "체인을 충분히 오래 돌리면 Z를 자동으로 추정하기 때문이다."
+feedback = "Metropolis는 Z를 추정하지 않는다. Z가 필요 없도록 설계된 것이다. Z 자체(예: 모델 증거)를 구하는 것은 별도의 어려운 문제다."
+
+[[questions.choices]]
+text = "제안을 모두 받아들이므로 정규화가 필요 없다."
+feedback = "제안을 모두 받아들이면 제안분포의 random walk가 될 뿐 목표 분포로 가지 않는다. 비에 따라 기각하는 단계가 핵심이다."
+
+[[questions.choices]]
+text = "표본들이 서로 독립이라 대수의 법칙이 바로 적용되기 때문이다."
+feedback = "Markov chain의 표본은 서로 상관되어 있다. 독립성은 Z가 필요 없는 이유와도 무관하다."
+
+[[questions]]
+id = "periodic-chain"
+type = "single"
+objective = 1
+prompt = '''두 상태를 매 step 번갈아 오가는 체인 $\mathbf{P} = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$에 대해 옳은 것은?'''
+explanation = '''$\boldsymbol{\pi} = (0.5, 0.5)$는 $\boldsymbol{\pi}\mathbf{P} = \boldsymbol{\pi}$를 만족하는 정상분포다. 그러나 상태 0에서 출발하면 분포가 $(1, 0), (0, 1), (1, 0), \dots$로 진동하며 수렴하지 않는다. 체인이 주기적(periodic)이기 때문이다. 정상분포가 존재하는 것과 임의의 출발점에서 그 분포로 수렴하는 것(혼합)은 다른 문제다. 시간 평균은 여전히 0.5로 간다.'''
+
+[[questions.choices]]
+text = "정상분포 (0.5, 0.5)가 있지만, 한 상태에서 출발한 분포는 그곳으로 수렴하지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "정상분포가 존재하지 않는다."
+feedback = "(0.5, 0.5)를 곱해 보면 그대로 (0.5, 0.5)다. 존재한다."
+
+[[questions.choices]]
+text = "정상분포가 있으므로 어디서 출발하든 결국 그 분포로 수렴한다."
+feedback = "수렴하려면 주기가 없어야(aperiodic) 한다. 이 체인은 분포가 두 값 사이를 영원히 오간다."
+
+[[questions.choices]]
+text = "고윳값이 모두 크기 1 미만이므로 빠르게 혼합한다."
+feedback = "이 행렬의 고윳값은 1과 -1이다. 크기가 1인 두 번째 고윳값 때문에 진동이 줄지 않는다."
+
+[[questions]]
+id = "brownian-variance"
+type = "numeric"
+objective = 2
+prompt = '''표준 Brownian motion $B(t)$에서 증분 $B(4) - B(1)$의 분산은?'''
+answer = 3
+tolerance = 0
+explanation = '''Brownian motion의 증분 $B(t) - B(s)$는 $\mathcal{N}(0, t - s)$를 따르므로 분산은 $4 - 1 = 3$이다. 분산은 시간 간격에 비례하고, 표준편차는 그 제곱근 $\sqrt{3}$에 비례한다. $\operatorname{Var}B(4) - \operatorname{Var}B(1)$로 계산해도 같은 답이 나오는 것은 증분이 $B(1)$과 독립이기 때문이다. 표준편차 차이 $2 - 1 = 1$로 계산하는 실수가 흔하다.'''
+
+[[questions]]
+id = "ou-stationary-variance"
+type = "numeric"
+objective = 3
+prompt = '''Ornstein–Uhlenbeck 과정 $dX = -\theta X\,dt + \sigma\,dW$에서 $\theta = 2$, $\sigma = 1$이다. 정상분포의 분산은?'''
+answer = 0.25
+tolerance = 0.005
+explanation = '''정상 분산은 $\sigma^2/(2\theta) = 1/4 = 0.25$다. 되돌림이 강할수록($\theta$가 클수록) 작고, 잡음이 클수록 크다. $\sigma/\theta = 0.5$나 $\sigma^2/\theta = 0.5$로 답하면 2를 빠뜨린 것이다. 2는 $d\operatorname{Var} = -2\theta\operatorname{Var}\,dt + \sigma^2\,dt$에서 나온다.'''
+
+[[questions]]
+id = "em-noise-scaling"
+type = "single"
+objective = 3
+prompt = '''Euler–Maruyama로 $dX = a(X)\,dt + b(X)\,dW$를 시간 간격 $\Delta t$로 이산화할 때 잡음 항으로 옳은 것은? ($\xi \sim \mathcal{N}(0, 1)$)'''
+explanation = '''Brownian 증분 $\Delta W$의 분산은 $\Delta t$이므로 표준편차는 $\sqrt{\Delta t}$다. 따라서 잡음 항은 $b(X)\sqrt{\Delta t}\,\xi$다. $\Delta t$를 곱하면 $\Delta t \to 0$에서 잡음이 사라져 상미분방정식이 되고, 잡음을 곱하지 않으면 간격을 줄일수록 잡음이 누적되어 폭발한다.'''
+
+[[questions.choices]]
+text = '''$b(X)\sqrt{\Delta t}\,\xi$'''
+correct = true
+
+[[questions.choices]]
+text = '''$b(X)\,\Delta t\,\xi$'''
+feedback = "이렇게 하면 시간 T까지 쌓인 잡음의 분산이 T·Δt가 되어 Δt → 0에서 0으로 사라진다. 확률과정이 상미분방정식으로 바뀐다."
+
+[[questions.choices]]
+text = '''$b(X)\,\xi$'''
+feedback = "간격과 무관하게 매 step 같은 크기의 잡음을 더하면, Δt를 줄일수록 같은 시간 동안 step이 많아져 잡음이 무한히 커진다."
+
+[[questions.choices]]
+text = '''$b(X)\,\xi/\sqrt{\Delta t}$'''
+feedback = "이것은 dW/dt, 즉 백색잡음의 크기를 흉내 낸 것이다. Euler–Maruyama는 미분이 아니라 증분 ΔW를 더한다."
+
+[[questions]]
+id = "random-walk-nonstationary"
+type = "multiple"
+objective = 3
+prompt = '''AR(1) 과정 $y_t = \phi\,y_{t-1} + \varepsilon_t$, $\varepsilon_t \sim \mathcal{N}(0, 1)$ 독립에 대해 옳은 것을 **모두** 고르시오.'''
+explanation = '''$\lvert\phi\rvert < 1$이면 정상 분산은 $1/(1 - \phi^2)$이고 자기상관은 $\phi^k$로 감소한다. $\phi = 0.5$이면 $1/0.75 \approx 1.33$이다. $\phi = 1$은 random walk로, $\operatorname{Var}(y_t) = t$가 시간에 따라 커지므로 정상이 아니다. 이런 두 시계열은 서로 독립이어도 표본 상관이 크게 나올 수 있다. OU 과정을 간격 $\Delta t$로 관측하면 $\phi = e^{-\theta\Delta t}$인 AR(1)이 된다.'''
+
+[[questions.choices]]
+text = "φ = 0.5이면 정상 분산은 약 1.33이다."
+correct = true
+
+[[questions.choices]]
+text = "φ = 1이면 분산이 시간에 비례해 커지므로 정상 과정이 아니다."
+correct = true
+
+[[questions.choices]]
+text = "OU 과정을 일정한 간격으로 관측하면 |φ| < 1인 AR(1) 과정이 된다."
+correct = true
+
+[[questions.choices]]
+text = "φ = 1인 두 시계열이 서로 독립이면 표본 상관은 0 근처로 나온다."
+feedback = "random walk 두 개는 독립이어도 둘 다 한 방향으로 흘러가는 구간이 길어 큰 상관이 자주 나온다. 실험에서 길이 500인 독립 random walk 쌍의 약 40%가 |상관| > 0.5였다."
+
+[[questions.choices]]
+text = "φ = 0.99이면 거의 random walk이므로 정상분포가 없다."
+feedback = "|φ| < 1이면 φ가 1에 가까워도 정상분포 N(0, 1/(1 - φ²))가 있다. 다만 상관시간이 길어 그 분포에 도달하고 고르게 표집하는 데 오래 걸린다."

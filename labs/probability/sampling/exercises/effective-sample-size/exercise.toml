@@ -1,0 +1,6 @@
+title = "자기 정규화 importance sampling과 유효 표본 크기"
+chapter = "probability/sampling"
+objective = 1
+exec = "browser"
+entry = "self_normalized_is"
+timeout_s = 10
