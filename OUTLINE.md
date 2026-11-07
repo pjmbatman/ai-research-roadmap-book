@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1196문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1213문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -876,13 +876,13 @@ _ML 연구자를 위한 배터리 기초, 배터리 모델 계층, 데이터셋�
 
 _여러 트랙을 가로지르는 단계별 종합 프로젝트, 오픈소스·데이터·벤치마크로 과학 커뮤니티에 기여하는 법, 역량 평가와 다음 단계를 다룬다._
 
-- **31.1** [단계별 종합 프로젝트](content/31-capstone/01-capstone-projects/index.md) · `필수`
-  - A. 회귀·분류 baseline · B. NumPy 기반 작은 신경망 · C. PyTorch 연구 템플릿 · D. 과학 데이터 예측 · E. 확률적 예측 모델 · F. 논문 재현 · G. 물리·데이터·하이브리드 비교 · H. 독립 연구
+- **31.1** [단계별 종합 프로젝트](content/31-capstone/01-capstone-projects/index.md) · `필수` · 퀴즈 5
+  - 프로젝트의 공통 골격 · A. 회귀·분류 baseline · B. NumPy 기반 작은 신경망 · C. PyTorch 연구 템플릿 · D. 과학 데이터 예측 · E. 확률적 예측 모델 · F. 논문 재현 · G. 물리·데이터·하이브리드 비교 · H. 독립 연구 · 참고 문헌
   - 선수: 0.3 학습 경로
-- **31.2** [오픈소스·데이터·벤치마크로 기여하기](content/31-capstone/02-open-science-contribution/index.md) · `필수`
-  - 오픈소스 기여 · 데이터셋 공개 · 벤치마크 설계 · 재현 패키지 · 이 로드맵에 기여하기
+- **31.2** [오픈소스·데이터·벤치마크로 기여하기](content/31-capstone/02-open-science-contribution/index.md) · `필수` · 퀴즈 6
+  - 오픈소스 기여 · 데이터셋 공개 · 벤치마크 설계 · 재현 패키지 · 이 로드맵에 기여하기 · 참고 문헌
   - 선수: 23.12 연구 윤리와 오픈 사이언스, 6.7 연구 코드 문서화
-- **31.3** [역량 평가와 다음 단계](content/31-capstone/03-competency-assessment/index.md) · `필수`
+- **31.3** [역량 평가와 다음 단계](content/31-capstone/03-competency-assessment/index.md) · `필수` · 퀴즈 6
   - 평가 질문 · 과학 연구자로서의 질문 · 성장 계획 · 최종 산출물
   - 선수: 31.1 단계별 종합 프로젝트
 
