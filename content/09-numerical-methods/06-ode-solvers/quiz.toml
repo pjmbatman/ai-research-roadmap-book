@@ -1,0 +1,122 @@
+# 9.6 ODE 수치해법 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+# 계산으로 확인할 수 있는 정답은 labs/numerical-methods/ode-solvers/test_quiz.py가 검증한다.
+
+[[questions]]
+id = "euler-halving"
+type = "numeric"
+objective = 1
+prompt = '''explicit Euler 방법의 국소 오차(한 step의 오차)는 $O(h^2)$이다. 고정된 구간 $[0, T]$를 풀 때 $h$를 절반으로 줄이면, 끝 시각의 **전역** 오차는 대략 몇 분의 1로 줄어드는가?'''
+answer = 2
+tolerance = 0.3
+slider = { min = 1, max = 16, step = 0.1, unit = "분의 1" }
+explanation = '''$h$를 절반으로 하면 step 수가 두 배가 된다. 국소 오차 $O(h^2)$가 $T/h$번 쌓이므로 전역 오차는 $O(h)$이고, $h$를 절반으로 하면 약 2분의 1로 준다. 본문 계산에서 Euler 오차는 $h = 0.1 \to 0.05 \to 0.025$일 때 $0.646 \to 0.284 \to 0.133$이었다. "차수 $p$인 방법"은 전역 오차가 $O(h^p)$라는 뜻이고, 국소 오차는 $O(h^{p+1})$이다. RK4는 전역 4차라 16분의 1로 준다.'''
+
+[[questions]]
+id = "implicit-step-cost"
+type = "single"
+objective = 1
+prompt = '''implicit Euler 방법 $\mathbf{y}_{n+1} = \mathbf{y}_n + h f(t_{n+1}, \mathbf{y}_{n+1})$의 한 step에 대한 설명으로 옳은 것은?'''
+explanation = '''미지수 $\mathbf{y}_{n+1}$이 양변에 있으므로, $f$가 비선형이면 매 step마다 비선형 방정식 $\mathbf{y}_{n+1} - h f(t_{n+1}, \mathbf{y}_{n+1}) - \mathbf{y}_n = \mathbf{0}$을 풀어야 한다. 보통 Newton 방법을 쓰고, 그 안에서 Jacobian $\partial f/\partial \mathbf{y}$로 만든 행렬 $\mathbf{I} - h\mathbf{J}$의 선형 시스템을 푼다. 그래서 한 step은 explicit 방법보다 비싸지만, stiff 문제에서는 훨씬 큰 step을 쓸 수 있어 전체 비용이 작다. 본문의 Robertson 문제에서 BDF는 Jacobian을 3–5번 계산하고 step 수는 RK45의 30분의 1 이하였다.'''
+
+[[questions.choices]]
+text = "f를 한 번 계산하면 바로 다음 상태가 나오므로 explicit Euler와 비용이 같다."
+feedback = "미지수 y_{n+1}이 f 안에 들어 있어 식을 풀어야 한다. f를 한 번 계산하는 것으로는 다음 상태가 나오지 않는다."
+
+[[questions.choices]]
+text = "매 step마다 방정식을 풀어야 하고, f가 비선형이면 Jacobian을 쓰는 Newton 반복이 필요하다."
+correct = true
+
+[[questions.choices]]
+text = "implicit 방법은 미래의 값을 쓰므로 인과율을 어기며, 물리 시뮬레이션에는 쓸 수 없다."
+feedback = "y_{n+1}을 쓰는 것은 '미래를 아는' 것이 아니라 그 값을 방정식의 해로 정의하는 것이다. stiff한 화학·회로·전지 모델은 대부분 implicit 방법으로 푼다."
+
+[[questions]]
+id = "euler-stability-limit"
+type = "numeric"
+objective = 2
+prompt = '''$y' = -50y$를 explicit Euler로 풀 때, 수치해가 발산하지 않는 가장 큰 step 크기 $h$는 얼마인가?'''
+answer = 0.04
+tolerance = 0.001
+slider = { min = 0.0, max = 0.1, step = 0.005 }
+explanation = '''explicit Euler는 $y_{n+1} = (1 + h\lambda)y_n$이므로 $|1 + h\lambda| \le 1$이어야 한다. $\lambda = -50$이면 $-2 \le -50h \le 0$, 즉 $h \le 2/50 = 0.04$다. 이 제한은 정확도가 아니라 안정성에서 온다. 해 $e^{-50t}$가 이미 0에 가까워진 뒤에도 $h > 0.04$이면 반올림 오차가 매 step $|1+h\lambda| > 1$배로 커진다.'''
+
+[[questions]]
+id = "stiffness-signs"
+type = "multiple"
+objective = 2
+prompt = '''다음 중 ODE 문제가 **stiff**하다는 신호를 모두 고르시오.'''
+explanation = '''stiffness는 해가 매끄러운데도 explicit 방법의 step 크기가 정확도가 아니라 안정성 때문에 작게 묶이는 현상이다. Jacobian 고유값의 실수부가 크게 다른 시간 척도(예: $-10^4$와 $-10^{-2}$)를 가지면 전형적으로 나타나고, explicit solver가 해가 거의 변하지 않는 구간에서도 아주 작은 step을 쓰거나 실패하며, implicit solver가 훨씬 적은 step으로 끝난다. 해가 빠르게 진동하는 것은 stiffness가 아니다. 그때는 모든 방법이 진동을 따라가기 위해 작은 step을 써야 한다.'''
+
+[[questions.choices]]
+text = "해가 거의 변하지 않는 구간에서도 explicit solver가 아주 작은 step을 쓴다."
+correct = true
+
+[[questions.choices]]
+text = "Jacobian 고유값의 크기가 여러 자릿수에 걸쳐 있다(빠른 감쇠 모드와 느린 모드가 공존)."
+correct = true
+
+[[questions.choices]]
+text = "implicit solver(BDF·Radau)가 explicit solver보다 훨씬 적은 step으로 같은 정확도에 도달한다."
+correct = true
+
+[[questions.choices]]
+text = "해가 빠르게 진동해서 모든 solver가 작은 step을 쓴다."
+feedback = "빠른 진동을 따라가려면 어떤 방법이든 작은 step이 필요하다. 이것은 정확도의 제한이지 stiffness가 아니다. stiffness의 핵심은 해는 느린데 step이 안정성 때문에 작게 묶이는 것이다."
+
+[[questions]]
+id = "implicit-large-step-accuracy"
+type = "single"
+objective = 2
+prompt = '''implicit Euler는 $y' = \lambda y$($\lambda < 0$)에서 어떤 $h$로도 발산하지 않는다. 이 사실에서 옳게 이끌어 낼 수 있는 것은?'''
+explanation = '''안정성은 "오차가 폭발하지 않는다"는 보장일 뿐, "정확하다"는 보장이 아니다. implicit Euler는 1차 방법이라 오차가 $O(h)$이고, 빠른 과도 구간(시간 척도 $1/|\lambda|$)을 그보다 큰 $h$로 건너뛰면 과도 현상의 모양은 틀린다. 큰 $h$는 과도 구간이 끝난 뒤 느린 성분만 남았을 때 쓸 수 있다. 적응적 solver는 과도 구간에서 작은 step, 그 뒤에서 큰 step을 자동으로 고른다.'''
+
+[[questions.choices]]
+text = "안정하므로 h를 아무리 크게 해도 정확한 답을 얻는다."
+feedback = "안정은 정확과 다르다. h = 1로 y' = -50y를 풀면 y_1 = y_0 / 51로 발산하지는 않지만, 정확해 e^{-50}y_0과는 전혀 다르다."
+
+[[questions.choices]]
+text = "발산은 막지만, 빠른 과도 구간을 정확히 따라가려면 여전히 그 시간 척도에 맞는 작은 h가 필요하다."
+correct = true
+
+[[questions.choices]]
+text = "implicit 방법은 안정하므로 tolerance를 따로 정할 필요가 없다."
+feedback = "tolerance는 정확도를 정하는 설정이다. 안정성과 무관하게, 원하는 정확도에 맞게 정하고 바꾸어 수렴을 확인해야 한다."
+
+[[questions]]
+id = "default-tolerance"
+type = "single"
+objective = 3
+prompt = '''`scipy.integrate.solve_ivp`를 tolerance 설정 없이 호출했다(기본값 `rtol=1e-3`, `atol=1e-6`). 결과의 정확도에 대해 옳은 것은?'''
+explanation = '''tolerance는 매 step의 **국소** 오차 추정을 제한한다. 전역 오차는 국소 오차가 쌓이고 전파된 결과라 그보다 클 수 있다. 본문에서 조화 진동자를 $t = 100$까지 기본값으로 풀면 $x(100)$의 오차가 $1.4 \times 10^{-2}$였다. 결과를 믿으려면 tolerance를 10배씩 줄여 가며 관심 있는 값이 더 이상 변하지 않는지 확인한다.'''
+
+[[questions.choices]]
+text = "rtol = 1e-3이므로 최종 결과의 상대 오차는 0.1% 이하로 보장된다."
+feedback = "tolerance는 step마다의 국소 오차를 제어한다. 긴 구간에서는 오차가 쌓여 전역 오차가 rtol보다 훨씬 클 수 있다."
+
+[[questions.choices]]
+text = "step마다 대략 세 자리 정도의 국소 정확도를 목표로 할 뿐이고, 전역 오차는 tolerance를 바꾸어 직접 확인해야 한다."
+correct = true
+
+[[questions.choices]]
+text = "기본값은 SciPy 개발자가 대부분의 과학 문제에 맞게 고른 것이므로 따로 확인할 필요가 없다."
+feedback = "기본값은 빠른 탐색용 절충이다. 출판할 결과나 학습 데이터 생성에는 tolerance 수렴 확인이 필요하다."
+
+[[questions]]
+id = "atol-small-quantity"
+type = "single"
+objective = 3
+prompt = '''농도가 $10^{-9}$ mol/L 수준인 미량 화학종을 포함한 반응계를 `solve_ivp`의 기본 `atol=1e-6`으로 풀었다. 이 화학종의 계산값에 대해 옳은 것은?'''
+explanation = '''각 성분의 허용 오차는 대략 $\text{atol} + \text{rtol}\cdot|y_i|$다. $|y_i| = 10^{-9}$이면 이 값은 거의 atol $= 10^{-6}$이고, 이는 성분 크기의 1000배다. 즉 solver는 이 성분의 오차를 사실상 제어하지 않는다. 본문 계산에서 $y' = -y$를 $t = 30$까지 기본 atol로 풀면 $y(30) \approx 9.4\times10^{-14}$ 대신 $3\times10^{-7}$이 나왔다. 작은 성분에는 그 크기보다 충분히 작은 atol을 성분별로 준다(`atol`에 배열을 넘길 수 있다).'''
+
+[[questions.choices]]
+text = "rtol = 1e-3이 적용되므로 상대 오차 0.1% 수준으로 계산된다."
+feedback = "허용 오차는 atol + rtol·|y|이다. |y| = 1e-9이면 rtol 항은 1e-12로 무시되고 atol = 1e-6이 지배한다."
+
+[[questions.choices]]
+text = "허용 오차(약 1e-6)가 값 자체보다 1000배 커서, 이 성분은 사실상 오차 제어를 받지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "값이 작을수록 solver가 자동으로 더 정밀하게 계산한다."
+feedback = "solver는 값의 크기에 맞춰 atol을 바꾸지 않는다. 작은 성분의 정확도는 사용자가 atol로 정해야 한다."
