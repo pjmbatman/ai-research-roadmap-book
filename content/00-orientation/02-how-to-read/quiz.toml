@@ -1,0 +1,122 @@
+# 0.2 이 책을 읽는 법 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "layer-rule"
+type = "single"
+objective = 2
+prompt = "선수 지식은 같은 레이어이거나 더 낮은 레이어의 트랙에만 걸 수 있다. 다음 중 이 규칙을 **어기는** 연결은?"
+explanation = "수리 기초(MTH)는 L1, 머신러닝 핵심(MLC)은 L2다. L1 장이 L2 장에 기대면 의존이 위쪽 레이어를 향하므로 규칙 위반이다. 나머지는 모두 같은 레이어이거나 아래 레이어를 향한다: SML(L4)→MLA(L3), DOM(L5)→SML(L4), RES(L4)→ORI(L0), RSE(L1)→INF(L1)."
+
+[[questions.choices]]
+text = "과학 머신러닝(SML)의 장이 머신러닝 심화(MLA)의 장을 선수 지식으로 가진다."
+feedback = "SML은 L4, MLA는 L3이다. 아래 레이어에 기대므로 허용된다."
+
+[[questions.choices]]
+text = "과학 분야별 응용(DOM)의 장이 과학 머신러닝(SML)의 장을 선수 지식으로 가진다."
+feedback = "DOM은 L5, SML은 L4다. 아래 레이어에 기대므로 허용된다."
+
+[[questions.choices]]
+text = "수리 기초(MTH)의 장이 머신러닝 핵심(MLC)의 장을 선수 지식으로 가진다."
+correct = true
+
+[[questions.choices]]
+text = "연구 소프트웨어 공학(RSE)의 장이 연구 인프라(INF)의 장을 선수 지식으로 가진다."
+feedback = "둘 다 L1이다. 같은 레이어 안의 의존은 트랙 단위로 순환만 없으면 허용된다."
+
+[[questions]]
+id = "failure-section-role"
+type = "single"
+objective = 1
+prompt = "모든 장에 '실패 사례' 절을 고정으로 두는 가장 중요한 이유는?"
+explanation = "연구에서 비싼 실패는 오류 메시지 없이 그럴듯한 숫자를 내는 실패다. 데이터 누수, 빠뜨린 활성화, 단일 seed의 결론은 코드가 정상적으로 끝난다. 이런 실패는 미리 알고 있어야만 찾을 수 있으므로 본문과 같은 비중으로 다룬다."
+
+[[questions.choices]]
+text = "오류 메시지 없이 그럴듯한 결과를 내는 실패는 미리 알고 있어야만 찾을 수 있기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "흔한 오류 메시지와 그 해결 방법을 모아 두기 위해서다."
+feedback = "오류 메시지가 있는 실패는 검색으로도 해결된다. 실패 사례 절이 겨냥하는 것은 오류 없이 틀린 결과를 내는 실패다."
+
+[[questions.choices]]
+text = "본문의 분량을 늘려 장의 형식을 맞추기 위해서다."
+feedback = "실패 사례는 형식을 채우는 절이 아니다. 연구에서 시간을 가장 많이 잃는 곳을 다룬다."
+
+[[questions]]
+id = "shape-reading"
+type = "numeric"
+objective = 1
+prompt = '''본문의 shape 주석 규칙으로 읽는다. `X`의 shape이 `(N, D) = (32, 3)`이고 `W`의 shape이 `(D, H) = (3, 16)`일 때, `Z = X @ W`의 원소는 모두 몇 개인가?'''
+answer = 512
+tolerance = 0
+explanation = '''행렬 곱은 `X`의 마지막 축(D = 3)과 `W`의 첫 축(D = 3)을 맞춰 없애고, 나머지 축을 이어 `(N, H) = (32, 16)`을 만든다. 원소 수는 $32 \times 16 = 512$다. $32 \times 3 \times 16 = 1536$은 곱셈 연산 수이고, $3 \times 16 = 48$은 `W`의 원소 수다.'''
+
+[[questions]]
+id = "chapter-complete-evidence"
+type = "multiple"
+objective = 3
+prompt = "필수 등급의 코드 실습 장을 '통과했다'고 판단하는 근거로 적절한 것을 모두 고르시오."
+explanation = "통과는 읽은 분량이 아니라 확인된 산출물로 판단한다. 개념 퀴즈, 연습문제의 공개 테스트, 통과 기준에 적힌 산출물이 그 근거다. 수업 시트를 끝까지 넘긴 것과 코드 셀의 기록된 출력을 읽은 것은 읽기의 기록일 뿐 할 수 있다는 근거가 아니다."
+
+[[questions.choices]]
+text = "개념 퀴즈를 모두 맞혔다."
+correct = true
+
+[[questions.choices]]
+text = "연습문제의 공개 테스트를 모두 통과했다."
+correct = true
+
+[[questions.choices]]
+text = "통과 기준에 적힌 산출물을 만들고, 적힌 방법으로 검증했다."
+correct = true
+
+[[questions.choices]]
+text = "모든 절의 수업 시트를 끝까지 넘겨 읽었다."
+feedback = "읽기를 마친 것은 학습 중이라는 기록이지 통과의 근거가 아니다."
+
+[[questions.choices]]
+text = "코드 셀 아래의 기록된 출력을 확인했다."
+feedback = "기록된 출력은 집필 시점의 결과다. 직접 실행하고 고쳐 본 것도, 산출물을 만든 것도 아니다."
+
+[[questions]]
+id = "tier-meaning"
+type = "single"
+objective = 2
+prompt = "MCMC(13.5장)는 심화(advanced) 등급이다. 이 표시를 가장 바르게 읽은 것은?"
+explanation = "등급은 내용이 얼마나 어려운지가 아니라 모든 독자가 얼마나 깊이 알아야 하는지를 뜻한다. 심화는 연구 주제에 따라 깊이 들어갈 내용이다. 베이지안 추론을 연구에 직접 쓰는 사람에게는 MCMC가 필수만큼 중요하고, 그렇지 않은 사람은 개념만 알아도 된다."
+
+[[questions.choices]]
+text = "연구 주제에 따라 깊이 들어갈 내용이다. 자기 연구에 필요하면 통과 기준을 직접 만족시키고, 아니면 개념만 알아 둔다."
+correct = true
+
+[[questions.choices]]
+text = "필수 장을 모두 마친 뒤에만 읽을 수 있는 장이다."
+feedback = "등급은 순서가 아니다. 심화 장도 선수 지식만 갖추면 언제든 읽을 수 있다."
+
+[[questions.choices]]
+text = "필수 장보다 수학적으로 어려운 장이라는 뜻이다."
+feedback = "등급은 난도의 서열이 아니라 필요한 깊이의 구분이다. 필수 장 중에도 수학적으로 어려운 장이 있다."
+
+[[questions.choices]]
+text = "필요할 때 문서를 찾아 적용할 수 있으면 되는 장이다."
+feedback = "그것은 참조(reference) 등급의 뜻이다."
+
+[[questions]]
+id = "no-code-pass"
+type = "single"
+objective = 3
+prompt = "연구 방법론의 '연구 질문과 가설'(23.4장)처럼 코드 실습이 없는 장의 통과는 주로 무엇으로 확인하는가?"
+explanation = "코드 실습이 없는 장은 개념 퀴즈와 문서 산출물로 통과를 확인한다. 문서 산출물은 템플릿을 채우고 루브릭으로 자기 점검한 뒤, 가능하면 동료나 지도교수의 리뷰를 받는다. 연구 질문이 반증 가능한지 같은 판단은 자동 채점으로 확인할 수 없기 때문이다."
+
+[[questions.choices]]
+text = "개념 퀴즈와 문서 산출물(템플릿 + 루브릭 자기 점검, 가능하면 사람의 리뷰)"
+correct = true
+
+[[questions.choices]]
+text = "코드가 없으므로 본문을 읽으면 통과한다."
+feedback = "코드가 없는 장도 산출물로 끝난다. 이 장의 산출물은 문서다."
+
+[[questions.choices]]
+text = "통과 기준이 없으므로 다음 장으로 바로 넘어간다."
+feedback = "모든 장(부록 제외)에는 통과 기준이 있다. 수단이 코드 대신 퀴즈와 문서일 뿐이다."
