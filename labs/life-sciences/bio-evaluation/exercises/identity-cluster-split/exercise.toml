@@ -1,0 +1,6 @@
+title = "서열 동일성 단일 연결 군집"
+chapter = "life-sciences/bio-evaluation"
+objective = 1
+exec = "browser"
+entry = "identity_clusters"
+timeout_s = 10
