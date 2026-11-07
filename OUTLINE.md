@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 697문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 722문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -533,17 +533,17 @@ _귀납적 편향의 관점에서 MLP·CNN·순환·상태공간 모델·Transfo
 - **18.4** [Attention과 Transformer](content/18-architectures/04-transformers/index.md) · `필수` · 위젯: Attention 계산
   - attention · multi-head와 cross-attention · 위치 정보 · mask · Transformer 블록 · 효율 · 해석의 한계
   - 선수: 18.1 귀납적 편향과 아키텍처 선택, 7.7 텐서와 einsum
-- **18.5** [언어모델과 LLM의 기초](content/18-architectures/05-language-models/index.md) · `심화`
-  - 토큰화 · 자기회귀 언어모델 · 사전학습과 후속 학습 · 사용 방식 · 평가 · 과학 연구에서의 LLM
+- **18.5** [언어모델과 LLM의 기초](content/18-architectures/05-language-models/index.md) · `심화` · 퀴즈 7
+  - 토큰화 · 자기회귀 언어모델 · 사전학습과 후속 학습 · 사용 방식 · 평가 · 과학 연구에서의 LLM · 참고 문헌
   - 선수: 18.4 Attention과 Transformer
-- **18.6** [그래프 신경망과 기하학적 딥러닝](content/18-architectures/06-graph-networks/index.md) · `심화`
-  - 그래프 표현 · message passing · 대칭성 · 시공간 그래프 · 그래프 구성 · 한계
+- **18.6** [그래프 신경망과 기하학적 딥러닝](content/18-architectures/06-graph-networks/index.md) · `심화` · 퀴즈 6
+  - 그래프 표현 · message passing · 대칭성 · 시공간 그래프 · 그래프 구성 · 한계 · 참고 문헌
   - 선수: 18.1 귀납적 편향과 아키텍처 선택
-- **18.7** [시계열 딥러닝](content/18-architectures/07-time-series-deep-learning/index.md) · `필수`
-  - 모델 계열 · 입력 설계 · 불규칙·다변량 시계열 · 시계열 Foundation Model · 평가의 함정
+- **18.7** [시계열 딥러닝](content/18-architectures/07-time-series-deep-learning/index.md) · `필수` · 퀴즈 6
+  - 모델 계열 · 입력 설계 · 불규칙·다변량 시계열 · 시계열 Foundation Model · 평가의 함정 · 참고 문헌
   - 선수: 18.3 순환 모델과 상태공간 모델, 16.7 시계열 분석
-- **18.8** [표현 분석](content/18-architectures/08-representation-analysis/index.md) · `심화`
-  - probing · 표현 유사도 · 검색과 최근접 이웃 · 시각화
+- **18.8** [표현 분석](content/18-architectures/08-representation-analysis/index.md) · `심화` · 퀴즈 6
+  - probing · 표현 유사도 · 검색과 최근접 이웃 · 시각화 · 참고 문헌
   - 선수: 18.1 귀납적 편향과 아키텍처 선택, 16.5 비지도학습과 표현 탐색
 
 ## `MLA` 머신러닝 심화 <sub>Advanced Machine Learning</sub>
