@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 266문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 302문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -142,22 +142,22 @@ _OS부터 GPU 드라이버, CUDA, Python, 패키지, 컨테이너까지 실행 �
 
 _Git과 GitHub로 변경을 추적·협업하고, AI 코딩 도구와 에이전트를 검증 가능한 개발 과정에 통합한다._
 
-- **4.1** [Git의 모델과 기본 작업](content/04-git-and-agents/01-git-fundamentals/index.md) · `필수`
-  - Git의 데이터 모델 · 세 영역 · 기본 작업 · branch·merge·rebase · 복구
+- **4.1** [Git의 모델과 기본 작업](content/04-git-and-agents/01-git-fundamentals/index.md) · `필수` · 퀴즈 7
+  - Git의 데이터 모델 · 세 영역 · 기본 작업 · branch·merge·rebase · 복구 · 참고 문헌
   - 선수: 2.1 Linux와 셸의 기초
-- **4.2** [GitHub 협업과 저장소 관리](content/04-git-and-agents/02-github-collaboration/index.md) · `필수`
-  - remote 작업 · Pull request와 code review · 커밋과 branch 규칙 · .gitignore · 대용량 파일 · 비밀정보 · 이슈와 프로젝트 관리
+- **4.2** [GitHub 협업과 저장소 관리](content/04-git-and-agents/02-github-collaboration/index.md) · `필수` · 퀴즈 6
+  - remote 작업 · Pull request와 code review · 커밋과 branch 규칙 · .gitignore · 대용량 파일 · 비밀정보 · 이슈와 프로젝트 관리 · 참고 문헌
   - 선수: 4.1 Git의 모델과 기본 작업
-- **4.3** [AI 코딩 도구의 활용과 검증](content/04-git-and-agents/03-ai-coding-tools/index.md) · `필수`
+- **4.3** [AI 코딩 도구의 활용과 검증](content/04-git-and-agents/03-ai-coding-tools/index.md) · `필수` · 퀴즈 6
   - 도구의 형태 · 잘 맡길 수 있는 일 · 검증해야 하는 것 · 작업 단위와 프롬프트
   - 선수: 4.1 Git의 모델과 기본 작업
-- **4.4** [에이전트 지침: AGENTS.md·CLAUDE.md·SKILL.md](content/04-git-and-agents/04-agent-instructions/index.md) · `필수`
-  - 프로젝트 지침 파일 · 무엇을 쓰는가 · Skill · 지침의 유지보수
+- **4.4** [에이전트 지침: AGENTS.md·CLAUDE.md·SKILL.md](content/04-git-and-agents/04-agent-instructions/index.md) · `필수` · 퀴즈 5
+  - 프로젝트 지침 파일 · 무엇을 쓰는가 · Skill · 준비 · 검증 · 지침의 유지보수 · 참고 문헌
   - 선수: 4.3 AI 코딩 도구의 활용과 검증
-- **4.5** [MCP와 도구 연결](content/04-git-and-agents/05-mcp-and-tools/index.md) · `심화`
-  - MCP의 구조 · 연결 방식 · 등록과 인증 · 연구에 쓰는 도구 연결 · 보안과 신뢰
+- **4.5** [MCP와 도구 연결](content/04-git-and-agents/05-mcp-and-tools/index.md) · `심화` · 퀴즈 6
+  - MCP의 구조 · 연결 방식 · 등록과 인증 · 연구에 쓰는 도구 연결 · 보안과 신뢰 · 참고 문헌
   - 선수: 4.4 에이전트 지침: AGENTS.md·CLAUDE.md·SKILL.md
-- **4.6** [에이전트 기반 연구 워크플로](content/04-git-and-agents/06-agentic-workflow/index.md) · `심화`
+- **4.6** [에이전트 기반 연구 워크플로](content/04-git-and-agents/06-agentic-workflow/index.md) · `심화` · 퀴즈 6
   - 작업 흐름 · 격리 · 실행 위치 · 권한 경계 · 연구 무결성
   - 선수: 4.5 MCP와 도구 연결
 
