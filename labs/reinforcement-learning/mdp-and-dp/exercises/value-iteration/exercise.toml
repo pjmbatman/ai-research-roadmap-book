@@ -1,0 +1,6 @@
+title = "가치 반복"
+chapter = "reinforcement-learning/mdp-and-dp"
+objective = 2
+exec = "browser"
+entry = "value_iteration"
+timeout_s = 10
