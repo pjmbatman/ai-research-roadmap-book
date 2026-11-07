@@ -1,0 +1,130 @@
+# 2.2 프로세스·세션·자원 모니터링 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "sigterm-before-sigkill"
+type = "single"
+objective = 1
+prompt = '''학습 스크립트에 "SIGTERM을 받으면 checkpoint를 저장하고 종료"하는 handler를 넣어 두었다. 학습을 멈추려 할 때 알맞은 방법은?'''
+explanation = '''SIGTERM(`kill <PID>`의 기본 시그널)은 프로그램이 받아서 처리할 수 있는 "종료 요청"이다. handler가 checkpoint를 저장하고 스스로 끝낼 기회가 있다. SIGKILL(`kill -9`)은 커널이 즉시 프로세스를 없애는 것이라 어떤 handler도, Python의 `finally`도 실행되지 않는다. 그래서 먼저 SIGTERM을 보내고, 정해 둔 시간이 지나도 끝나지 않을 때만 SIGKILL을 쓴다. 집필 시점 실험에서 handler가 있는 Python 프로세스는 SIGTERM에 저장 메시지와 `finally`를 모두 실행했고, SIGKILL에는 아무것도 출력하지 못했다.'''
+
+[[questions.choices]]
+text = "`kill <PID>`로 SIGTERM을 보내고, 끝날 때까지 기다린다. 응답이 없을 때만 `kill -9`를 쓴다."
+correct = true
+
+[[questions.choices]]
+text = "`kill -9 <PID>`가 가장 확실하므로 처음부터 쓴다."
+feedback = "SIGKILL은 잡을 수 없는 시그널이다. handler가 실행되지 않아 checkpoint 저장 기회를 잃고, 쓰던 파일이 반쯤 쓰인 채 남을 수 있다."
+
+[[questions.choices]]
+text = "SIGKILL을 보내도 Python이 `finally` 블록을 실행해 주므로 어느 쪽이든 같다."
+feedback = "SIGKILL에는 Python 인터프리터가 반응할 기회가 없다. finally도, atexit도 실행되지 않는다."
+
+[[questions.choices]]
+text = "SSH 연결을 끊으면 학습이 SIGTERM을 받아 정상 종료된다."
+feedback = "연결이 끊길 때 터미널의 프로세스가 받는 것은 SIGHUP이다. handler를 SIGTERM에만 달았다면 저장 없이 죽는다. 또 tmux 안에서 돌고 있다면 아무 시그널도 받지 않고 계속 돈다."
+
+[[questions]]
+id = "exit-code-137"
+type = "numeric"
+objective = 1
+prompt = '''bash에서 실행한 학습 프로세스가 커널의 OOM killer에게 SIGKILL(시그널 번호 9)로 종료되었다. 직후 `echo $?`가 출력하는 종료 상태는?'''
+answer = 137
+tolerance = 0
+explanation = '''bash는 시그널로 종료된 명령의 상태를 128 + 시그널 번호로 보고한다. SIGKILL은 9이므로 137이다. 같은 규칙으로 Ctrl-C(SIGINT, 2)는 130, SIGTERM(15)은 143이다. 로그에 traceback이 없이 종료 상태 137만 남았다면, OOM killer나 누군가의 `kill -9`를 먼저 의심하고 커널 로그를 본다.'''
+
+[[questions]]
+id = "nohup-vs-tmux"
+type = "single"
+objective = 3
+prompt = '''SSH로 접속해 `nohup python train.py &`로 학습을 시작하고 접속을 끊었다. 다음 날 다시 접속했을 때의 상황으로 옳은 것은?'''
+explanation = '''`nohup`은 SIGHUP을 무시하게 만들어 접속이 끊겨도 프로세스가 살아 있게 한다. stdout이 터미널이면 출력을 `nohup.out`으로 돌린다(리다이렉션을 따로 주지 않았을 때). 그러나 그 프로세스에 터미널로 **다시 붙을** 수는 없다. pdb 같은 대화형 입력, 진행 막대를 그 화면 그대로 보는 일은 불가능하고, 로그 파일과 `ps`로 상태를 확인해야 한다. tmux는 세션 자체가 서버에 남아 있어 `tmux attach`로 그 화면에 그대로 돌아갈 수 있다. 두 방법 모두 서버가 재부팅되면 프로세스는 사라진다.'''
+
+[[questions.choices]]
+text = "학습은 계속 돌고 있지만 그 터미널에 다시 붙을 수는 없다. 출력은 nohup.out(또는 지정한 로그 파일)에서 확인한다."
+correct = true
+
+[[questions.choices]]
+text = "`&`로 background에 보냈으므로 nohup이 없어도 결과는 같았다."
+feedback = "background 작업도 접속이 끊길 때 SIGHUP을 받아 종료될 수 있다(셸 설정에 따라 다르다). nohup은 바로 이 시그널을 무시하게 하려고 쓴다."
+
+[[questions.choices]]
+text = "`tmux attach`로 학습 화면에 다시 붙을 수 있다."
+feedback = "tmux 안에서 시작하지 않은 프로세스는 tmux 세션이 없다. 다시 붙을 수 있게 하려면 처음부터 tmux 안에서 실행해야 한다."
+
+[[questions.choices]]
+text = "nohup으로 시작한 프로세스는 서버가 재부팅되어도 다시 시작된다."
+feedback = "nohup은 SIGHUP만 막는다. 재부팅이나 OOM이 프로세스를 죽이면 그만이다. 장기 실험은 checkpoint와 재시작 절차로 대비한다(2.5장)."
+
+[[questions]]
+id = "gpu-util-meaning"
+type = "single"
+objective = 2
+prompt = '''`nvidia-smi`에서 GPU 사용률(utilization)이 계속 100%로 보인다. 이 숫자로 말할 수 있는 것은?'''
+explanation = '''nvidia-smi의 GPU 사용률은 표본 구간 동안 **커널이 하나라도 실행 중이던 시간의 비율**이다. 커널이 GPU의 연산 유닛(SM)을 얼마나 채웠는지, 연산 성능을 얼마나 뽑았는지는 말하지 않는다. 아주 작은 커널이 쉬지 않고 이어져도 100%가 나온다. 그래서 사용률 100%는 "GPU가 데이터를 기다리며 놀지는 않는다"는 정도의 증거이고, 처리량이 좋은지는 step당 시간·samples/s와 profiler(22장)로 확인한다. 정의는 `nvidia-smi --help-query-gpu`의 `utilization.gpu` 설명으로 확인한다.'''
+
+[[questions.choices]]
+text = "표본 구간 내내 어떤 커널이든 실행 중이었다는 것. 연산 유닛을 얼마나 채웠는지는 알 수 없다."
+correct = true
+
+[[questions.choices]]
+text = "GPU의 연산 능력을 100% 쓰고 있으므로 더 빠르게 만들 여지가 없다."
+feedback = "사용률은 시간의 비율이지 연산 유닛 점유율이 아니다. 작은 batch로 SM의 일부만 쓰는 커널이 이어져도 100%가 나온다."
+
+[[questions.choices]]
+text = "GPU 메모리를 100% 쓰고 있다는 뜻이다."
+feedback = "메모리 사용량은 memory.used / memory.total로 따로 표시된다. 사용률과 메모리는 독립이다."
+
+[[questions.choices]]
+text = "데이터 로딩이 병목이라는 뜻이다."
+feedback = "데이터 로딩이 병목이면 GPU가 데이터를 기다리는 시간이 생겨 사용률이 오히려 낮게, 들쭉날쭉하게 나온다."
+
+[[questions]]
+id = "disk-full-deleted-open"
+type = "single"
+objective = 2
+prompt = '''checkpoint 저장이 `No space left on device`로 실패했다. 큰 로그 파일 `debug.log`(200 GB)를 `rm`으로 지웠는데도 `df -h`의 사용률이 그대로 100%다. 가장 가능성이 높은 원인과 확인 방법은?'''
+explanation = '''Linux에서 파일을 지우면 디렉터리에서 이름이 사라질 뿐, 그 파일을 **열고 있는 프로세스가 있으면** 공간은 그 프로세스가 닫을 때까지 반환되지 않는다. 계속 로그를 쓰던 학습 프로세스가 아직 살아 있다면 200 GB는 그대로다. `lsof +L1`(링크 수가 0인, 즉 지워졌지만 열린 파일)로 찾을 수 있고, 그 프로세스를 정상 종료하거나 재시작해야 공간이 돌아온다. 이 때문에 `du`의 합계와 `df`의 사용량이 크게 어긋난다.'''
+
+[[questions.choices]]
+text = "지운 파일을 아직 열고 있는 프로세스가 있어 공간이 반환되지 않았다. `lsof +L1`로 확인한다."
+correct = true
+
+[[questions.choices]]
+text = "df는 하루에 한 번만 갱신되므로 내일 다시 확인한다."
+feedback = "df는 파일시스템의 현재 사용량을 바로 읽는다. 기다려도 열린 파일이 닫히지 않으면 그대로다."
+
+[[questions.choices]]
+text = "rm은 휴지통으로 옮기기만 하므로 휴지통을 비워야 한다."
+feedback = "셸의 rm에는 휴지통이 없다. 데스크톱 파일 관리자의 동작과 혼동한 것이다."
+
+[[questions.choices]]
+text = "GPU 메모리가 가득 차서 생긴 오류이므로 nvidia-smi를 확인한다."
+feedback = "`No space left on device`는 디스크(또는 inode) 공간 부족이다. GPU 메모리 부족은 CUDA out of memory로 나타난다."
+
+[[questions]]
+id = "ghost-gpu-process"
+type = "multiple"
+objective = 2
+prompt = '''공유 서버에서 내 학습을 Ctrl-C로 멈췄는데, `nvidia-smi`에 GPU 2의 메모리 20 GB가 여전히 사용 중으로 나온다. 알맞은 대응을 **모두** 고르시오.'''
+explanation = '''먼저 누가 그 메모리를 잡고 있는지 확인한다. `nvidia-smi --query-compute-apps=pid,used_memory --format=csv`로 PID를 얻고, `ps -o pid,ppid,user,etime,cmd -p <PID>`로 소유자와 명령을 본다. 내 프로세스(흔히 DataLoader worker나 multiprocessing 자식이 부모가 죽은 뒤 남은 것)라면 SIGTERM부터 보낸다. 남의 프로세스라면 건드리지 않고 연락하거나 관리자에게 알린다. GPU reset은 관리자 권한이 필요하고 같은 GPU의 다른 작업을 모두 망가뜨린다. 컨테이너 안에서는 PID 공간이 달라 nvidia-smi가 프로세스를 보여 주지 않을 수 있다는 점도 기억한다.'''
+
+[[questions.choices]]
+text = "`nvidia-smi --query-compute-apps=pid,used_memory --format=csv`로 메모리를 잡은 PID를 확인한다."
+correct = true
+
+[[questions.choices]]
+text = "`ps -o pid,ppid,user,etime,cmd -p <PID>`로 그 프로세스의 소유자와 명령을 확인한다."
+correct = true
+
+[[questions.choices]]
+text = "내 것으로 확인된 남은 worker 프로세스에 `kill <PID>`(SIGTERM)를 보낸다."
+correct = true
+
+[[questions.choices]]
+text = "GPU 2에 올라간 모든 PID에 `kill -9`를 보낸다."
+feedback = "그중에는 다른 사람의 정상 작업이 있을 수 있다. 공유 서버에서 남의 프로세스는 소유자 확인 없이 건드리지 않는다(애초에 권한이 없는 경우가 많다)."
+
+[[questions.choices]]
+text = "`nvidia-smi --gpu-reset`으로 GPU를 초기화한다."
+feedback = "GPU reset은 관리자 권한이 필요하고, 그 GPU를 쓰는 모든 작업을 망가뜨린다. 일반 사용자의 해결책이 아니다."
