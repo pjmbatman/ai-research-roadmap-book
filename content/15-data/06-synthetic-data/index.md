@@ -128,6 +128,8 @@ Sobol   ζ축 16칸 중 16칸  discrepancy 0.0020
 
 grid는 각 축에서 4개 값만 시험한다. 출력이 주로 $\zeta$에 의존한다면, 16번의 실행 중 $\zeta$에 대한 정보는 4가지 값에 대한 것뿐이다. random은 16칸 중 8칸만 덮었고 discrepancy가 가장 크다. LHS와 Sobol은 축마다 16칸을 모두 덮고 discrepancy도 가장 작다. 차원이 높을수록, 그리고 일부 파라미터만 중요할수록 이 차이가 커진다.
 
+::widget{name="doe-coverage"}
+
 ::quiz{id="grid-projection"}
 
 ::quiz{id="grid-curse"}
