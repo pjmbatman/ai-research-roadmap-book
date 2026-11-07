@@ -1,0 +1,6 @@
+title = "STLSQ로 동역학 방정식 찾기"
+chapter = "scientific-ml/system-identification-and-estimation"
+objective = 2
+exec = "browser"
+entry = "stlsq"
+timeout_s = 10

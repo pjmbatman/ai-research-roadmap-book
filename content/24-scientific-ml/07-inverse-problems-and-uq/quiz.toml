@@ -1,0 +1,135 @@
+# 24.7 역문제와 불확실성 정량화 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "ill-posed-noise-amplification"
+type = "single"
+objective = 1
+prompt = '''흐림 연산자 $\mathbf{A}$로 $\mathbf{y} = \mathbf{A}\mathbf{x} + \boldsymbol{\varepsilon}$를 측정했다. 잡음은 0.01로 작은데, 정규화 없이 최소제곱으로 푼 $\hat{\mathbf{x}}$는 참값과 수천 배 이상 다르다. 가장 직접적인 원인은?'''
+explanation = '''SVD로 쓰면 $\hat{\mathbf{x}} = \mathbf{x} + \sum_i (\mathbf{u}_i^\top\boldsymbol{\varepsilon}/s_i)\mathbf{v}_i$다. 흐림 연산자의 특이값은 0을 향해 빠르게 줄어들어, 아주 작은 $s_i$ 방향의 잡음 성분이 $1/s_i$배로 증폭된다. 잡음이 작아도 $s_i$가 $10^{-10}$이면 결과는 엄청나게 커진다. 부동소수점 오차나 최적화 수렴 문제가 아니라 문제 자체의 불안정성(잘못 놓임)이다. 정규화는 이 방향을 누르는 대신 편향을 받아들인다.'''
+
+[[questions.choices]]
+text = "작은 특이값 방향의 잡음 성분이 1/특이값 배로 증폭된다."
+correct = true
+
+[[questions.choices]]
+text = "부동소수점 반올림 오차가 쌓였다. 배정밀도 대신 4배정밀도를 쓰면 해결된다."
+feedback = "반올림 오차를 줄여도 측정 잡음 ε 자체가 1/s_i배로 증폭되는 것은 그대로다. 정밀도가 아니라 문제의 조건이 원인이다."
+
+[[questions.choices]]
+text = "측정 수가 미지수 수보다 적어서 해가 유일하지 않다."
+feedback = "이 예에서는 측정 80개, 미지수 80개다. 해는 수학적으로 유일하지만 데이터의 작은 변화에 매우 민감하다(안정성이 깨짐)."
+
+[[questions.choices]]
+text = "최소제곱은 잡음이 가우시안일 때만 쓸 수 있는데 잡음 분포가 다르다."
+feedback = "잡음이 가우시안이어도 같은 증폭이 일어난다. 문제는 잡음의 분포가 아니라 연산자의 특이값이다."
+
+[[questions]]
+id = "lcurve-tradeoff"
+type = "single"
+objective = 1
+prompt = '''Tikhonov 정규화 $\min \lVert \mathbf{A}\mathbf{x} - \mathbf{y} \rVert^2 + \lambda\lVert \mathbf{x} \rVert^2$에서 $\lambda$를 키우면 잔차 노름과 해 노름은 어떻게 변하는가?'''
+explanation = '''필터 인자 $f_i = s_i^2/(s_i^2 + \lambda)$가 $\lambda$에 대해 감소하므로 해의 모든 SVD 성분이 줄어 해 노름이 줄고, 측정을 덜 맞추게 되어 잔차는 늘어난다. 둘은 단조롭게 반대로 움직이고, L-curve는 이 절충을 로그–로그 평면에 그린 것이다. 본문 cell 1에서 $\lambda$를 $10^{-6}$에서 $1$로 키우는 동안 잔차는 0.055에서 2.030으로, 해 노름은 9.77에서 1.92로 변했다. 참값과의 오차만 그 사이에서 최소가 된다.'''
+
+[[questions.choices]]
+text = "잔차는 커지고 해 노름은 작아진다."
+correct = true
+
+[[questions.choices]]
+text = "잔차와 해 노름이 모두 작아진다."
+feedback = "둘을 동시에 줄일 수는 없다. 해를 작게 누를수록 측정을 덜 맞춘다. 그래서 λ 선택이 절충이다."
+
+[[questions.choices]]
+text = "잔차는 작아지고 해 노름은 커진다."
+feedback = "그것은 λ를 줄일 때다. λ → 0이면 정규화 없는 최소제곱에 가까워져 잔차가 가장 작고 해가 가장 크다."
+
+[[questions.choices]]
+text = "참값과의 오차와 같은 방향으로 변하므로 잔차가 최소인 λ가 최적이다."
+feedback = "잔차가 최소인 λ는 0에 가깝고, 그때 해는 잡음을 맞추느라 출렁인다. 오차는 중간의 λ에서 최소다."
+
+[[questions]]
+id = "tikhonov-prior-ratio"
+type = "numeric"
+objective = 2
+prompt = '''선형 가우시안 역문제에서 측정 잡음 표준편차가 $\sigma = 0.02$, 사전분포가 $\mathbf{x} \sim \mathcal{N}(\mathbf{0}, \tau^2\mathbf{I})$, $\tau = 0.1$이다. 사후 평균과 같은 Tikhonov 해의 $\lambda$는? (목적함수 $\lVert \mathbf{A}\mathbf{x} - \mathbf{y} \rVert^2 + \lambda\lVert \mathbf{x} \rVert^2$ 기준)'''
+answer = 0.04
+tolerance = 0.0005
+explanation = '''음의 로그 사후밀도는 $\frac{1}{2\sigma^2}\lVert \mathbf{A}\mathbf{x} - \mathbf{y} \rVert^2 + \frac{1}{2\tau^2}\lVert \mathbf{x} \rVert^2 + \text{상수}$이고, $2\sigma^2$를 곱하면 $\lVert \mathbf{A}\mathbf{x} - \mathbf{y} \rVert^2 + (\sigma^2/\tau^2)\lVert \mathbf{x} \rVert^2$이다. 따라서 $\lambda = \sigma^2/\tau^2 = 0.0004/0.01 = 0.04$다. $\sigma/\tau = 0.2$로 답하면 제곱을 빠뜨린 것이다. 사전분포가 넓을수록($\tau$가 클수록) 정규화가 약해진다.'''
+
+[[questions]]
+id = "nonidentifiable-posterior"
+type = "single"
+objective = 2
+prompt = '''Michaelis–Menten 모델을 $S \ll K_m$인 저농도에서만 측정해 MCMC로 사후분포를 구했더니 $\log v_{\max}$와 $\log K_m$의 상관이 1.00이고, 비율 $v_{\max}/K_m$의 구간만 좁았다. 결과 보고로 가장 알맞은 것은?'''
+explanation = '''데이터가 정한 것은 비율 $v_{\max}/K_m$뿐이고, 개별 값의 범위는 사실상 사전분포가 정했다. 그러므로 식별되는 조합과 그 구간을 보고하고, 개별 파라미터는 사전분포에서 거의 움직이지 않았다는 사실과 함께 쓴다. MAP 값 하나는 능선 위의 임의의 점이다. 사후 평균도 능선을 따라 사전분포의 영향을 받은 값이라 물리적 의미가 없다. MCMC를 오래 돌려도 능선은 좁아지지 않는다. 능선은 수렴 실패가 아니라 데이터에 정보가 없다는 뜻이다.'''
+
+[[questions.choices]]
+text = '''식별되는 조합 $v_{\max}/K_m$의 구간을 보고하고, 개별 값은 데이터로 정해지지 않았다고 밝힌다.'''
+correct = true
+
+[[questions.choices]]
+text = '''MAP 추정값 $(\hat{v}_{\max}, \hat{K}_m)$을 보고한다. 데이터를 가장 잘 설명하는 값이기 때문이다.'''
+feedback = "능선 위의 모든 점이 데이터를 거의 똑같이 잘 설명한다. MAP는 그중 사전분포가 살짝 기운 쪽의 한 점일 뿐이다."
+
+[[questions.choices]]
+text = "체인을 10배 더 길게 돌려 개별 파라미터의 구간이 좁아질 때까지 기다린다."
+feedback = "더 오래 돌리면 능선을 더 정확히 그릴 뿐 능선이 좁아지지 않는다. 좁히려면 넓은 농도 범위를 재는 새 실험이 필요하다."
+
+[[questions.choices]]
+text = "개별 파라미터의 사후 평균을 보고한다. 평균은 불확실성을 고려한 값이기 때문이다."
+feedback = "사후 평균의 위치는 능선을 따라 사전분포가 정한다. 데이터가 정하지 않은 값을 데이터로 추정한 것처럼 보고하게 된다."
+
+[[questions]]
+id = "sobol-interaction"
+type = "single"
+objective = 3
+prompt = '''어떤 입력 $x_3$의 Sobol 1차 지수는 $S_3 \approx 0$인데 총 지수는 $S_{T,3} \approx 0.24$다. 옳은 해석은?'''
+explanation = '''1차 지수는 $x_3$ 하나만 알 때 줄어드는 분산, 총 지수는 $x_3$가 관여하는 모든 상호작용을 포함한 기여다. $S_3 \approx 0$이고 $S_{T,3} \approx 0.24$이면 $x_3$는 혼자서는 출력의 평균을 바꾸지 않지만 다른 입력과의 상호작용으로 출력 분산의 약 24%를 만든다. Ishigami 함수에서 $0.1x_3^4\sin x_1$ 항이 그렇다. $x_3$를 고정하면 이 상호작용 분산을 잘못 없애게 된다. 고정해도 되는 입력은 총 지수가 0에 가까운 입력이다.'''
+
+[[questions.choices]]
+text = "x3는 단독으로는 영향이 없지만 다른 입력과의 상호작용으로 출력 분산의 약 24%를 만든다. 고정하면 안 된다."
+correct = true
+
+[[questions.choices]]
+text = "1차 지수가 0이므로 x3는 출력에 영향이 없다. 기준값으로 고정해도 된다."
+feedback = "고정 여부는 총 지수로 판단한다. 1차 지수가 0이어도 상호작용으로 큰 분산을 만들 수 있다."
+
+[[questions.choices]]
+text = "추정 잡음 때문에 두 지수가 다르게 나왔을 뿐, 둘은 항상 같아야 한다."
+feedback = "두 지수는 상호작용이 없을 때만 같다. S_T,i ≥ S_i이고, 차이가 상호작용의 크기다."
+
+[[questions.choices]]
+text = "x3의 국소 민감도도 0.24일 것이다."
+feedback = "국소 민감도는 한 점의 기울기라 분산 비율과 단위도 의미도 다르다. Ishigami의 원점에서 x3의 기울기는 0이다."
+
+[[questions]]
+id = "local-vs-global"
+type = "multiple"
+objective = 3
+prompt = '''기준점에서의 국소 민감도(편미분)와 Sobol 전역 지수에 대한 설명으로 옳은 것을 모두 고르시오.'''
+explanation = '''국소 민감도는 기준점 근처의 선형 근사라서, 입력 범위가 넓거나 모델이 비선형이면 전역적 영향을 대표하지 못한다(Ishigami의 원점에서 $x_2$의 기울기는 0이지만 $S_2 \approx 0.44$). Sobol 지수는 입력의 분포를 정해야 계산되고, 그 분포에 따라 값이 바뀐다. 모델이 입력에 대해 선형이고 입력이 독립이면 1차 지수는 (기울기 × 입력 표준편차)의 제곱 비율과 같아져 두 방법이 일치한다. 국소 민감도는 모델 평가가 훨씬 적게 든다.'''
+
+[[questions.choices]]
+text = "기준점에서 기울기가 0인 입력도 출력 분산의 큰 부분을 만들 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "Sobol 지수는 입력의 분포(범위)를 바꾸면 달라진다."
+correct = true
+
+[[questions.choices]]
+text = "모델이 입력에 대해 선형이고 입력이 독립이면, 1차 지수는 (기울기 × 입력 표준편차)²의 비율과 같다."
+correct = true
+
+[[questions.choices]]
+text = "Sobol 지수는 국소 민감도보다 모델 평가가 적게 든다."
+feedback = "Sobol 지수의 Monte Carlo 추정은 모델 평가 N(d+2)번(N은 수천–수십만)이 든다. 국소 민감도는 d+1번이나 2d번이면 된다. 비싼 모델에서는 대리모델(24.5장)을 쓴다."
+
+[[questions]]
+id = "jensen-propagation"
+type = "numeric"
+objective = 3
+prompt = '''파라미터의 사후분포가 $\theta \sim \mathcal{N}(1, 0.5^2)$이고 예측이 $f(\theta) = \theta^2$이다. 예측의 사후 평균 $\mathbb{E}[f(\theta)]$는? (사후 평균 파라미터를 넣은 $f(\mathbb{E}[\theta]) = 1$과 비교한다)'''
+answer = 1.25
+tolerance = 0.005
+explanation = '''$\mathbb{E}[\theta^2] = \operatorname{Var}(\theta) + (\mathbb{E}[\theta])^2 = 0.25 + 1 = 1.25$다. 평균 파라미터를 넣은 예측 1은 볼록 함수에서 예측의 평균보다 작다(Jensen 부등식). 비선형 모델에서는 파라미터 표본을 하나씩 모델에 통과시키는 Monte Carlo 전파로 예측분포를 구해야 한다.'''

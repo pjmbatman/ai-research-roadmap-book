@@ -1,0 +1,6 @@
+title = "SVD 필터 인자로 Tikhonov 해 구하기"
+chapter = "scientific-ml/inverse-problems-and-uq"
+objective = 1
+exec = "browser"
+entry = "tikhonov_svd"
+timeout_s = 10

@@ -1,0 +1,6 @@
+title = "칼만 필터의 갱신 단계"
+chapter = "scientific-ml/system-identification-and-estimation"
+objective = 3
+exec = "browser"
+entry = "kf_update"
+timeout_s = 10
