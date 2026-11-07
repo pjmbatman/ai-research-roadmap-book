@@ -1,0 +1,135 @@
+# 18.3 순환 모델과 상태공간 모델 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "vanishing-factor"
+type = "numeric"
+objective = 1
+prompt = '''hidden state가 스칼라인 선형 RNN $h_t = 0.9\, h_{t-1} + x_t$가 있다. 마지막 시점 $h_{50}$에서 계산한 손실의 gradient를 50 step 전의 $h_0$까지 거슬러 보내면, $\partial h_{50} / \partial h_0$는 얼마인가? (소수 셋째 자리까지)'''
+answer = 0.00515
+tolerance = 0.0005
+explanation = '''$\partial h_t / \partial h_{t-1} = 0.9$이므로 chain rule로 $\partial h_{50}/\partial h_0 = 0.9^{50} \approx 0.0052$다. 한 step에 10%씩만 줄어도 50 step 뒤에는 200분의 1 이하가 된다. 행렬이면 같은 역할을 스펙트럼 반지름이 하고(7.5장), tanh 같은 활성화의 도함수(1 이하)가 매 step 곱해져 더 빨리 사라진다. $0.9 \times 50 = 45$처럼 곱 대신 합으로 생각하는 것이 흔한 실수다.'''
+
+[[questions]]
+id = "lstm-additive-path"
+type = "single"
+objective = 1
+prompt = '''LSTM이 일반 RNN보다 먼 과거의 정보를 gradient로 잘 전달하는 이유로 가장 정확한 것은?'''
+explanation = '''LSTM의 cell state는 $\mathbf{c}_t = \mathbf{f}_t \odot \mathbf{c}_{t-1} + \mathbf{i}_t \odot \tilde{\mathbf{c}}_t$로 **덧셈**으로 갱신된다. 이 경로를 따라 $\partial \mathbf{c}_t / \partial \mathbf{c}_{t-1}$은 (gate가 $\mathbf{c}_{t-1}$에 의존하는 항을 빼면) forget gate $\mathbf{f}_t$의 대각행렬이다. 같은 가중치 행렬과 활성화 도함수의 곱이 반복되지 않고, forget gate가 1에 가까우면 gradient가 거의 줄지 않는다. 그렇다고 소실이 완전히 사라지는 것은 아니다. forget gate 0.97도 60 step이면 0.16이 된다.'''
+
+[[questions.choices]]
+text = "cell state가 forget gate를 곱하고 새 값을 더하는 덧셈 경로로 갱신되어, gradient가 같은 행렬의 반복 곱을 거치지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "LSTM은 파라미터가 RNN의 4배라서 표현력이 크기 때문이다."
+feedback = "파라미터 수는 gradient 전달과 무관하다. 같은 수의 파라미터를 가진 넓은 RNN도 gradient 소실을 겪는다."
+
+[[questions.choices]]
+text = "LSTM은 tanh 대신 ReLU를 써서 활성화의 도함수가 1이기 때문이다."
+feedback = "LSTM은 gate에 sigmoid, 후보값과 출력에 tanh를 쓴다. 핵심은 활성화 종류가 아니라 cell state의 덧셈 경로다."
+
+[[questions.choices]]
+text = "LSTM은 BPTT 대신 다른 학습 알고리즘을 쓰기 때문이다."
+feedback = "LSTM도 시간 축으로 펼쳐 역전파하는 BPTT로 학습한다. 달라지는 것은 펼친 그래프의 구조다."
+
+[[questions]]
+id = "lstm-param-count"
+type = "numeric"
+objective = 1
+prompt = '''PyTorch의 `nn.LSTM(input_size=16, hidden_size=32)`(한 층, 단방향)의 파라미터는 모두 몇 개인가? PyTorch는 gate마다 입력 쪽 bias와 hidden 쪽 bias를 따로 둔다.'''
+answer = 6400
+tolerance = 0
+explanation = '''gate(입력·forget·후보·출력) 4개가 각각 입력 가중치 $32 \times 16$, hidden 가중치 $32 \times 32$, bias 두 벌 $32 + 32$를 가진다. $4 \times (512 + 1024 + 64) = 6400$이다. GRU는 gate가 3개라 $3 \times 1600 = 4800$, 일반 RNN은 $1600$이다. bias를 한 벌로 세면 6272가 나오는데, PyTorch 구현과는 다르다.'''
+
+[[questions]]
+id = "ssm-kernel-formula"
+type = "single"
+objective = 2
+prompt = '''이산 선형 상태공간 모델 $\mathbf{x}_k = \bar{\mathbf{A}}\mathbf{x}_{k-1} + \bar{\mathbf{B}}u_k$, $y_k = \mathbf{C}\mathbf{x}_k$(처음 상태는 $\mathbf{0}$)를 합성곱 $y_k = \sum_{j \ge 0} K_j u_{k-j}$로 쓸 때 kernel $K_j$는?'''
+explanation = '''재귀를 펼치면 $\mathbf{x}_k = \sum_{j \ge 0} \bar{\mathbf{A}}^j\bar{\mathbf{B}}u_{k-j}$이므로 $y_k = \sum_j \mathbf{C}\bar{\mathbf{A}}^j\bar{\mathbf{B}}\,u_{k-j}$, 즉 $K_j = \mathbf{C}\bar{\mathbf{A}}^j\bar{\mathbf{B}}$다. $j$ step 전의 입력은 $\bar{\mathbf{B}}$로 상태에 들어가 $\bar{\mathbf{A}}$를 $j$번 거친 뒤 $\mathbf{C}$로 읽힌다. $\bar{\mathbf{A}}$가 시간에 따라 변하지 않으므로 kernel이 시점 $k$에 의존하지 않는다.'''
+
+[[questions.choices]]
+text = '''$K_j = \mathbf{C}\bar{\mathbf{A}}^j\bar{\mathbf{B}}$'''
+correct = true
+
+[[questions.choices]]
+text = '''$K_j = \mathbf{C}\bar{\mathbf{A}}\bar{\mathbf{B}}^j$'''
+feedback = "입력은 상태에 들어갈 때 B̄를 한 번만 거친다. 그 뒤 시간이 지나며 반복해서 곱해지는 것은 상태 전이 행렬 Ā다."
+
+[[questions.choices]]
+text = '''$K_j = j\,\mathbf{C}\bar{\mathbf{A}}\bar{\mathbf{B}}$'''
+feedback = "상태 전이가 j번 반복되면 Ā가 j번 곱해진다(거듭제곱). j배가 아니다. 그래서 |λ(Ā)| < 1이면 kernel이 지수적으로 감쇠한다."
+
+[[questions.choices]]
+text = "시점 k마다 다른 kernel이 필요하므로 하나의 K_j로 쓸 수 없다."
+feedback = "Ā, B̄, C가 시간에 따라 변하지 않으면(LTI) kernel은 시점과 무관하다. 시점마다 kernel이 달라지는 것은 Mamba처럼 파라미터가 입력에 따라 변하는 경우다."
+
+[[questions]]
+id = "selective-ssm-scan"
+type = "single"
+objective = 2
+prompt = '''Mamba 계열의 selective 상태공간 모델은 이산화 간격 $\Delta_k$(따라서 $\bar{\mathbf{A}}_k$, $\bar{\mathbf{B}}_k$)를 각 시점의 입력으로부터 계산한다. 이 설계의 결과로 옳은 것은?'''
+explanation = '''$\bar{\mathbf{A}}_k$가 시점마다 다르면 $j$ step 전 입력의 영향은 $\mathbf{C}\bar{\mathbf{A}}_k\cdots\bar{\mathbf{A}}_{k-j+1}\bar{\mathbf{B}}_{k-j}$로 시점 $k$에 의존한다. 하나의 kernel로 모든 시점을 처리하는 합성곱(FFT) 계산을 쓸 수 없다. 대신 선형 재귀 $x_k = a_k x_{k-1} + b_k$는 결합법칙을 만족하는 연산으로 쓸 수 있어 병렬 scan으로 학습하고, 추론은 여전히 한 step에 상태 하나만 갱신한다. 입력에 따라 "기억할 것과 잊을 것"을 고르는 능력을 얻는 대신 합성곱 계산을 포기한 것이다.'''
+
+[[questions.choices]]
+text = "고정된 합성곱 kernel로 쓸 수 없게 되어, 학습에 FFT 합성곱 대신 병렬 scan을 쓴다."
+correct = true
+
+[[questions.choices]]
+text = "입력에 의존하게 만들어도 여전히 하나의 고정 kernel로 FFT 합성곱을 할 수 있다."
+feedback = "kernel이 시점에 따라 달라지므로 하나의 kernel로 쓸 수 없다. 본문 셀에서 selective 모델의 충격 응답은 충격이 들어온 시점에 따라 달랐다."
+
+[[questions.choices]]
+text = "추론할 때 Transformer처럼 지난 모든 시점의 key와 value를 저장해야 한다."
+feedback = "selective SSM도 재귀이므로 추론 시 고정된 크기의 상태 하나만 갱신한다. 시퀀스 길이에 비례하는 저장이 필요한 것은 attention의 KV cache다."
+
+[[questions.choices]]
+text = "상태 행렬이 입력에 의존하므로 모델이 비선형 RNN과 같아져 병렬 학습이 불가능하다."
+feedback = "상태에 대해서는 여전히 선형 재귀다(계수만 입력에 의존). 선형 재귀는 병렬 scan으로 계산할 수 있다. 상태에 비선형 함수를 적용하는 RNN과 다른 점이다."
+
+[[questions]]
+id = "one-step-vs-rollout"
+type = "single"
+objective = 3
+prompt = '''진자 궤적을 학습한 모델의 one-step RMSE가 $6 \times 10^{-5}$ rad로 관측 잡음(0.001 rad)보다 작다. 이 결과로 말할 수 있는 것은?'''
+explanation = '''one-step 평가는 매 step 참값 과거를 입력으로 주므로(teacher forcing) 한 step 오차만 잰다. free rollout에서는 자기 예측이 다음 입력이 되어 작은 오차가 누적되고, 오차가 만든 입력은 학습 때 본 분포 밖일 수 있다(exposure bias). 본문 실험에서 one-step RMSE $6 \times 10^{-5}$인 모델의 rollout 오차는 20 s 안에 0.3 rad까지 커졌다. 장기 예측 성능은 rollout으로 따로 재야 한다.'''
+
+[[questions.choices]]
+text = "한 step 예측이 정확하다는 것뿐이다. 장기 예측 성능은 rollout으로 따로 평가해야 한다."
+correct = true
+
+[[questions.choices]]
+text = "한 step 오차가 작으므로 1000 step rollout의 오차도 1000배 이하, 즉 0.06 rad 이하다."
+feedback = "오차는 선형으로 더해지지 않는다. 동역학이 오차를 증폭하거나, 위상 오차가 누적되어 진동이 어긋나면 오차는 진폭 수준까지 커진다."
+
+[[questions.choices]]
+text = "관측 잡음보다 작은 오차이므로 모델이 실제 동역학을 정확히 학습했다."
+feedback = "teacher forcing의 한 step 오차는 계수의 작은 치우침(예: 감쇠율)을 잘 드러내지 않는다. 그 치우침이 rollout에서 누적된다."
+
+[[questions.choices]]
+text = "rollout 오차는 one-step 오차와 같은 크기다. 같은 모델이기 때문이다."
+feedback = "모델은 같지만 입력이 다르다. rollout에서는 모델 자신의 예측이 입력이 된다."
+
+[[questions]]
+id = "irregular-sampling"
+type = "multiple"
+objective = 3
+prompt = '''관측 간격이 불규칙하고 결측이 있는 임상·환경 센서 시계열을 다룰 때 **적절한** 방법을 모두 고르시오.'''
+explanation = '''시간 간격 $\Delta t_k$를 입력으로 주거나, 연속시간 모델을 이산화할 때 실제 간격으로 $\bar{\mathbf{A}} = e^{\mathbf{A}\Delta t_k}$를 계산하면 간격의 정보를 쓴다. 결측을 0으로 채우면 "값이 0으로 측정됨"과 "측정하지 않음"이 구별되지 않으므로, 결측 여부를 나타내는 mask를 함께 넣는다. 결측 위치를 무시하고 관측값만 이어 붙이면 시간 간격 정보가 사라진다. 특히 측정 빈도 자체가 상태에 대한 정보(상태가 나쁠수록 자주 측정)인 경우가 많다.'''
+
+[[questions.choices]]
+text = "관측 사이의 시간 간격 Δt를 입력 특징으로 함께 넣는다."
+correct = true
+
+[[questions.choices]]
+text = "연속시간 상태공간 모델을 실제 간격으로 이산화한다: Ā_k = exp(A Δt_k)."
+correct = true
+
+[[questions.choices]]
+text = "결측값을 0으로 채우고 등간격 RNN에 그대로 넣는다."
+feedback = "0이 측정값인지 결측인지 모델이 구별할 수 없다. 결측 mask를 함께 주어야 한다."
+
+[[questions.choices]]
+text = "결측을 지우고 남은 관측을 등간격인 것처럼 이어 붙인다."
+feedback = "실제 간격이 사라져 1시간 뒤와 3일 뒤의 관측을 같은 한 step으로 다룬다. 측정 빈도에 담긴 정보도 사라진다."

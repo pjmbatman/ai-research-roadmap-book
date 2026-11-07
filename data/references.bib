@@ -316,3 +316,73 @@
   archiveprefix = {arXiv},
   note          = {확인: arXiv 기록(2018년 6월 4일 제출, v3 2018년 10월 17일; 저자 27명). 관계적 귀납 편향의 정의와 구성 요소별 편향 정리, graph network 블록}
 }
+
+@article{bengio1994learning,
+  author  = {Bengio, Yoshua and Simard, Patrice and Frasconi, Paolo},
+  title   = {Learning Long-Term Dependencies with Gradient Descent is Difficult},
+  journal = {IEEE Transactions on Neural Networks},
+  volume  = {5},
+  number  = {2},
+  pages   = {157--166},
+  year    = {1994},
+  doi     = {10.1109/72.279181},
+  note    = {확인: 서지 기록(1994년 3월호). 시간 간격이 길수록 gradient 기반 학습이 어려워지고, 정보의 안정적 저장과 gradient 학습 용이성 사이에 긴장이 있다는 분석}
+}
+
+@article{hochreiter1997long,
+  author  = {Hochreiter, Sepp and Schmidhuber, J{\"u}rgen},
+  title   = {Long Short-Term Memory},
+  journal = {Neural Computation},
+  volume  = {9},
+  number  = {8},
+  pages   = {1735--1780},
+  year    = {1997},
+  doi     = {10.1162/neco.1997.9.8.1735},
+  note    = {확인: 서지 기록(DOI). LSTM}
+}
+
+@inproceedings{cho2014learning,
+  author    = {Cho, Kyunghyun and van Merri{\"e}nboer, Bart and Gulcehre, Caglar and Bahdanau, Dzmitry and Bougares, Fethi and Schwenk, Holger and Bengio, Yoshua},
+  title     = {Learning Phrase Representations using {RNN} Encoder--Decoder for Statistical Machine Translation},
+  booktitle = {Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  pages     = {1724--1734},
+  year      = {2014},
+  doi       = {10.3115/v1/D14-1179},
+  note      = {확인: ACL Anthology D14-1179. GRU(update·reset gate)를 제안}
+}
+
+@misc{bai2018empirical,
+  author        = {Bai, Shaojie and Kolter, J. Zico and Koltun, Vladlen},
+  title         = {An Empirical Evaluation of Generic Convolutional and Recurrent Networks for Sequence Modeling},
+  year          = {2018},
+  eprint        = {1803.01271},
+  archiveprefix = {arXiv},
+  note          = {확인: arXiv 기록(2018년 3월 제출, 4월 v2). temporal convolutional network(TCN)와 RNN 계열의 비교}
+}
+
+@inproceedings{bengio2015scheduled,
+  author    = {Bengio, Samy and Vinyals, Oriol and Jaitly, Navdeep and Shazeer, Noam},
+  title     = {Scheduled Sampling for Sequence Prediction with Recurrent Neural Networks},
+  booktitle = {Advances in Neural Information Processing Systems 28},
+  pages     = {1171--1179},
+  year      = {2015},
+  note      = {확인: NIPS 2015 proceedings 메타데이터와 arXiv:1506.03099. 학습(참값 과거)과 추론(자기 예측)의 불일치를 줄이는 scheduled sampling}
+}
+
+@inproceedings{gu2022efficiently,
+  author    = {Gu, Albert and Goel, Karan and R{\'e}, Christopher},
+  title     = {Efficiently Modeling Long Sequences with Structured State Spaces},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2022},
+  eprint    = {2111.00396},
+  note      = {확인: ICLR 2022 발표 기록과 arXiv:2111.00396 초록. S4: 상태 행렬에 저랭크 보정을 둔 구조로 kernel을 효율적으로 계산, Long Range Arena 결과}
+}
+
+@misc{gu2023mamba,
+  author        = {Gu, Albert and Dao, Tri},
+  title         = {Mamba: Linear-Time Sequence Modeling with Selective State Spaces},
+  year          = {2023},
+  eprint        = {2312.00752},
+  archiveprefix = {arXiv},
+  note          = {확인: arXiv 기록(2023년 12월 1일 제출, v2 2024년 5월). SSM 파라미터를 입력의 함수로 두는 selective SSM과 하드웨어를 고려한 병렬 재귀 알고리즘}
+}
