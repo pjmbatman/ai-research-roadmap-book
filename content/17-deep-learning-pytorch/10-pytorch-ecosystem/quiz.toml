@@ -1,0 +1,117 @@
+# 17.10 PyTorch 생태계와 대안 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "compile-graph-break"
+type = "single"
+objective = 1
+prompt = '''`torch.compile`로 감싼 함수 안에 `if y.sum() > 0:`처럼 **텐서 값에 의존하는** Python 분기가 있다. 기본 설정(`fullgraph=False`)에서 일어나는 일은?'''
+explanation = '''분기 조건이 텐서의 값에 달려 있으면 컴파일 시점에 어느 쪽으로 갈지 알 수 없다. 그래서 그 지점에서 그래프가 끊기고(graph break), 앞부분 그래프를 실행해 조건을 계산한 뒤 Python이 분기를 고르고, 선택된 쪽을 다시 그래프로 잡는다. 결과는 eager와 같지만 그래프가 여러 조각이 되어 최적화 기회가 줄어든다. `fullgraph=True`를 주면 이런 graph break를 오류로 알려 준다.'''
+
+[[questions.choices]]
+text = "분기 지점에서 그래프가 나뉘고(graph break) Python이 분기를 처리한다. 결과는 같지만 최적화 범위가 줄어든다."
+correct = true
+
+[[questions.choices]]
+text = "컴파일 오류가 나서 실행되지 않는다."
+feedback = "기본 설정에서는 오류 대신 그래프를 나눈다. 오류로 받고 싶으면 fullgraph=True를 준다."
+
+[[questions.choices]]
+text = "처음 호출에서 고른 분기가 그래프에 고정되어, 조건이 바뀌어도 같은 분기를 실행한다."
+feedback = "그렇게 되면 결과가 틀린다. torch.compile은 결과가 eager와 같도록 분기 지점에서 그래프를 끊는다."
+
+[[questions.choices]]
+text = "두 분기를 모두 하나의 그래프로 컴파일해 성능 손실이 없다."
+feedback = "본문의 예에서 분기가 있는 함수는 그래프 2개로 나뉘었다."
+
+[[questions]]
+id = "compile-benchmark"
+type = "single"
+objective = 1
+prompt = '''`torch.compile`이 학습을 빠르게 하는지 확인하려 한다. 측정 방법으로 가장 알맞은 것은?'''
+explanation = '''첫 호출에는 그래프 캡처와 코드 생성 시간이 들어가고, 입력 shape이 바뀌면 재컴파일이 일어난다. 그래서 몇 step을 warm-up으로 버리고, 실제 학습과 같은 shape에서 여러 step의 시간을 재고(GPU라면 동기화 후), 결과가 eager와 허용 오차 안에서 같은지도 함께 확인한다. 연산 순서가 바뀌어 반올림이 달라질 수 있으므로 비트 단위 일치는 기대하지 않는다.'''
+
+[[questions.choices]]
+text = "warm-up step을 제외하고 실제와 같은 shape에서 여러 step을 재며, 결과가 eager와 허용 오차 안에서 같은지 확인한다."
+correct = true
+
+[[questions.choices]]
+text = "첫 호출 한 번의 시간을 eager의 첫 호출과 비교한다."
+feedback = "첫 호출에는 컴파일 시간이 들어 있다. 본문의 JAX 비교에서도 첫 step만 수백 배 느렸다."
+
+[[questions.choices]]
+text = "매 step 입력 길이를 무작위로 바꾸어 다양한 경우를 잰다."
+feedback = "shape이 바뀌면 재컴파일이 일어나 컴파일 비용을 재게 된다. 실제 학습의 shape 분포로 잰다."
+
+[[questions.choices]]
+text = "속도만 재면 된다. 컴파일은 결과를 바꾸지 않는다."
+feedback = "연산 융합으로 반올림 순서가 바뀌어 결과가 미세하게 달라질 수 있다. 허용 오차 안에서 같은지 확인한다."
+
+[[questions]]
+id = "jax-pure-update"
+type = "single"
+objective = 2
+prompt = '''JAX로 학습 step을 작성할 때 파라미터 업데이트를 표현하는 일반적인 방식은?'''
+explanation = '''JAX 배열은 바꿀 수 없고(immutable), `jax.grad`·`jax.jit`·`jax.vmap` 같은 변환은 부작용 없는 순수 함수를 전제한다. 그래서 step 함수는 현재 파라미터와 데이터를 받아 **새 파라미터를 반환**하고, 호출하는 쪽이 그 값으로 교체한다. PyTorch처럼 `.grad`에 누적하거나 제자리에서 빼는 방식과 다르다.'''
+
+[[questions.choices]]
+text = "step 함수가 현재 파라미터를 받아 새 파라미터를 반환하고, 호출하는 쪽이 교체한다."
+correct = true
+
+[[questions.choices]]
+text = "PyTorch처럼 `p -= lr * g`로 배열을 제자리에서 수정한다."
+feedback = "JAX 배열은 제자리 수정을 지원하지 않는다. 값을 바꾼 새 배열을 만든다."
+
+[[questions.choices]]
+text = "`backward()`가 각 배열의 `.grad` 속성을 채우면 optimizer가 읽는다."
+feedback = "JAX에는 .grad 속성이 없다. jax.grad가 gradient를 함수의 반환값으로 준다."
+
+[[questions.choices]]
+text = "전역 변수에 파라미터를 두고 jit 함수 안에서 갱신한다."
+feedback = "jit은 함수를 추적할 때의 전역 값을 상수로 굳힐 수 있어 의도대로 갱신되지 않는다. 상태는 인자와 반환값으로 주고받는다."
+
+[[questions]]
+id = "vmap-per-sample"
+type = "single"
+objective = 2
+prompt = '''표본 하나의 손실 `loss_one(params, x_i, y_i)`에 대해 `vmap(grad(loss_one), in_dims=(None, 0, 0))(params, x, y)`가 반환하는 것은? (`x`는 표본 B개)'''
+explanation = '''`grad(loss_one)`은 표본 하나의 손실에 대한 파라미터 gradient를 계산하는 함수다. `vmap`은 이 함수를 batch 축(x, y의 0번 축)을 따라 벡터화하고, params는 공유한다(None). 결과는 파라미터마다 앞에 B 축이 붙은 **표본별 gradient**다. batch 평균 손실의 gradient는 이것을 평균한 값이다. 표본별 gradient norm은 이상 표본 찾기나 차등 프라이버시 학습에 쓰인다.'''
+
+[[questions.choices]]
+text = "파라미터마다 (B, ...) shape인 표본별 gradient"
+correct = true
+
+[[questions.choices]]
+text = "batch 평균 손실의 gradient 하나"
+feedback = "그것은 표본별 gradient를 평균한 값이다. vmap은 평균하지 않고 표본 축을 남긴다."
+
+[[questions.choices]]
+text = "파라미터에 대한 Hessian"
+feedback = "grad를 한 번만 적용했으므로 1차 도함수다. Hessian에는 grad를 두 번(또는 jacrev(grad)) 적용한다."
+
+[[questions.choices]]
+text = "입력 x에 대한 gradient"
+feedback = "grad는 기본으로 첫 번째 인자(params)에 대해 미분한다."
+
+[[questions]]
+id = "library-selection"
+type = "multiple"
+objective = 1
+prompt = '''연구 전체가 의존할 외부 라이브러리를 고르려 한다. 판단 근거로 **알맞은** 것을 모두 고르시오.'''
+explanation = '''유지보수 상태(최근 릴리스, 이슈·PR 응답, 관리자 수), 라이선스(연구 결과의 공개·상용화 계획과 맞는지, 모델 가중치의 별도 라이선스 포함), 의존성의 무게(특정 PyTorch·CUDA 버전 고정 여부)는 몇 년짜리 연구에서 실제로 문제가 되는 항목이다. 저장소의 별 수는 과거의 인기를 보여 줄 뿐 지금 유지되고 있는지를 말해 주지 않는다.'''
+
+[[questions.choices]]
+text = "최근 릴리스 시점과 이슈·PR에 대한 응답 등 유지보수 상태"
+correct = true
+
+[[questions.choices]]
+text = "코드와 사전학습 가중치의 라이선스가 연구 결과의 공개 계획과 맞는지"
+correct = true
+
+[[questions.choices]]
+text = "특정 PyTorch·CUDA 버전을 고정하는지 등 의존성의 무게"
+correct = true
+
+[[questions.choices]]
+text = "저장소의 별(star) 수가 많은지"
+feedback = "별 수는 과거의 관심을 보여 줄 뿐이다. 별이 많아도 유지보수가 멈춘 저장소가 있다."

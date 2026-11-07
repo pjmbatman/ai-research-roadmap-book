@@ -1,0 +1,6 @@
+title = "대시보드의 smoothing을 직접 계산하기"
+chapter = "deep-learning-pytorch/dashboards"
+objective = 3
+exec = "browser"
+entry = "smooth"
+timeout_s = 10
