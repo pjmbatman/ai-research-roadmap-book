@@ -3,7 +3,7 @@ id: python-and-computing
 title: "Python과 계산 기초"
 title_en: "Python and Computing Foundations"
 track: research-software-engineering
-status: outline
+status: draft
 summary: "수식을 정확하고 효율적인 코드로 옮기기 위한 Python 언어, 과학 계산 라이브러리, 계산 비용과 컴퓨터 구조를 익힌다."
 ---
 

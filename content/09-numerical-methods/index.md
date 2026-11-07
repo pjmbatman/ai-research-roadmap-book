@@ -3,7 +3,7 @@ id: numerical-methods
 title: "수치해석과 시뮬레이션"
 title_en: "Numerical Methods and Simulation"
 track: mathematical-foundations
-status: outline
+status: draft
 summary: "부동소수점, 안정성과 조건수, 수치 선형대수, 반복법, ODE·PDE·DAE 수치해법과 시뮬레이터 검증을 다룬다."
 ---
 

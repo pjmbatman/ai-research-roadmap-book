@@ -3,7 +3,7 @@ id: classical-ml
 title: "고전 머신러닝과 통계 모델링"
 title_en: "Classical Machine Learning and Statistical Modeling"
 track: ml-core
-status: outline
+status: draft
 summary: "강한 기준 모델, 선형·커널·트리 모델, 비지도학습, 모델 선택과 평가, 시계열·생존분석·인과추론의 기초를 다룬다."
 ---
 

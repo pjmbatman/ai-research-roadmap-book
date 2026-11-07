@@ -3,7 +3,7 @@ id: life-sciences
 title: "생명과학"
 title_en: "Life Sciences"
 track: domain-applications
-status: outline
+status: draft
 summary: "ML 연구자를 위한 분자생물학 기초, 생물 서열 모델, 단백질 구조 예측과 설계, 유전체·단일세포 데이터, 평가와 누수를 다룬다."
 ---
 

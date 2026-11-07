@@ -3,7 +3,7 @@ id: linear-algebra
 title: "선형대수와 기하"
 title_en: "Linear Algebra and Geometry"
 track: mathematical-foundations
-status: outline
+status: draft
 summary: "데이터와 모델을 공간과 변환의 관점에서 이해한다. 선형·아핀·비선형 구조, rank, 분해, 텐서, 다양체, 함수공간까지 다룬다."
 ---
 

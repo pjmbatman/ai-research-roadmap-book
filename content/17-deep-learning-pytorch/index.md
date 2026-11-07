@@ -3,7 +3,7 @@ id: deep-learning-pytorch
 title: "딥러닝과 PyTorch"
 title_en: "Deep Learning with PyTorch"
 track: ml-core
-status: outline
+status: draft
 summary: "신경망의 구성 요소, PyTorch의 tensor·autograd·Module·DataLoader, forward–backward–update 학습 루프, 평가·체크포인트, trainer 설계, 대시보드, 학습 실패 진단을 다룬다."
 ---
 

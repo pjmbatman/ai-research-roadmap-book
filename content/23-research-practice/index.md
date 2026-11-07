@@ -3,7 +3,7 @@ id: research-practice
 title: "연구 방법론과 학술 소통"
 title_en: "Research Practice and Scholarly Communication"
 track: research-methodology
-status: outline
+status: draft
 summary: "문헌 탐색, 논문 읽기와 재현, 연구 질문과 가설, 실험 설계, 결과 해석, 연구 기록, 논문 작성, figure, 발표, 리뷰, 연구 윤리를 다룬다."
 ---
 

@@ -3,7 +3,7 @@ id: reliability
 title: "신뢰성: 불확실성·강건성·해석"
 title_en: "Reliability: Uncertainty, Robustness, and Interpretation"
 track: ml-advanced
-status: outline
+status: draft
 summary: "불확실성의 종류와 모델링, 예측분포의 평가, conformal prediction, 분포 이동과 OOD, 해석가능성, 위험을 고려한 의사결정을 다룬다."
 ---
 

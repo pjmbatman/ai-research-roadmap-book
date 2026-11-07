@@ -3,7 +3,7 @@ id: chemistry-and-materials
 title: "화학·재료"
 title_en: "Chemistry and Materials"
 track: domain-applications
-status: outline
+status: draft
 summary: "분자와 결정의 표현, 물성 예측, 기계학습 원자간 퍼텐셜, 분자·재료 생성과 역설계, 데이터와 평가의 함정을 다룬다."
 ---
 
