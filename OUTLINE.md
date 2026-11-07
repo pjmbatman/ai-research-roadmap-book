@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 203문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 235문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -72,21 +72,21 @@ _이 책이 무엇을 목표로 하며, 어떤 순서와 형식으로 읽고 훈
 
 _AI 연구가 어떤 단계와 결정으로 이루어지는지 전체 지도를 그리고, 문제를 수학적으로 정의하는 법을 익힌다._
 
-- **1.1** [AI 연구의 생애주기](content/01-research-landscape/01-research-lifecycle/index.md) · `필수`
+- **1.1** [AI 연구의 생애주기](content/01-research-landscape/01-research-lifecycle/index.md) · `필수` · 퀴즈 5
   - 문제에서 후속 연구까지 · 연구의 종류 · 학습과 추론, 오프라인과 운영 · 제약과 절충
-- **1.2** [AI for Science의 지형](content/01-research-landscape/02-ai-for-science-landscape/index.md) · `필수`
+- **1.2** [AI for Science의 지형](content/01-research-landscape/02-ai-for-science-landscape/index.md) · `필수` · 퀴즈 5
   - AI가 과학에 기여하는 방식 · 과학 문제는 무엇이 다른가 · 분야별 지도 · 성공과 실패에서 배우기 · 두 갈래의 입문자
   - 선수: 1.1 AI 연구의 생애주기
-- **1.3** [문제를 수학적으로 정의하기](content/01-research-landscape/03-problem-formulation/index.md) · `필수`
+- **1.3** [문제를 수학적으로 정의하기](content/01-research-landscape/03-problem-formulation/index.md) · `필수` · 퀴즈 6
   - 변수의 역할 · 문제의 유형 · 정보의 시점 · 범위의 명시 · 문제 정의 문서
   - 선수: 1.1 AI 연구의 생애주기
-- **1.4** [모델링을 나누는 여러 축](content/01-research-landscape/04-modeling-axes/index.md) · `필수`
+- **1.4** [모델링을 나누는 여러 축](content/01-research-landscape/04-modeling-axes/index.md) · `필수` · 퀴즈 5
   - 학습 신호에 따른 구분 · 판별 모델과 생성 모델 · 점 예측과 분포 예측 · 결정론적 모델과 확률적 모델, 빈도주의와 베이지안 · 학습 구성 방식 · 축들은 독립적이다
   - 선수: 1.3 문제를 수학적으로 정의하기
-- **1.5** [첫 번째 연구 파이프라인 완주하기](content/01-research-landscape/05-first-pipeline/index.md) · `필수`
+- **1.5** [첫 번째 연구 파이프라인 완주하기](content/01-research-landscape/05-first-pipeline/index.md) · `필수` · 퀴즈 6
   - 최소 파이프라인의 구성 · 한 번에 완주하기 · 의도적으로 생략한 것들 · 결과를 의심하는 첫 연습
   - 선수: 1.3 문제를 수학적으로 정의하기
-- **1.6** [AI 연구 생태계](content/01-research-landscape/06-research-ecosystem/index.md) · `참조`
+- **1.6** [AI 연구 생태계](content/01-research-landscape/06-research-ecosystem/index.md) · `참조` · 퀴즈 5
   - 발표 경로 · 오픈소스와 공유 문화 · 동향을 따라가는 법
   - 선수: 1.1 AI 연구의 생애주기
 
