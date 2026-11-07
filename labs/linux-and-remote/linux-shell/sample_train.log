@@ -1,0 +1,11 @@
+2026-03-02 10:00:01 INFO  epoch=1 loss=2.314 lr=0.001
+2026-03-02 10:03:12 INFO  epoch=2 loss=1.872 lr=0.001
+2026-03-02 10:03:13 WARN  dataloader slow: 4.2 s/batch
+2026-03-02 10:06:20 INFO  epoch=3 loss=1.541 lr=0.001
+2026-03-02 10:06:21 WARN  dataloader slow: 3.9 s/batch
+2026-03-02 10:09:35 INFO  epoch=4 loss=1.322 lr=0.0005
+2026-03-02 10:09:40 ERROR checkpoint write failed: No space left on device
+2026-03-02 10:12:44 INFO  epoch=5 loss=1.198 lr=0.0005
+2026-03-02 10:12:45 WARN  dataloader slow: 4.8 s/batch
+2026-03-02 10:15:58 INFO  epoch=6 loss=1.105 lr=0.0005
+2026-03-02 10:16:02 ERROR checkpoint write failed: No space left on device

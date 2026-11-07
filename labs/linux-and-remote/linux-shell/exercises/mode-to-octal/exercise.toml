@@ -1,0 +1,6 @@
+title = "ls -l 권한 문자열을 chmod 8진수로"
+chapter = "linux-and-remote/linux-shell"
+objective = 1
+exec = "browser"
+entry = "mode_to_octal"
+timeout_s = 10

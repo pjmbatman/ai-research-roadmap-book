@@ -1,0 +1,149 @@
+# 2.1 Linux와 셸의 기초 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "chmod-octal-value"
+type = "numeric"
+objective = 1
+prompt = '''`ls -l`에 `-rw-r-----`로 보이는 파일의 권한을 `chmod`의 세 자리 8진수로 쓰면 무엇인가? (예: 755)'''
+answer = 640
+tolerance = 0
+explanation = '''맨 앞 `-`는 파일 종류(일반 파일)이고 권한이 아니다. 나머지를 세 글자씩 나누면 소유자 `rw-` = 4 + 2 = 6, 그룹 `r--` = 4, 기타 `---` = 0이다. 그래서 `chmod 640`이다. 소유자는 읽고 쓰고, 같은 그룹은 읽기만, 나머지는 접근하지 못한다.'''
+
+[[questions]]
+id = "directory-execute-bit"
+type = "single"
+objective = 1
+prompt = '''공유 서버에서 동료에게 결과 파일을 보여 주려 한다. `~/results/summary.csv`는 `-rw-r--r--`인데, 같은 그룹의 동료가 `cat ~kim/results/summary.csv`를 실행하면 `Permission denied`가 난다. `ls -ld ~kim/results`는 `drwx------`다. 원인으로 가장 알맞은 것은?'''
+explanation = '''파일을 열려면 경로 위의 모든 디렉터리를 **통과**(x)할 수 있어야 한다. 디렉터리의 `x`는 "그 안으로 들어가 이름으로 파일에 접근하는 권한"이고, `r`은 "목록을 보는 권한"이다. `results`가 `drwx------`이면 그룹과 기타에게 x가 없어 안의 파일 권한과 상관없이 접근할 수 없다. 그룹에게만 보여 주려면 `chmod g+x ~kim/results`(목록까지 보이려면 `g+rx`)를 쓰고, 상위의 홈 디렉터리도 통과할 수 있어야 한다. 777로 여는 것은 필요 이상으로 넓다.'''
+
+[[questions.choices]]
+text = "summary.csv에 그룹 쓰기 권한(w)이 없어서다. chmod 664가 필요하다."
+feedback = "읽기에는 w가 필요 없다. 파일의 r은 이미 그룹에게 있다. 막힌 곳은 파일이 아니라 경로 위의 디렉터리다."
+
+[[questions.choices]]
+text = "results 디렉터리에 그룹 실행(x) 권한이 없어 그 안으로 들어갈 수 없어서다."
+correct = true
+
+[[questions.choices]]
+text = "다른 사용자의 홈 디렉터리 파일은 sudo 없이는 원래 읽을 수 없다."
+feedback = "권한 비트가 허용하면 다른 사용자도 읽을 수 있다. sudo는 관리자 권한이고, 공유 서버에서 일반 사용자에게 주어지지 않는 경우가 많다."
+
+[[questions.choices]]
+text = "summary.csv를 chmod 777로 바꾸면 해결된다."
+feedback = "파일을 777로 열어도 경로 위 디렉터리를 통과할 수 없으면 여전히 접근할 수 없다. 게다가 모두에게 쓰기·실행까지 허용하는 과도한 권한이다."
+
+[[questions]]
+id = "symlink-vs-hardlink"
+type = "single"
+objective = 1
+prompt = '''`data.h5`를 가리키는 symbolic link `sym.h5`와 hard link `hard.h5`를 만든 뒤, 원본 이름 `data.h5`를 `rm`으로 지웠다. 그다음 상태로 옳은 것은?'''
+explanation = '''hard link는 같은 inode(파일 실체)를 가리키는 또 하나의 **이름**이다. 이름 하나를 지워도 다른 이름이 남아 있으면 데이터는 그대로다(링크 수만 1 줄어든다). symbolic link는 **경로 문자열**을 담은 별도의 작은 파일이라, 가리키던 경로가 사라지면 깨진 링크(dangling link)가 된다.'''
+
+[[questions.choices]]
+text = "둘 다 깨진다. 원본이 지워졌기 때문이다."
+feedback = "hard link는 원본의 사본도 참조도 아니고 같은 inode의 다른 이름이다. 이름이 하나라도 남아 있으면 데이터는 지워지지 않는다."
+
+[[questions.choices]]
+text = "sym.h5는 깨지고, hard.h5로는 여전히 데이터를 읽을 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "sym.h5로는 읽을 수 있고, hard.h5는 깨진다."
+feedback = "반대다. symbolic link는 경로를 저장하므로 그 경로가 사라지면 깨진다."
+
+[[questions.choices]]
+text = "둘 다 읽을 수 있다. 링크는 만들 때 데이터를 복사해 두기 때문이다."
+feedback = "어느 링크도 데이터를 복사하지 않는다. 대용량 데이터에 링크를 쓰는 이유가 바로 복사하지 않기 위해서다."
+
+[[questions]]
+id = "bashrc-login-shell"
+type = "single"
+objective = 2
+prompt = '''`~/.bashrc` 끝에 `export PATH="$HOME/tools/bin:$PATH"`를 추가했다. 터미널에서 새 bash 창을 열면 적용되는데, SSH로 서버에 막 로그인한 직후에는 적용되지 않는다. `~/.bash_profile`은 있고, 그 안에는 `.bashrc`를 부르는 줄이 없다. 가장 알맞은 설명은?'''
+explanation = '''SSH 로그인은 **login shell**을 띄운다. bash login shell은 `/etc/profile`을 읽은 뒤 `~/.bash_profile`, `~/.bash_login`, `~/.profile` 중 **처음 발견한 하나만** 읽고, `~/.bashrc`는 직접 읽지 않는다. 그래서 흔히 `~/.bash_profile`(또는 `~/.profile`) 안에서 `.bashrc`를 source한다. 여기서는 `.bash_profile`이 있으므로 `.profile`도 읽히지 않는다. 해결은 `.bash_profile`에 `[ -f ~/.bashrc ] && . ~/.bashrc`를 넣거나 PATH 설정을 login 쪽 파일로 옮기는 것이다.'''
+
+[[questions.choices]]
+text = "SSH 로그인은 login shell이라 ~/.bash_profile을 읽고, 그 파일이 .bashrc를 부르지 않기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "공유 서버에서는 보안 때문에 사용자가 PATH를 바꿀 수 없다."
+feedback = "PATH는 사용자 셸의 환경변수다. 일반 사용자도 자기 셸에서 얼마든지 바꿀 수 있다."
+
+[[questions.choices]]
+text = "export 대신 set을 써야 서버 전체에 적용된다."
+feedback = "export는 변수를 자식 프로세스에 물려주게 하는 명령이고 맞게 쓰였다. 문제는 그 줄이 담긴 파일이 login shell에서 읽히지 않는다는 것이다."
+
+[[questions.choices]]
+text = "~/.profile에 같은 줄을 추가하면 반드시 해결된다."
+feedback = "bash login shell은 .bash_profile이 있으면 그것만 읽고 .profile은 읽지 않는다. 이 상황에서는 .profile을 고쳐도 반영되지 않는다."
+
+[[questions]]
+id = "path-first-match"
+type = "single"
+objective = 2
+prompt = '''`PATH=/home/kim/.local/bin:/usr/bin:/opt/conda/envs/proj/bin`이다. `jupyter`는 `~/.local/bin`과 conda 환경 양쪽에 있다. 터미널에서 `jupyter lab`을 실행했을 때 일어나는 일은?'''
+explanation = '''셸은 PATH의 디렉터리를 **앞에서부터** 찾아 처음 나온 실행 파일을 쓴다. 여기서는 `~/.local/bin/jupyter`(예: `pip install --user`로 깔린 것)가 먼저 잡힌다. 이 jupyter가 띄우는 기본 커널은 conda 환경의 python이 아닐 수 있어, conda 환경에 설치한 패키지가 "없다"는 오류가 난다. `type -a jupyter`로 후보 전체와 순서를 확인하고, 노트북 안에서 `import sys; sys.executable`로 실제 인터프리터를 확인한다.'''
+
+[[questions.choices]]
+text = "~/.local/bin/jupyter가 실행된다. PATH의 앞쪽이 우선이다."
+correct = true
+
+[[questions.choices]]
+text = "/opt/conda/envs/proj/bin/jupyter가 실행된다. 가장 최근에 설치한 것이 우선이다."
+feedback = "설치 시점은 상관없다. 셸은 PATH 순서만 본다."
+
+[[questions.choices]]
+text = "두 jupyter가 충돌해 셸이 오류를 낸다."
+feedback = "셸은 첫 번째로 찾은 것을 조용히 실행한다. 경고가 없다는 것이 이 문제를 찾기 어렵게 만든다."
+
+[[questions.choices]]
+text = "PATH의 뒤쪽이 사용자가 마지막에 추가한 것이므로 conda 쪽이 실행된다."
+feedback = "PATH는 앞에서부터 검색한다. 뒤에 덧붙인(PATH=$PATH:...) 디렉터리는 가장 늦게 검색된다."
+
+[[questions]]
+id = "set-e-pitfalls"
+type = "multiple"
+objective = 3
+prompt = '''`set -e`만 켜고 `pipefail`은 켜지 않은 bash 스크립트에서, 아래 줄 중 **스크립트를 그 자리에서 멈추게 하는** 것을 모두 고르시오. (`false`는 항상 exit code 1로 끝나는 명령이다.)'''
+explanation = '''`set -e`는 단순 명령이 0이 아닌 코드로 끝나면 스크립트를 멈춘다. `false` 단독, 그리고 명령 치환 결과를 대입하는 `x=$(false)`가 여기에 해당한다. 파이프라인의 종료 코드는 기본적으로 **마지막 명령**의 코드이므로 `false | tee log`는 0이 되어 멈추지 않는다. `set -o pipefail`을 켜야 파이프 중간의 실패가 드러난다. `||`의 왼쪽, `if`의 조건은 실패를 "처리한 것"으로 보아 `set -e`가 적용되지 않는다. 이 장의 `set -euo pipefail` 실험(집필 시점에 bash 5.2로 확인)과 같다.'''
+
+[[questions.choices]]
+text = "`false`"
+correct = true
+
+[[questions.choices]]
+text = "`false | tee log.txt`"
+feedback = "pipefail이 없으면 파이프라인의 종료 코드는 마지막 명령(tee)의 것이다. tee가 성공하면 실패가 묻힌다."
+
+[[questions.choices]]
+text = "`x=$(false)`"
+correct = true
+
+[[questions.choices]]
+text = "`false || echo \"실패했지만 계속\"`"
+feedback = "|| 왼쪽의 실패는 오른쪽이 처리한 것으로 보아 set -e가 멈추지 않는다. 의도적으로 실패를 허용할 때 쓰는 관용구다."
+
+[[questions]]
+id = "redirect-order"
+type = "single"
+objective = 3
+prompt = '''학습 로그를 파일 하나에 남기려 한다. stdout과 stderr를 **모두** `train.log`에 기록하는 명령은?'''
+explanation = '''리다이렉션은 왼쪽에서 오른쪽으로 처리된다. `> train.log 2>&1`은 먼저 stdout(1)을 파일로 돌린 뒤, stderr(2)를 "지금 1이 가리키는 곳", 즉 파일로 복제한다. `2>&1 > train.log`는 stderr를 먼저 당시의 stdout(터미널)으로 복제하고 나서 stdout만 파일로 돌리므로 오류 메시지는 터미널에 남는다. Python의 traceback은 stderr로 나가므로, 이 차이 때문에 "죽은 이유"가 로그에 없는 일이 생긴다.'''
+
+[[questions.choices]]
+text = "`python train.py > train.log 2>&1`"
+correct = true
+
+[[questions.choices]]
+text = "`python train.py 2>&1 > train.log`"
+feedback = "순서가 반대다. stderr가 먼저 터미널로 복제된 뒤 stdout만 파일로 간다. traceback이 로그에 남지 않는다."
+
+[[questions.choices]]
+text = "`python train.py > train.log`"
+feedback = "stdout만 기록된다. 오류와 경고, traceback은 stderr로 나가 터미널에만 보인다."
+
+[[questions.choices]]
+text = "`python train.py | tee train.log`"
+feedback = "파이프는 stdout만 넘긴다. stderr까지 넘기려면 `2>&1 | tee train.log`처럼 써야 한다."
