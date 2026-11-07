@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 672문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 697문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -457,17 +457,17 @@ _데이터의 의미와 저장 형식, 전처리와 탐색적 분석, 분할과 
 
 _강한 기준 모델, 선형·커널·트리 모델, 비지도학습, 모델 선택과 평가, 시계열·생존분석·인과추론의 기초를 다룬다._
 
-- **16.1** [기준 모델의 철학](content/16-classical-ml/01-baselines/index.md) · `필수`
-  - 왜 baseline인가 · 단순 baseline · 강한 baseline · baseline이 이기는 경우
+- **16.1** [기준 모델의 철학](content/16-classical-ml/01-baselines/index.md) · `필수` · 퀴즈 6
+  - 왜 baseline인가 · 단순 baseline · 강한 baseline · baseline이 이기는 경우 · 참고 문헌
   - 선수: 15.4 데이터 분할과 누수 방지
-- **16.2** [선형 모델과 정규화](content/16-classical-ml/02-linear-models/index.md) · `필수`
-  - 선형회귀 · 정규화 · 로지스틱 회귀 · 특징 공학
+- **16.2** [선형 모델과 정규화](content/16-classical-ml/02-linear-models/index.md) · `필수` · 퀴즈 6
+  - 선형회귀 · 정규화 · 로지스틱 회귀 · 특징 공학 · 참고 문헌
   - 선수: 16.1 기준 모델의 철학, 7.4 내적·노름·직교성·사영, 12.2 우도와 최대우도
-- **16.3** [커널 방법과 최근접 이웃](content/16-classical-ml/03-kernels-and-neighbors/index.md) · `필수`
-  - 최근접 이웃 · SVM · 커널 방법 · 확장성
+- **16.3** [커널 방법과 최근접 이웃](content/16-classical-ml/03-kernels-and-neighbors/index.md) · `필수` · 퀴즈 6
+  - 최근접 이웃 · SVM · 커널 방법 · 확장성 · 참고 문헌
   - 선수: 16.2 선형 모델과 정규화, 7.9 함수공간과 연산자
-- **16.4** [트리와 앙상블](content/16-classical-ml/04-trees-and-ensembles/index.md) · `필수`
-  - 결정 트리 · bagging과 랜덤 포레스트 · gradient boosting · 표 데이터에서의 위치 · 특징 중요도
+- **16.4** [트리와 앙상블](content/16-classical-ml/04-trees-and-ensembles/index.md) · `필수` · 퀴즈 7
+  - 결정 트리 · bagging과 랜덤 포레스트 · gradient boosting · 표 데이터에서의 위치 · 특징 중요도 · 참고 문헌
   - 선수: 16.1 기준 모델의 철학
 - **16.5** [비지도학습과 표현 탐색](content/16-classical-ml/05-unsupervised-learning/index.md) · `필수`
   - 차원 축소 · 군집 · 밀도 추정과 이상 탐지 · 시각화 · 군집의 의미
