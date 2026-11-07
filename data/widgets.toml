@@ -25,31 +25,31 @@ status = "prototype"
 name = "svd-explorer"
 title = "SVD: 회전–스케일–회전"
 chapters = ["linear-algebra/svd-and-pca"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "autodiff-graph"
 title = "계산 그래프와 역전파"
 chapters = ["calculus-and-autodiff/automatic-differentiation"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "float-precision"
 title = "부동소수점 비트 구조"
 chapters = ["numerical-methods/floating-point"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "ode-stability"
 title = "ODE solver의 step 크기와 안정성"
 chapters = ["numerical-methods/ode-solvers"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "optimizer-landscape"
 title = "손실 지형 위의 optimizer 궤적"
 chapters = ["optimization/first-order-methods", "optimization/adaptive-methods"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "distribution-explorer"

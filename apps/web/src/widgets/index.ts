@@ -15,6 +15,11 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "attention-visualizer": () => import("./attention-visualizer/index"),
   "diffusion-process": () => import("./diffusion-process/index"),
   "battery-ecm": () => import("./battery-ecm/index"),
+  "svd-explorer": () => import("./svd-explorer/index"),
+  "autodiff-graph": () => import("./autodiff-graph/index"),
+  "float-precision": () => import("./float-precision/index"),
+  "ode-stability": () => import("./ode-stability/index"),
+  "optimizer-landscape": () => import("./optimizer-landscape/index"),
 };
 
 export function mountWidgets(page: PageData) {
