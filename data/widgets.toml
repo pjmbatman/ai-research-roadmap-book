@@ -223,37 +223,37 @@ status = "prototype"
 name = "config-merge"
 title = "설정 계층 병합"
 chapters = ["research-code-engineering/configuration"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "argparse-sandbox"
 title = "CLI 인자에서 설정으로"
 chapters = ["research-code-engineering/cli-design"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "power-iteration"
 title = "반복 적용과 고유벡터"
 chapters = ["linear-algebra/eigen-and-symmetric"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "projection-lstsq"
 title = "사영과 최소제곱"
 chapters = ["linear-algebra/inner-products-and-projection"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "einsum-axes"
 title = "einsum 축 표기"
 chapters = ["linear-algebra/tensors-and-einsum"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "slerp-vs-lerp"
 title = "구면 위 보간"
 chapters = ["linear-algebra/manifolds-and-geometry"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "basis-expansion"
