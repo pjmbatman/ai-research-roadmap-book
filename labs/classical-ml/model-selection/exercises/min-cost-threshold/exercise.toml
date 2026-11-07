@@ -1,0 +1,6 @@
+title = "비용을 최소화하는 threshold 고르기"
+chapter = "classical-ml/model-selection"
+objective = 2
+exec = "browser"
+entry = "best_threshold"
+timeout_s = 10
