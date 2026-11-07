@@ -1,0 +1,6 @@
+title = "바닥이 있는 멱법칙 맞추고 외삽하기"
+chapter = "information-and-learning-theory/modern-generalization"
+objective = 2
+exec = "browser"
+entry = "fit_power_law"
+timeout_s = 10

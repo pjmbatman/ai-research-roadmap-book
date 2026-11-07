@@ -1,0 +1,6 @@
+title = "반복 실험으로 bias–variance 분해하기"
+chapter = "information-and-learning-theory/generalization-basics"
+objective = 2
+exec = "browser"
+entry = "bias_variance"
+timeout_s = 10

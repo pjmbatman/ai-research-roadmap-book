@@ -1,0 +1,6 @@
+title = "Hoeffding bound로 시험 표본 수 정하기"
+chapter = "information-and-learning-theory/generalization-basics"
+objective = 3
+exec = "browser"
+entry = "sample_size"
+timeout_s = 10
