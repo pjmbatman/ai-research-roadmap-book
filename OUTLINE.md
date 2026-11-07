@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 136문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 170문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -356,23 +356,23 @@ _확률변수와 분포, 조건부확률, 다변량 가우시안, 기댓값과 �
 
 _추정량의 성질, 우도와 최대우도, 분포 기반 문제 정의, 구간 추정과 검정, 모델 비교의 통계를 다룬다._
 
-- **12.1** [추정량의 성질](content/12-statistical-inference/01-estimators/index.md) · `필수`
+- **12.1** [추정량의 성질](content/12-statistical-inference/01-estimators/index.md) · `필수` · 퀴즈 7
   - 기본 개념 · 편향과 분산 · 점근적 성질 · 효율성
   - 선수: 11.5 기댓값·부등식·극한정리
-- **12.2** [우도와 최대우도](content/12-statistical-inference/02-likelihood/index.md) · `필수`
+- **12.2** [우도와 최대우도](content/12-statistical-inference/02-likelihood/index.md) · `필수` · 퀴즈 7
   - 확률과 우도 · 최대우도추정 · 손실함수의 확률적 해석 · MLE의 성질과 한계 · MAP와 정규화
   - 선수: 12.1 추정량의 성질
 - **12.3** [분포 기반 문제 정의](content/12-statistical-inference/03-distributional-formulation/index.md) · `필수` · 퀴즈 7 · 위젯: 손실함수가 고르는 대표값
   - 무엇의 분포가 필요한가 · 결정 이론 · 분포를 출력하는 모델 · 적정 점수 규칙 · 불확실성의 출처 구분 · 참고 문헌
   - 선수: 12.2 우도와 최대우도
-- **12.4** [구간 추정·가설 검정·부트스트랩](content/12-statistical-inference/04-intervals-and-testing/index.md) · `필수`
-  - 신뢰구간 · 가설 검정 · 효과 크기 · 부트스트랩 · 다중 비교와 선택 편향
+- **12.4** [구간 추정·가설 검정·부트스트랩](content/12-statistical-inference/04-intervals-and-testing/index.md) · `필수` · 퀴즈 6
+  - 신뢰구간 · 가설 검정 · 효과 크기 · 부트스트랩 · 다중 비교와 선택 편향 · 참고 문헌
   - 선수: 12.1 추정량의 성질
-- **12.5** [모델 비교의 통계](content/12-statistical-inference/05-comparing-models/index.md) · `필수`
-  - 변동의 출처 · 짝지은 비교 · 교차검증 결과의 비교 · 여러 데이터셋에서의 비교 · 보고 방식
+- **12.5** [모델 비교의 통계](content/12-statistical-inference/05-comparing-models/index.md) · `필수` · 퀴즈 7
+  - 변동의 출처 · 짝지은 비교 · 교차검증 결과의 비교 · 여러 데이터셋에서의 비교 · 보고 방식 · 참고 문헌
   - 선수: 12.4 구간 추정·가설 검정·부트스트랩
-- **12.6** [회귀모형의 통계적 관점](content/12-statistical-inference/06-regression-models/index.md) · `심화`
-  - 선형모형 · 일반화 선형모형 · 잔차 진단 · 혼합효과 모형
+- **12.6** [회귀모형의 통계적 관점](content/12-statistical-inference/06-regression-models/index.md) · `심화` · 퀴즈 7
+  - 선형모형 · 일반화 선형모형 · 잔차 진단 · 혼합효과 모형 · 참고 문헌
   - 선수: 12.2 우도와 최대우도
 
 ### 제13부. 베이지안 추론 <sub>Bayesian Inference</sub>
