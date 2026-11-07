@@ -1,0 +1,6 @@
+title = "반응 네트워크의 보존량 찾기와 검사"
+chapter = "scientific-ml/physics-and-learning"
+objective = 3
+exec = "browser"
+entry = "conservation_laws"
+timeout_s = 10

@@ -1,0 +1,6 @@
+title = "solver를 통과하는 순방향 민감도"
+chapter = "scientific-ml/neural-ode-and-differentiable-simulation"
+objective = 1
+exec = "browser"
+entry = "euler_with_sensitivity"
+timeout_s = 10
