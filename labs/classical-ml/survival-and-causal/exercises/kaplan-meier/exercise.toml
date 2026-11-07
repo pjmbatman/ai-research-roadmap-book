@@ -1,0 +1,6 @@
+title = "Kaplan–Meier 생존곡선 구현하기"
+chapter = "classical-ml/survival-and-causal"
+objective = 1
+exec = "browser"
+entry = "kaplan_meier"
+timeout_s = 10
