@@ -1,26 +1,12 @@
 // 위젯 등록부. 구현이 있는 위젯만 동적으로 불러오고, 아직 없는 위젯(status = planned)은 무엇을 하게 될지 안내하는 자리만 그린다.
 import type { PageData } from "../client/main";
 
-const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Record<string, string>) => void }>> = {
-  "linear-map-2d": () => import("./linear-map-2d/index"),
-  "relu-regions": () => import("./relu-regions/index"),
-  "loss-to-estimator": () => import("./loss-to-estimator/index"),
-  "distribution-explorer": () => import("./distribution-explorer/index"),
-  "gaussian-conditioning": () => import("./gaussian-conditioning/index"),
-  "bayesian-update": () => import("./bayesian-update/index"),
-  "gp-regression": () => import("./gp-regression/index"),
-  "calibration-diagram": () => import("./calibration-diagram/index"),
-  "split-leakage": () => import("./split-leakage/index"),
-  "training-loop-stepper": () => import("./training-loop-stepper/index"),
-  "attention-visualizer": () => import("./attention-visualizer/index"),
-  "diffusion-process": () => import("./diffusion-process/index"),
-  "battery-ecm": () => import("./battery-ecm/index"),
-  "svd-explorer": () => import("./svd-explorer/index"),
-  "autodiff-graph": () => import("./autodiff-graph/index"),
-  "float-precision": () => import("./float-precision/index"),
-  "ode-stability": () => import("./ode-stability/index"),
-  "optimizer-landscape": () => import("./optimizer-landscape/index"),
-};
+type WidgetModule = { mount: (root: HTMLElement, attrs: Record<string, string>) => void };
+// 위젯 폴더(<name>/index.ts)를 자동으로 찾는다. 새 위젯은 폴더만 만들면 등록된다.
+const MODULES = import.meta.glob<WidgetModule>("./*/index.ts");
+const IMPL: Record<string, () => Promise<WidgetModule>> = Object.fromEntries(
+  Object.entries(MODULES).map(([p, load]) => [p.split("/")[1], load]),
+);
 
 export function mountWidgets(page: PageData) {
   const nodes = [...document.querySelectorAll<HTMLElement>(".widget[data-widget]")];
