@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 852문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 882문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -556,20 +556,20 @@ _귀납적 편향의 관점에서 MLP·CNN·순환·상태공간 모델·Transfo
 
 _생성모델의 공통 문제 정의, 자기회귀·VAE·GAN·flow·확산·flow matching, 생성모델 평가, 자기지도학습, 사전학습과 전이를 다룬다._
 
-- **19.1** [생성모델의 공통 문제 정의](content/19-generative-and-foundation-models/01-generative-modeling/index.md) · `필수`
-  - 무엇의 분포인가 · 세 가지 능력 · 생성 · 재구성 · 예측 · 계열 지도
+- **19.1** [생성모델의 공통 문제 정의](content/19-generative-and-foundation-models/01-generative-modeling/index.md) · `필수` · 퀴즈 6
+  - 무엇의 분포인가 · 세 가지 능력 · 생성 · 재구성 · 예측 · 계열 지도 · 참고 문헌
   - 선수: 11.2 주요 분포와 지수족, 14.1 엔트로피·교차엔트로피·KL
-- **19.2** [자기회귀 모델](content/19-generative-and-foundation-models/02-autoregressive-models/index.md) · `필수`
-  - chain rule 분해 · 구조 · 샘플링 · 연속값의 자기회귀
+- **19.2** [자기회귀 모델](content/19-generative-and-foundation-models/02-autoregressive-models/index.md) · `필수` · 퀴즈 6
+  - chain rule 분해 · 구조 · 샘플링 · 연속값의 자기회귀 · 참고 문헌
   - 선수: 19.1 생성모델의 공통 문제 정의
-- **19.3** [VAE와 잠재변수 생성모델](content/19-generative-and-foundation-models/03-vae/index.md) · `필수`
-  - 모델 · ELBO · 재매개변수화 · 문제와 대응 · 확장
+- **19.3** [VAE와 잠재변수 생성모델](content/19-generative-and-foundation-models/03-vae/index.md) · `필수` · 퀴즈 6
+  - 모델 · ELBO · 재매개변수화 · 문제와 대응 · 확장 · 참고 문헌
   - 선수: 19.1 생성모델의 공통 문제 정의, 13.6 근사 추론 II: 변분추론과 Laplace 근사
-- **19.4** [GAN과 Normalizing Flow](content/19-generative-and-foundation-models/04-gan-and-flows/index.md) · `심화`
-  - GAN · GAN의 어려움 · Normalizing flow · flow 구조
+- **19.4** [GAN과 Normalizing Flow](content/19-generative-and-foundation-models/04-gan-and-flows/index.md) · `심화` · 퀴즈 6
+  - GAN · GAN의 어려움 · Normalizing flow · flow 구조 · 참고 문헌
   - 선수: 19.1 생성모델의 공통 문제 정의, 8.3 적분과 변수변환
-- **19.5** [확산 모델과 score 기반 모델](content/19-generative-and-foundation-models/05-diffusion-models/index.md) · `필수` · 위젯: 확산 과정의 forward와 reverse
-  - forward 과정 · reverse 과정과 학습 · score 관점 · 샘플링 · 조건부 생성 · 과학 데이터에의 적용
+- **19.5** [확산 모델과 score 기반 모델](content/19-generative-and-foundation-models/05-diffusion-models/index.md) · `필수` · 퀴즈 6 · 위젯: 확산 과정의 forward와 reverse
+  - forward 과정 · reverse 과정과 학습 · score 관점 · 샘플링 · 조건부 생성 · 과학 데이터에의 적용 · 참고 문헌
   - 선수: 19.1 생성모델의 공통 문제 정의, 11.7 확률과정 기초
 - **19.6** [Flow Matching과 연속시간 생성모델](content/19-generative-and-foundation-models/06-flow-matching/index.md) · `심화`
   - 연속 정규화 흐름 · flow matching · rectified flow와 최적 수송 · 확산 모델과의 관계
