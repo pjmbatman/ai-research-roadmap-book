@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 20문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 48문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -53,18 +53,18 @@
 
 _이 책이 무엇을 목표로 하며, 어떤 순서와 형식으로 읽고 훈련하는지 안내한다._
 
-- **0.1** [왜 이 책인가](content/00-orientation/01-why-this-book/index.md) · `필수`
+- **0.1** [왜 이 책인가](content/00-orientation/01-why-this-book/index.md) · `필수` · 퀴즈 6
   - 목표로 하는 연구자상 · 지식의 목록이 아니라 훈련 체계 · 이 책의 범위와 한계
-- **0.2** [이 책을 읽는 법](content/00-orientation/02-how-to-read/index.md) · `필수`
+- **0.2** [이 책을 읽는 법](content/00-orientation/02-how-to-read/index.md) · `필수` · 퀴즈 6
   - 레이어·트랙·부·장 · 모든 장의 공통 형식 · 이론과 실습을 한 화면에서 · 평가 방식 · 난이도 등급 · 표기법·용어·코드 규칙
   - 선수: 0.1 왜 이 책인가
-- **0.3** [학습 경로](content/00-orientation/03-learning-paths/index.md) · `필수`
+- **0.3** [학습 경로](content/00-orientation/03-learning-paths/index.md) · `필수` · 퀴즈 5
   - 목차 순서와 학습 순서는 다르다 · 다섯 단계 나선형 경로 · 배경별 경로 · 분야 선택 · 기간은 계획 범위, 진도는 산출물
   - 선수: 0.2 이 책을 읽는 법
-- **0.4** [자가 진단과 역량 지도](content/00-orientation/04-self-assessment/index.md) · `필수`
+- **0.4** [자가 진단과 역량 지도](content/00-orientation/04-self-assessment/index.md) · `필수` · 퀴즈 6
   - 역량 지도 · 진단 문항 · 진단 결과의 활용
   - 선수: 0.3 학습 경로
-- **0.5** [스터디·강의로 활용하기](content/00-orientation/05-study-guide/index.md) · `참조`
+- **0.5** [스터디·강의로 활용하기](content/00-orientation/05-study-guide/index.md) · `참조` · 퀴즈 5
   - 네 가지 모임 형식 · 운영 주기와 역할 · 점검과 피드백 · 강의 교재로 쓸 때 · 로드맵에 돌려주기
   - 선수: 0.3 학습 경로
 
