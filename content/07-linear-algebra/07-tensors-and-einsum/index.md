@@ -93,6 +93,8 @@ Frobenius ij,ij-> : True
 
 `"ii->"`처럼 한 입력 안에서 글자가 반복되면 대각 원소만 읽는다. `"ij,ij->"`는 같은 위치의 원소를 곱해 모두 더하므로, 7.4장의 Frobenius 내적 $\langle \mathbf{A}, \mathbf{C} \rangle_F = \operatorname{tr}(\mathbf{A}^\top\mathbf{C})$이다.
 
+::widget{name="einsum-axes"}
+
 ::quiz{id="einsum-frobenius"}
 
 **batch 행렬 곱.** 자유 인덱스가 두 입력에 모두 있고 출력에도 남으면 그 축은 "같이 순회하는" batch 축이 된다. $C_{bik} = \sum_j A_{bij} B_{bjk}$는 `"bij,bjk->bik"`로, batch 항목마다 독립된 행렬 곱이다. attention이 정확히 이 구조다. 쿼리 $\mathbf{Q}$와 키 $\mathbf{K}$의 유사도 점수는
