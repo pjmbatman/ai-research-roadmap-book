@@ -275,6 +275,8 @@ rebase 후:  A ← B ← C ← F ← D′ ← E′  ← feature
 
 D′는 D와 같은 변경을 담지만 parent가 다르고(B 대신 F) tree도 다르므로 **id가 다른 새 commit**이다. 원래의 D, E는 지워지지 않고, 이름표만 잃은 채 객체 데이터베이스에 남는다. 이제 main에서 `git merge feature`를 하면 fast-forward가 되어 이력이 한 줄로 이어진다.
 
+::widget{name="commit-dag"}
+
 ::quiz{id="rebase-new-commits"}
 
 merge와 rebase는 같은 문제를 다르게 푼다.
