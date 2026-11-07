@@ -127,7 +127,7 @@ status = "prototype"
 name = "scaffold-split-explorer"
 title = "무작위 분할 vs scaffold 분할"
 chapters = ["chemistry-and-materials/property-prediction"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "md-energy-conservation"

@@ -21,6 +21,7 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "ode-stability": () => import("./ode-stability/index"),
   "optimizer-landscape": () => import("./optimizer-landscape/index"),
   "coulomb-matrix-invariance": () => import("./coulomb-matrix-invariance/index"),
+  "scaffold-split-explorer": () => import("./scaffold-split-explorer/index"),
 };
 
 export function mountWidgets(page: PageData) {
