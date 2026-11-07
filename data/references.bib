@@ -172,3 +172,88 @@
   doi     = {10.2307/1942661},
   note    = {확인: 서지 기록과 초록. 처리가 반복되지 않았거나 반복이 통계적으로 독립이 아닌 실험에서 추론 통계로 처리 효과를 검정하는 오류(pseudoreplication)의 정의}
 }
+
+@article{metropolis1953equation,
+  author  = {Metropolis, Nicholas and Rosenbluth, Arianna W. and Rosenbluth, Marshall N. and Teller, Augusta H. and Teller, Edward},
+  title   = {Equation of State Calculations by Fast Computing Machines},
+  journal = {The Journal of Chemical Physics},
+  volume  = {21},
+  number  = {6},
+  pages   = {1087--1092},
+  year    = {1953},
+  doi     = {10.1063/1.1699114},
+  note    = {확인: 서지 기록(웹 검색). 대칭 제안과 밀도 비에 따른 수용으로 볼츠만 분포를 샘플링하는 Metropolis 알고리즘}
+}
+
+@article{hastings1970monte,
+  author  = {Hastings, W. K.},
+  title   = {Monte Carlo Sampling Methods Using Markov Chains and Their Applications},
+  journal = {Biometrika},
+  volume  = {57},
+  number  = {1},
+  pages   = {97--109},
+  year    = {1970},
+  doi     = {10.1093/biomet/57.1.97},
+  note    = {확인: 서지 기록과 초록(웹 검색). Metropolis 방법의 일반화}
+}
+
+@article{gelman1992inference,
+  author  = {Gelman, Andrew and Rubin, Donald B.},
+  title   = {Inference from Iterative Simulation Using Multiple Sequences},
+  journal = {Statistical Science},
+  volume  = {7},
+  number  = {4},
+  pages   = {457--472},
+  year    = {1992},
+  doi     = {10.1214/ss/1177011136},
+  note    = {확인: Project Euclid 서지 기록(웹 검색). 과분산된 시작점의 여러 체인을 비교하는 수렴 진단}
+}
+
+@article{roberts1997weak,
+  author  = {Roberts, G. O. and Gelman, A. and Gilks, W. R.},
+  title   = {Weak Convergence and Optimal Scaling of Random Walk Metropolis Algorithms},
+  journal = {The Annals of Applied Probability},
+  volume  = {7},
+  number  = {1},
+  pages   = {110--120},
+  year    = {1997},
+  doi     = {10.1214/aoap/1034625254},
+  note    = {확인: 서지 기록과 초록(웹 검색). 점근적으로 최적인 수용률 0.234}
+}
+
+@incollection{neal2011mcmc,
+  author    = {Neal, Radford M.},
+  title     = {MCMC Using Hamiltonian Dynamics},
+  booktitle = {Handbook of Markov Chain Monte Carlo},
+  editor    = {Brooks, Steve and Gelman, Andrew and Jones, Galin L. and Meng, Xiao-Li},
+  publisher = {Chapman \& Hall/CRC},
+  chapter   = {5},
+  pages     = {113--162},
+  year      = {2011},
+  doi       = {10.1201/b10905},
+  eprint    = {1206.1901},
+  archivePrefix = {arXiv},
+  note      = {확인: 저자 페이지 초록과 서지 기록(웹 검색). leapfrog 적분과 HMC 해설}
+}
+
+@article{hoffman2014no,
+  author  = {Hoffman, Matthew D. and Gelman, Andrew},
+  title   = {The No-U-Turn Sampler: Adaptively Setting Path Lengths in Hamiltonian Monte Carlo},
+  journal = {Journal of Machine Learning Research},
+  volume  = {15},
+  pages   = {1593--1623},
+  year    = {2014},
+  note    = {확인: JMLR 논문 페이지(웹 검색). 되돌아오기 시작하면 멈추는 규칙으로 걸음 수를 자동 결정, dual averaging으로 보폭 적응}
+}
+
+@article{vehtari2021rank,
+  author  = {Vehtari, Aki and Gelman, Andrew and Simpson, Daniel and Carpenter, Bob and B{\"u}rkner, Paul-Christian},
+  title   = {Rank-Normalization, Folding, and Localization: An Improved $\widehat{R}$ for Assessing Convergence of MCMC},
+  journal = {Bayesian Analysis},
+  volume  = {16},
+  number  = {2},
+  pages   = {667--718},
+  year    = {2021},
+  doi     = {10.1214/20-BA1221},
+  note    = {확인: Project Euclid 서지 기록과 초록(웹 검색). 순위 정규화 R-hat, bulk/tail ESS. R-hat < 1.01, ESS > 400 권고는 2차 자료로 확인}
+}

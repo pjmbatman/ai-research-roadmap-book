@@ -1,0 +1,6 @@
+title = "HMC의 leapfrog 적분기"
+chapter = "bayesian-inference/mcmc"
+objective = 2
+exec = "browser"
+entry = "leapfrog"
+timeout_s = 15
