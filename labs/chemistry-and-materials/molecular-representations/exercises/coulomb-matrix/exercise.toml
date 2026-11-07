@@ -1,0 +1,6 @@
+title = "Coulomb 행렬과 고윳값 기술자"
+chapter = "chemistry-and-materials/molecular-representations"
+objective = 2
+exec = "browser"
+entry = "coulomb_eigs"
+timeout_s = 10
