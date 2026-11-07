@@ -131,11 +131,11 @@ for runtime in ["11.8", "12.1", "12.4", "12.6", "13.0"]:
 
 ## PyTorch 바이너리와 CUDA
 
-pip이나 uv로 설치하는 PyTorch는 미리 컴파일된 바이너리 패키지(wheel, 3.4장)다. CUDA용 wheel은 실행에 필요한 CUDA runtime, cuBLAS, cuDNN, NCCL 같은 라이브러리를 함께 가져온다. 집필 시점의 Linux용 wheel은 이 라이브러리들을 `nvidia-`로 시작하는 별도 Python 패키지로 의존성에 걸어 두는 방식을 쓴다. 정확한 구성은 버전마다 바뀌므로 자신의 환경에서 직접 확인한다(집필 시점 예시).
+pip이나 uv로 설치하는 PyTorch는 미리 컴파일된 바이너리 패키지(wheel, 3.4장)다. CUDA용 wheel은 실행에 필요한 CUDA runtime, cuBLAS, cuDNN, NCCL 같은 라이브러리를 함께 가져온다. 집필 시점 PyPI의 Linux용 wheel은 이 라이브러리들을 `nvidia-cudnn-cu13`, `nvidia-nccl-cu13`, `cuda-toolkit`처럼 별도의 Python 패키지로 만들어 의존성에 걸어 두는 방식을 쓴다(3.4장). 정확한 구성은 버전마다 바뀌므로 자신의 환경에서 직접 확인한다(집필 시점 예시).
 
 ```bash
 # PyTorch와 함께 설치된 NVIDIA 라이브러리 패키지 확인
-pip list 2>/dev/null | grep -i nvidia
+pip list 2>/dev/null | grep -i -E 'nvidia|cuda'
 uv tree --package torch          # uv 프로젝트라면 의존성 트리로 확인
 
 # PyTorch가 보는 CUDA·cuDNN·GPU
