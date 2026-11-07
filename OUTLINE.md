@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 639문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 672문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -486,20 +486,20 @@ _강한 기준 모델, 선형·커널·트리 모델, 비지도학습, 모델 �
 
 _신경망의 구성 요소, PyTorch의 tensor·autograd·Module·DataLoader, forward–backward–update 학습 루프, 평가·체크포인트, trainer 설계, 대시보드, 학습 실패 진단을 다룬다._
 
-- **17.1** [신경망의 구성 요소](content/17-deep-learning-pytorch/01-neural-network-components/index.md) · `필수` · 위젯: ReLU 신경망의 조각별 아핀 영역
-  - 층과 활성화 · 깊이와 폭 · 초기화 · 정규화 층 · residual connection과 dropout · output head
+- **17.1** [신경망의 구성 요소](content/17-deep-learning-pytorch/01-neural-network-components/index.md) · `필수` · 퀴즈 7 · 위젯: ReLU 신경망의 조각별 아핀 영역
+  - 층과 활성화 · 깊이와 폭 · 초기화 · 정규화 층 · residual connection과 dropout · output head · 참고 문헌
   - 선수: 7.2 아핀 구조와 비선형성, 8.4 자동미분과 역전파
-- **17.2** [PyTorch 텐서와 autograd](content/17-deep-learning-pytorch/02-tensors-and-autograd/index.md) · `필수`
-  - 텐서 · shape 연산 · autograd · 그래프 제어 · 함수형 도구
+- **17.2** [PyTorch 텐서와 autograd](content/17-deep-learning-pytorch/02-tensors-and-autograd/index.md) · `필수` · 퀴즈 7
+  - 텐서 · shape 연산 · autograd · 그래프 제어 · 함수형 도구 · 참고 문헌
   - 선수: 5.3 NumPy·pandas·SciPy, 8.4 자동미분과 역전파
-- **17.3** [nn.Module과 모델 구성](content/17-deep-learning-pytorch/03-modules/index.md) · `필수`
+- **17.3** [nn.Module과 모델 구성](content/17-deep-learning-pytorch/03-modules/index.md) · `필수` · 퀴즈 6
   - nn.Module · parameter와 buffer · 컨테이너 · state_dict · hook · 설정에서 모델 만들기
   - 선수: 17.2 PyTorch 텐서와 autograd
-- **17.4** [Dataset과 DataLoader](content/17-deep-learning-pytorch/04-datasets-and-dataloaders/index.md) · `필수`
+- **17.4** [Dataset과 DataLoader](content/17-deep-learning-pytorch/04-datasets-and-dataloaders/index.md) · `필수` · 퀴즈 6
   - Dataset · sample contract · batch 구성 · sampler · 병렬 로딩 · 대용량 데이터
   - 선수: 17.2 PyTorch 텐서와 autograd, 15.4 데이터 분할과 누수 방지
-- **17.5** [학습 루프 해부: forward → loss → backward → update](content/17-deep-learning-pytorch/05-training-loop/index.md) · `필수` · 위젯: 학습 루프 단계 재생기
-  - 전체 흐름 · 수식과 코드 · 역할의 구분 · 단위의 구분 · 실전 요소 · end-to-end라는 말의 의미
+- **17.5** [학습 루프 해부: forward → loss → backward → update](content/17-deep-learning-pytorch/05-training-loop/index.md) · `필수` · 퀴즈 7 · 위젯: 학습 루프 단계 재생기
+  - 전체 흐름 · 수식과 코드 · 역할의 구분 · 단위의 구분 · 실전 요소 · end-to-end라는 말의 의미 · 참고 문헌
   - 선수: 17.3 nn.Module과 모델 구성, 17.4 Dataset과 DataLoader, 10.4 적응적 방법과 학습 레시피, 14.3 목적함수 설계의 원리
 - **17.6** [평가·추론·체크포인트](content/17-deep-learning-pytorch/06-evaluation-and-checkpoints/index.md) · `필수`
   - 평가 모드 · metric 집계 · 체크포인트의 내용 · best와 last · 재개와 추론 · inference contract
