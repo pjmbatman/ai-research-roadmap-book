@@ -124,6 +124,8 @@ for name, df in [("코드 먼저", code_first), ("lockfile 먼저", lock_first)]
 
 코드를 먼저 복사하면 `train.py` 한 줄을 고칠 때마다 의존성 설치(수 분, PyTorch라면 수 GB 다운로드)가 다시 실행된다. lockfile을 먼저 복사하면 의존성 layer는 cache에서 재사용되고 코드 복사만 다시 일어난다. (이 흉내에서는 생략했지만, 실제 Dockerfile에서는 코드를 복사한 뒤 프로젝트 자신을 설치하는 짧은 `uv sync` 줄이 뒤따른다.) `RUN --mount=type=cache`는 BuildKit 기능으로, 패키지 다운로드 cache를 빌드 사이에 보존하되 image에는 넣지 않는다.
 
+::widget{name="docker-layer-cache"}
+
 ::quiz{id="layer-order"}
 
 **`.dockerignore`.** `COPY . .`은 빌드 context(보통 저장소 루트) 전체를 복사한다. `.venv`, `.git`, 데이터, 결과 디렉터리가 섞여 들어가지 않도록 `.dockerignore`에 적어 둔다. 로컬의 `.venv`가 image에 복사되면 image가 커질 뿐 아니라, 다른 경로에서 만든 가상환경이라 제대로 동작하지도 않는다(3.3장).
