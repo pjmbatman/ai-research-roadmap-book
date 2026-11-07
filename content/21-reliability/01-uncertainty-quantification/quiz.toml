@@ -1,0 +1,95 @@
+# 21.1 불확실성 정량화 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "more-data-reduces-which"
+type = "single"
+objective = 1
+prompt = '''같은 입력 영역에서 측정을 열 배로 늘렸다. 측정 장비와 실험 조건은 그대로다. 이 영역의 예측 불확실성에서 무엇이 어떻게 바뀌는가?'''
+explanation = '''epistemic 불확실성은 모델이 데이터를 충분히 보지 못해 생기는 불확실성이므로, 같은 영역의 데이터가 늘면 줄어든다. aleatoric 불확실성은 같은 입력에서도 결과가 흩어지는 데이터 생성 과정 자체의 성질이라, 장비와 조건이 같다면 데이터를 늘려도 줄지 않는다. 데이터가 늘면 aleatoric의 **추정값**은 더 정확해지지만 그 크기 자체는 그대로다.'''
+
+[[questions.choices]]
+text = "epistemic은 줄고 aleatoric은 거의 그대로다."
+correct = true
+
+[[questions.choices]]
+text = "aleatoric과 epistemic이 모두 줄어든다."
+feedback = "aleatoric은 같은 조건에서 반복 측정해도 남는 흩어짐이다. 측정 수를 늘려 줄일 수 있는 것은 그 흩어짐의 추정 오차뿐이다."
+
+[[questions.choices]]
+text = "aleatoric은 줄고 epistemic은 그대로다."
+feedback = "두 이름을 바꿔 기억한 경우다. 데이터로 줄어드는 것은 '모르는 것'인 epistemic이다."
+
+[[questions.choices]]
+text = "둘 다 그대로다. 불확실성은 모델 구조로만 정해진다."
+feedback = "epistemic은 데이터 양에 직접 의존한다. 구성원 간 불일치는 데이터가 많은 영역에서 작아진다."
+
+[[questions]]
+id = "total-variance-numeric"
+type = "numeric"
+objective = 1
+prompt = '''앙상블 구성원 두 개가 같은 입력에 대해 예측분포 $\mathcal{N}(1, 2)$와 $\mathcal{N}(3, 4)$를 냈다(두 번째 인자는 분산). 두 구성원을 고르게 섞은 예측분포의 전체 분산은 얼마인가?'''
+answer = 4
+tolerance = 0.01
+explanation = '''전분산 법칙으로 aleatoric 항 = 구성원 분산의 평균 = (2 + 4)/2 = 3, epistemic 항 = 구성원 평균의 분산 = ((1-2)² + (3-2)²)/2 = 1이다. 전체 분산은 3 + 1 = 4다. 분산의 평균(3)만 보고하면 구성원 간 불일치를 놓치고, 평균의 분산(1)만 보고하면 관측 잡음을 놓친다.'''
+
+[[questions]]
+id = "softmax-confidence"
+type = "single"
+objective = 2
+prompt = '''두 class를 구분하는 로지스틱 회귀가 학습 데이터에서 아주 멀리 떨어진 입력에 $p(\text{class 1}) = 0.999$를 냈다. 이 숫자로 말할 수 있는 것은?'''
+explanation = '''선형 결정 경계에서 멀어질수록 로짓의 절댓값이 커지므로 확률은 0이나 1로 간다. 학습 데이터에서 멀어진다는 사실은 확률에 반영되지 않는다. 그래서 softmax·sigmoid 확률은 "경계의 어느 쪽에 있는가"를 말할 뿐, 입력이 학습 범위 안인지는 말하지 않는다. 본문 실습에서 부트스트랩 앙상블조차 그런 점에서 모두 1.000에 합의했다. 같은 모델 클래스의 구성원은 같은 방식으로 외삽하기 때문이다. 학습 범위 밖인지는 분포 이동·OOD 탐지(21.4장)로 따로 확인한다.'''
+
+[[questions.choices]]
+text = "입력이 결정 경계의 class 1 쪽에 멀리 있다는 것뿐이고, 학습 범위 안인지는 알 수 없다."
+correct = true
+
+[[questions.choices]]
+text = "모델이 이 입력에 매우 확신하므로 불확실성이 작다."
+feedback = "확률이 1에 가까운 것은 로짓이 크다는 뜻이다. 학습 데이터가 없는 영역에서도 로짓은 얼마든지 커진다."
+
+[[questions.choices]]
+text = "확률이 0.999이므로 이런 입력 1000개 중 999개가 실제로 class 1이다."
+feedback = "그 해석은 보정(calibration)이 그 영역에서 성립할 때만 맞다. 보정은 학습 분포 안에서 측정한 것이고, 학습 범위 밖에서는 아무 보장이 없다."
+
+[[questions]]
+id = "ensemble-diversity-source"
+type = "multiple"
+objective = 2
+prompt = '''딥 앙상블의 구성원 간 불일치를 epistemic 불확실성의 신호로 쓰려 한다. 구성원 사이의 **다양성을 실제로 만들어 내는** 것을 모두 고르시오.'''
+explanation = '''구성원마다 다른 무작위 초기값은 비볼록 손실면에서 서로 다른 해로 가게 만든다(10.6장). 부트스트랩 재표본은 구성원마다 다른 데이터를 보게 한다. 이 두 가지가 다양성의 원천이다. 반대로 같은 초기값·같은 데이터에서 시드만 같게 여러 번 학습하면 결정적 연산에서는 같은 모델이 나오고, 구성원 수를 늘려도 불일치는 생기지 않는다. 예측 결과를 평균 내는 것은 다양성을 쓰는 단계이지 만드는 단계가 아니다.'''
+
+[[questions.choices]]
+text = "구성원마다 다른 무작위 초기값"
+correct = true
+
+[[questions.choices]]
+text = "구성원마다 다른 부트스트랩 재표본"
+correct = true
+
+[[questions.choices]]
+text = "같은 초기값과 같은 데이터로 같은 설정의 학습을 여러 번 반복하는 것"
+feedback = "결정적으로 학습하면 같은 결과가 나온다. 구성원이 여러 개여도 서로 다르지 않으면 불일치는 0이고 epistemic 불확실성을 과소평가한다."
+
+[[questions.choices]]
+text = "구성원의 예측을 평균 내는 것"
+feedback = "평균은 이미 있는 다양성을 합치는 단계다. 다양성 자체는 학습 과정의 차이에서 나온다."
+
+[[questions]]
+id = "heteroscedastic-gradient"
+type = "single"
+objective = 2
+prompt = '''이분산 가우시안 NLL $\log\sigma + (y-\mu)^2/(2\sigma^2)$로 평균 $\mu$와 표준편차 $\sigma$를 함께 학습한다. 학습 초기에 어떤 입력 영역에서 평균을 잘 못 맞히고 있다면, 그 영역에서 무슨 일이 일어나기 쉬운가?'''
+explanation = '''NLL을 $\mu$로 미분하면 $-(y-\mu)/\sigma^2$이므로, $\sigma$가 큰 영역의 평균 gradient는 $1/\sigma^2$만큼 작아진다. 잔차가 큰 영역에서는 $\sigma$를 키우는 것이 NLL을 빨리 줄이는 길이라, 모델은 평균을 고치는 대신 "이 영역은 잡음이 크다"고 설명해 버리고, 그 뒤로는 평균의 학습이 느려진다. 평균을 먼저 MSE로 학습하고 $\sigma$를 나중에 학습하거나, 평균 gradient의 $1/\sigma^2$ 가중을 줄이는 방식으로 대응한다.'''
+
+[[questions.choices]]
+text = "모델이 σ를 키워 잔차를 설명하고, 그 영역의 평균 gradient가 1/σ²만큼 작아져 평균 학습이 느려진다."
+correct = true
+
+[[questions.choices]]
+text = "σ가 작아져 그 영역의 평균 gradient가 커지므로 평균이 더 빨리 맞춰진다."
+feedback = "잔차가 큰 곳에서 NLL을 줄이는 방향은 σ를 키우는 쪽이다. σ를 줄이면 잔차 항이 커진다."
+
+[[questions.choices]]
+text = "σ와 μ는 손실에서 분리되어 있어 서로 영향을 주지 않는다."
+feedback = "잔차 항 (y-μ)²/(2σ²)에 두 파라미터가 곱으로 함께 들어 있다. μ의 gradient는 σ에 의존한다."
