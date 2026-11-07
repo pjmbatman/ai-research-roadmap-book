@@ -1,0 +1,80 @@
+# 28.2 물성 예측 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "noise-floor"
+type = "numeric"
+objective = 1
+prompt = '''실험으로 측정한 log 용해도 레이블의 재현 표준편차가 $\sigma = 0.5$(정규 잡음)이다. 참값을 정확히 아는 완벽한 모델이 이 시험 데이터에서 받을 수 있는 가장 낮은 평균절대오차(MAE)는 약 얼마인가? $\sqrt{2/\pi} \approx 0.798$로 계산한다.'''
+explanation = '''레이블이 참값 + 정규 잡음(표준편차 σ)이면, 참값을 정확히 예측해도 레이블과는 잡음만큼 어긋난다. 정규 잡음에서 |오차|의 기댓값은 $\sigma\sqrt{2/\pi} = 0.5 \times 0.798 \approx 0.40$이다. 이보다 낮은 MAE를 보고하는 모델은 시험 레이블의 잡음에 과적합한 것이다. 레이블 잡음은 측정 자체의 한계이므로 모델을 아무리 개선해도 넘을 수 없는 바닥이다.'''
+answer = 0.40
+tolerance = 0.02
+
+[[questions]]
+id = "random-split-optimistic"
+type = "single"
+objective = 2
+prompt = '''같은 분자 데이터·같은 모델에서 무작위 분할의 MAE가 0.23, scaffold 분할의 MAE가 0.46으로 나왔다. 이 결과의 해석으로 가장 적절한 것은?'''
+explanation = '''두 수치는 같은 모델이 서로 다른 test 분자에서 받은 성능이다. 무작위 분할의 test 분자는 train에 거의 같은 골격의 친척이 있어(최근접 유사도가 높아) 쉬운 보간이 된다. scaffold 분할은 골격을 통째로 한쪽에 둬서 "처음 보는 골격"으로 평가한다. 모델을 새로운 화학 구조에 쓸 계획이라면 scaffold 분할의 0.46이 실제 쓰임새에 가깝고, 무작위 분할의 0.23은 낙관적이다.'''
+
+[[questions.choices]]
+text = "scaffold 분할이 더 어려운 평가이므로, 새 화학 구조에 쓸 계획이라면 0.46이 실제 성능에 더 가깝다."
+correct = true
+
+[[questions.choices]]
+text = "scaffold 분할이 train 데이터를 적게 써서 성능이 나빠졌을 뿐이므로, 무작위 분할의 0.23을 보고한다."
+feedback = "두 분할의 train 크기는 거의 같다. 차이는 데이터 양이 아니라 test 분자가 train과 얼마나 비슷한가다."
+
+[[questions.choices]]
+text = "두 수치의 평균 0.35가 가장 정직한 성능이다."
+feedback = "평균은 의미가 없다. 재려는 일반화의 종류(보간이냐 새 골격이냐)에 따라 맞는 분할을 하나 고른다."
+
+[[questions.choices]]
+text = "scaffold 분할에서 성능이 나빠진 것은 모델에 버그가 있다는 신호다."
+feedback = "성능 차이는 정상이다. 무작위 분할이 쉬운 것이지 scaffold 분할이 고장난 것이 아니다."
+
+[[questions]]
+id = "applicability-domain"
+type = "multiple"
+objective = 2
+prompt = '''물성 예측 모델을 새 분자 후보 선별에 쓸 때, **적용 영역**(모델을 믿을 수 있는 범위)을 수치로 나타내는 방법으로 적절한 것을 모두 고르시오.'''
+explanation = '''적용 영역은 "이 입력에서 모델을 믿어도 되는가"를 재는 것이다. test 분자의 최근접 train 유사도(낮으면 외삽), 모델이 내는 예측 불확실성(앙상블 분산이나 GP 표준편차)이 모두 적용 영역 지표다. 둘 다 오차와 상관이 있어야 쓸모가 있으므로 scaffold 분할에서 상관을 확인한다. 반면 train MAE가 낮다는 것은 모델이 학습 데이터를 잘 맞혔다는 뜻일 뿐, 새 분자에 대한 믿음의 근거가 아니다(과적합한 모델도 train MAE가 낮다).'''
+
+[[questions.choices]]
+text = "후보 분자의 최근접 train 분자와의 Tanimoto 유사도"
+correct = true
+
+[[questions.choices]]
+text = "앙상블이나 Gaussian process가 내는 예측 불확실성"
+correct = true
+
+[[questions.choices]]
+text = "모델의 train 데이터 MAE가 낮은지"
+feedback = "train MAE는 학습 데이터에 대한 적합도다. 과적합한 모델도 train MAE가 낮으므로 새 분자에 대한 적용 영역을 말해 주지 않는다."
+
+[[questions.choices]]
+text = "후보 분자의 분자량이 train 분자량 범위 안에 드는지"
+correct = true
+
+[[questions]]
+id = "split-choice"
+type = "single"
+objective = 2
+prompt = '''분자마다 최초 합성·보고 연도가 기록된 데이터가 있다. 이 모델로 "앞으로 새로 합성될 분자"의 물성을 얼마나 잘 맞힐지 추정하려 한다. 가장 적절한 분할은?'''
+explanation = '''쓰임새가 "미래의 분자"이므로, 과거 연도의 분자로 학습하고 이후 연도의 분자로 시험하는 시간 분할(time-split)이 그 상황을 가장 비슷하게 재현한다. Sheridan(2013)은 시간 분할이 무작위 분할(너무 낙관적)보다 전향적 예측 성능을 더 가깝게 추정한다고 보고했다. 연도 정보가 있는데 무작위로 섞으면 미래 분자가 train에 들어가는 시간 누수가 생긴다.'''
+
+[[questions.choices]]
+text = "연도 기준 시간 분할: 과거로 학습, 이후 연도로 시험"
+correct = true
+
+[[questions.choices]]
+text = "무작위 분할: 연도와 무관하게 섞어서 나눈다."
+feedback = "연도를 무시하고 섞으면 미래에 보고된 분자가 train에 들어가, 전향적 성능을 과대평가한다."
+
+[[questions.choices]]
+text = "층화 분할: 각 연도에서 같은 비율로 test를 뽑는다."
+feedback = "각 연도에서 test를 뽑으면 미래 분자가 train에도 있게 되어, 역시 미래 예측 상황을 재현하지 못한다."
+
+[[questions.choices]]
+text = "분자량 기준 분할: 큰 분자를 test로 둔다."
+feedback = "분자량은 합성 시점과 무관하다. 미래 분자를 재려면 시간 정보를 써야 한다."

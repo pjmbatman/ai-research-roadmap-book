@@ -1,0 +1,6 @@
+title = "scaffold 분할 구현하기"
+chapter = "chemistry-and-materials/property-prediction"
+objective = 2
+exec = "browser"
+entry = "scaffold_split"
+timeout_s = 10
