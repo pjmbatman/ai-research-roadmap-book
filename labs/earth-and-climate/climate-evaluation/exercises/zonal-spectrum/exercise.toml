@@ -1,0 +1,6 @@
+title = "동서 방향 에너지 스펙트럼으로 흐릿함 재기"
+chapter = "earth-and-climate/climate-evaluation"
+objective = 2
+exec = "browser"
+entry = "energy_ratio"
+timeout_s = 10
