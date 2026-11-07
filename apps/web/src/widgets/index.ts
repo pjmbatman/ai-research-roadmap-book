@@ -9,6 +9,7 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "training-loop-stepper": () => import("./training-loop-stepper/index"),
   "attention-visualizer": () => import("./attention-visualizer/index"),
   "diffusion-process": () => import("./diffusion-process/index"),
+  "battery-ecm": () => import("./battery-ecm/index"),
 };
 
 export function mountWidgets(page: PageData) {

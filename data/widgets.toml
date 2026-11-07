@@ -115,4 +115,4 @@ status = "planned"
 name = "battery-ecm"
 title = "등가회로 모델 시뮬레이터"
 chapters = ["battery-ai/battery-models", "battery-ai/battery-fundamentals"]
-status = "planned"
+status = "prototype"
