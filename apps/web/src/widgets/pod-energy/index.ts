@@ -117,6 +117,7 @@ export function mount(root: HTMLElement) {
   pn.input.setAttribute("aria-valuetext", `ν ${NUS[ni]}`);
   pn.input.addEventListener("input", () => pn.input.setAttribute("aria-valuetext", `ν ${NUS[ni]}`));
   const grid = el("div", "param-grid");
+  grid.style.gridTemplateColumns = "repeat(auto-fit, minmax(150px, 1fr))";
   grid.append(pr.row, pn.row);
   const ro = readouts();
   f.panel.append(grid, ro.row);
