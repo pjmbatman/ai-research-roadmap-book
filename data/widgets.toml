@@ -43,7 +43,7 @@ status = "prototype"
 name = "ode-stability"
 title = "ODE solver의 step 크기와 안정성"
 chapters = ["numerical-methods/ode-solvers"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "optimizer-landscape"

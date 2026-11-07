@@ -8,6 +8,7 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "svd-explorer": () => import("./svd-explorer/index"),
   "autodiff-graph": () => import("./autodiff-graph/index"),
   "float-precision": () => import("./float-precision/index"),
+  "ode-stability": () => import("./ode-stability/index"),
 };
 
 export function mountWidgets(page: PageData) {
