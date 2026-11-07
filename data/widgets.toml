@@ -139,7 +139,7 @@ status = "prototype"
 name = "predictor-exploitation"
 title = "예측 모델 착취와 적용 영역"
 chapters = ["chemistry-and-materials/molecular-design"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "leakage-threshold"

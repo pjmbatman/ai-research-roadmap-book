@@ -23,6 +23,7 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "coulomb-matrix-invariance": () => import("./coulomb-matrix-invariance/index"),
   "scaffold-split-explorer": () => import("./scaffold-split-explorer/index"),
   "md-energy-conservation": () => import("./md-energy-conservation/index"),
+  "predictor-exploitation": () => import("./predictor-exploitation/index"),
 };
 
 export function mountWidgets(page: PageData) {
