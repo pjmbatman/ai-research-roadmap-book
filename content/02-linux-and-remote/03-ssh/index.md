@@ -164,6 +164,8 @@ ssh -N -L 16006:localhost:6006 gpu1     # -N: 원격 명령 없이 터널만
 
 **Jupyter.** 원격에서 `jupyter lab --no-browser --port 8888`로 띄우면 접속 URL과 token이 출력된다. `ssh -N -L 8890:localhost:8888 gpu1`로 터널을 연 뒤, 출력된 URL의 포트만 8890으로 바꿔 내 브라우저에서 연다. token은 비밀번호와 같으니 채팅이나 저장소에 붙여 넣지 않는다.
 
+::widget{name="ssh-tunnel"}
+
 ::quiz{id="local-forward-port"}
 
 :::caution[함정]
