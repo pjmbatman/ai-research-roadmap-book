@@ -439,37 +439,37 @@ status = "planned"
 name = "smoothing-illusion"
 title = "곡선 smoothing 착시"
 chapters = ["deep-learning-pytorch/dashboards"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "learning-curve-reader"
 title = "학습 곡선 진단"
 chapters = ["deep-learning-pytorch/debugging-training"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "receptive-field"
 title = "수용 영역"
 chapters = ["architectures/cnn"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "ssm-kernel"
 title = "상태공간 모델 커널"
 chapters = ["architectures/recurrent-and-ssm"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "sampling-temperature"
 title = "temperature와 top-k·top-p"
 chapters = ["architectures/language-models"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "over-smoothing"
 title = "GNN over-smoothing"
 chapters = ["architectures/graph-networks"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "probe-vs-pca"
