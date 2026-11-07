@@ -251,3 +251,85 @@
   archivePrefix = {arXiv},
   note      = {확인: arXiv 목록과 초록, OpenReview(ICLR 2021). 데이터를 잡음으로 보내는 SDE와 score로 표현한 역방향 SDE로 확산 모델을 통합}
 }
+
+@article{rousseeuw1987silhouettes,
+  author  = {Rousseeuw, Peter J.},
+  title   = {Silhouettes: A Graphical Aid to the Interpretation and Validation of Cluster Analysis},
+  journal = {Journal of Computational and Applied Mathematics},
+  volume  = {20},
+  pages   = {53--65},
+  year    = {1987},
+  doi     = {10.1016/0377-0427(87)90125-7},
+  note    = {확인: 서지 기록(bibsonomy·MaRDI)과 초록. 군집마다 촘촘함과 분리를 비교하는 silhouette, 평균 silhouette 폭으로 군집 수 선택}
+}
+
+@inproceedings{ester1996density,
+  author    = {Ester, Martin and Kriegel, Hans-Peter and Sander, J{\"o}rg and Xu, Xiaowei},
+  title     = {A Density-Based Algorithm for Discovering Clusters in Large Spatial Databases with Noise},
+  booktitle = {Proceedings of the Second International Conference on Knowledge Discovery and Data Mining (KDD-96)},
+  pages     = {226--231},
+  year      = {1996},
+  note      = {확인: 서지 기록(bibsonomy)과 원문 PDF 사본. DBSCAN, 반경 Eps 안의 최소 점 수로 정의한 밀도 기반 군집}
+}
+
+@article{scholkopf1998nonlinear,
+  author  = {Sch{\"o}lkopf, Bernhard and Smola, Alexander and M{\"u}ller, Klaus-Robert},
+  title   = {Nonlinear Component Analysis as a Kernel Eigenvalue Problem},
+  journal = {Neural Computation},
+  volume  = {10},
+  number  = {5},
+  pages   = {1299--1319},
+  year    = {1998},
+  doi     = {10.1162/089976698300017467},
+  note    = {확인: MPI 출판 목록과 서지 기록. 커널로 특징 공간의 주성분을 계산하는 kernel PCA}
+}
+
+@article{hyvarinen2000independent,
+  author  = {Hyv{\"a}rinen, Aapo and Oja, Erkki},
+  title   = {Independent Component Analysis: Algorithms and Applications},
+  journal = {Neural Networks},
+  volume  = {13},
+  number  = {4--5},
+  pages   = {411--430},
+  year    = {2000},
+  doi     = {10.1016/S0893-6080(00)00026-5},
+  note    = {확인: dblp·bibsonomy 서지 기록과 초록. 비가우스 데이터의 독립 성분을 찾는 ICA, 원천 분리와 EEG 잡음 제거 응용}
+}
+
+@inproceedings{liu2008isolation,
+  author    = {Liu, Fei Tony and Ting, Kai Ming and Zhou, Zhi-Hua},
+  title     = {Isolation Forest},
+  booktitle = {Proceedings of the 8th IEEE International Conference on Data Mining (ICDM 2008)},
+  pages     = {413--422},
+  year      = {2008},
+  doi       = {10.1109/ICDM.2008.17},
+  note      = {확인: researchr 서지 기록과 IEEE 초록. 정상 점을 모델링하지 않고 무작위 분할로 이상 점을 고립시키는 방법}
+}
+
+@article{vandermaaten2008visualizing,
+  author  = {van der Maaten, Laurens and Hinton, Geoffrey},
+  title   = {Visualizing Data using t-SNE},
+  journal = {Journal of Machine Learning Research},
+  volume  = {9},
+  pages   = {2579--2605},
+  year    = {2008},
+  note    = {확인: JMLR 논문 페이지. t-SNE, 저차원에서 Student t 분포를 쓰는 이웃 확률 보존. SNE 절에서 perplexity의 전형적인 값 5–50}
+}
+
+@article{wattenberg2016how,
+  author  = {Wattenberg, Martin and Vi{\'e}gas, Fernanda and Johnson, Ian},
+  title   = {How to Use t-SNE Effectively},
+  journal = {Distill},
+  year    = {2016},
+  doi     = {10.23915/distill.00002},
+  note    = {확인: distill.pub 원문. perplexity에 따른 변화, 군집 크기·군집 사이 거리 해석의 함정, 무작위 잡음에서 생기는 덩어리}
+}
+
+@misc{mcinnes2018umap,
+  author        = {McInnes, Leland and Healy, John and Melville, James},
+  title         = {{UMAP}: Uniform Manifold Approximation and Projection for Dimension Reduction},
+  year          = {2018},
+  eprint        = {1802.03426},
+  archivePrefix = {arXiv},
+  note          = {확인: arXiv 목록과 초록. 최근접 이웃 그래프 구조를 보존하는 차원 축소}
+}
