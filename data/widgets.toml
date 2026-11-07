@@ -655,37 +655,37 @@ status = "prototype"
 name = "pod-energy"
 title = "POD 에너지와 외삽"
 chapters = ["physics-and-engineering/surrogate-modeling"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "closure-apriori"
 title = "closure 사전·사후 평가"
 chapters = ["physics-and-engineering/turbulence-and-closure"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "beam-pareto"
 title = "빔 설계 Pareto"
 chapters = ["physics-and-engineering/design-optimization"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "rollout-spectrum"
 title = "rollout 오차와 스펙트럼"
 chapters = ["physics-and-engineering/physics-benchmarks"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "area-weighting"
 title = "위도 가중 평균"
 chapters = ["earth-and-climate/earth-system-data"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "spread-skill"
 title = "spread–skill과 rank histogram"
 chapters = ["earth-and-climate/weather-forecasting"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "energy-spectrum-blur"
