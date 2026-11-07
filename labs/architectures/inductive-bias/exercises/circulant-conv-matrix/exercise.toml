@@ -1,0 +1,6 @@
+title = "합성곱을 행렬로 쓰기"
+chapter = "architectures/inductive-bias"
+objective = 1
+exec = "browser"
+entry = "conv_matrix"
+timeout_s = 10

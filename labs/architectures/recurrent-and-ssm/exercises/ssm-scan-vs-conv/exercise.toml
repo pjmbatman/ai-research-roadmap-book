@@ -1,0 +1,6 @@
+title = "상태공간 모델의 재귀와 합성곱"
+chapter = "architectures/recurrent-and-ssm"
+objective = 2
+exec = "browser"
+entry = "ssm_scan"
+timeout_s = 10

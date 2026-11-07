@@ -1,0 +1,149 @@
+# 18.4 Attention과 Transformer — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "why-scale-sqrt-d"
+type = "single"
+objective = 1
+prompt = '''scaled dot-product attention에서 점수 $\mathbf{q}^\top\mathbf{k}$를 $\sqrt{D}$로 나누는 이유로 가장 정확한 것은? ($D$는 query·key의 차원)'''
+explanation = '''$\mathbf{q}, \mathbf{k}$의 성분이 서로 독립이고 평균 0, 분산 1이면 $\mathbf{q}^\top\mathbf{k} = \sum_{d=1}^{D} q_d k_d$의 분산은 $D$다. 나누지 않으면 $D$가 클수록 점수의 폭이 커져 softmax가 한 key에 거의 모든 가중치를 주는 포화 상태가 되고, 그 영역에서 softmax의 gradient는 매우 작다. $\sqrt{D}$로 나누면 분산이 1 근처로 유지된다. 본문 셀에서 $D = 512$일 때 나누지 않은 최대 가중치 평균은 0.925, 나눈 경우는 0.253이었다.'''
+
+[[questions.choices]]
+text = "점수의 분산이 D에 비례해 커지는 것을 막아, softmax가 한 key로 포화되어 gradient가 작아지는 것을 피하려고"
+correct = true
+
+[[questions.choices]]
+text = "softmax 출력의 행 합을 1로 만들기 위해"
+feedback = "softmax는 스케일과 무관하게 항상 행 합이 1이다. 스케일은 분포가 얼마나 뾰족한지만 바꾼다."
+
+[[questions.choices]]
+text = "계산량을 줄이기 위해"
+feedback = "나눗셈 한 번은 계산량에 거의 영향이 없다. 목적은 수치적 성질(점수의 분산)이다."
+
+[[questions.choices]]
+text = "query와 key의 길이를 1로 정규화해 코사인 유사도로 만들기 위해"
+feedback = "√D로 나누는 것은 벡터마다의 정규화가 아니라 모든 점수에 같은 상수를 나누는 것이다. 벡터의 크기 정보는 그대로 남는다."
+
+[[questions]]
+id = "self-attention-permutation"
+type = "single"
+objective = 2
+prompt = '''위치 인코딩 없이 self-attention 층(마스크 없음)에 토큰 시퀀스를 넣었다. 입력 토큰의 순서를 바꾸면 출력은 어떻게 되는가?'''
+explanation = '''self-attention은 모든 쌍의 점수를 계산하고 각 query 위치에 같은 연산을 적용하므로, 입력을 치환 행렬 $\mathbf{P}$로 섞으면 출력도 같은 $\mathbf{P}$로 섞인다: $f(\mathbf{P}\mathbf{X}) = \mathbf{P}f(\mathbf{X})$(순열 등변). 그래서 위치 정보 없이는 "개가 사람을 물었다"와 "사람이 개를 물었다"의 토큰별 출력이 순서만 바뀐 같은 값이 되고, 평균 pooling하면 완전히 같아진다. 순서가 의미를 갖는 데이터에서는 위치 인코딩으로 이 대칭을 깨야 한다. 반대로 점구름처럼 순서가 의미 없는 집합에는 이 성질이 바로 필요한 귀납적 편향이다.'''
+
+[[questions.choices]]
+text = "출력도 같은 방식으로 순서가 바뀐다(순열 등변)."
+correct = true
+
+[[questions.choices]]
+text = "출력은 변하지 않는다(순열 불변)."
+feedback = "토큰마다 출력이 하나씩 있으므로, 출력도 함께 섞인다. 불변이 되는 것은 출력을 평균·합 pooling한 뒤다."
+
+[[questions.choices]]
+text = "attention은 순서를 학습하므로 출력이 완전히 달라진다."
+feedback = "위치 정보가 없으면 attention이 순서를 알 방법이 없다. 점수는 토큰 내용(q, k)으로만 정해진다."
+
+[[questions.choices]]
+text = "softmax가 비선형이라 출력이 예측할 수 없게 바뀐다."
+feedback = "비선형성은 순열 등변성과 무관하다. 모든 위치에 같은 연산을 적용한다는 사실이 등변성을 만든다."
+
+[[questions]]
+id = "rope-relative"
+type = "single"
+objective = 2
+prompt = '''RoPE(rotary position embedding)는 위치 $m$의 query와 위치 $n$의 key를 위치에 비례하는 각으로 회전시킨 뒤 내적한다. 이 내적의 성질로 옳은 것은?'''
+explanation = '''성분 쌍마다 각 $m\theta_i$로 회전한 $\mathbf{R}_m\mathbf{q}$와 $n\theta_i$로 회전한 $\mathbf{R}_n\mathbf{k}$의 내적은 $\mathbf{q}^\top\mathbf{R}_m^\top\mathbf{R}_n\mathbf{k} = \mathbf{q}^\top\mathbf{R}_{n-m}\mathbf{k}$다. 회전 행렬의 성질($\mathbf{R}_m^\top\mathbf{R}_n = \mathbf{R}_{n-m}$, 7.10장의 $SO(2)$ 표현) 덕분에 절대 위치는 사라지고 상대 위치 $n - m$만 남는다. 본문 셀에서 위치 (3, 1), (10, 8), (52, 50)의 점수가 모두 같았다.'''
+
+[[questions.choices]]
+text = "query와 key의 상대 위치(n − m)에만 의존한다."
+correct = true
+
+[[questions.choices]]
+text = "query와 key의 절대 위치 m, n에 각각 따로 의존한다."
+feedback = "회전 행렬의 곱 R_mᵀR_n = R_{n−m}이므로 절대 위치는 상쇄된다. 이것이 RoPE의 핵심이다."
+
+[[questions.choices]]
+text = "위치와 무관하다. 회전은 벡터의 길이를 바꾸지 않기 때문이다."
+feedback = "회전은 길이를 보존하지만, 두 벡터를 서로 다른 각으로 돌리면 둘 사이의 각이 바뀌어 내적이 달라진다."
+
+[[questions.choices]]
+text = "임베딩에 위치 벡터를 더하는 절대 위치 인코딩과 수학적으로 같다."
+feedback = "더하는 방식은 q·k에 내용–위치 교차항을 만들어 절대 위치가 남는다. RoPE는 곱하는(회전) 방식이라 내적에서 상대 위치만 남는다."
+
+[[questions]]
+id = "padding-mask-missing"
+type = "single"
+objective = 2
+prompt = '''길이가 다른 문장들을 PAD 토큰으로 채워 batch로 만들고, padding mask 없이 encoder self-attention을 계산했다. 무엇이 문제인가?'''
+explanation = '''mask가 없으면 실제 토큰의 query가 PAD 위치의 key에도 0이 아닌 가중치를 주어, PAD 칸의 value가 실제 토큰의 출력에 섞인다. 그 결과 같은 문장의 출력이 batch에 함께 들어간 다른 문장의 길이(즉 PAD 개수)에 따라 달라진다. 오류는 나지 않으므로 발견하기 어렵다. 본문 셀에서 PAD 칸의 값만 바꿔도 mask가 없으면 실제 토큰의 출력이 최대 0.997 변했고, mask가 있으면 정확히 0이었다.'''
+
+[[questions.choices]]
+text = "실제 토큰의 출력에 PAD 위치의 value가 섞여, 같은 문장의 결과가 batch 구성에 따라 달라진다."
+correct = true
+
+[[questions.choices]]
+text = "PAD 임베딩이 0이면 아무 문제가 없다."
+feedback = "PAD 임베딩이 0이어도 key는 bias 때문에(그리고 위치 인코딩을 더하면) 0이 아니고, 점수 0도 softmax에서 0이 아닌 가중치(e⁰ = 1)를 받는다. 가중치를 정확히 0으로 만들려면 점수를 −∞로 가려야 한다."
+
+[[questions.choices]]
+text = "shape이 맞지 않아 실행 오류가 난다."
+feedback = "PAD로 길이를 맞췄으므로 shape은 맞고 오류 없이 실행된다. 그래서 위험하다."
+
+[[questions.choices]]
+text = "미래 토큰을 보게 되어 정보 누수가 생긴다."
+feedback = "그것은 causal mask가 막는 문제다. padding mask는 존재하지 않는 토큰을 가리는 것이고, 두 mask는 목적이 다르다."
+
+[[questions]]
+id = "score-matrix-memory"
+type = "numeric"
+objective = 3
+prompt = '''길이 $T = 4096$인 시퀀스 하나에 head 16개인 self-attention 층 하나를 float32(4바이트)로 계산한다. 점수 행렬(softmax 전 또는 후, 한 벌)을 모두 메모리에 올리면 몇 GB인가? (1 GB = $10^9$ 바이트, 소수 둘째 자리까지)'''
+answer = 1.07
+tolerance = 0.02
+explanation = '''head마다 $T \times T$ 행렬이므로 $4096^2 \times 16 \times 4 = 1.07 \times 10^9$ 바이트, 약 1.07 GB다. 한 층, 한 시퀀스, 한 벌의 값이다. 길이를 2배로 늘리면 4배가 된다. 학습할 때는 역전파를 위해 층마다 이런 행렬을 저장하므로 메모리가 길이의 제곱으로 빠르게 커진다. 점수 행렬을 블록 단위로 나눠 계산해 전체를 한 번에 저장하지 않는 구현(예: FlashAttention 계열)은 메모리를 줄이지만, 연산량은 여전히 $T^2$에 비례한다.'''
+
+[[questions]]
+id = "kv-cache-cost"
+type = "single"
+objective = 3
+prompt = '''decoder로 토큰을 하나씩 생성할 때 KV cache를 쓴다. $t$번째 토큰을 생성하는 step에 대한 설명으로 옳은 것은?'''
+explanation = '''KV cache는 지난 토큰들의 key·value를 저장해 두고, 새 토큰의 query·key·value만 계산해 덧붙인다. 새 query는 저장된 key $t$개와의 점수를 계산하므로 한 step의 attention 비용은 $O(t)$이고, cache 메모리는 생성한 길이에 비례해 계속 커진다. cache가 없으면 매 step 지난 모든 토큰의 key·value를 다시 계산해야 한다. 고정 크기 상태만 갱신하는 RNN·SSM(18.3장)과 대비되는 점이다.'''
+
+[[questions.choices]]
+text = "새 query가 저장된 key t개를 보므로 attention 비용은 O(t)이고, cache 메모리는 t에 비례해 커진다."
+correct = true
+
+[[questions.choices]]
+text = "cache 덕분에 한 step의 비용이 시퀀스 길이와 무관한 O(1)이다."
+feedback = "key·value를 다시 계산하지 않을 뿐, 새 query는 여전히 과거 모든 key와 점수를 계산한다. O(1)인 것은 고정 크기 상태를 갱신하는 RNN·SSM이다."
+
+[[questions.choices]]
+text = "cache를 쓰면 causal mask가 필요 없어진 결과가 cache 없는 계산과 달라진다."
+feedback = "cache에는 이미 생성된 과거 토큰만 있으므로 미래를 볼 수 없고, 결과는 causal mask를 쓴 전체 계산과 정확히 같다(본문 셀에서 확인)."
+
+[[questions.choices]]
+text = "cache에는 과거 토큰의 query·key·value를 모두 저장한다."
+feedback = "과거 토큰의 query는 다시 쓰이지 않는다. 새 토큰의 query가 과거의 key·value와 만날 뿐이다."
+
+[[questions]]
+id = "attention-not-explanation"
+type = "multiple"
+objective = 1
+prompt = '''분자 물성 예측 Transformer의 attention map에서 특정 원자 쌍에 큰 가중치가 보였다. 이 관찰에 대한 설명으로 **옳은** 것을 모두 고르시오.'''
+explanation = '''attention 가중치는 value를 섞는 비율일 뿐이고, value 벡터의 크기와 방향, 뒤따르는 층(FFN, residual, 다른 head와 층)이 출력에 미치는 영향은 반영하지 않는다. 그래서 가중치가 크다고 그 입력이 예측에 중요하다는 보장은 없고, 서로 다른 attention 분포가 같은 예측을 낼 수도 있다(Jain과 Wallace, 2019). 중요도를 주장하려면 그 입력을 바꾸거나 지웠을 때 예측이 어떻게 변하는지(섭동·ablation) 직접 잰다.'''
+
+[[questions.choices]]
+text = "그 원자 쌍의 value가 해당 query의 출력에 크게 섞였다는 뜻이다."
+correct = true
+
+[[questions.choices]]
+text = "그 원자 쌍을 바꾸거나 지웠을 때 예측이 크게 변하는지는 따로 실험해야 알 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "그 원자 쌍의 상호작용이 물성을 결정하는 물리적 원인이다."
+feedback = "attention 가중치는 모델 내부의 섞는 비율이지 인과 관계가 아니다. 물리적 원인이라는 주장에는 모델 밖의 근거(실험, 이론)가 필요하다."
+
+[[questions.choices]]
+text = "가중치가 큰 쌍이 예측에 가장 중요하므로, 가중치 순서가 곧 특징 중요도 순서다."
+feedback = "value의 크기, 다른 head·층, residual 경로가 출력에 주는 영향은 가중치에 나타나지 않는다. 가중치와 gradient 기반 중요도가 서로 상관이 낮은 경우가 보고되어 있다."
