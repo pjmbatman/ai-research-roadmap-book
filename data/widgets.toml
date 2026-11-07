@@ -109,7 +109,7 @@ status = "planned"
 name = "calibration-diagram"
 title = "Calibration과 reliability diagram"
 chapters = ["reliability/evaluating-predictive-distributions"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "battery-ecm"
