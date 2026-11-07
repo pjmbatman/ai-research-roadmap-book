@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 108문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 136문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -299,17 +299,17 @@ _부동소수점, 안정성과 조건수, 수치 선형대수, 반복법, ODE·P
 
 _최적화 문제의 구조, 볼록성과 최적성 조건, 제약 최적화, 1차·적응적·2차 방법, 비볼록 손실 지형, 특수한 최적화 문제를 다룬다._
 
-- **10.1** [최적화 문제의 구조](content/10-optimization/01-optimization-basics/index.md) · `필수`
-  - 문제의 구성 · 볼록성 · 최적해의 종류 · 최적성 조건
+- **10.1** [최적화 문제의 구조](content/10-optimization/01-optimization-basics/index.md) · `필수` · 퀴즈 7
+  - 문제의 구성 · 볼록성 · 최적해의 종류 · 최적성 조건 · 참고 문헌
   - 선수: 8.1 다변수 미분
-- **10.2** [제약 최적화와 쌍대성](content/10-optimization/02-constrained-optimization/index.md) · `필수`
-  - Lagrange 승수 · KKT 조건 · 쌍대성 · 제약과 penalty · 투영과 근위 연산
+- **10.2** [제약 최적화와 쌍대성](content/10-optimization/02-constrained-optimization/index.md) · `필수` · 퀴즈 7
+  - Lagrange 승수 · KKT 조건 · 쌍대성 · 제약과 penalty · 투영과 근위 연산 · 참고 문헌
   - 선수: 10.1 최적화 문제의 구조
-- **10.3** [1차 최적화 방법](content/10-optimization/03-first-order-methods/index.md) · `필수` · 위젯: 손실 지형 위의 optimizer 궤적
-  - Gradient descent · Line search · SGD · Momentum · 수렴 이론 개요
+- **10.3** [1차 최적화 방법](content/10-optimization/03-first-order-methods/index.md) · `필수` · 퀴즈 7 · 위젯: 손실 지형 위의 optimizer 궤적
+  - Gradient descent · Line search · SGD · Momentum · 수렴 이론 개요 · 참고 문헌
   - 선수: 10.1 최적화 문제의 구조
-- **10.4** [적응적 방법과 학습 레시피](content/10-optimization/04-adaptive-methods/index.md) · `필수` · 위젯: 손실 지형 위의 optimizer 궤적
-  - 적응적 방법 · weight decay · 학습률 스케줄 · 실전 기법 · 최신 optimizer의 위치 · 공정한 optimizer 비교
+- **10.4** [적응적 방법과 학습 레시피](content/10-optimization/04-adaptive-methods/index.md) · `필수` · 퀴즈 7 · 위젯: 손실 지형 위의 optimizer 궤적
+  - 적응적 방법 · weight decay · 학습률 스케줄 · 실전 기법 · 최신 optimizer의 위치 · 공정한 optimizer 비교 · 참고 문헌
   - 선수: 10.3 1차 최적화 방법
 - **10.5** [2차 방법과 준뉴턴](content/10-optimization/05-second-order-methods/index.md) · `심화`
   - Newton 방법 · Gauss–Newton과 Levenberg–Marquardt · 준뉴턴 · 자연 gradient · 사용처
