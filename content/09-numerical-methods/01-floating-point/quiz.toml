@@ -1,0 +1,126 @@
+# 9.1 부동소수점과 수치 오차 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "machine-epsilon-meaning"
+type = "single"
+objective = 1
+prompt = '''float64의 machine epsilon $\varepsilon = 2^{-52} \approx 2.2 \times 10^{-16}$에 대한 설명으로 옳은 것은?'''
+explanation = '''$\varepsilon$은 1과 1 다음으로 큰 float64 수의 간격이다. 반올림(최근접)으로 생기는 **상대** 오차는 정규수 범위 어디서나 $\varepsilon/2$ 이하다. 절대 간격(ulp)은 수의 크기에 비례해 커지므로, $10^{16}$ 근처에서는 이웃한 수의 간격이 2다. 표현할 수 있는 가장 작은 양수는 $\varepsilon$과 전혀 다른 양으로, float64에서는 $10^{-308}$ 근처(subnormal까지 치면 $5 \times 10^{-324}$)다.'''
+
+[[questions.choices]]
+text = "float64로 표현할 수 있는 가장 작은 양수다."
+feedback = "가장 작은 양수는 지수 범위가 정한다. float64의 최소 정규수는 약 2.2e-308로, eps보다 300자리 가까이 작다."
+
+[[questions.choices]]
+text = "1과 그다음 수의 간격이며, 정규수 범위에서 반올림의 상대 오차는 그 절반 이하다."
+correct = true
+
+[[questions.choices]]
+text = "모든 float64 수에서 이웃한 수의 간격이 eps로 일정하다."
+feedback = "간격(ulp)은 수의 크기에 비례해 커진다. 일정한 것은 상대 간격이다. 1e16 근처에서는 간격이 2이므로 1을 더해도 값이 바뀌지 않을 수 있다."
+
+[[questions.choices]]
+text = "float64 계산 결과의 절대 오차는 항상 eps 이하다."
+feedback = "반올림 한 번의 상대 오차가 eps/2 이하일 뿐이다. 큰 수의 절대 오차는 훨씬 크고, 연산이 쌓이거나 상쇄가 일어나면 상대 오차도 eps보다 커진다."
+
+[[questions]]
+id = "float32-integer-gap"
+type = "numeric"
+objective = 1
+prompt = '''정수 $2^{24} + 1 = 16777217$을 float32로 바꾼 뒤 다시 정수로 읽으면 얼마인가?'''
+answer = 16777216
+tolerance = 0
+explanation = '''float32의 가수는 저장되는 23비트에 숨은 1비트를 더해 24비트다. $[2^{24}, 2^{25})$ 구간에서 이웃한 float32 수의 간격(ulp)은 $2^{24-23} = 2$이므로 홀수 $2^{24}+1$은 표현할 수 없다. 이 값은 $2^{24}$와 $2^{24}+2$의 정확히 가운데라, 최근접 반올림의 동률 규칙(가수가 짝수인 쪽)에 따라 $2^{24} = 16777216$이 된다. float32로 정수 카운터나 큰 인덱스를 다루면 이 지점부터 정수를 정확히 셀 수 없다.'''
+
+[[questions]]
+id = "bf16-vs-fp16"
+type = "single"
+objective = 1
+prompt = '''fp16(float16)으로 학습할 때는 loss scaling이 흔히 필요하지만, bf16(bfloat16)으로 학습할 때는 대개 필요 없다. 그 이유로 옳은 것은?'''
+explanation = '''bf16은 지수 8비트·가수 7비트로, 지수 비트 수가 fp32와 같아 표현 범위(최소 정규수 약 $1.2 \times 10^{-38}$, 최대 약 $3.4 \times 10^{38}$)가 fp32와 같다. fp16은 지수 5비트라 최소 정규수가 약 $6.1 \times 10^{-5}$, 최대가 65504다. 작은 gradient가 fp16에서는 underflow로 0이 되므로 loss에 큰 수를 곱해 범위 안으로 옮기는 것이 loss scaling이다. 대신 bf16은 가수가 fp16(10비트)보다 짧아 **정밀도는 더 낮다**.'''
+
+[[questions.choices]]
+text = "bf16은 지수 비트가 fp32와 같아 표현 범위가 넓으므로, 작은 gradient가 underflow하지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "bf16은 가수 비트가 fp16보다 많아 더 정밀하기 때문이다."
+feedback = "반대다. bf16의 가수는 7비트로 fp16(10비트)보다 짧다. bf16은 정밀도를 내주고 범위를 얻은 형식이다."
+
+[[questions.choices]]
+text = "bf16은 fp16보다 메모리를 더 써서 그만큼 오차가 작기 때문이다."
+feedback = "두 형식 모두 16비트다. 차이는 16비트를 지수와 가수에 어떻게 나누느냐다."
+
+[[questions.choices]]
+text = "bf16 연산은 내부적으로 항상 fp64로 계산되기 때문이다."
+feedback = "저장 형식의 차이이지 내부 연산 정밀도의 차이가 아니다. 누적을 fp32로 하는 하드웨어가 많지만 fp16에서도 마찬가지다."
+
+[[questions]]
+id = "cancellation-stable-form"
+type = "single"
+objective = 2
+prompt = '''큰 $x$(예: $x = 10^{12}$)에서 $f(x) = \sqrt{x+1} - \sqrt{x}$를 float64로 계산하려 한다. 가장 정확한 방법은?'''
+explanation = '''$\sqrt{x+1}$과 $\sqrt{x}$는 약 $10^6$으로 거의 같아, 뺄셈에서 앞자리가 상쇄되고 반올림 오차만 남는다(파국적 상쇄). 실제로 float64에서 직접 계산하면 $5.00004 \times 10^{-7}$이 나와 참값 $5.0 \times 10^{-7}$과 상대 오차 약 $8 \times 10^{-6}$만큼 어긋난다. float64의 정밀도($10^{-16}$)보다 열 자릿수 가까이 나쁘다. 분자·분모에 $\sqrt{x+1} + \sqrt{x}$를 곱하면 $1/(\sqrt{x+1} + \sqrt{x})$로, 뺄셈 없이 덧셈만 남아 거의 모든 자릿수가 정확하다.'''
+
+[[questions.choices]]
+text = '''정의대로 `np.sqrt(x + 1) - np.sqrt(x)`를 계산한다. float64면 충분히 정확하다.'''
+feedback = "두 제곱근은 약 1e6으로 거의 같고, 차는 약 5e-7이다. 뺄셈이 앞자리 여섯 자리를 지워 상대 오차가 eps의 수억 배로 커진다."
+
+[[questions.choices]]
+text = '''$1 / (\sqrt{x+1} + \sqrt{x})$로 바꿔 계산한다.'''
+correct = true
+
+[[questions.choices]]
+text = '''분모가 0이 되지 않도록 작은 수를 더해 `np.sqrt(x + 1 + 1e-12) - np.sqrt(x)`로 계산한다.'''
+feedback = "여기서 문제는 0으로 나누기가 아니라 비슷한 두 수의 뺄셈이다. 1e-12를 더해도 x + 1의 반올림에 묻혀 아무것도 바뀌지 않고, 상쇄는 그대로 일어난다."
+
+[[questions.choices]]
+text = "float32로 계산해 반올림 오차의 영향을 줄인다."
+feedback = "정밀도를 낮추면 상쇄로 남는 상대 오차가 더 커진다. float32에서 x = 1e6으로 해 보면 직접 계산은 4.88e-4, 참값은 5.0e-4다."
+
+[[questions]]
+id = "softmax-shift"
+type = "single"
+objective = 2
+prompt = '''logits $\mathbf{z} = (1000, 1001, 1002)$에 정의대로 softmax `np.exp(z) / np.exp(z).sum()`을 적용하면 `[nan nan nan]`이 나온다. 올바른 고침은?'''
+explanation = '''$e^{1000}$은 float64의 최댓값(약 $1.8 \times 10^{308}$, $e^{709.8}$ 근처)을 넘어 inf가 되고, inf/inf가 nan이다. softmax는 모든 logit에서 같은 상수를 빼도 값이 변하지 않으므로($e^{z_k - m} / \sum_j e^{z_j - m}$), $m = \max_j z_j$를 빼면 지수의 인자가 모두 0 이하가 되어 overflow가 사라지고 결과는 수학적으로 같다. 결과는 $(0.090, 0.245, 0.665)$다.'''
+
+[[questions.choices]]
+text = "모든 logit에서 최댓값을 뺀 뒤 softmax를 계산한다."
+correct = true
+
+[[questions.choices]]
+text = "결과에 `np.nan_to_num`을 적용해 nan을 0으로 바꾼다."
+feedback = "증상만 가린다. 결과가 (0, 0, 0)이 되어 확률의 합이 1이 아니고, 이 값으로 계산한 loss와 gradient도 틀린다. nan이 생긴 원인(exp의 overflow)을 없애야 한다."
+
+[[questions.choices]]
+text = "분모에 작은 수 eps를 더해 0으로 나누기를 막는다."
+feedback = "분모는 0이 아니라 inf다. inf/(inf + eps)도 nan이다."
+
+[[questions.choices]]
+text = "logit을 [-80, 80] 범위로 잘라(clip) 계산한다."
+feedback = "overflow는 피하지만 1000, 1001, 1002가 모두 80이 되어 softmax가 (1/3, 1/3, 1/3)로 바뀐다. 결과가 틀린다."
+
+[[questions]]
+id = "summation-order"
+type = "multiple"
+objective = 2
+prompt = '''float32로 $10^4$ 하나와 $10^{-4}$ 1만 개를 더한다(참값 10001). 옳은 것을 모두 고르시오.'''
+explanation = '''$10^4$ 근처 float32의 간격(ulp)은 $2^{-10} \approx 9.8 \times 10^{-4}$라, $10^{-4}$를 하나씩 더하면 매번 반올림으로 사라져 결과가 $10^4$ 그대로다. 작은 값끼리 먼저 더하면 그 합(약 1.00005)이 ulp보다 커서 보존되고 결과는 10001이다. 부동소수점 덧셈은 결합법칙이 성립하지 않아 순서가 결과를 바꾼다. Kahan 보정 합은 덧셈마다 잃은 부분을 따로 모아 되돌려 주므로 첫 순서에서도 10001에 가까운 값을 낸다.'''
+
+[[questions.choices]]
+text = "10^4를 맨 앞에 두고 순서대로 더하면 결과는 10^4 그대로다."
+correct = true
+
+[[questions.choices]]
+text = "10^-4들을 먼저 더한 뒤 10^4를 더하면 10001에 가까운 값이 나온다."
+correct = true
+
+[[questions.choices]]
+text = "덧셈은 교환법칙과 결합법칙이 성립하므로 순서와 상관없이 같은 값이 나온다."
+feedback = "실수의 덧셈은 그렇지만 부동소수점 덧셈은 결합법칙이 성립하지 않는다. 각 덧셈 뒤의 반올림이 순서에 따라 다르기 때문이다."
+
+[[questions.choices]]
+text = "Kahan 보정 합으로도 10^4를 맨 앞에 둔 순서에서는 개선할 수 없다."
+feedback = "Kahan 합은 바로 이런 경우를 위해 있다. 사라진 아래쪽 자릿수를 보정 변수에 모아 두었다가 다음 덧셈에서 되돌려 준다."

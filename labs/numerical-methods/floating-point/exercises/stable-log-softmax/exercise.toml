@@ -1,0 +1,6 @@
+title = "안정한 log-softmax"
+chapter = "numerical-methods/floating-point"
+objective = 2
+exec = "browser"
+entry = "log_softmax"
+timeout_s = 10
