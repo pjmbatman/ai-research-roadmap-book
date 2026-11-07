@@ -61,8 +61,6 @@ shallow[0] is grid[0]: True
 rows: [[1, 0, 0], [1, 0, 0]]
 ```
 
-::quiz{id="is-vs-equal"}
-
 출력의 세 부분이 각각 하나의 규칙이다.
 
 1. **할당은 복사하지 않는다.** `b = a` 뒤에는 이름이 둘, 객체는 하나다.
@@ -250,8 +248,6 @@ MLPConfig(width='64', depth=2, tags=[])
 
 dataclass는 함수의 가변 기본 인자와 같은 버그를 정의 시점에 막는다. 리스트·dict·set을 기본값으로 쓰면 `ValueError`를 내고 `default_factory`를 쓰라고 안내한다. 마지막 줄은 다음 절의 주제다. 필드에 `int`라고 적었지만 문자열 `"64"`가 그대로 들어갔다.
 
-::quiz{id="dataclass-default-factory"}
-
 **magic method.** `__len__`, `__getitem__`, `__iter__`, `__enter__`/`__exit__`, `__call__`처럼 밑줄 두 개로 감싼 메서드는 언어의 문법과 내장 함수에 연결된다. `len(ds)`는 `ds.__len__()`을, `ds[i]`는 `ds.__getitem__(i)`를 부른다. PyTorch의 map-style `Dataset`이 `__len__`과 `__getitem__` 두 개만 구현하면 되는 것도 이 때문이다(17.4장). 연산자를 다시 정의하는 `__add__`, `__mul__` 등은 수학 객체(벡터, 다항식, 단위가 있는 물리량)를 표현할 때 유용하지만, 연산의 의미가 수학적으로 분명할 때만 쓴다.
 
 **상속과 composition.** 상속(inheritance)은 "A는 B의 한 종류다"(is-a), composition은 "A는 B를 가지고 있다"(has-a)를 표현한다. 연구 코드에서 깊은 상속 계층은 읽기 어렵다. 모델의 동작을 이해하려면 부모 클래스를 몇 단계씩 거슬러 올라가야 하고, 부모를 고치면 모든 자식이 영향을 받는다. "학습기(Trainer)는 모델·optimizer·logger를 **가진다**"처럼 composition으로 조립하면 부품을 바꿔 끼우기 쉽고 테스트하기도 쉽다. 상속은 프레임워크가 요구할 때(`nn.Module`, `Dataset`)와 인터페이스를 공유할 때 주로 쓴다.
@@ -295,8 +291,6 @@ def evaluate(model: Model, x: np.ndarray, y: np.ndarray) -> float:
 ```
 
 `Model`을 상속하지 않았더라도 `predict` 메서드를 가진 모든 객체(scikit-learn 추정기, 직접 만든 물리 모델)를 `evaluate`에 넘길 수 있고, 정적 분석기는 `predict`가 없는 객체를 넘기는 호출을 오류로 표시한다.
-
-::quiz{id="type-hints-not-enforced"}
 
 **연구에서의 의미.** 정적 분석기를 CI(6.6장)에 넣으면 리팩토링 중에 생긴 인자 순서 실수 같은 버그를 실행 전에 잡는다. 그러나 정적 분석은 숫자 범위(학습률이 양수인가)나 배열 shape를 검사하지 못한다. 그런 조건은 함수 첫머리의 검사나 테스트로 확인해야 한다.
 
