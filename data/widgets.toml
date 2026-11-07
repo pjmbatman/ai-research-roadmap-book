@@ -84,7 +84,7 @@ status = "prototype"
 [[widgets]]
 name = "split-leakage"
 title = "데이터 분할과 누수"
-chapters = ["data/splitting-and-leakage", "classical-ml/model-selection", "classical-ml/time-series-analysis"]
+chapters = ["data/splitting-and-leakage", "classical-ml/model-selection", "classical-ml/time-series-analysis", "battery-ai/battery-data"]
 status = "prototype"
 
 [[widgets]]
@@ -146,3 +146,585 @@ name = "leakage-threshold"
 title = "근접 중복 누수 임계 탐색"
 chapters = ["chemistry-and-materials/chemistry-evaluation"]
 status = "prototype"
+
+[[widgets]]
+name = "split-unit-forecast"
+title = "분할 단위와 예측 지평"
+chapters = ["research-landscape/problem-formulation"]
+status = "planned"
+
+[[widgets]]
+name = "seed-variance"
+title = "seed마다 흔들리는 검증 점수"
+chapters = ["research-landscape/first-pipeline"]
+status = "planned"
+
+[[widgets]]
+name = "tmux-anatomy"
+title = "tmux 세션·창·패널"
+chapters = ["linux-and-remote/processes-and-monitoring"]
+status = "planned"
+
+[[widgets]]
+name = "ssh-tunnel"
+title = "SSH 포트 포워딩 방향"
+chapters = ["linux-and-remote/ssh"]
+status = "planned"
+
+[[widgets]]
+name = "preemption-checkpoint"
+title = "선점과 체크포인트 간격"
+chapters = ["linux-and-remote/shared-servers"]
+status = "planned"
+
+[[widgets]]
+name = "cuda-version-stack"
+title = "드라이버·CUDA·프레임워크 호환"
+chapters = ["environments/software-stack"]
+status = "planned"
+
+[[widgets]]
+name = "docker-layer-cache"
+title = "Dockerfile 레이어 캐시"
+chapters = ["environments/docker"]
+status = "planned"
+
+[[widgets]]
+name = "commit-dag"
+title = "merge·rebase·reset과 커밋 그래프"
+chapters = ["git-and-agents/git-fundamentals"]
+status = "planned"
+
+[[widgets]]
+name = "selection-bias"
+title = "시도 횟수와 test 낙관 편향"
+chapters = ["git-and-agents/agentic-workflow"]
+status = "planned"
+
+[[widgets]]
+name = "broadcasting-shapes"
+title = "브로드캐스팅 규칙"
+chapters = ["python-and-computing/scientific-python"]
+status = "planned"
+
+[[widgets]]
+name = "strides-cache"
+title = "메모리 배치와 캐시 라인"
+chapters = ["python-and-computing/computer-architecture"]
+status = "planned"
+
+[[widgets]]
+name = "roofline"
+title = "roofline 모델"
+chapters = ["python-and-computing/computer-architecture"]
+status = "planned"
+
+[[widgets]]
+name = "config-merge"
+title = "설정 계층 병합"
+chapters = ["research-code-engineering/configuration"]
+status = "planned"
+
+[[widgets]]
+name = "argparse-sandbox"
+title = "CLI 인자에서 설정으로"
+chapters = ["research-code-engineering/cli-design"]
+status = "planned"
+
+[[widgets]]
+name = "power-iteration"
+title = "반복 적용과 고유벡터"
+chapters = ["linear-algebra/eigen-and-symmetric"]
+status = "planned"
+
+[[widgets]]
+name = "projection-lstsq"
+title = "사영과 최소제곱"
+chapters = ["linear-algebra/inner-products-and-projection"]
+status = "planned"
+
+[[widgets]]
+name = "einsum-axes"
+title = "einsum 축 표기"
+chapters = ["linear-algebra/tensors-and-einsum"]
+status = "planned"
+
+[[widgets]]
+name = "slerp-vs-lerp"
+title = "구면 위 보간"
+chapters = ["linear-algebra/manifolds-and-geometry"]
+status = "planned"
+
+[[widgets]]
+name = "basis-expansion"
+title = "기저 전개와 해상도"
+chapters = ["linear-algebra/function-spaces"]
+status = "planned"
+
+[[widgets]]
+name = "equivariance-check"
+title = "등변성 검사"
+chapters = ["linear-algebra/symmetry-and-groups"]
+status = "planned"
+
+[[widgets]]
+name = "gradient-hessian-contour"
+title = "기울기와 Hessian 고유벡터"
+chapters = ["calculus-and-autodiff/multivariable-calculus"]
+status = "planned"
+
+[[widgets]]
+name = "condition-ellipse"
+title = "조건수와 섭동 증폭"
+chapters = ["numerical-methods/conditioning-and-stability"]
+status = "planned"
+
+[[widgets]]
+name = "iterative-solver-race"
+title = "반복법 수렴 비교"
+chapters = ["numerical-methods/numerical-linear-algebra"]
+status = "planned"
+
+[[widgets]]
+name = "newton-basins"
+title = "Newton 끌개 영역"
+chapters = ["numerical-methods/nonlinear-equations"]
+status = "planned"
+
+[[widgets]]
+name = "runge-interpolation"
+title = "Runge 현상"
+chapters = ["numerical-methods/interpolation-and-quadrature"]
+status = "planned"
+
+[[widgets]]
+name = "cfl-advection"
+title = "CFL 조건"
+chapters = ["numerical-methods/pde-and-dae"]
+status = "planned"
+
+[[widgets]]
+name = "loss-slice"
+title = "손실 단면과 보간 경로"
+chapters = ["optimization/nonconvex-landscape"]
+status = "planned"
+
+[[widgets]]
+name = "bayes-opt-1d"
+title = "1D 베이지안 최적화"
+chapters = ["optimization/special-optimization"]
+status = "planned"
+
+[[widgets]]
+name = "base-rate"
+title = "기저율과 자연 빈도"
+chapters = ["probability/conditional-probability"]
+status = "planned"
+
+[[widgets]]
+name = "clt-sampler"
+title = "중심극한정리와 꼬리"
+chapters = ["probability/expectation-and-limits"]
+status = "planned"
+
+[[widgets]]
+name = "importance-weights"
+title = "중요도 가중과 ESS"
+chapters = ["probability/sampling"]
+status = "planned"
+
+[[widgets]]
+name = "metropolis-chain"
+title = "Metropolis 혼합"
+chapters = ["probability/stochastic-processes"]
+status = "planned"
+
+[[widgets]]
+name = "ci-coverage"
+title = "신뢰구간 포함률"
+chapters = ["statistical-inference/intervals-and-testing"]
+status = "planned"
+
+[[widgets]]
+name = "bootstrap-resampler"
+title = "부트스트랩 단위"
+chapters = ["statistical-inference/comparing-models"]
+status = "planned"
+
+[[widgets]]
+name = "residual-diagnostics"
+title = "잔차 진단"
+chapters = ["statistical-inference/regression-models"]
+status = "planned"
+
+[[widgets]]
+name = "partial-pooling"
+title = "부분 풀링과 수축"
+chapters = ["bayesian-inference/hierarchical-models"]
+status = "planned"
+
+[[widgets]]
+name = "gmm-em"
+title = "GMM EM 단계"
+chapters = ["bayesian-inference/latent-variables-and-em"]
+status = "planned"
+
+[[widgets]]
+name = "kl-direction"
+title = "forward vs reverse KL"
+chapters = ["information-and-learning-theory/entropy-and-kl"]
+status = "planned"
+
+[[widgets]]
+name = "mi-histogram-bias"
+title = "MI 추정 편향"
+chapters = ["information-and-learning-theory/mutual-information"]
+status = "planned"
+
+[[widgets]]
+name = "double-descent"
+title = "double descent"
+chapters = ["information-and-learning-theory/modern-generalization"]
+status = "planned"
+
+[[widgets]]
+name = "doe-coverage"
+title = "표집 설계 커버리지"
+chapters = ["data/synthetic-data"]
+status = "planned"
+
+[[widgets]]
+name = "window-overlap-leak"
+title = "window 겹침 누수"
+chapters = ["architectures/time-series-deep-learning"]
+status = "planned"
+
+[[widgets]]
+name = "robust-outlier"
+title = "z와 robust z"
+chapters = ["data/preprocessing-and-eda"]
+status = "planned"
+
+[[widgets]]
+name = "regularization-path"
+title = "정규화 경로"
+chapters = ["classical-ml/linear-models"]
+status = "planned"
+
+[[widgets]]
+name = "knn-rbf-scale"
+title = "kNN과 RBF 길이척도"
+chapters = ["classical-ml/kernels-and-neighbors"]
+status = "planned"
+
+[[widgets]]
+name = "tree-boosting-overfit"
+title = "트리 깊이와 boosting"
+chapters = ["classical-ml/trees-and-ensembles"]
+status = "planned"
+
+[[widgets]]
+name = "tsne-perplexity"
+title = "t-SNE perplexity"
+chapters = ["classical-ml/unsupervised-learning"]
+status = "planned"
+
+[[widgets]]
+name = "kaplan-meier"
+title = "Kaplan–Meier와 중도절단"
+chapters = ["classical-ml/survival-and-causal"]
+status = "planned"
+
+[[widgets]]
+name = "smoothing-illusion"
+title = "곡선 smoothing 착시"
+chapters = ["deep-learning-pytorch/dashboards"]
+status = "planned"
+
+[[widgets]]
+name = "learning-curve-reader"
+title = "학습 곡선 진단"
+chapters = ["deep-learning-pytorch/debugging-training"]
+status = "planned"
+
+[[widgets]]
+name = "receptive-field"
+title = "수용 영역"
+chapters = ["architectures/cnn"]
+status = "planned"
+
+[[widgets]]
+name = "ssm-kernel"
+title = "상태공간 모델 커널"
+chapters = ["architectures/recurrent-and-ssm"]
+status = "planned"
+
+[[widgets]]
+name = "sampling-temperature"
+title = "temperature와 top-k·top-p"
+chapters = ["architectures/language-models"]
+status = "planned"
+
+[[widgets]]
+name = "over-smoothing"
+title = "GNN over-smoothing"
+chapters = ["architectures/graph-networks"]
+status = "planned"
+
+[[widgets]]
+name = "probe-vs-pca"
+title = "PCA 시각화 vs 선형 프로브"
+chapters = ["architectures/representation-analysis"]
+status = "planned"
+
+[[widgets]]
+name = "gan-dynamics"
+title = "GAN 학습 동역학"
+chapters = ["generative-and-foundation-models/gan-and-flows"]
+status = "planned"
+
+[[widgets]]
+name = "coupling-flow"
+title = "affine coupling 흐름"
+chapters = ["generative-and-foundation-models/gan-and-flows"]
+status = "planned"
+
+[[widgets]]
+name = "vae-collapse"
+title = "VAE posterior collapse"
+chapters = ["generative-and-foundation-models/vae"]
+status = "planned"
+
+[[widgets]]
+name = "flow-paths"
+title = "flow matching 경로"
+chapters = ["generative-and-foundation-models/flow-matching"]
+status = "planned"
+
+[[widgets]]
+name = "gen-metric-failures"
+title = "생성 지표의 실패"
+chapters = ["generative-and-foundation-models/evaluating-generative-models"]
+status = "planned"
+
+[[widgets]]
+name = "contrastive-collapse"
+title = "대조학습 붕괴"
+chapters = ["generative-and-foundation-models/self-supervised-learning"]
+status = "planned"
+
+[[widgets]]
+name = "lora-rank"
+title = "LoRA 랭크"
+chapters = ["generative-and-foundation-models/foundation-models"]
+status = "planned"
+
+[[widgets]]
+name = "gridworld-vi"
+title = "격자 세계 가치 반복"
+chapters = ["reinforcement-learning/mdp-and-dp"]
+status = "planned"
+
+[[widgets]]
+name = "bandit-regret"
+title = "밴딧 누적 후회"
+chapters = ["reinforcement-learning/bandits-and-offline-rl"]
+status = "planned"
+
+[[widgets]]
+name = "lqr-mpc"
+title = "LQR과 제약 MPC"
+chapters = ["reinforcement-learning/model-based-control"]
+status = "planned"
+
+[[widgets]]
+name = "conformal-coverage"
+title = "split conformal 포함률"
+chapters = ["reliability/conformal-prediction"]
+status = "planned"
+
+[[widgets]]
+name = "cost-threshold"
+title = "비용 비율과 임계값"
+chapters = ["reliability/decision-making"]
+status = "planned"
+
+[[widgets]]
+name = "checkpoint-tradeoff"
+title = "gradient checkpointing"
+chapters = ["experiment-operations/memory-management"]
+status = "planned"
+
+[[widgets]]
+name = "ring-allreduce"
+title = "ring all-reduce"
+chapters = ["experiment-operations/distributed-training"]
+status = "planned"
+
+[[widgets]]
+name = "batching-latency"
+title = "배치 크기와 지연·처리량"
+chapters = ["experiment-operations/inference-and-deployment"]
+status = "planned"
+
+[[widgets]]
+name = "citation-pagerank"
+title = "인용 그래프 PageRank"
+chapters = ["research-practice/literature-search"]
+status = "planned"
+
+[[widgets]]
+name = "power-vs-seeds"
+title = "검정력과 seed 수"
+chapters = ["research-practice/experimental-design"]
+status = "planned"
+
+[[widgets]]
+name = "factorial-effects"
+title = "2^k 요인 효과"
+chapters = ["research-practice/reproducing-papers"]
+status = "planned"
+
+[[widgets]]
+name = "error-bars"
+title = "SD·SE·CI 오차막대"
+chapters = ["research-practice/analyzing-results"]
+status = "planned"
+
+[[widgets]]
+name = "axis-lie-factor"
+title = "축 범위와 lie factor"
+chapters = ["research-practice/figures-and-tables"]
+status = "planned"
+
+[[widgets]]
+name = "colormap-lightness"
+title = "컬러맵 밝기"
+chapters = ["research-practice/figures-and-tables"]
+status = "planned"
+
+[[widgets]]
+name = "pinn-loss-balance"
+title = "PINN 손실 균형"
+chapters = ["scientific-ml/pinn"]
+status = "planned"
+
+[[widgets]]
+name = "spectral-conv"
+title = "스펙트럼 합성곱과 해상도"
+chapters = ["scientific-ml/neural-operators"]
+status = "planned"
+
+[[widgets]]
+name = "kalman-1d"
+title = "1D 칼만 필터"
+chapters = ["scientific-ml/system-identification-and-estimation"]
+status = "planned"
+
+[[widgets]]
+name = "l-curve"
+title = "Tikhonov L-curve"
+chapters = ["scientific-ml/inverse-problems-and-uq"]
+status = "planned"
+
+[[widgets]]
+name = "abc-tolerance"
+title = "ABC 허용 오차"
+chapters = ["scientific-discovery/simulation-based-inference"]
+status = "planned"
+
+[[widgets]]
+name = "eig-design"
+title = "측정 설계와 기대 정보 이득"
+chapters = ["scientific-discovery/experimental-design"]
+status = "planned"
+
+[[widgets]]
+name = "pareto-front"
+title = "다목적 Pareto front"
+chapters = ["scientific-discovery/autonomous-experimentation"]
+status = "planned"
+
+[[widgets]]
+name = "grid-resolution-re"
+title = "격자 해상도와 레이놀즈 수"
+chapters = ["physics-and-engineering/simulation-fundamentals"]
+status = "planned"
+
+[[widgets]]
+name = "pod-energy"
+title = "POD 에너지와 외삽"
+chapters = ["physics-and-engineering/surrogate-modeling"]
+status = "planned"
+
+[[widgets]]
+name = "closure-apriori"
+title = "closure 사전·사후 평가"
+chapters = ["physics-and-engineering/turbulence-and-closure"]
+status = "planned"
+
+[[widgets]]
+name = "beam-pareto"
+title = "빔 설계 Pareto"
+chapters = ["physics-and-engineering/design-optimization"]
+status = "planned"
+
+[[widgets]]
+name = "rollout-spectrum"
+title = "rollout 오차와 스펙트럼"
+chapters = ["physics-and-engineering/physics-benchmarks"]
+status = "planned"
+
+[[widgets]]
+name = "area-weighting"
+title = "위도 가중 평균"
+chapters = ["earth-and-climate/earth-system-data"]
+status = "planned"
+
+[[widgets]]
+name = "spread-skill"
+title = "spread–skill과 rank histogram"
+chapters = ["earth-and-climate/weather-forecasting"]
+status = "planned"
+
+[[widgets]]
+name = "energy-spectrum-blur"
+title = "흐릿함과 에너지 스펙트럼"
+chapters = ["earth-and-climate/climate-evaluation"]
+status = "planned"
+
+[[widgets]]
+name = "homology-split"
+title = "상동성 기준 분할"
+chapters = ["life-sciences/bio-evaluation"]
+status = "planned"
+
+[[widgets]]
+name = "kabsch-align"
+title = "Kabsch 정렬과 RMSD"
+chapters = ["life-sciences/protein-structure"]
+status = "planned"
+
+[[widgets]]
+name = "batch-correction"
+title = "배치 효과와 보정"
+chapters = ["life-sciences/omics-and-single-cell"]
+status = "planned"
+
+[[widgets]]
+name = "soc-filter"
+title = "쿨롱 카운팅 vs EKF"
+chapters = ["battery-ai/state-and-lifetime-prediction"]
+status = "planned"
+
+[[widgets]]
+name = "charge-pareto"
+title = "다단계 충전 Pareto"
+chapters = ["battery-ai/charging-optimization"]
+status = "planned"
+
+[[widgets]]
+name = "competency-radar"
+title = "역량 레이더"
+chapters = ["capstone/competency-assessment"]
+status = "planned"
