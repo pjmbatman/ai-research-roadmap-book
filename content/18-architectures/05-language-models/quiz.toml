@@ -1,0 +1,149 @@
+# 18.5 언어모델과 LLM의 기초 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "bpe-number-split"
+type = "single"
+objective = 1
+prompt = '''본문의 작은 말뭉치로 배운 BPE에서 `2020`은 한 토큰이지만 `2019`는 `201` + `9`, `1920`은 `1` + `9` + `20`으로 나뉘었다. 이렇게 나뉘는 이유로 옳은 것은?'''
+explanation = '''BPE는 학습 말뭉치에서 자주 이웃한 기호 쌍을 순서대로 병합한다. 말뭉치에 두 번 나온 `2020`은 병합이 끝까지 진행되어 한 토큰이 되었고, 나오지 않은 `2019`·`1920`은 배운 병합 중 적용되는 것만 적용된다. 토큰 경계는 자릿값과 무관하게 빈도가 정하므로, 같은 `20`이 수에 따라 다른 자리를 뜻하게 된다. 같은 규칙과 같은 입력이면 결과는 늘 같다.'''
+
+[[questions.choices]]
+text = "BPE 병합이 말뭉치 빈도로 정해져, 숫자도 자릿값이 아니라 학습 말뭉치에 자주 나온 문자열 단위로 잘린다."
+correct = true
+
+[[questions.choices]]
+text = "BPE는 숫자를 자릿값(천·백·십·일의 자리)에 맞춰 나누도록 설계되어 있다."
+feedback = "BPE는 문자의 의미를 모른다. 자릿값에 맞추려면 숫자를 한 자리씩 나누는 것 같은 별도 규칙이 필요하다."
+
+[[questions.choices]]
+text = "토큰화는 실행할 때마다 무작위로 경계를 정하므로 다시 실행하면 다르게 나뉠 수 있다."
+feedback = "학습한 병합 규칙을 배운 순서대로 적용하는 결정적인 절차다. 같은 규칙, 같은 입력이면 결과도 같다."
+
+[[questions.choices]]
+text = "2019와 1920은 사전에 없는 단어라 모르는 토큰(unknown) 하나로 바뀌어야 하는데, 구현 오류로 쪼개졌다."
+feedback = "하위 단어 토큰화의 목적이 바로 모르는 단어를 아는 조각으로 나누는 것이다. 쪼개진 것은 의도된 동작이다."
+
+[[questions]]
+id = "held-out-perplexity"
+type = "numeric"
+objective = 2
+prompt = '''언어모델이 test 토큰 4개의 정답에 준 확률이 차례로 0.5, 0.25, 0.5, 0.125였다. 이 4개 토큰에 대한 perplexity는? (소수 둘째 자리까지)'''
+explanation = '''perplexity는 정답 확률의 기하평균의 역수다. $\exp\big(-\tfrac{1}{4}(\ln 0.5 + \ln 0.25 + \ln 0.5 + \ln 0.125)\big) = 2^{(1+2+1+3)/4} = 2^{1.75} \approx 3.36$. 확률의 산술평균(0.34375)의 역수 2.91로 계산하면 틀린다. 낮은 확률을 준 토큰 하나가 perplexity를 크게 올린다.'''
+answer = 3.36
+tolerance = 0.01
+
+[[questions]]
+id = "train-ppl-below-floor"
+type = "single"
+objective = 2
+prompt = '''본문 실험에서 자료 생성 과정의 perplexity 하한은 1.344인데, 문맥 8 계수 모델의 train perplexity는 1.212였다(test는 3.531). 이 결과의 해석으로 옳은 것은?'''
+explanation = '''하한은 자료 생성 과정 자체의 무작위성이 정하는 값이라, 새 자료에서는 어떤 모델도 기대값으로 이보다 낮아질 수 없다. train에서 하한보다 낮다는 것은 학습 자료의 우연한 잡음(어느 위치에서 돌연변이가 생겼는지)까지 외웠다는 뜻이다. test perplexity 3.531이 그 대가를 보여 준다. 모델 비교와 보고는 test perplexity로 한다.'''
+
+[[questions.choices]]
+text = "문맥별 빈도표가 학습 자료의 잡음까지 외운 것이다. 일반화 성능은 test perplexity로 판단해야 한다."
+correct = true
+
+[[questions.choices]]
+text = "모델이 자료 생성 과정보다 더 좋은 규칙을 찾아냈다."
+feedback = "생성 과정에 남은 무작위성은 어떤 모델도 새 자료에서 예측할 수 없다. 하한 아래는 train 자료에서만 가능한 암기다."
+
+[[questions.choices]]
+text = "하한을 잘못 계산했다는 신호다."
+feedback = "하한은 반복 위치의 정답 확률 0.925와 나머지 0.025로 정확히 계산된다. test perplexity가 하한보다 큰 것도 이와 맞는다."
+
+[[questions.choices]]
+text = "train perplexity가 가장 낮으므로 문맥 8 계수 모델이 다섯 모델 중 가장 좋다."
+feedback = "train 성능으로 모델을 고르면 가장 많이 외운 모델을 고르게 된다. test에서는 신경망 모델(1.424)이 훨씬 낫다."
+
+[[questions]]
+id = "tokenizer-ppl-comparison"
+type = "single"
+objective = 2
+prompt = '''같은 test 텍스트에서 모델 A(BPE, 토큰 하나가 평균 2글자)는 토큰당 perplexity 12, 모델 B(문자 단위)는 문자당 perplexity 3을 얻었다. 옳은 판단은?'''
+explanation = '''전체 음의 로그우도가 같은 텍스트에서 비교할 수 있는 양이다. A의 토큰 수는 글자 수의 절반이므로 $\mathrm{PPL}_{\text{char}} = 12^{1/2} \approx 3.46$이다. B의 3보다 크므로 이 텍스트에서는 B가 더 좋다. 토큰당 값 12와 3을 그대로 비교하거나, 토큰이 크다는 이유만으로 A를 낫다고 볼 수 없다.'''
+
+[[questions.choices]]
+text = "문자당으로 바꾸면 A는 약 3.46이므로, 이 텍스트에서는 B가 더 좋다."
+correct = true
+
+[[questions.choices]]
+text = "12가 3보다 크므로 A가 B보다 4배 나쁘다."
+feedback = "토큰당 값은 토큰 크기에 따라 달라진다. 같은 단위(문자당·바이트당)로 바꾼 뒤 비교해야 한다."
+
+[[questions.choices]]
+text = "A는 토큰 하나에 더 많은 정보를 담으므로 perplexity와 무관하게 A가 더 좋다."
+feedback = "토큰이 크다는 것은 모델의 품질이 아니라 tokenizer의 선택이다. 같은 텍스트에 준 확률로 비교한다."
+
+[[questions.choices]]
+text = "tokenizer가 다르면 두 모델의 확률을 비교할 방법이 전혀 없다."
+feedback = "같은 텍스트 전체의 음의 로그우도는 tokenizer와 무관하게 정의되므로, 문자당·바이트당 값으로 비교할 수 있다."
+
+[[questions]]
+id = "temperature-effects"
+type = "multiple"
+objective = 2
+prompt = '''logit 벡터에 temperature $\tau$와 top-k를 적용하는 디코딩에 대해 옳은 것을 모두 고르시오.'''
+explanation = '''logit을 양수 $\tau$로 나누어도 대소 관계는 그대로이므로 순위는 바뀌지 않는다. $\tau \to 0$이면 최댓값 하나에 확률이 몰려 greedy가 되고, top-k에서 $k = 1$이면 최댓값만 남으므로 역시 greedy와 같다. 그러나 순위가 그대로이므로 temperature를 낮춰도 모델의 1순위 답이 바뀌지 않는다. 일관성이 높아질 뿐 정확성이 높아지지는 않는다.'''
+
+[[questions.choices]]
+text = "temperature는 후보 토큰의 확률 순위를 바꾸지 않는다."
+correct = true
+
+[[questions.choices]]
+text = '''$\tau \to 0$이면 확률이 가장 큰 토큰만 고르는 greedy 디코딩에 가까워진다.'''
+correct = true
+
+[[questions.choices]]
+text = "top-k에서 k = 1이면 greedy 디코딩과 같다."
+correct = true
+
+[[questions.choices]]
+text = "temperature를 낮추면 모델이 더 정확한 사실을 답한다."
+feedback = "temperature는 이미 매긴 순위를 바꾸지 않는다. 1순위가 틀렸다면 낮은 temperature에서는 더 일관되게 틀린다."
+
+[[questions]]
+id = "training-stages"
+type = "single"
+objective = 1
+prompt = '''LLM의 학습 단계에 대한 설명으로 옳은 것은?'''
+explanation = '''instruction tuning은 (지시, 모범 응답) 쌍에 대한 다음 토큰 예측으로, 손실의 형태는 사전학습과 같고 데이터가 다르다. RLHF는 선호 비교로 보상 모델을 학습해 강화학습으로 최대화하고, DPO는 같은 목표를 보상 모델 없이 선호 쌍에 대한 손실로 직접 최적화한다. 선호 최적화는 사람이 더 낫다고 고른 응답 쪽으로 분포를 옮기는 것이라, 사람이 판단하기 어려운 사실의 정확성을 보장하지 않는다.'''
+
+[[questions.choices]]
+text = "instruction tuning은 손실의 형태로는 사전학습과 같은 다음 토큰 예측이고, 다른 것은 (지시, 응답) 쌍이라는 데이터다."
+correct = true
+
+[[questions.choices]]
+text = "DPO는 RLHF와 마찬가지로 먼저 보상 모델을 따로 학습한 뒤 강화학습으로 최적화한다."
+feedback = "DPO의 핵심은 보상 모델과 강화학습 단계 없이, 선호 쌍에 대한 분류형 손실로 같은 목표를 직접 최적화하는 것이다."
+
+[[questions.choices]]
+text = "RLHF를 거친 모델은 사실 관계가 검증되어 있으므로 인용을 따로 확인할 필요가 없다."
+feedback = "RLHF는 사람이 선호한 응답 쪽으로 분포를 옮길 뿐이다. 확신에 찬 문체가 선호되면 틀린 내용도 확신에 차서 나온다."
+
+[[questions.choices]]
+text = "사전학습은 정답 레이블이 붙은 질문–답 쌍으로만 이루어진다."
+feedback = "사전학습은 레이블 없는 대규모 텍스트로 다음 토큰을 예측한다. 텍스트 자체가 다음 토큰의 정답을 제공한다."
+
+[[questions]]
+id = "rag-verification"
+type = "single"
+objective = 3
+prompt = '''도메인 문서로 RAG를 구성했더니 답변마다 검색된 문단의 출처가 붙어 나온다. 이 답변을 연구에 쓰기 전에 가장 먼저 확인할 것은?'''
+explanation = '''RAG는 검색과 생성 두 단계에서 각각 틀릴 수 있다. 출처가 붙어 있다는 것은 그 문단이 입력에 들어갔다는 뜻일 뿐, 답이 그 문단에 근거한다는 보장이 아니다. 인용한 문단이 답을 실제로 뒷받침하는지, 정답 문서가 검색되었는지를 정답을 아는 질문 세트로 따로 평가한다.'''
+
+[[questions.choices]]
+text = "인용된 문단이 답의 내용을 실제로 뒷받침하는지, 그리고 정답이 있는 문서가 검색되었는지를 정답을 아는 질문으로 따로 확인한다."
+correct = true
+
+[[questions.choices]]
+text = "출처가 붙어 있으므로 답은 문서에 근거한 것이고, 따로 확인할 필요가 없다."
+feedback = "모델은 검색된 문서에 없는 내용을 덧붙이거나 잘못 옮길 수 있다. 출처 표시는 근거의 존재를 보장하지 않는다."
+
+[[questions.choices]]
+text = "temperature를 0으로 낮춰 다시 생성하고, 같은 답이 나오면 맞는 것으로 본다."
+feedback = "temperature를 낮추면 같은 답이 반복될 뿐이다. 일관성은 정확성의 증거가 아니다."
+
+[[questions.choices]]
+text = "답변의 문장이 유창하고 전문 용어가 정확하게 쓰였는지 본다."
+feedback = "유창함은 다음 토큰 예측이 가장 잘하는 일이다. 내용의 정확성과는 별개다."

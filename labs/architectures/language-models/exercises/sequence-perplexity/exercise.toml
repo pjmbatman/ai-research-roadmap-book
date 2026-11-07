@@ -1,0 +1,6 @@
+title = "logit에서 perplexity 계산하기"
+chapter = "architectures/language-models"
+objective = 2
+exec = "browser"
+entry = "perplexity"
+timeout_s = 10
