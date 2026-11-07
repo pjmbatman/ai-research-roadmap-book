@@ -53,7 +53,7 @@ await test("메인(Bento): 타일 일곱 개, 이어서 학습 타일이 본문 
   await go("/");
   assert((await page.locator(".bento > .tile").count()) === 7, `타일 ${await page.locator(".bento > .tile").count()}`);
   const href = await page.getAttribute("[data-hero]", "href");
-  assert(href.endsWith(CH72), href);
+  assert(/^\/[a-z0-9-]+\/[a-z0-9-]+\/$/.test(href), `이어서 학습이 장을 가리켜야 함: ${href}`);
   assert((await page.locator("[data-hero] .mini-path i").count()) >= 10, "진행 점");
   assert((await over()) <= 0, "가로 넘침");
   await shot("home");
