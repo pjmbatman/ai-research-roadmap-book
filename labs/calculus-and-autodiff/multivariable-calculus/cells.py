@@ -64,7 +64,7 @@ eps = 1e-6
 J_fd = np.stack([(net(x + eps * e) - net(x - eps * e)) / (2 * eps)
                  for e in np.eye(3)], axis=1)           # (2, 3)
 print("J shape:", J.shape)
-print("chain rule와 유한차분의 최대 차이:", f"{np.abs(J - J_fd).max():.1e}")
+print("chain rule와 유한차분의 최대 차이 < 1e-8:", np.abs(J - J_fd).max() < 1e-8)
 
 # %% cell 5 — 1차·2차 Taylor 근사의 오차
 def rosen(p, b=10.0):

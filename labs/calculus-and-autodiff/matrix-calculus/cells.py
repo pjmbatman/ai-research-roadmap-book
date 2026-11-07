@@ -25,7 +25,7 @@ checks = {
     "log det X -> X^{-T}    ": (num_grad(lambda M: np.log(np.linalg.det(M)), X), np.linalg.inv(X).T),
 }
 for name, (num, formula) in checks.items():
-    print(f"{name}  최대 차이 {np.abs(num - formula).max():.1e}")
+    print(f"{name}  최대 차이 < 1e-8: {np.abs(num - formula).max() < 1e-8}")
 
 # %% cell 2 — 선형회귀의 gradient
 N, D = 50, 3
@@ -79,4 +79,4 @@ for k, g in grads.items():
     f = lambda v, k=k: forward({**P0, k: v})[3]
     g_num = num_grad(f, P0[k])
     rel = np.linalg.norm(g - g_num) / (np.linalg.norm(g) + np.linalg.norm(g_num))
-    print(f"{k}: shape {str(g.shape):7}  상대오차 {rel:.1e}")
+    print(f"{k}: shape {str(g.shape):7}  상대오차 < 1e-7: {rel < 1e-7}")

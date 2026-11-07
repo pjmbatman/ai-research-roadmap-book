@@ -24,7 +24,8 @@ print("cond(A)     :", f"{np.linalg.cond(A):.2f}")
 # %% cell 2 — Cholesky: 양의 정부호 검사와 jitter
 x = np.linspace(0, 1, 50)                                  # (50,) 입력 위치
 K = np.exp(-0.5 * (x[:, None] - x[None, :]) ** 2 / 0.3**2)  # (50, 50) RBF 커널
-print(f"cond(K) = {np.linalg.cond(K):.1e}, 최소 고유값 = {np.linalg.eigvalsh(K)[0]:.1e}")
+eps = np.finfo(float).eps                                 # 반올림 수준의 값은 환경마다 달라 판정만 찍는다
+print("cond(K)*eps > 1:", np.linalg.cond(K) * eps > 1, "  최소 고유값 < 1e-12:", np.linalg.eigvalsh(K)[0] < 1e-12)
 try:
     sla.cholesky(K, lower=True)
 except np.linalg.LinAlgError:
@@ -33,8 +34,7 @@ except np.linalg.LinAlgError:
 L = sla.cholesky(K + 1e-6 * np.eye(50), lower=True)        # K + jitter*I
 y = np.sin(2 * np.pi * x)                                  # (50,) 관측값
 alpha = sla.cho_solve((L, True), y)                        # (K + jitter I)^-1 y
-print("jitter 1e-6 : 성공, 잔차 =",
-      f"{np.linalg.norm((K + 1e-6 * np.eye(50)) @ alpha - y):.1e}")
+print("jitter 1e-6 : 성공, 잔차 < 1e-10:", np.linalg.norm((K + 1e-6 * np.eye(50)) @ alpha - y) < 1e-10)
 
 # %% cell 3 — 반복법: Jacobi · Gauss–Seidel · CG
 import scipy.sparse.linalg as spla

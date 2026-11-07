@@ -75,8 +75,8 @@ disc = LogisticRegression().fit(X, y)                      # p(y|x)를 직접 �
 gen = LinearDiscriminantAnalysis(store_covariance=True).fit(X, y)   # p(x|y)p(y)를 학습
 
 x_new = np.array([[1.0, 0.5], [12.0, 6.0]])                # 경계 근처 점, 데이터에서 먼 점
-print("판별 p(y=1|x):", disc.predict_proba(x_new)[:, 1].round(3))
-print("생성 p(y=1|x):", gen.predict_proba(x_new)[:, 1].round(3))
+print("판별 p(y=1|x):", disc.predict_proba(x_new)[:, 1].round(2))
+print("생성 p(y=1|x):", gen.predict_proba(x_new)[:, 1].round(2))
 p_x = sum(gen.priors_[k] * multivariate_normal(gen.means_[k], gen.covariance_).pdf(x_new)
           for k in (0, 1))                                 # p(x) = sum_k p(x|y=k) p(y=k)
 print("생성 p(x)    :", np.array2string(p_x, precision=2))
@@ -84,8 +84,8 @@ print("생성모델이 만든 불량 시료 3개:\n", rng.multivariate_normal(ge
 ```
 
 ```output
-판별 p(y=1|x): [0.465 1.   ]
-생성 p(y=1|x): [0.468 1.   ]
+판별 p(y=1|x): [0.46 1.  ]
+생성 p(y=1|x): [0.47 1.  ]
 생성 p(x)    : [1.02e-01 5.35e-25]
 생성모델이 만든 불량 시료 3개:
  [[ 2.95  2.23]

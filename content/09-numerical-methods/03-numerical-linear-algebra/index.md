@@ -70,7 +70,8 @@ cond(A)     : 2.62
 ```python {exec="browser" session="nla"}
 x = np.linspace(0, 1, 50)                                  # (50,) 입력 위치
 K = np.exp(-0.5 * (x[:, None] - x[None, :]) ** 2 / 0.3**2)  # (50, 50) RBF 커널
-print(f"cond(K) = {np.linalg.cond(K):.1e}, 최소 고유값 = {np.linalg.eigvalsh(K)[0]:.1e}")
+eps = np.finfo(float).eps                                 # 반올림 수준의 값은 환경마다 달라 판정만 찍는다
+print("cond(K)*eps > 1:", np.linalg.cond(K) * eps > 1, "  최소 고유값 < 1e-12:", np.linalg.eigvalsh(K)[0] < 1e-12)
 try:
     sla.cholesky(K, lower=True)
 except np.linalg.LinAlgError:
@@ -79,17 +80,16 @@ except np.linalg.LinAlgError:
 L = sla.cholesky(K + 1e-6 * np.eye(50), lower=True)        # K + jitter*I
 y = np.sin(2 * np.pi * x)                                  # (50,) 관측값
 alpha = sla.cho_solve((L, True), y)                        # (K + jitter I)^-1 y
-print("jitter 1e-6 : 성공, 잔차 =",
-      f"{np.linalg.norm((K + 1e-6 * np.eye(50)) @ alpha - y):.1e}")
+print("jitter 1e-6 : 성공, 잔차 < 1e-10:", np.linalg.norm((K + 1e-6 * np.eye(50)) @ alpha - y) < 1e-10)
 ```
 
 ```output
-cond(K) = 6.4e+18, 최소 고유값 = -3.8e-15
+cond(K)*eps > 1: True   최소 고유값 < 1e-12: True
 jitter 없음 : LinAlgError (수치적으로 양의 정부호가 아니다)
-jitter 1e-6 : 성공, 잔차 = 6.7e-14
+jitter 1e-6 : 성공, 잔차 < 1e-10: True
 ```
 
-RBF 커널 행렬은 이론적으로 양의 정부호지만, 점이 촘촘하고 length scale이 길면 행들이 거의 같아져 가장 작은 고유값이 반올림 오차 수준이 되고, 계산값은 음수로 나오기도 한다. 대각에 작은 양수(jitter)를 더하면 모든 고유값이 그만큼 커져 분해가 성공한다. jitter는 관측 잡음 분산을 조금 더한 것과 같아서 모델을 바꾸므로, 값을 기록하고 결과가 그 크기에 민감하지 않은지 확인한다.
+RBF 커널 행렬은 이론적으로 양의 정부호지만, 점이 촘촘하고 length scale이 길면 행들이 거의 같아져 가장 작은 고유값이 반올림 오차 수준이 되고, 계산값은 음수로 나오기도 한다(집필 환경에서 $10^{-15}$ 크기의 음수). 조건수도 $1/\varepsilon$을 넘어 9.2장의 기준으로는 믿을 자릿수가 없다. 대각에 작은 양수(jitter)를 더하면 모든 고유값이 그만큼 커져 분해가 성공한다. jitter는 관측 잡음 분산을 조금 더한 것과 같아서 모델을 바꾸므로, 값을 기록하고 결과가 그 크기에 민감하지 않은지 확인한다.
 
 ::quiz{id="cholesky-jitter"}
 

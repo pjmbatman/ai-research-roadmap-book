@@ -22,12 +22,15 @@ for n in [5, 8, 11]:
     A = hilbert(n)
     x = np.ones(n)
     b = A @ x
-    print(f"n = {n:2d}  cond*eps = {np.linalg.cond(A) * eps:.1e}")
+    kappa = np.linalg.cond(A)
+    print(f"n = {n:2d}  cond*eps = {kappa * eps:.1e}")
     for name, x_hat in [("solve", np.linalg.solve(A, b)),    # LU + 부분 피벗팅
                         ("inv @ b", np.linalg.inv(A) @ b)]:   # 역행렬을 만든 뒤 곱
         fwd = np.linalg.norm(x_hat - x) / np.linalg.norm(x)
         bwd = np.linalg.norm(b - A @ x_hat) / (np.linalg.norm(A, 2) * np.linalg.norm(x_hat))
-        print(f"   {name:8s} backward = {bwd:.1e}  forward = {fwd:.1e}")
+        # 오차의 정확한 값은 LAPACK 구현마다 다르므로, 크기 관계만 판정한다
+        print(f"   {name:8s} backward <= 10 eps: {bwd <= 10 * eps!s:5}  "
+              f"forward <= cond*backward: {fwd <= kappa * bwd!s:5}  forward < 1e-5: {fwd < 1e-5}")
 
 # %% cell 3 — 조건이 좋은 문제, 불안정한 알고리즘: 이차방정식의 작은 근
 b, c = -1e8, 1.0                                     # x^2 + b x + c = 0

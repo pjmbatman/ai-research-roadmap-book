@@ -185,6 +185,8 @@ $$
 이며, 양 끝은 해당 고유벡터에서 정확히 달성된다. 즉 **최대 고윳값은 이차형식을 최대화하는 단위 벡터 방향의 값**이다. 이 변분 표현이 7.6장의 PCA("분산을 최대화하는 방향")의 수학적 근거다.
 
 ```python {exec="browser" session="eig"}
+import scipy.linalg as sla
+
 S2 = np.array([[2.0, 1.0], [1.0, 2.0]])
 T2 = np.array([[1.0, 2.0], [2.0, 1.0]])
 print("S2 고윳값:", np.linalg.eigvalsh(S2), "  T2 고윳값:", np.linalg.eigvalsh(T2))
@@ -196,7 +198,7 @@ rq = np.einsum("ni,ij,nj->n", X, S2, X) / np.einsum("ni,ni->n", X, X)
 print(f"Rayleigh quotient 범위: [{rq.min():.4f}, {rq.max():.4f}]")
 for M, name in [(S2, "S2"), (T2, "T2")]:
     try:
-        np.linalg.cholesky(M)
+        sla.cholesky(M)                  # PD가 아니면 LinAlgError
         print(name, "Cholesky 성공 → 양의 정부호")
     except np.linalg.LinAlgError:
         print(name, "Cholesky 실패 → 양의 정부호 아님")
@@ -210,7 +212,7 @@ S2 Cholesky 성공 → 양의 정부호
 T2 Cholesky 실패 → 양의 정부호 아님
 ```
 
-$\mathbf{T}_2$는 성분이 모두 양수이지만 고윳값 $-1$이 있어 PD가 아니다. 고유벡터 방향 $\mathbf{x} = (1, -1)$에서 이차형식이 음수가 된다. 무작위 방향 10000개에서 계산한 $\mathbf{S}_2$의 Rayleigh quotient는 정확히 두 고윳값 1과 3 사이에 있다.
+$\mathbf{T}_2$는 성분이 모두 양수이지만 고윳값 $-1$이 있어 PD가 아니다. 고유벡터 방향 $\mathbf{x} = (1, -1)$에서 이차형식이 음수가 된다. 무작위 방향 10000개에서 계산한 $\mathbf{S}_2$의 Rayleigh quotient는 정확히 두 고윳값 1과 3 사이에 있다. 셀은 `np.linalg.cholesky` 대신 `scipy.linalg.cholesky`를 쓴다. 집필 시점의 브라우저 런타임(Pyodide 0.29)에서는 `np.linalg.cholesky`가 PD가 아닌 행렬에 예외를 내지 않고 NaN으로 채운 행렬을 돌려주기 때문이다. 실패를 예외로 잡는 판정은 실행 환경에서 실제로 예외가 나는지 한 번 확인하고 쓴다.
 
 ::quiz{id="psd-test"}
 

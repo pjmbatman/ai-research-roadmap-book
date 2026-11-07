@@ -36,7 +36,7 @@ b = np.array([6.0, 0.0, 0.0])
 p = P @ b
 print("P b       =", np.round(p, 4))
 print("P^2 = P ? ", np.allclose(P @ P, P), "  P^T = P ?", np.allclose(P.T, P))
-print("A^T (b-p) =", np.round(A.T @ (b - p), 12))
+print("A^T (b-p) = 0 ?", np.allclose(A.T @ (b - p), 0))
 
 # %% cell 4 — 최소제곱: 용수철 상수 추정
 rng = np.random.default_rng(1)
@@ -50,7 +50,7 @@ w_qr = np.linalg.solve(R, Qx.T @ force_n)                    # R w = Q^T y
 w_ls = np.linalg.lstsq(X, force_n)[0]
 print("k [N/m], c [N]  정규방정식:", np.round(w_ne, 3), " QR:", np.round(w_qr, 3), " lstsq:", np.round(w_ls, 3))
 r = force_n - X @ w_ls
-print(f"max |X^T r| = {np.abs(X.T @ r).max():.1e}")
+print("max |X^T r| < 1e-10:", np.abs(X.T @ r).max() < 1e-10)
 
 # %% cell 5 — pseudoinverse와 최소 노름 해
 A1 = np.array([[1.0, 1.0]])                                  # (1, 2) 방정식 x1 + x2 = 2

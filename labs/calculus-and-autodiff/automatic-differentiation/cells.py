@@ -9,13 +9,17 @@ import numpy as np
 def f(x):
     return np.exp(np.sin(x))
 
+def f32(x):
+    """float32 계산: 함수값을 float32로 반올림해 저장한다(float32 exp·sin의 마지막 비트는 구현마다 다르다)"""
+    return np.float32(f(np.float64(x)))
+
 x0 = 1.0
 exact = np.cos(x0) * np.exp(np.sin(x0))               # 해석적 도함수
 print("     h      float64 오차   float32 오차")
 for h in [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-8, 1e-10]:
     d64 = (f(x0 + h) - f(x0 - h)) / (2 * h)            # 중앙차분
     x32, h32 = np.float32(x0), np.float32(h)
-    d32 = (f(x32 + h32) - f(x32 - h32)) / (2 * h32)
+    d32 = (f32(x32 + h32) - f32(x32 - h32)) / (2 * h32)
     print(f"{h:8.0e}   {abs(d64 - exact):12.2e}   {abs(float(d32) - exact):12.2e}")
 
 # %% cell 2 — 30줄짜리 reverse mode 자동미분 엔진

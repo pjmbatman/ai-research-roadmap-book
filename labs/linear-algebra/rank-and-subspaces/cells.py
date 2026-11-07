@@ -38,7 +38,8 @@ noisy = np.column_stack([c1, c2, c1 + c2 + 1e-9 * rng.normal(size=100)])
 
 for name, X in [("정확히 종속", exact), ("1e-9 잡음", noisy)]:
     s = np.linalg.svd(X, compute_uv=False)                 # 특이값(7.6장)
-    print(f"{name}: 특이값 {s[0]:.2f} {s[1]:.2f} {s[2]:.1e}  "
+    s3 = "< 1e-12" if s[2] < 1e-12 else f"{s[2]:.1e}"      # 반올림 잡음 크기의 값은 환경마다 달라 판정만 찍는다
+    print(f"{name}: 특이값 {s[0]:.2f} {s[1]:.2f} {s3}  "
           f"rank(기본 tol) = {np.linalg.matrix_rank(X)}  "
           f"rank(tol=1e-6) = {np.linalg.matrix_rank(X, tol=1e-6)}")
 
@@ -64,7 +65,7 @@ n_vec = np.array([32.0, 1.8, -1.0])                        # X @ n_vec = 0
 w_a = np.linalg.lstsq(X, y_obs)[0]
 w_b = w_a + 10.0 * n_vec
 print("w_a =", np.round(w_a, 3), " w_b =", np.round(w_b, 3))
-print("예측 차이 최대 =", f"{np.abs(X @ w_a - X @ w_b).max():.1e}")
+print("예측 차이 최대 < 1e-10:", np.abs(X @ w_a - X @ w_b).max() < 1e-10)
 
 for lam in [1e-6, 1e-2, 1e2]:
     w = np.linalg.solve(X.T @ X + lam * np.eye(3), X.T @ y_obs)

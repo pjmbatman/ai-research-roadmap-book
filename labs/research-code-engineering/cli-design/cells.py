@@ -22,7 +22,7 @@ for argv in [["configs/base.toml", "--lr", "fast"], ["configs/base.toml", "--dev
     try:
         p.parse_args(argv)
     except ValueError as e:
-        print("오류:", e)
+        print("오류:", str(e).split(" (choose from")[0])   # 허용 목록의 표기는 Python 패치 버전마다 달라 앞부분만 찍는다
 
 # %% cell 2 — 조용히 무시되거나 엉뚱하게 해석되는 인자
 loose = argparse.ArgumentParser()
@@ -66,7 +66,7 @@ for argv in [["train", "configs/base.toml", "--seed", "1"], ["eval", "outputs/ru
         args = cli.parse_args(argv)
         print(args.func(args))
     except ValueError as err:
-        print("오류:", err)
+        print("오류:", str(err).split(" (choose from")[0])
 
 # %% cell 4 — 우선순위: 기본값 < 설정 파일 < 명령행
 defaults = {"lr": 1e-3, "epochs": 50, "seed": 0}
