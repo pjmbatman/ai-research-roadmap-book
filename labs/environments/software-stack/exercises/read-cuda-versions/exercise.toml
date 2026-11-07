@@ -1,0 +1,6 @@
+title = "세 가지 CUDA 버전 읽고 판정하기"
+chapter = "environments/software-stack"
+objective = 2
+exec = "browser"
+entry = "summarize"
+timeout_s = 10
