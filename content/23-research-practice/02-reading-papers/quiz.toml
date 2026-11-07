@@ -1,4 +1,4 @@
-# 23.2 논문 읽는 법 — 개념 퀴즈 (코드 실습이 없는 장의 예)
+# 23.2 논문 읽는 법 — 개념 퀴즈
 # 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
 
 [[questions]]
@@ -80,3 +80,21 @@ feedback = "보고된 숫자는 코드에서 나왔을 가능성이 높다. 먼�
 [[questions.choices]]
 text = "차이가 작아 보이므로 무시한다."
 feedback = "batch 크기에 따른 스케일 차이는 실효 정규화 강도를 크게 바꿀 수 있다."
+
+[[questions]]
+id = "plus-minus-se"
+type = "numeric"
+objective = 2
+prompt = '''표 캡션에 "seed 5개의 평균 ± 표준오차"라고 적혀 있고, 제안 방법의 값은 $0.854 \pm 0.005$다. 이 방법을 한 번 실행할 때 결과가 흔들리는 정도, 즉 seed 간 **표준편차**는 얼마인가? (소수 셋째 자리까지)'''
+explanation = '''표준오차는 평균의 정밀도로, $\mathrm{SE} = \mathrm{SD}/\sqrt{n}$이다. 거꾸로 $\mathrm{SD} = \mathrm{SE}\sqrt{n} = 0.005 \times \sqrt{5} \approx 0.011$이다. 한 번 실행한 결과는 평균 주위로 약 0.011씩 흔들린다. ±를 표준편차로 잘못 읽으면 실행 간 흔들림을 $\sqrt{5}$배 작게 보고, 두 방법의 차이를 실제보다 확실하게 믿게 된다.'''
+answer = 0.011
+tolerance = 0.001
+
+[[questions]]
+id = "lambda-scaling"
+type = "numeric"
+objective = 3
+prompt = '''논문의 손실은 $\frac{1}{N}\sum_{i=1}^{N}(y_i - \hat{y}_i)^2 + \lambda\lVert\mathbf{w}\rVert^2$이고 $\lambda = 0.01$, 학습 샘플은 $N = 500$개다(full batch). 공개 코드는 데이터 항을 평균이 아니라 **합**으로 계산한다. 코드에서 논문과 같은 해를 얻으려면 정규화 계수를 얼마로 두어야 하는가?'''
+explanation = '''논문의 손실에 $N$을 곱하면 $\sum_i (y_i - \hat{y}_i)^2 + N\lambda\lVert\mathbf{w}\rVert^2$이 된다. 손실에 양수를 곱해도 최솟값의 위치는 같으므로, 합으로 쓴 코드에서는 계수를 $N\lambda = 500 \times 0.01 = 5$로 두어야 같은 해가 나온다. 코드에서 0.01을 그대로 쓰면 실효 정규화가 500분의 1로 약해진다.'''
+answer = 5
+tolerance = 0
