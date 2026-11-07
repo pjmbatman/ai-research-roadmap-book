@@ -181,6 +181,8 @@ beta=12 sigma^2=0.1  beta*sigma^2= 1.2  최적 |w| 0.000  KL 0.000  sqrt(v - bet
 
 격자 탐색으로 찾은 최적 $|w|$가 공식 $\sqrt{\max(v - \beta\sigma^2, 0)}$과 모든 경우에 일치하고, $\beta\sigma^2 = 1.2 > v = 1$인 두 경우에는 KL이 정확히 0이다. $\beta = 1, \sigma^2 = 1.2$와 $\beta = 12, \sigma^2 = 0.1$이 같은 결과를 낸다는 점도 확인할 수 있다.
 
+::widget{name="vae-collapse"}
+
 ::quiz{id="collapse-threshold"}
 
 **진단.** 학습 중에 **잠재 차원별 KL**의 데이터 평균을 기록한다. 어떤 차원의 KL이 0에 가까우면 그 차원은 사용되지 않는다(비활성 차원). 모든 차원이 0이면 완전한 collapse다. 재구성 오차가 데이터 분산과 같은 수준에 머무는 것도 신호다.
