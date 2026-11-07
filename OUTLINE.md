@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 474문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 516문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -285,14 +285,14 @@ _부동소수점, 안정성과 조건수, 수치 선형대수, 반복법, ODE·P
 - **9.4** [비선형 방정식과 반복법](content/09-numerical-methods/04-nonlinear-equations/index.md) · `필수` · 퀴즈 6
   - 근 찾기 · 고정점 반복 · 다변수 Newton · 실패 양상 · 참고 문헌
   - 선수: 9.2 조건수·안정성·수렴
-- **9.5** [보간·근사·수치적분](content/09-numerical-methods/05-interpolation-and-quadrature/index.md) · `필수`
-  - 보간 · 근사 · 수치적분 · 고차원 적분
+- **9.5** [보간·근사·수치적분](content/09-numerical-methods/05-interpolation-and-quadrature/index.md) · `필수` · 퀴즈 7
+  - 보간 · 근사 · 수치적분 · 고차원 적분 · 참고 문헌
   - 선수: 9.2 조건수·안정성·수렴
-- **9.6** [ODE 수치해법](content/09-numerical-methods/06-ode-solvers/index.md) · `필수` · 위젯: ODE solver의 step 크기와 안정성
-  - 초기값 문제 · 기본 방법 · 암시적 방법 · stiffness · 적응적 step과 tolerance · 경계값 문제
+- **9.6** [ODE 수치해법](content/09-numerical-methods/06-ode-solvers/index.md) · `필수` · 퀴즈 7 · 위젯: ODE solver의 step 크기와 안정성
+  - 초기값 문제 · 기본 방법 · 암시적 방법 · stiffness · 적응적 step과 tolerance · 경계값 문제 · 참고 문헌
   - 선수: 9.4 비선형 방정식과 반복법
-- **9.7** [PDE·DAE와 시뮬레이터 검증](content/09-numerical-methods/07-pde-and-dae/index.md) · `심화`
-  - PDE 이산화 · 안정성 조건 · DAE · 검증과 확인(V&V) · 시뮬레이터를 데이터 생성기로 쓸 때
+- **9.7** [PDE·DAE와 시뮬레이터 검증](content/09-numerical-methods/07-pde-and-dae/index.md) · `심화` · 퀴즈 7
+  - PDE 이산화 · 안정성 조건 · DAE · 검증과 확인(V&V) · 시뮬레이터를 데이터 생성기로 쓸 때 · 참고 문헌
   - 선수: 9.6 ODE 수치해법
 
 ### 제10부. 최적화 <sub>Optimization</sub>
@@ -311,14 +311,14 @@ _최적화 문제의 구조, 볼록성과 최적성 조건, 제약 최적화, 1�
 - **10.4** [적응적 방법과 학습 레시피](content/10-optimization/04-adaptive-methods/index.md) · `필수` · 퀴즈 7 · 위젯: 손실 지형 위의 optimizer 궤적
   - 적응적 방법 · weight decay · 학습률 스케줄 · 실전 기법 · 최신 optimizer의 위치 · 공정한 optimizer 비교 · 참고 문헌
   - 선수: 10.3 1차 최적화 방법
-- **10.5** [2차 방법과 준뉴턴](content/10-optimization/05-second-order-methods/index.md) · `심화`
-  - Newton 방법 · Gauss–Newton과 Levenberg–Marquardt · 준뉴턴 · 자연 gradient · 사용처
+- **10.5** [2차 방법과 준뉴턴](content/10-optimization/05-second-order-methods/index.md) · `심화` · 퀴즈 7
+  - Newton 방법 · Gauss–Newton과 Levenberg–Marquardt · 준뉴턴 · 자연 gradient · 사용처 · 참고 문헌
   - 선수: 10.3 1차 최적화 방법
-- **10.6** [비볼록 최적화와 손실 지형](content/10-optimization/06-nonconvex-landscape/index.md) · `심화`
-  - 비볼록성 · 평탄함과 일반화 · 학습 동역학 · 손실 지형 분석
+- **10.6** [비볼록 최적화와 손실 지형](content/10-optimization/06-nonconvex-landscape/index.md) · `심화` · 퀴즈 7
+  - 비볼록성 · 평탄함과 일반화 · 학습 동역학 · 손실 지형 분석 · 참고 문헌
   - 선수: 10.4 적응적 방법과 학습 레시피
-- **10.7** [특수한 최적화 문제](content/10-optimization/07-special-optimization/index.md) · `심화`
-  - 다목적 최적화 · 이중수준 최적화 · 블랙박스 최적화 · 베이지안 최적화 · 미분 불가능·이산 문제
+- **10.7** [특수한 최적화 문제](content/10-optimization/07-special-optimization/index.md) · `심화` · 퀴즈 7
+  - 다목적 최적화 · 이중수준 최적화 · 블랙박스 최적화 · 베이지안 최적화 · 미분 불가능·이산 문제 · 참고 문헌
   - 선수: 10.2 제약 최적화와 쌍대성
 
 ## `PSI` 확률·통계적 추론 <sub>Probabilistic and Statistical Inference</sub>
