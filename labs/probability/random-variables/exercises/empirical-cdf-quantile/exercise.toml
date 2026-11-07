@@ -1,0 +1,6 @@
+title = "경험적 CDF와 quantile function"
+chapter = "probability/random-variables"
+objective = 2
+exec = "browser"
+entry = "quantile"
+timeout_s = 10
