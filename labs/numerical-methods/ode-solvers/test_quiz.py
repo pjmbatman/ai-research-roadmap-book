@@ -33,7 +33,9 @@ def test_implicit_step_cost():
     bdf = solve_ivp(robertson, (0, 1), [1, 0, 0], method="BDF")
     rk = solve_ivp(robertson, (0, 1), [1, 0, 0], method="RK45")
     assert bdf.njev > 0 and rk.njev == 0                      # implicit은 Jacobian을 쓴다
-    assert bdf.t.size * 30 < rk.t.size                        # 대신 step이 훨씬 적다
+    # 대신 함수 평가가 훨씬 적다. RK45는 stiff 구간에서 step을 줄이다 플랫폼에 따라 다른 시각에 멈추므로
+    # 끝까지 갔는지가 아니라 평가 횟수로 비교한다(멈추기 전까지만 세도 BDF보다 수십 배 많다).
+    assert bdf.success and bdf.nfev * 20 < rk.nfev
     assert correct("implicit-step-cost") == [1]
 
 
