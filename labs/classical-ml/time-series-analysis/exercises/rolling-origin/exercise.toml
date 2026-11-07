@@ -1,0 +1,6 @@
+title = "rolling-origin 평가와 horizon별 오차"
+chapter = "classical-ml/time-series-analysis"
+objective = 3
+exec = "browser"
+entry = "rolling_origin_errors"
+timeout_s = 10

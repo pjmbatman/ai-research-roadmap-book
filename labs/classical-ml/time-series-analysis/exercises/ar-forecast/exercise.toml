@@ -1,0 +1,6 @@
+title = "AR(p) 적합과 재귀 예측"
+chapter = "classical-ml/time-series-analysis"
+objective = 2
+exec = "browser"
+entry = "forecast_ar"
+timeout_s = 10
