@@ -31,5 +31,5 @@ export function labFiles(ch: Chapter): { text: Record<string, string>; other: st
 export function labGuide(ch: Chapter, assetBase: string): string {
   const s = h2Sections(ch.body).find((x) => x.title === "실습");
   if (!s) return "";
-  return renderMarkdown(s.text.replace(/^::exercise\{[^}]*\}\s*$/gm, "").trim(), { assetBase });
+  return renderMarkdown(s.text.replace(/^::exercise\{[^}]*\}\s*$/gm, "").trim(), { assetBase, fromDir: ch.dir });
 }

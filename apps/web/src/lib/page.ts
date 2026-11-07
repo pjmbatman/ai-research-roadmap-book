@@ -13,7 +13,7 @@ export function chapterData(ch: Chapter) {
     answer: q.answer, tolerance: q.tolerance ?? 0, slider: q.slider ?? null,
   }));
   const exercises = Object.fromEntries(
-    Object.values(ch.exercises).map((e) => [e.id, { ...e, problem: renderMarkdown(e.problem.replace(/^# .+\n/m, "")), titleText: e.title }]),
+    Object.values(ch.exercises).map((e) => [e.id, { ...e, problem: renderMarkdown(e.problem.replace(/^# .+\n/m, ""), { fromDir: ch.dir }), titleText: e.title }]),
   );
   const widgets = Object.fromEntries(widgetsFor(ch).map((w) => [w.name, { title: w.title, kind: w.kind, status: w.status }]));
   return { chapterId: ch.id, title: String(ch.meta.title ?? ""), objectives, quiz, exercises, widgets };

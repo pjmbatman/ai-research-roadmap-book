@@ -34,7 +34,7 @@ const tk = trackKeyOf(ch);
 const [c1, c2] = TRACK_COLORS[tk] ?? TRACK_COLORS.reference;
 const exIds = Object.keys(ch.exercises);
 const quest = lessonMode ? questOf(ch) : null;
-const html = lessonMode ? renderChapter(ch.body, { assetBase: `${base}content-assets/${ch.partSlug}/${ch.slug}/` }) : "";
+const html = lessonMode ? renderChapter(ch.body, { assetBase: `${base}content-assets/${ch.partSlug}/${ch.slug}/`, fromDir: ch.dir }) : "";
 
 const sectionsOf = (body: string) =>
   body.split(/^## /m).slice(1).map((chunk) => {
@@ -154,7 +154,7 @@ const nodeIcon = (k: string) => (ICONS as Record<string, string>)[k] ?? ICONS.re
         {outline.map((s) => (
           <div class:list={["tile", "ocard", FIXED_KIND[s.title] && `ocard-${FIXED_KIND[s.title]}`]}>
             <h3>{s.title}</h3>
-            <div set:html={renderMarkdown(s.body)} />
+            <div set:html={renderMarkdown(s.body, { fromDir: ch.dir })} />
           </div>
         ))}
       </section>
