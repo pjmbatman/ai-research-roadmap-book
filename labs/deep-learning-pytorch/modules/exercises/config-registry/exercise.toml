@@ -1,0 +1,6 @@
+title = "설정에서 객체 만들기: registry 패턴"
+chapter = "deep-learning-pytorch/modules"
+objective = 1
+exec = "browser"
+entry = "Registry"
+timeout_s = 10

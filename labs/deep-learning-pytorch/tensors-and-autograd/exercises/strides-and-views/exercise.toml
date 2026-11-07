@@ -1,0 +1,6 @@
+title = "stride로 view와 contiguous 판정하기"
+chapter = "deep-learning-pytorch/tensors-and-autograd"
+objective = 1
+exec = "browser"
+entry = "is_contiguous"
+timeout_s = 10

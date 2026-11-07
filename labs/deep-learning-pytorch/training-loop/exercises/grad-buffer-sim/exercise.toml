@@ -1,0 +1,6 @@
+title = "`.grad` 버퍼 시뮬레이터로 학습 루프의 순서 버그 찾기"
+chapter = "deep-learning-pytorch/training-loop"
+objective = 1
+exec = "browser"
+entry = "run_ops"
+timeout_s = 10

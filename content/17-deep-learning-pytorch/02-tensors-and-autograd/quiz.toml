@@ -1,0 +1,131 @@
+# 17.2 PyTorch 텐서와 autograd — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "float64-input"
+type = "single"
+objective = 1
+prompt = '''NumPy에서 읽은 float64 배열 `a`를 `x = torch.from_numpy(a)`로 바꿔, 기본 설정으로 만든 `nn.Linear` 층에 넣었다. 무슨 일이 일어나는가? (집필 시점 PyTorch 기준)'''
+explanation = '''`torch.from_numpy`는 dtype을 그대로 유지하므로 `x`는 float64이고, `nn.Linear`의 가중치는 기본 dtype인 float32다. 행렬 곱의 두 피연산자 dtype이 달라 RuntimeError가 난다. 입력을 `x.float()`로 바꾸거나, 데이터를 읽을 때 float32로 맞춘다.'''
+
+[[questions.choices]]
+text = "dtype이 맞지 않아 RuntimeError가 난다."
+correct = true
+
+[[questions.choices]]
+text = "PyTorch가 자동으로 float32로 바꿔 계산한다."
+feedback = "산술 연산의 일부는 타입 승격을 하지만, nn.Linear의 행렬 곱은 입력과 가중치의 dtype이 같아야 한다."
+
+[[questions.choices]]
+text = "가중치가 float64로 바뀌어 더 정밀하게 계산된다."
+feedback = "모듈의 파라미터 dtype은 입력에 따라 바뀌지 않는다. model.double()처럼 명시적으로 바꿔야 한다."
+
+[[questions.choices]]
+text = "from_numpy가 복사하면서 기본 dtype(float32)으로 바꿔 두었으므로 문제없다."
+feedback = "from_numpy는 복사도 dtype 변환도 하지 않는다. NumPy 배열과 메모리를 공유하는 같은 dtype의 텐서를 만든다."
+
+[[questions]]
+id = "from-numpy-shared"
+type = "single"
+objective = 1
+prompt = '''`a = np.ones(3)`, `t = torch.from_numpy(a)` 다음에 `a *= 2`를 실행했다. `t`의 값은?'''
+explanation = '''`torch.from_numpy`는 NumPy 배열과 같은 메모리를 쓰는 텐서를 만든다. 제자리 연산 `a *= 2`는 그 메모리를 바꾸므로 `t`도 `[2, 2, 2]`가 된다. 복사본이 필요하면 `torch.tensor(a)`나 `torch.from_numpy(a).clone()`을 쓴다.'''
+
+[[questions.choices]]
+text = "[1, 1, 1]: 텐서를 만들 때 값을 복사했다."
+feedback = "그것은 torch.tensor(a)의 동작이다. from_numpy는 복사하지 않는다."
+
+[[questions.choices]]
+text = "[2, 2, 2]: 두 객체가 같은 메모리를 공유한다."
+correct = true
+
+[[questions.choices]]
+text = "오류: NumPy 배열이 텐서에 묶인 뒤에는 수정할 수 없다."
+feedback = "수정할 수 있고, 바로 그 때문에 의도하지 않은 변경이 생길 수 있다."
+
+[[questions]]
+id = "view-after-transpose"
+type = "single"
+objective = 1
+prompt = '''`x`의 shape이 `(B, T, D)`이고 contiguous하다. `x.transpose(1, 2).view(B, -1)`을 실행하면?'''
+explanation = '''transpose는 메모리를 옮기지 않고 stride만 바꾸므로 결과는 contiguous가 아니다. `view`는 메모리 배치를 바꾸지 않고 shape만 다시 해석하므로, 이 경우 요청한 shape을 stride로 표현할 수 없어 RuntimeError가 난다. `reshape`(필요하면 복사) 또는 `.contiguous().view(...)`를 쓴다.'''
+
+[[questions.choices]]
+text = "RuntimeError: 전치한 텐서는 contiguous가 아니어서 view로 표현할 수 없다."
+correct = true
+
+[[questions.choices]]
+text = "(B, T·D) 텐서가 나오고, 원소 순서는 transpose 전과 같다."
+feedback = "transpose를 했으므로 원하는 원소 순서는 바뀌어야 한다. 그리고 view는 이 경우 그 순서를 만들 수 없어 실패한다."
+
+[[questions.choices]]
+text = "PyTorch가 자동으로 복사해 (B, D·T) 텐서를 돌려준다."
+feedback = "자동으로 복사하는 것은 reshape다. view는 복사하지 않는다는 것을 보장하는 대신 실패할 수 있다."
+
+[[questions]]
+id = "broadcast-grad-value"
+type = "numeric"
+objective = 2
+prompt = '''`X`의 shape이 `(4, 3)`, `b = torch.zeros(1, 3, requires_grad=True)`이다. `loss = (X + b).sum()`에 `loss.backward()`를 하면 `b.grad`의 각 성분은?'''
+explanation = '''`b`는 4개 행에 복제되어 더해진다. 각 사용처의 gradient는 1이고, 같은 변수가 여러 번 쓰이면 gradient를 더하므로 각 성분은 $1 \times 4 = 4$다. 일반적으로 broadcasting의 gradient는 broadcast된 축을 따라 출력 쪽 gradient를 합한 것이다.'''
+answer = 4
+tolerance = 0
+
+[[questions]]
+id = "grad-accumulates"
+type = "numeric"
+objective = 2
+prompt = '''`w = torch.tensor(3.0, requires_grad=True)`에 대해 `(w ** 2).backward()`를 두 번 실행했다(사이에 `w.grad`를 비우지 않음). `w.grad`의 값은?'''
+explanation = '''한 번의 backward는 $d(w^2)/dw = 2w = 6$을 `w.grad`에 **더한다**. 두 번 실행하면 $6 + 6 = 12$다. PyTorch는 `.grad`를 덮어쓰지 않고 누적하므로, 학습 루프에서는 매 step `optimizer.zero_grad()`가 필요하다.'''
+answer = 12
+tolerance = 0
+
+[[questions]]
+id = "graph-connected"
+type = "multiple"
+objective = 2
+prompt = '''`w = torch.randn(3, requires_grad=True)`, `x = torch.randn(3)`일 때, 결과 텐서가 계산 그래프에 연결되어 `requires_grad`가 `True`인 것을 모두 고르시오.'''
+explanation = '''`w * x`와 `w.clone()`은 `w`에서 시작한 연산이므로 그래프에 연결된다(clone도 미분 가능한 연산이다). `detach()`는 같은 값을 가진 그래프 밖의 텐서를 돌려주고, `torch.no_grad()` 안의 연산은 그래프를 만들지 않는다. `x * 2`는 `requires_grad`가 없는 텐서끼리의 연산이다.'''
+
+[[questions.choices]]
+text = "w * x"
+correct = true
+
+[[questions.choices]]
+text = "(w * x).detach()"
+feedback = "detach는 값은 같지만 그래프에서 떨어진 텐서를 돌려준다."
+
+[[questions.choices]]
+text = "torch.no_grad() 블록 안에서 계산한 w * x"
+feedback = "no_grad 안에서는 그래프를 기록하지 않는다. 입력이 requires_grad여도 결과는 False다."
+
+[[questions.choices]]
+text = "w.clone()"
+correct = true
+
+[[questions.choices]]
+text = "x * 2"
+feedback = "x는 requires_grad가 없는 텐서다. 그래프는 requires_grad인 텐서에서 시작한 연산만 기록한다."
+
+[[questions]]
+id = "inplace-saved-tensor"
+type = "single"
+objective = 2
+prompt = '''`s = torch.sigmoid(a)`(`a`는 requires_grad) 다음에 `s.mul_(2)`를 하고 `s.sum().backward()`를 실행하면 RuntimeError가 난다. 가장 정확한 이유는?'''
+explanation = '''sigmoid의 국소 미분은 $s(1 - s)$로, 출력 $s$ 자신이 필요하다. 그래서 autograd는 forward 때 $s$를 저장해 두고 버전 번호를 기록한다. `mul_`이 $s$를 제자리에서 바꾸면 버전이 올라가고, backward는 저장한 값이 바뀌었음을 감지해 오류를 낸다. 덮어쓴 값으로 계산하면 틀린 gradient가 나오기 때문이다.'''
+
+[[questions.choices]]
+text = "sigmoid의 backward에 필요한 출력 s가 제자리에서 바뀌어, 저장해 둔 값이 더는 유효하지 않다."
+correct = true
+
+[[questions.choices]]
+text = "requires_grad인 텐서에는 어떤 in-place 연산도 쓸 수 없다."
+feedback = "in-place 연산 자체는 허용된다. backward에 필요한 값을 덮어쓸 때만 오류가 난다. 예를 들어 덧셈 결과에 add_를 하는 것은 오류 없이 동작한다. 덧셈의 backward는 출력 값을 쓰지 않기 때문이다."
+
+[[questions.choices]]
+text = "mul_은 미분할 수 없는 연산이다."
+feedback = "곱셈은 미분 가능하다. 문제는 연산의 종류가 아니라, 다른 연산이 저장해 둔 값을 바꿨다는 점이다."
+
+[[questions.choices]]
+text = "s가 잎(leaf) 텐서여서 수정할 수 없다."
+feedback = "s는 a에서 계산된 중간 텐서이지 잎 텐서가 아니다. 잎 텐서의 in-place 수정은 다른 오류 메시지를 낸다."

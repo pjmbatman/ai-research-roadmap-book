@@ -1,0 +1,16 @@
+# 17.3 실습: 설정 파일로 구성되는 모델
+# type은 config_model.py의 REGISTRY에 등록된 이름이다. 나머지 키는 생성자 인자로 넘긴다.
+
+[model]
+type = "mlp"
+d_in = 3
+d_out = 1
+hidden = [32, 32]
+activation = "silu"
+norm = "layernorm"
+dropout = 0.1
+
+[input_norm]
+type = "standardize"
+mean = [300.0, 1.0e5, 0.5]     # 온도(K), 압력(Pa), 몰분율(-)
+std = [10.0, 2.0e3, 0.2]
