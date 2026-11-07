@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 747문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 772문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -588,17 +588,17 @@ _생성모델의 공통 문제 정의, 자기회귀·VAE·GAN·flow·확산·flo
 
 _MDP와 동적계획법, 가치·정책 기반 강화학습, 모델 기반 방법과 최적제어, 밴딧·오프라인 RL을 다룬다._
 
-- **20.1** [MDP와 동적계획법](content/20-reinforcement-learning/01-mdp-and-dp/index.md) · `필수`
-  - MDP · 가치함수 · 동적계획법 · 부분 관측
+- **20.1** [MDP와 동적계획법](content/20-reinforcement-learning/01-mdp-and-dp/index.md) · `필수` · 퀴즈 6
+  - MDP · 가치함수 · 동적계획법 · 부분 관측 · 참고 문헌
   - 선수: 11.7 확률과정 기초
-- **20.2** [가치 기반·정책 기반 강화학습](content/20-reinforcement-learning/02-model-free-rl/index.md) · `심화`
-  - 가치 기반 · 정책 기반 · actor-critic · 실험의 어려움
+- **20.2** [가치 기반·정책 기반 강화학습](content/20-reinforcement-learning/02-model-free-rl/index.md) · `심화` · 퀴즈 6
+  - 가치 기반 · 정책 기반 · actor-critic · 실험의 어려움 · 참고 문헌
   - 선수: 20.1 MDP와 동적계획법
-- **20.3** [모델 기반 방법과 최적제어](content/20-reinforcement-learning/03-model-based-control/index.md) · `심화`
-  - 최적제어 · MPC · 모델 기반 RL · 미분가능 시뮬레이션과 제어
+- **20.3** [모델 기반 방법과 최적제어](content/20-reinforcement-learning/03-model-based-control/index.md) · `심화` · 퀴즈 6
+  - 최적제어 · MPC · 모델 기반 RL · 미분가능 시뮬레이션과 제어 · 참고 문헌
   - 선수: 20.1 MDP와 동적계획법, 10.2 제약 최적화와 쌍대성
-- **20.4** [밴딧·오프라인 RL·안전한 의사결정](content/20-reinforcement-learning/04-bandits-and-offline-rl/index.md) · `심화`
-  - 밴딧 · 오프라인 RL · 오프 정책 평가 · 안전 제약
+- **20.4** [밴딧·오프라인 RL·안전한 의사결정](content/20-reinforcement-learning/04-bandits-and-offline-rl/index.md) · `심화` · 퀴즈 7
+  - 밴딧 · 오프라인 RL · 오프 정책 평가 · 안전 제약 · 참고 문헌
   - 선수: 20.2 가치 기반·정책 기반 강화학습
 
 ### 제21부. 신뢰성: 불확실성·강건성·해석 <sub>Reliability: Uncertainty, Robustness, and Interpretation</sub>
