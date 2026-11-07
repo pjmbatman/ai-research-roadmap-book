@@ -1,0 +1,6 @@
+title = "LoRA의 순전파·병합·파라미터 수"
+chapter = "generative-and-foundation-models/foundation-models"
+objective = 2
+exec = "browser"
+entry = "lora_forward"
+timeout_s = 10

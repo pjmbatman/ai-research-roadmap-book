@@ -1,0 +1,118 @@
+# 19.7 생성모델의 평가 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "precision-recall-failure"
+type = "single"
+objective = 1
+prompt = '''k-NN 다양체로 잰 생성모델의 precision이 0.99, recall이 0.68이었다. 가장 그럴듯한 해석은?'''
+explanation = '''precision은 생성 표본이 실제 데이터 다양체 안에 들어가는 비율(품질), recall은 실제 표본이 생성 다양체 안에 들어가는 비율(커버리지)이다. precision이 높고 recall만 낮으면 만든 것은 그럴듯하지만 실제 데이터의 일부 영역을 만들지 못한다는 뜻이다. 모드 누락(mode collapse)의 전형적인 모습이다. 흐릿한 모델은 반대로 recall이 높고 precision이 낮다.'''
+
+[[questions.choices]]
+text = "표본이 흐릿해 데이터가 없는 곳에 많이 떨어진다."
+feedback = "그 경우는 precision이 낮아진다. 이 장의 흐릿한 모델은 precision 0.698, recall 0.992였다."
+
+[[questions.choices]]
+text = "만드는 표본은 그럴듯하지만, 실제 데이터의 일부 영역(모드)을 생성하지 못한다."
+correct = true
+
+[[questions.choices]]
+text = "학습 자료를 베끼고 있다."
+feedback = "복사 모델은 precision과 recall이 모두 좋게 나온다(이 장에서 0.970, 0.970). 기억은 학습 자료까지의 거리로 따로 재야 한다."
+
+[[questions.choices]]
+text = "두 값의 평균이 0.835로 높으므로 좋은 모델이다."
+feedback = "두 축을 평균하면 따로 잰 의미가 사라진다. 실제 데이터의 32%를 만들지 못하는 것은 많은 과학 응용에서 치명적이다."
+
+[[questions]]
+id = "likelihood-mixture-bound"
+type = "numeric"
+objective = 2
+prompt = '''좋은 모델 $p$를 1%만 쓰고 나머지 99%는 쓰레기 분포에서 뽑는 혼합 모델 $q = 0.01\,p + 0.99\,q_{\text{junk}}$를 만들었다. held-out 자료의 평균 log-likelihood(표본당, nat)는 $p$에 비해 **최대** 얼마나 줄어드는가? (소수 둘째 자리까지)'''
+answer = 4.61
+tolerance = 0.01
+explanation = '''$q(\mathbf{x}) \ge 0.01\,p(\mathbf{x})$이므로 $\log q(\mathbf{x}) \ge \log p(\mathbf{x}) - \log 100$이다. 표본당 최대 $\log 100 \approx 4.61$ nat만 줄어든다. 64차원이면 차원당 0.072 nat이고, 차원이 클수록 이 차이는 더 작아진다. 표본의 99%가 쓰레기여도 likelihood는 거의 움직이지 않으므로, likelihood는 표본 품질의 증거가 될 수 없다(Theis 외, 2016).'''
+
+[[questions]]
+id = "mmd-power"
+type = "single"
+objective = 2
+prompt = '''생성 표본 30개와 실제 표본 30개로 MMD 순열 검정(대역폭은 거리의 중앙값)을 했더니 $p = 0.40$이었다. 옳은 결론은?'''
+explanation = '''유의하지 않다는 것은 "차이를 찾지 못했다"는 뜻이지 "같다"는 증거가 아니다. 이 장의 실험에서 중앙값 대역폭은 모드 안의 퍼짐이 1.5배 다른 모델을 표본 200개로도 5%만 기각했고, 표본 30개면 맞는 대역폭으로도 10%만 기각했다. 같은 설정에서 일부러 망가뜨린 모델을 검정해 검정력을 보여야 결론을 낼 수 있다.'''
+
+[[questions.choices]]
+text = "생성 분포가 실제 분포와 같다는 것이 통계적으로 확인되었다."
+feedback = "기각하지 못한 것은 같다는 증거가 아니다. 표본 30개와 중앙값 대역폭으로는 의미 있는 차이도 거의 찾지 못한다."
+
+[[questions.choices]]
+text = "이 설정의 검정력을 모르므로 결론을 낼 수 없다. 망가뜨린 대조 모델로 검정력을 확인하고, 표본 수와 대역폭을 다시 정한다."
+correct = true
+
+[[questions.choices]]
+text = "p 값이 0.05보다 크므로 MMD²의 추정값은 0이다."
+feedback = "p 값은 귀무분포에서의 위치이지 MMD²의 크기가 아니다. 불편 추정량은 같은 분포에서도 양수나 음수가 나온다."
+
+[[questions]]
+id = "fid-memorization"
+type = "multiple"
+objective = 2
+prompt = '''FID에 대한 설명으로 옳은 것을 모두 고르시오.'''
+explanation = '''FID는 특징의 평균과 공분산만 비교한다. 특징이 구조를 담지 못하면(이 장의 원 좌표) 흐릿한 모델과 모드가 없는 가우시안도 좋은 모델과 비슷한 값을 받는다. 학습 자료를 기준으로 계산하면 학습 자료를 베끼는 모델이 0에 가까운 최고점을 받는다. 그리고 표본 공분산의 추정 오차 때문에 같은 분포라도 표본이 적으면 값이 크다(50개씩 6.14, 500개씩 0.41). 기억을 벌하는 항은 없다.'''
+
+[[questions.choices]]
+text = "특징 추출기가 데이터의 구조를 담지 못하면 서로 매우 다른 모델에도 비슷한 값을 준다."
+correct = true
+
+[[questions.choices]]
+text = "학습 자료를 기준으로 계산하면 학습 자료를 베끼는 모델이 가장 좋은 점수를 받는다."
+correct = true
+
+[[questions.choices]]
+text = "표본 수가 다른 두 FID 값도 직접 비교할 수 있다."
+feedback = "같은 분포의 두 표본도 50개씩이면 6.14, 500개씩이면 0.41이었다. FID는 표본 수에 따라 체계적으로 편향된다."
+
+[[questions.choices]]
+text = "held-out 자료로 계산하면 기억을 벌하므로 기억 탐지에 쓸 수 있다."
+feedback = "held-out 기준에서도 복사 모델(0.95)은 좋은 모델(0.43)과 같은 자릿수였다. 기억은 학습 자료까지의 거리로 따로 잰다."
+
+[[questions]]
+id = "marginal-stats-shuffle"
+type = "single"
+objective = 3
+prompt = '''생성된 시계열의 각 시점 값을 서로 다른 실제 계열에서 가져와 이어 붙인 "모델"이 있다. 이 결함을 가장 직접 드러내는 점검은?'''
+explanation = '''각 시점의 값이 실제 분포에서 왔으므로 시점별 평균·분산·분위수는 완벽하게 맞는다. 깨진 것은 시점 사이의 관계다. 자기상관(이 장에서 0.795 → 0.004)이나 스펙트럼처럼 여러 시점을 함께 보는 통계가 결함을 드러낸다. 하위 과제(TSTR)도 이 결함을 잡지만(0.950 → 0.224), 원인을 직접 가리키는 것은 시간 구조 통계다.'''
+
+[[questions.choices]]
+text = "시점별 평균과 표준편차를 실제 자료와 비교한다."
+feedback = "이 모델은 시점별 분포를 정확히 재현하도록 만들어졌으므로 시점별 통계는 완벽하게 맞는다."
+
+[[questions.choices]]
+text = "자기상관 함수나 스펙트럼처럼 시점 사이의 관계를 보는 통계를 비교한다."
+correct = true
+
+[[questions.choices]]
+text = "생성된 값이 실제 값의 범위(최솟값–최댓값) 안에 있는지 확인한다."
+feedback = "모든 값이 실제 자료에서 왔으므로 범위 검사는 언제나 통과한다."
+
+[[questions]]
+id = "tstr-baseline"
+type = "multiple"
+objective = 3
+prompt = '''생성 자료의 유용성을 TSTR(train on synthetic, test on real)로 평가하려 한다. 올바른 설계를 모두 고르시오.'''
+explanation = '''TSTR 점수는 같은 하위 모델을 실제 자료로 학습한 기준선(TRTR)과 비교해야 해석할 수 있고, 두 경우에 같은 모델·같은 튜닝 예산을 써야 생성 자료의 효과만 남는다. 시험 자료는 생성모델이 본 적 없는 실제 자료여야 한다. 생성모델이 시험 자료를 학습했다면 기억이 점수를 부풀린다. 생성 자료에 더 큰 튜닝 예산을 주면 튜닝 효과가 섞인다.'''
+
+[[questions.choices]]
+text = "같은 하위 모델을 실제 자료로 학습한 성능을 기준선으로 함께 보고한다."
+correct = true
+
+[[questions.choices]]
+text = "시험 자료는 생성모델의 학습에 쓰지 않은 실제 자료로 한다."
+correct = true
+
+[[questions.choices]]
+text = "생성 자료가 많으므로 하위 모델의 하이퍼파라미터 탐색을 생성 자료 쪽에만 더 넓게 한다."
+feedback = "튜닝 예산이 다르면 생성 자료의 효과와 튜닝의 효과를 구분할 수 없다(12.5장)."
+
+[[questions.choices]]
+text = "생성모델의 학습 자료를 시험 자료로 다시 쓴다. 실제 자료이기 때문이다."
+feedback = "생성모델이 그 자료를 기억했다면 생성 자료가 시험 자료의 복사본을 담게 되어 점수가 부풀려진다."

@@ -1,0 +1,6 @@
+title = "조건부 flow matching의 학습 표본과 ε-예측의 변환"
+chapter = "generative-and-foundation-models/flow-matching"
+objective = 2
+exec = "browser"
+entry = "cfm_pair"
+timeout_s = 10
