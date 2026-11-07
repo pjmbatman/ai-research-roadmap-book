@@ -153,6 +153,8 @@ evaluate(0.07)
 
 시험 궤적 6개의 평균으로 보면 한 step 오차는 두 모델이 거의 같다(0.0028 대 0.0029). 그러나 rollout은 전혀 다르다. A는 6개 중 2개가 $t = 1$ 전에 발산했고, 남은 4개의 장 오차도 B보다 크다. B는 하나도 발산하지 않았다.
 
+::widget{name="rollout-spectrum"}
+
 ::quiz{id="one-step-not-enough"}
 
 ## 물리적 일관성
