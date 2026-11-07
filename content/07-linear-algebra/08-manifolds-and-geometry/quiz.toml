@@ -1,0 +1,124 @@
+# 7.8 다양체와 표현의 기하 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "so3-dimension"
+type = "numeric"
+objective = 1
+prompt = '''3차원 회전 행렬의 집합 $SO(3) = \{\mathbf{R} \in \mathbb{R}^{3\times 3} : \mathbf{R}^\top\mathbf{R} = \mathbf{I},\ \det\mathbf{R} = 1\}$은 성분 9개짜리 공간 $\mathbb{R}^{3 \times 3}$ 안에 놓여 있다. 다양체로서 $SO(3)$의 차원은?'''
+answer = 3
+tolerance = 0
+slider = { min = 1, max = 9, step = 1 }
+explanation = '''$\mathbf{R}^\top\mathbf{R} = \mathbf{I}$는 대칭행렬에 대한 등식이라 독립인 조건이 $3 \cdot 4 / 2 = 6$개다. 9개의 자유도에서 6개를 빼면 3이 남는다. 같은 답을 접공간으로도 얻는다: 항등원에서의 접공간은 $3 \times 3$ 반대칭 행렬이고, 반대칭 행렬은 대각선 위 성분 3개로 정해진다. 회전축 방향(2)과 회전각(1)이라는 물리적 직관과도 맞는다.'''
+
+[[questions]]
+id = "chart-singularity"
+type = "single"
+objective = 2
+prompt = '''구면좌표 $(\theta, \varphi) \mapsto (\sin\theta\cos\varphi, \sin\theta\sin\varphi, \cos\theta)$의 Jacobian은 대부분의 점에서 rank 2이지만 북극($\theta = 0$)에서 rank 1이다. 이 사실이 뜻하는 것은?'''
+explanation = '''북극에서는 $\varphi$를 바꿔도 점이 움직이지 않으므로 Jacobian의 $\varphi$ 열이 0이 된다. 이것은 **좌표(chart)의 결함**이지 구면의 결함이 아니다. 구면은 북극에서도 다른 점과 똑같이 매끄럽고 2차원 접평면을 가진다. 북극 근처에서는 다른 chart(예: 축을 돌린 구면좌표, 입체사영)를 쓰면 rank 2가 회복된다. 회전을 오일러 각으로 매개화할 때 생기는 gimbal lock도 같은 현상이다.'''
+
+[[questions.choices]]
+text = "구면좌표라는 chart가 그 점에서 국소 좌표 역할을 못 한다. 구면 자체는 북극에서도 2차원이다."
+correct = true
+
+[[questions.choices]]
+text = "구면은 북극에서 1차원으로 줄어드는 특이점을 가진다."
+feedback = "구면은 모든 점이 대칭적으로 같다. 회전하면 북극을 적도로 옮길 수 있다. rank가 떨어진 것은 매개화 방식 때문이다."
+
+[[questions.choices]]
+text = "북극 근처의 데이터는 1차원 다양체로 모델링해야 한다."
+feedback = "Jacobian의 rank는 매개화(chart)의 성질이다. 데이터가 놓인 집합의 차원과 혼동하면 안 된다."
+
+[[questions.choices]]
+text = "수치미분 오차 때문이며 해석적으로 계산하면 rank 2다."
+feedback = "해석적으로도 θ = 0에서 ∂/∂φ 열은 정확히 0이다. sin θ가 곱해지기 때문이다."
+
+[[questions]]
+id = "jacobian-tangent-plane"
+type = "single"
+objective = 2
+prompt = '''매끄러운 곡면을 매개화한 사상 $f: \mathbb{R}^2 \to \mathbb{R}^3$의 Jacobian $\mathbf{J}_f(\mathbf{u})$가 rank 2라고 하자. 점 $f(\mathbf{u})$에서의 접평면에 대한 설명으로 옳은 것은?'''
+explanation = '''Jacobian은 국소 좌표의 작은 변화 $\Delta\mathbf{u}$를 곡면 위 점의 변화 $\mathbf{J}_f\Delta\mathbf{u}$로 보내는 선형사상이다. 그래서 접평면(을 원점으로 옮긴 접공간)은 $\mathbf{J}_f$의 열공간, 즉 두 열이 span하는 2차원 부분공간이다. 접공간은 $\mathbb{R}^3$의 부분공간이지만 곡면 자체는 아니다. 곡면은 접평면에서 2차 이상의 항만큼 벗어난다.'''
+
+[[questions.choices]]
+text = '''접공간은 $\mathbf{J}_f(\mathbf{u})$의 열공간(두 열이 span하는 평면)이다.'''
+correct = true
+
+[[questions.choices]]
+text = '''접공간은 $\mathbf{J}_f(\mathbf{u})$의 null space다.'''
+feedback = "J는 3×2이고 rank 2이므로 null space는 {0}뿐이다. 접방향은 J가 만들어 내는 출력 쪽, 즉 열공간에 있다."
+
+[[questions.choices]]
+text = "곡면이 접평면 위에 놓여 있으므로 접평면과 곡면은 같은 집합이다."
+feedback = "접평면은 한 점 근처의 1차 근사다. 곡면은 그 점에서 멀어질수록 접평면에서 벗어난다."
+
+[[questions.choices]]
+text = '''접공간의 차원은 $\mathbb{R}^3$에 놓여 있으므로 3이다.'''
+feedback = "접공간의 차원은 다양체의 차원(여기서 2)과 같다. 바깥 공간의 차원과는 다르다."
+
+[[questions]]
+id = "curve-rank-vs-dimension"
+type = "single"
+objective = 3
+prompt = '''$t \in [-1, 1]$에서 곡선 $(t, t^2, t^3)$ 위의 점 200개를 모아 $200 \times 3$ 데이터 행렬을 만들고 열마다 평균을 뺐다. 옳은 것은?'''
+explanation = '''세 좌표 $t, t^2, t^3$은 (평균을 뺀 뒤에도) 선형독립인 함수라서 데이터 행렬의 rank는 3이다. 하지만 점들은 매개변수 하나 $t$로 정해지는 곡선 위에 있으므로 다양체 차원은 1이다. 곡선의 Jacobian $(1, 2t, 3t^2)^\top$은 모든 점에서 rank 1이다. rank는 데이터를 담는 **가장 작은 선형 부분공간**의 차원이고, 다양체 차원은 **국소적인 자유도**다. 곡선이 휘어 있을수록 두 값이 벌어진다.'''
+
+[[questions.choices]]
+text = "데이터 행렬의 rank는 3이지만 다양체 차원은 1이다."
+correct = true
+
+[[questions.choices]]
+text = "데이터 행렬의 rank가 1이다. 점들이 곡선 하나 위에 있기 때문이다."
+feedback = "rank는 선형 구조만 본다. 휘어진 곡선은 직선(1차원 부분공간)에 들어가지 않으므로 rank가 1이 될 수 없다."
+
+[[questions.choices]]
+text = "rank와 다양체 차원은 항상 같으므로 둘 다 3이다."
+feedback = "데이터가 선형 부분공간 위에 있을 때만 같다. 곡선은 매개변수 하나로 정해지므로 다양체 차원은 1이다."
+
+[[questions]]
+id = "lerp-midpoint-norm"
+type = "numeric"
+objective = 1
+prompt = '''서로 수직인 두 단위벡터 $\mathbf{p}, \mathbf{q}$를 직선 보간한 중점 $\tfrac{1}{2}(\mathbf{p} + \mathbf{q})$의 노름은? (소수 셋째 자리까지)'''
+answer = 0.707
+tolerance = 0.002
+explanation = '''$\lVert\tfrac{1}{2}(\mathbf{p}+\mathbf{q})\rVert^2 = \tfrac{1}{4}(1 + 0 + 1) = \tfrac{1}{2}$이므로 노름은 $1/\sqrt{2} \approx 0.707$이다. 직선 보간은 구면 안쪽을 가로지르므로 단위구면을 벗어난다. 구면 위를 따라가는 측지선 보간(slerp)은 모든 $t$에서 노름 1을 유지한다. 정규화된 embedding이나 방향 데이터를 보간할 때 이 차이가 나타난다.'''
+
+[[questions]]
+id = "latent-dim-not-dof"
+type = "single"
+objective = 3
+prompt = '''잠재 차원 32인 autoencoder가 어떤 시뮬레이션 데이터를 잘 재구성한다. 이 결과로 말할 수 있는 것은?'''
+explanation = '''잠재 차원은 설계자가 고른 숫자다. 재구성이 잘 된다는 것은 "32차원이면 충분하다"는 뜻일 뿐, 데이터의 자유도가 32라는 뜻이 아니다. 실제 자유도는 더 작을 수 있고, 잠재 좌표 여러 개가 같은 정보를 중복해서 담을 수도 있다. 반대로 시뮬레이션의 실제 파라미터 수가 32보다 크더라도, 재구성 오차에 거의 영향을 주지 않는 방향은 버려졌을 수 있다. 자유도를 주장하려면 잠재 차원을 바꿔 가며 재구성 오차를 보거나, 내재 차원 추정을 따로 해야 한다.'''
+
+[[questions.choices]]
+text = "32차원이면 재구성에 충분하다는 것까지만 말할 수 있다. 데이터의 실제 자유도는 이보다 작을 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "데이터의 실제 자유도는 정확히 32다."
+feedback = "잠재 차원은 모델 설계의 선택이다. 같은 데이터를 16차원이나 8차원으로도 잘 재구성할 수 있다면 32는 자유도가 아니다."
+
+[[questions.choices]]
+text = "잠재 공간의 유클리드 거리가 데이터 사이의 물리적 거리와 비례한다."
+feedback = "재구성 손실은 잠재 공간의 거리 구조를 직접 제약하지 않는다. decoder가 비선형이면 잠재 공간의 같은 거리가 데이터 공간에서는 매우 다른 변화에 대응할 수 있다."
+
+[[questions]]
+id = "pca-on-swiss-roll"
+type = "single"
+objective = 3
+prompt = '''Swiss roll(2차원 시트를 3차원에서 말아 놓은 데이터)에 PCA를 했더니 세 주성분의 분산 비율이 약 0.41, 0.31, 0.29였다. 해석으로 옳은 것은?'''
+explanation = '''PCA는 데이터를 가장 잘 담는 **선형** 부분공간을 찾는다. 말린 시트는 어떤 평면에도 들어가지 않으므로 세 방향 모두에 분산이 퍼진다. 그래서 PCA가 말하는 "선형 차원"은 3에 가깝다. 반면 한 점의 작은 이웃만 보면 시트는 거의 평평하고, 국소 PCA의 분산은 두 방향에 몰린다. 내재 차원 2는 국소 구조에서 드러난다.'''
+
+[[questions.choices]]
+text = "데이터를 담는 선형 부분공간은 3차원이지만, 국소적으로는 2차원 시트일 수 있다. PCA는 선형 차원만 본다."
+correct = true
+
+[[questions.choices]]
+text = "데이터의 내재 차원은 3이다."
+feedback = "전역 PCA는 휘어진 구조를 펴지 못한다. 국소 이웃에서 PCA를 하면 셋째 성분의 분산이 거의 0이 된다."
+
+[[questions.choices]]
+text = "주성분 2개면 분산의 72%를 설명하므로 2차원 PCA 투영이 시트를 펼친다."
+feedback = "PCA 투영은 선형 사영이라 말린 시트를 위에서 눌러 겹치게 만든다. 시트의 서로 먼 부분이 투영 후 같은 위치에 올 수 있다."

@@ -1,0 +1,6 @@
+title = "구면의 지수사상과 측지선"
+chapter = "linear-algebra/manifolds-and-geometry"
+objective = 1
+exec = "browser"
+entry = "sphere_exp"
+timeout_s = 10

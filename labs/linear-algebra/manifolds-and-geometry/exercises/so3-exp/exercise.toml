@@ -1,0 +1,6 @@
+title = "SO(3)의 지수사상: Rodrigues 공식"
+chapter = "linear-algebra/manifolds-and-geometry"
+objective = 2
+exec = "browser"
+entry = "so3_exp"
+timeout_s = 10
