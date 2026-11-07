@@ -31,7 +31,7 @@ status = "prototype"
 name = "autodiff-graph"
 title = "계산 그래프와 역전파"
 chapters = ["calculus-and-autodiff/automatic-differentiation"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "float-precision"

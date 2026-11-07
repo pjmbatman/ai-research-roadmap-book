@@ -6,6 +6,7 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "relu-regions": () => import("./relu-regions/index"),
   "loss-to-estimator": () => import("./loss-to-estimator/index"),
   "svd-explorer": () => import("./svd-explorer/index"),
+  "autodiff-graph": () => import("./autodiff-graph/index"),
 };
 
 export function mountWidgets(page: PageData) {
