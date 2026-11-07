@@ -127,3 +127,1413 @@ ko = "인식적 불확실성"
 en = "epistemic uncertainty"
 keep_en = true
 definition = "모델이 아직 모르는 데서 오는 불확실성(파라미터·모델 구조). 데이터가 늘면 줄어들 수 있다."
+
+# 부록 B(용어집)를 쓰며 본문 장들에서 모은 용어. 장 링크는 부록 B 표에 있다.
+
+[[terms]]
+ko = "셸"
+en = "shell"
+definition = "사용자가 입력한 명령을 해석해 프로그램을 실행하는 명령 해석기. bash·zsh가 대표적이다."
+
+[[terms]]
+ko = "환경변수"
+en = "environment variable"
+definition = "프로세스가 부모에게서 물려받는 이름=값 쌍. PATH, CUDA_VISIBLE_DEVICES처럼 프로그램의 동작을 바꾼다."
+
+[[terms]]
+ko = "프로세스"
+en = "process"
+definition = "실행 중인 프로그램의 인스턴스. 고유한 PID, 메모리 공간, 열린 파일을 가진다."
+
+[[terms]]
+ko = "시그널"
+en = "signal"
+definition = "운영체제가 프로세스에 보내는 비동기 알림. SIGINT·SIGTERM·SIGKILL처럼 종료나 중단을 요청한다."
+
+[[terms]]
+ko = "SSH"
+en = "Secure Shell"
+keep_en = true
+definition = "암호화된 채널로 원격 서버에 접속하고 명령·파일·포트를 전달하는 프로토콜."
+
+[[terms]]
+ko = "포트 포워딩"
+en = "port forwarding"
+definition = "SSH 연결을 통해 로컬 포트와 원격 포트를 이어, 원격의 서비스(예: Jupyter, TensorBoard)를 로컬에서 여는 방법."
+
+[[terms]]
+ko = "job scheduler"
+en = "job scheduler"
+keep_en = true
+definition = "공유 클러스터에서 작업을 대기열에 넣고 자원이 나면 배정해 실행하는 시스템. Slurm이 대표적이다."
+
+[[terms]]
+ko = "드라이버"
+en = "driver"
+definition = "운영체제 커널이 GPU 같은 하드웨어를 다루게 하는 소프트웨어. CUDA 런타임이 쓸 수 있는 최대 CUDA 버전을 정한다."
+
+[[terms]]
+ko = "가상환경"
+en = "virtual environment"
+definition = "프로젝트마다 독립된 Python 인터프리터 경로와 패키지 디렉터리를 두는 격리 환경. venv가 표준 도구다."
+
+[[terms]]
+ko = "lockfile"
+en = "lockfile"
+keep_en = true
+definition = "의존성 해석 결과(모든 패키지의 정확한 버전과 해시)를 고정해 같은 환경을 다시 만들게 하는 파일."
+
+[[terms]]
+ko = "의존성"
+en = "dependency"
+definition = "코드가 동작하는 데 필요한 다른 패키지와 그 버전 범위."
+
+[[terms]]
+ko = "컨테이너"
+en = "container"
+definition = "image에서 만든, 호스트 커널을 공유하면서 파일시스템·프로세스를 격리한 실행 단위."
+
+[[terms]]
+ko = "image"
+en = "image"
+keep_en = true
+definition = "컨테이너를 만드는 읽기 전용 파일시스템 계층 묶음. Dockerfile로 만든다."
+
+[[terms]]
+ko = "커밋"
+en = "commit"
+definition = "Git에서 프로젝트 파일 전체의 스냅숏(tree)과 부모 커밋, 작성자, 메시지를 담은 불변 객체. 내용의 해시가 이름이다."
+
+[[terms]]
+ko = "branch"
+en = "branch"
+keep_en = true
+definition = "특정 커밋을 가리키는 움직이는 이름(참조). 그 branch에서 새 커밋을 만들면 앞으로 이동한다."
+
+[[terms]]
+ko = "merge"
+en = "merge"
+keep_en = true
+definition = "두 갈래의 이력을 합쳐 양쪽 변경을 모두 담은 상태를 만드는 Git 작업."
+
+[[terms]]
+ko = "rebase"
+en = "rebase"
+keep_en = true
+definition = "커밋들을 다른 기준 커밋 위에 다시 적용해 이력을 새로 쓰는 Git 작업. 이미 공유한 branch에서는 피한다."
+
+[[terms]]
+ko = "저장소"
+en = "repository"
+definition = "프로젝트의 파일과 그 변경 이력 전체를 담은 Git 데이터베이스."
+
+[[terms]]
+ko = "pull request"
+en = "pull request"
+keep_en = true
+definition = "한 branch의 변경을 다른 branch에 합치기 전에 리뷰와 CI를 거치도록 요청하는 GitHub의 단위."
+
+[[terms]]
+ko = "CI"
+en = "continuous integration"
+keep_en = true
+definition = "커밋이나 PR마다 테스트·검사를 자동으로 실행해 문제를 일찍 찾는 관행."
+
+[[terms]]
+ko = "MCP"
+en = "Model Context Protocol"
+keep_en = true
+definition = "AI 에이전트가 외부 도구·데이터 소스에 표준 방식으로 연결되도록 정한 프로토콜."
+
+[[terms]]
+ko = "src layout"
+en = "src layout"
+keep_en = true
+definition = "패키지 코드를 src/ 아래에 두어 설치하지 않은 코드가 실수로 import되지 않게 하는 프로젝트 구조."
+
+[[terms]]
+ko = "설정"
+en = "configuration"
+definition = "코드를 바꾸지 않고 실험 조건을 바꾸도록 코드 밖으로 뺀 값의 묶음. 실행마다 최종 설정을 저장한다."
+
+[[terms]]
+ko = "CLI"
+en = "command-line interface"
+keep_en = true
+definition = "명령줄 인자로 프로그램을 실행하는 인터페이스. 연구 코드는 설정 파일과 인자 덮어쓰기를 함께 받는다."
+
+[[terms]]
+ko = "로깅"
+en = "logging"
+definition = "실행 중의 사건을 수준(DEBUG·INFO·WARNING·ERROR)과 함께 기록하는 것. print와 달리 출력 위치·수준을 설정으로 바꾼다."
+
+[[terms]]
+ko = "예외"
+en = "exception"
+definition = "정상 흐름을 멈추고 호출 스택을 거슬러 전파되는 오류 객체. 조용히 삼키지 않고 원인과 함께 다시 던진다."
+
+[[terms]]
+ko = "회귀 테스트"
+en = "regression test"
+definition = "한 번 고친 버그나 확인한 결과가 다시 깨지지 않는지 지키는 테스트."
+
+[[terms]]
+ko = "property 기반 테스트"
+en = "property-based testing"
+definition = "특정 입력 대신 모든 입력이 만족해야 할 성질을 적고, 도구가 무작위 입력으로 반례를 찾는 테스트."
+
+[[terms]]
+ko = "불변조건"
+en = "invariant"
+definition = "코드가 실행되는 동안 항상 참이어야 하는 조건. 예: 확률의 합은 1, 질량은 보존."
+
+[[terms]]
+ko = "flaky test"
+en = "flaky test"
+keep_en = true
+definition = "코드가 같아도 실행마다 통과·실패가 바뀌는 테스트. 시드·시간·순서 의존이 원인이다."
+
+[[terms]]
+ko = "broadcasting"
+en = "broadcasting"
+keep_en = true
+definition = "shape이 다른 배열의 연산에서 길이 1인 축을 늘려 맞추는 NumPy·PyTorch 규칙. 의도하지 않은 확장이 흔한 버그다."
+
+[[terms]]
+ko = "벡터화"
+en = "vectorization"
+definition = "Python 반복문 대신 배열 연산 하나로 계산을 표현해 컴파일된 루프에서 실행되게 하는 것."
+
+[[terms]]
+ko = "복잡도"
+en = "complexity"
+definition = "입력 크기 n이 커질 때 연산 수가 늘어나는 차수. O(n log n)처럼 쓴다."
+
+[[terms]]
+ko = "벡터공간"
+en = "vector space"
+definition = "덧셈과 스칼라배에 닫혀 있고 정해진 공리를 만족하는 집합."
+
+[[terms]]
+ko = "선형사상"
+en = "linear map"
+definition = "덧셈과 스칼라배를 보존하는 사상 f(ax + by) = af(x) + bf(y). 유한차원에서는 행렬로 표현된다."
+
+[[terms]]
+ko = "기저"
+en = "basis"
+definition = "공간을 생성하는 선형독립인 벡터 집합. 원소 수가 차원이다."
+
+[[terms]]
+ko = "선형독립"
+en = "linear independence"
+definition = "어떤 벡터도 나머지의 선형결합으로 쓸 수 없는 성질. 계수가 모두 0일 때만 선형결합이 0이 된다."
+
+[[terms]]
+ko = "열공간"
+en = "column space"
+definition = "행렬 A의 열들이 생성하는 공간. Ax가 닿을 수 있는 모든 출력의 집합이다."
+
+[[terms]]
+ko = "영공간"
+en = "null space"
+definition = "Ax = 0을 만족하는 x의 집합. 이 방향의 입력 변화는 출력에 나타나지 않는다."
+
+[[terms]]
+ko = "노름"
+en = "norm"
+definition = "벡터의 크기를 재는 함수. 양수성, 동차성, 삼각부등식을 만족한다."
+
+[[terms]]
+ko = "내적"
+en = "inner product"
+definition = "두 벡터에서 스칼라를 내는 대칭·양정부호·쌍선형 함수. 길이와 각도를 정의한다."
+
+[[terms]]
+ko = "정규직교"
+en = "orthonormal"
+definition = "서로 직교하고 각각 길이가 1인 벡터 집합의 성질."
+
+[[terms]]
+ko = "사영"
+en = "projection"
+definition = "벡터를 부분공간 위의 가장 가까운 점으로 보내는 사상. 직교사영의 잔차는 부분공간과 직교한다."
+
+[[terms]]
+ko = "정규방정식"
+en = "normal equation"
+definition = "최소제곱 해가 만족하는 식 AᵀAx = Aᵀb. 수치적으로는 QR이나 SVD로 푸는 편이 안정하다."
+
+[[terms]]
+ko = "고윳값"
+en = "eigenvalue"
+definition = "Av = λv를 만족하는 0 아닌 벡터 v가 있을 때의 스칼라 λ. v는 고유벡터다."
+
+[[terms]]
+ko = "대칭행렬"
+en = "symmetric matrix"
+definition = "Aᵀ = A인 행렬. 고윳값이 실수이고 정규직교 고유벡터로 대각화된다."
+
+[[terms]]
+ko = "양의 정부호"
+en = "positive definite"
+definition = "모든 0 아닌 x에 대해 xᵀAx > 0인 대칭행렬의 성질. 공분산·Hessian 분석에 쓰인다."
+
+[[terms]]
+ko = "SVD"
+en = "singular value decomposition"
+keep_en = true
+definition = "임의의 행렬을 A = UΣVᵀ(직교·대각·직교)로 쓰는 분해. 저랭크 근사와 PCA의 바탕이다."
+
+[[terms]]
+ko = "PCA"
+en = "principal component analysis"
+keep_en = true
+definition = "중심화한 데이터의 분산이 큰 직교 방향을 차례로 찾는 선형 차원 축소. 공분산의 고유벡터, 데이터 행렬의 SVD로 구한다."
+
+[[terms]]
+ko = "저랭크 근사"
+en = "low-rank approximation"
+definition = "행렬을 rank가 낮은 행렬로 근사하는 것. 절단 SVD가 Frobenius·스펙트럼 노름에서 최적이다."
+
+[[terms]]
+ko = "텐서"
+en = "tensor"
+definition = "여러 축을 가진 배열. 이 책에서는 주로 shape이 있는 다차원 배열을 뜻한다."
+
+[[terms]]
+ko = "einsum"
+en = "Einstein summation"
+keep_en = true
+definition = "축 이름 문자열로 텐서의 곱·합·전치를 표현하는 함수. 반복되는 첨자는 합산된다."
+
+[[terms]]
+ko = "측지선"
+en = "geodesic"
+definition = "다양체 위에서 두 점을 잇는 국소적으로 가장 짧은 곡선."
+
+[[terms]]
+ko = "내재 차원"
+en = "intrinsic dimension"
+definition = "데이터가 실제로 놓인 다양체의 차원. 관측 차원보다 훨씬 작을 수 있다."
+
+[[terms]]
+ko = "커널 트릭"
+en = "kernel trick"
+definition = "특징 사상을 명시적으로 계산하지 않고 내적 k(x, x′)만으로 고차원 특징 공간의 알고리즘을 실행하는 방법."
+
+[[terms]]
+ko = "등변성"
+en = "equivariance"
+definition = "입력을 변환하면 출력도 대응하는 방식으로 변환되는 성질 f(g·x) = g·f(x). 출력이 바뀌지 않으면 불변성(invariance)이다."
+
+[[terms]]
+ko = "gradient"
+en = "gradient"
+keep_en = true
+definition = "스칼라 함수의 편미분을 모은 벡터 ∇f. 이 책에서는 열벡터이며 함수가 가장 빨리 증가하는 방향이다."
+
+[[terms]]
+ko = "Jacobian"
+en = "Jacobian"
+keep_en = true
+definition = "벡터 함수 f: ℝⁿ→ℝᵐ의 편미분 행렬(m × n). 국소 선형 근사의 행렬이다."
+
+[[terms]]
+ko = "Hessian"
+en = "Hessian"
+keep_en = true
+definition = "스칼라 함수의 2계 편미분 행렬. 극점 근처의 곡률을 나타낸다."
+
+[[terms]]
+ko = "연쇄법칙"
+en = "chain rule"
+definition = "합성함수의 도함수가 각 단계 도함수(Jacobian)의 곱이라는 법칙. 역전파의 바탕이다."
+
+[[terms]]
+ko = "안장점"
+en = "saddle point"
+definition = "gradient가 0이지만 어떤 방향으로는 올라가고 다른 방향으로는 내려가는 점. Hessian의 고윳값 부호가 섞여 있다."
+
+[[terms]]
+ko = "행렬 미분"
+en = "matrix calculus"
+definition = "행렬·벡터 변수에 대한 미분을 체계적으로 계산하는 규칙. 미분형 dF를 거쳐 유도하면 layout 혼동을 줄인다."
+
+[[terms]]
+ko = "변수변환"
+en = "change of variables"
+definition = "적분 변수를 바꿀 때 Jacobian 행렬식의 절댓값을 곱하는 규칙. 확률밀도 변환과 normalizing flow의 바탕이다."
+
+[[terms]]
+ko = "자동미분"
+en = "automatic differentiation"
+definition = "프로그램을 기본 연산의 합성으로 보고 연쇄법칙을 기계적으로 적용해 정확한 도함수를 계산하는 방법."
+
+[[terms]]
+ko = "계산 그래프"
+en = "computational graph"
+definition = "연산을 노드, 값의 흐름을 간선으로 표현한 방향성 비순환 그래프. 자동미분이 이 그래프를 따라간다."
+
+[[terms]]
+ko = "vector-Jacobian product"
+en = "vector-Jacobian product, VJP"
+keep_en = true
+definition = "vᵀJ를 Jacobian 행렬을 만들지 않고 계산하는 연산. reverse-mode 자동미분의 기본 단위다."
+
+[[terms]]
+ko = "부동소수점"
+en = "floating point"
+definition = "부호·지수·가수로 실수를 근사하는 유한 정밀도 표현. 상대 오차가 machine epsilon 수준이다."
+
+[[terms]]
+ko = "machine epsilon"
+en = "machine epsilon"
+keep_en = true
+definition = "1과 그다음 표현 가능한 부동소수점 수의 차이. float64는 약 2.2 × 10⁻¹⁶, float32는 약 1.2 × 10⁻⁷이다."
+
+[[terms]]
+ko = "파국적 상쇄"
+en = "catastrophic cancellation"
+definition = "거의 같은 두 수를 뺄 때 유효숫자가 사라져 상대 오차가 크게 커지는 현상."
+
+[[terms]]
+ko = "조건수"
+en = "condition number"
+definition = "입력의 상대 오차가 출력의 상대 오차로 최대 몇 배 증폭되는지 나타내는 문제 자체의 성질. 행렬에서는 σ_max/σ_min이다."
+
+[[terms]]
+ko = "안정성"
+en = "stability"
+definition = "알고리즘이 반올림 오차를 문제의 조건수 이상으로 키우지 않는 성질."
+
+[[terms]]
+ko = "잔차"
+en = "residual"
+definition = "근사해를 방정식에 넣었을 때 남는 값 b − Ax. 잔차가 작아도 조건수가 크면 해의 오차는 클 수 있다."
+
+[[terms]]
+ko = "LU 분해"
+en = "LU decomposition"
+definition = "행렬을 하삼각·상삼각 행렬의 곱으로 쓰는 분해. 피벗팅과 함께 일반 선형계를 푼다."
+
+[[terms]]
+ko = "Cholesky 분해"
+en = "Cholesky decomposition"
+definition = "양의 정부호 대칭행렬을 A = LLᵀ로 쓰는 분해. 가우시안 샘플링과 GP에 쓰인다."
+
+[[terms]]
+ko = "희소 행렬"
+en = "sparse matrix"
+definition = "대부분의 원소가 0인 행렬. 0이 아닌 원소만 CSR·COO 같은 형식으로 저장한다."
+
+[[terms]]
+ko = "Newton 방법"
+en = "Newton's method"
+definition = "현재 점의 선형(또는 이차) 근사의 해로 반복해 가는 방법. 해 근처에서 이차 수렴한다."
+
+[[terms]]
+ko = "보간"
+en = "interpolation"
+definition = "주어진 점들을 정확히 지나는 함수를 만들어 그 사이 값을 추정하는 것."
+
+[[terms]]
+ko = "수치적분"
+en = "numerical integration, quadrature"
+definition = "적분을 가중치를 단 함수값의 합으로 근사하는 방법. 사다리꼴·Simpson·Gauss 규칙이 있다."
+
+[[terms]]
+ko = "상미분방정식"
+en = "ordinary differential equation, ODE"
+definition = "한 독립변수(보통 시간)에 대한 도함수로 미지 함수를 정의하는 방정식."
+
+[[terms]]
+ko = "강성"
+en = "stiffness"
+definition = "ODE의 시간 척도가 크게 다를 때 명시적 방법이 안정성 때문에 아주 작은 step을 강제당하는 성질. 암시적 방법을 쓴다."
+
+[[terms]]
+ko = "편미분방정식"
+en = "partial differential equation, PDE"
+definition = "여러 독립변수(공간·시간)에 대한 편도함수로 미지 함수를 정의하는 방정식."
+
+[[terms]]
+ko = "유한차분"
+en = "finite difference"
+definition = "도함수를 격자점 값의 차분으로 근사하는 방법. gradient 검증에도 쓴다."
+
+[[terms]]
+ko = "CFL 조건"
+en = "Courant–Friedrichs–Lewy condition"
+definition = "명시적 시간 적분이 안정하려면 한 step 동안 정보가 이동하는 거리가 대략 격자 간격을 넘지 않아야 한다는 조건."
+
+[[terms]]
+ko = "manufactured solution"
+en = "method of manufactured solutions"
+keep_en = true
+definition = "해를 먼저 정하고 그에 맞는 원천항을 만들어, 시뮬레이터가 알려진 해에 기대한 차수로 수렴하는지 검증하는 방법."
+
+[[terms]]
+ko = "목적함수"
+en = "objective function"
+definition = "최적화에서 최소화(또는 최대화)하는 함수. ML에서는 loss와 정규화 항의 합인 경우가 많다."
+
+[[terms]]
+ko = "볼록 함수"
+en = "convex function"
+definition = "두 점을 잇는 선분이 그래프 위에 있는 함수. 국소 최솟값이 곧 전역 최솟값이다."
+
+[[terms]]
+ko = "볼록 집합"
+en = "convex set"
+definition = "두 점을 잇는 선분이 항상 집합 안에 있는 집합."
+
+[[terms]]
+ko = "KKT 조건"
+en = "Karush–Kuhn–Tucker conditions"
+definition = "부등식 제약 최적화의 1차 최적 조건. 정상성·원 문제 실행 가능성·쌍대 실행 가능성·상보 여유로 이뤄진다."
+
+[[terms]]
+ko = "Lagrange 승수"
+en = "Lagrange multiplier"
+definition = "제약을 목적함수에 더할 때 곱하는 계수. 최적점에서 제약을 조금 풀 때 목적값이 변하는 비율이다."
+
+[[terms]]
+ko = "쌍대성"
+en = "duality"
+definition = "원 최적화 문제마다 그 최적값의 하한을 주는 쌍대 문제가 대응한다는 성질."
+
+[[terms]]
+ko = "경사하강"
+en = "gradient descent"
+definition = "음의 gradient 방향으로 학습률만큼 이동하기를 반복하는 1차 최적화 방법."
+
+[[terms]]
+ko = "확률적 경사하강"
+en = "stochastic gradient descent, SGD"
+definition = "전체 데이터 대신 mini-batch로 추정한 gradient로 갱신하는 경사하강. 갱신이 싸지만 잡음이 있다."
+
+[[terms]]
+ko = "학습률"
+en = "learning rate"
+definition = "한 번의 갱신에서 gradient 방향으로 움직이는 크기 η. 너무 크면 발산하고 너무 작으면 느리다."
+
+[[terms]]
+ko = "momentum"
+en = "momentum"
+keep_en = true
+definition = "이전 갱신 방향의 지수이동평균을 더해 진동을 줄이고 일관된 방향으로 가속하는 기법."
+
+[[terms]]
+ko = "Adam"
+en = "Adam"
+keep_en = true
+definition = "gradient의 1차·2차 모멘트 지수이동평균으로 파라미터마다 step 크기를 조정하는 적응적 최적화 방법."
+
+[[terms]]
+ko = "학습률 스케줄"
+en = "learning rate schedule"
+definition = "학습 진행에 따라 학습률을 바꾸는 규칙. warmup과 cosine 감쇠가 흔하다."
+
+[[terms]]
+ko = "준뉴턴 방법"
+en = "quasi-Newton method"
+definition = "Hessian을 직접 계산하지 않고 gradient 변화로 근사해 갱신하는 방법. L-BFGS가 대표적이다."
+
+[[terms]]
+ko = "전처리"
+en = "preconditioning"
+definition = "문제의 좌표를 바꿔 조건수를 줄여 반복법의 수렴을 빠르게 하는 기법."
+
+[[terms]]
+ko = "베이지안 최적화"
+en = "Bayesian optimization"
+definition = "평가 비용이 큰 함수를 대리모델(주로 GP)과 획득함수로 다음 평가점을 골라 최적화하는 방법."
+
+[[terms]]
+ko = "확률변수"
+en = "random variable"
+definition = "표본공간의 각 결과에 실수를 대응시키는 (가측) 함수."
+
+[[terms]]
+ko = "확률밀도함수"
+en = "probability density function"
+definition = "연속 확률변수에서 구간 위의 적분이 확률이 되는 함수. 값 자체는 1보다 클 수 있다."
+
+[[terms]]
+ko = "누적분포함수"
+en = "cumulative distribution function"
+definition = "F(x) = P(X ≤ x). 이산·연속 확률변수 모두에 정의된다."
+
+[[terms]]
+ko = "지수족"
+en = "exponential family"
+definition = "밀도가 h(x)exp(ηᵀT(x) − A(η)) 꼴인 분포 모임. 정규·Bernoulli·Poisson·감마 등이 속하고 켤레 사전분포를 가진다."
+
+[[terms]]
+ko = "조건부 독립"
+en = "conditional independence"
+definition = "Z가 주어졌을 때 X와 Y의 결합 조건부분포가 각 조건부분포의 곱으로 나뉘는 성질."
+
+[[terms]]
+ko = "교란"
+en = "confounding"
+definition = "처리와 결과에 모두 영향을 주는 공통 원인 때문에 둘 사이에 인과가 아닌 연관이 생기는 것."
+
+[[terms]]
+ko = "다변량 가우시안"
+en = "multivariate Gaussian"
+definition = "평균 벡터 μ와 공분산 행렬 Σ로 정해지는 다차원 정규분포. 주변·조건부분포도 가우시안이다."
+
+[[terms]]
+ko = "공분산"
+en = "covariance"
+definition = "두 확률변수가 평균에서 함께 벗어나는 정도 E[(X − μ_X)(Y − μ_Y)]."
+
+[[terms]]
+ko = "대수의 법칙"
+en = "law of large numbers"
+definition = "독립 동일 분포 표본의 평균이 표본 수가 늘면 기댓값으로 수렴한다는 정리."
+
+[[terms]]
+ko = "중심극한정리"
+en = "central limit theorem"
+definition = "유한 분산을 가진 독립 동일 분포 표본 평균의 표준화된 분포가 표준정규분포로 수렴한다는 정리."
+
+[[terms]]
+ko = "i.i.d."
+en = "independent and identically distributed"
+keep_en = true
+definition = "표본들이 서로 독립이고 같은 분포에서 뽑혔다는 가정. 많은 평가·추론 도구의 전제다."
+
+[[terms]]
+ko = "Monte Carlo"
+en = "Monte Carlo"
+keep_en = true
+definition = "무작위 표본의 평균으로 기댓값·적분을 근사하는 방법. 오차가 표본 수의 제곱근에 반비례한다."
+
+[[terms]]
+ko = "중요도 표집"
+en = "importance sampling"
+definition = "목표 분포 대신 제안분포에서 뽑고 밀도 비 가중치로 보정해 기댓값을 추정하는 방법."
+
+[[terms]]
+ko = "Markov chain"
+en = "Markov chain"
+keep_en = true
+definition = "다음 상태의 분포가 현재 상태에만 의존하는 확률과정."
+
+[[terms]]
+ko = "정상분포"
+en = "stationary distribution"
+definition = "Markov 연쇄의 전이를 한 번 적용해도 바뀌지 않는 분포. MCMC는 목표 분포를 정상분포로 갖게 설계한다."
+
+[[terms]]
+ko = "추정량"
+en = "estimator"
+definition = "데이터로부터 미지 파라미터를 추정하는 규칙(함수). 그 값이 추정값이다."
+
+[[terms]]
+ko = "편향"
+en = "bias"
+definition = "추정량의 기댓값과 참값의 차이 E[θ̂] − θ."
+
+[[terms]]
+ko = "평균제곱오차"
+en = "mean squared error, MSE"
+definition = "E[(θ̂ − θ)²] = 편향² + 분산. 예측에서는 예측값과 정답 차이의 제곱 평균이다."
+
+[[terms]]
+ko = "최대우도 추정"
+en = "maximum likelihood estimation, MLE"
+definition = "우도(또는 로그우도)를 최대화하는 파라미터를 추정값으로 삼는 방법. NLL 최소화와 같다."
+
+[[terms]]
+ko = "음의 로그우도"
+en = "negative log-likelihood, NLL"
+definition = "−log p(D|θ). 최소화하는 손실로 쓰며 고정 분산 가우시안에서는 MSE, 범주형에서는 교차엔트로피가 된다."
+
+[[terms]]
+ko = "Fisher 정보"
+en = "Fisher information"
+definition = "로그우도의 곡률(score 분산)로 정의되는 양. 그 역이 불편추정량 분산의 하한(Cramér–Rao)을 준다."
+
+[[terms]]
+ko = "가설 검정"
+en = "hypothesis testing"
+definition = "귀무가설 아래에서 관측 통계량이 얼마나 극단적인지(p-value)로 가설을 기각할지 정하는 절차."
+
+[[terms]]
+ko = "p-value"
+en = "p-value"
+keep_en = true
+definition = "귀무가설이 참일 때 관측값만큼 또는 더 극단적인 통계량이 나올 확률. 가설이 참일 확률이 아니다."
+
+[[terms]]
+ko = "다중 비교"
+en = "multiple comparisons"
+definition = "여러 가설을 동시에 검정할 때 우연한 유의 결과가 늘어나는 문제. Bonferroni·Holm·BH로 보정한다."
+
+[[terms]]
+ko = "부트스트랩"
+en = "bootstrap"
+definition = "데이터를 복원추출로 다시 뽑아 통계량의 분포를 근사하는 방법."
+
+[[terms]]
+ko = "효과 크기"
+en = "effect size"
+definition = "차이나 연관의 크기를 단위나 표준편차 기준으로 나타낸 양. p-value와 달리 표본 수에 따라 커지지 않는다."
+
+[[terms]]
+ko = "일반화 선형모형"
+en = "generalized linear model, GLM"
+definition = "선형예측자를 link 함수로 지수족 분포의 평균에 연결한 회귀 모형. 로지스틱·Poisson 회귀가 속한다."
+
+[[terms]]
+ko = "pseudoreplication"
+en = "pseudoreplication"
+keep_en = true
+definition = "독립이 아닌 관측(같은 개체·셀의 반복 측정)을 독립 표본처럼 세어 표본 수를 부풀리는 오류."
+
+[[terms]]
+ko = "사전분포"
+en = "prior distribution"
+definition = "데이터를 보기 전 파라미터에 대한 믿음을 나타내는 분포 p(θ)."
+
+[[terms]]
+ko = "켤레 사전분포"
+en = "conjugate prior"
+definition = "우도와 곱했을 때 사후분포가 사전분포와 같은 분포족에 머무는 사전분포."
+
+[[terms]]
+ko = "주변우도"
+en = "marginal likelihood"
+definition = "파라미터를 적분해 없앤 데이터의 확률 p(D) = ∫p(D|θ)p(θ)dθ. 모델 비교와 하이퍼파라미터 선택에 쓴다."
+
+[[terms]]
+ko = "사후예측분포"
+en = "posterior predictive distribution"
+definition = "사후분포로 평균한 새 관측의 분포 p(y*|D) = ∫p(y*|θ)p(θ|D)dθ."
+
+[[terms]]
+ko = "계층 모델"
+en = "hierarchical model"
+definition = "그룹별 파라미터가 공통 상위 분포에서 나온다고 두는 모델. 그룹 사이에 정보를 나누어 추정을 수축시킨다."
+
+[[terms]]
+ko = "잠재변수"
+en = "latent variable"
+definition = "관측되지 않지만 관측 데이터의 생성을 설명하기 위해 모델에 둔 변수 z."
+
+[[terms]]
+ko = "EM 알고리즘"
+en = "expectation-maximization"
+definition = "잠재변수의 사후분포를 구하는 E 단계와 기대 완전 로그우도를 최대화하는 M 단계를 번갈아 우도를 높이는 방법."
+
+[[terms]]
+ko = "MCMC"
+en = "Markov chain Monte Carlo"
+keep_en = true
+definition = "목표 분포를 정상분포로 갖는 Markov 연쇄를 돌려 표본을 얻는 방법. Metropolis–Hastings·HMC가 대표적이다."
+
+[[terms]]
+ko = "유효 표본 크기"
+en = "effective sample size, ESS"
+definition = "자기상관이 있는 표본이 독립 표본 몇 개만큼의 정보를 갖는지 나타내는 값."
+
+[[terms]]
+ko = "변분추론"
+en = "variational inference"
+definition = "다루기 쉬운 분포족에서 사후분포와의 KL을 최소화(ELBO 최대화)하는 분포를 찾는 근사 추론."
+
+[[terms]]
+ko = "ELBO"
+en = "evidence lower bound"
+keep_en = true
+definition = "로그 주변우도의 하한 E_q[log p(x, z)] − E_q[log q(z)]. 변분추론과 VAE가 최대화한다."
+
+[[terms]]
+ko = "reparameterization trick"
+en = "reparameterization trick"
+keep_en = true
+definition = "확률변수를 z = μ + σε처럼 파라미터의 결정적 함수와 고정된 잡음으로 써 표본을 통과해 gradient를 흘리는 기법."
+
+[[terms]]
+ko = "Gaussian Process"
+en = "Gaussian process, GP"
+keep_en = true
+definition = "임의의 유한 개 입력에서의 함수값이 다변량 가우시안을 따르는 함수 위의 분포. 평균함수와 커널로 정해진다."
+
+[[terms]]
+ko = "사전 예측 점검"
+en = "prior predictive check"
+definition = "사전분포에서 생성한 가상 데이터가 물리적으로 그럴듯한지 데이터를 보기 전에 확인하는 절차."
+
+[[terms]]
+ko = "posterior predictive check"
+en = "posterior predictive check, PPC"
+keep_en = true
+definition = "사후예측분포에서 생성한 데이터를 관측 데이터와 비교해 모델이 데이터의 특징을 재현하는지 보는 절차."
+
+[[terms]]
+ko = "엔트로피"
+en = "entropy"
+definition = "분포의 불확실성 H(p) = −E[log p(X)]. 최적 부호의 평균 길이다."
+
+[[terms]]
+ko = "교차엔트로피"
+en = "cross-entropy"
+definition = "H(p, q) = −E_p[log q(X)]. 분류의 손실로 쓰며 H(p) + KL(p‖q)와 같다."
+
+[[terms]]
+ko = "KL divergence"
+en = "Kullback–Leibler divergence"
+keep_en = true
+definition = "KL(p‖q) = E_p[log p/q] ≥ 0. 비대칭이며 0이면 두 분포가 같다."
+
+[[terms]]
+ko = "상호정보량"
+en = "mutual information"
+definition = "I(X; Y) = KL(p(x, y)‖p(x)p(y)). 한 변수를 알 때 다른 변수의 불확실성이 줄어드는 양이다."
+
+[[terms]]
+ko = "일반화"
+en = "generalization"
+definition = "학습에 쓰지 않은 데이터에서도 성능이 유지되는 성질. 학습 오차와 시험 오차의 차이로 잰다."
+
+[[terms]]
+ko = "과적합"
+en = "overfitting"
+definition = "학습 데이터의 잡음까지 맞춰 학습 오차는 작지만 새 데이터의 오차가 큰 상태."
+
+[[terms]]
+ko = "bias–variance trade-off"
+en = "bias–variance trade-off"
+keep_en = true
+definition = "기대 제곱 예측오차를 편향², 분산, 줄일 수 없는 잡음으로 나누는 분해."
+
+[[terms]]
+ko = "double descent"
+en = "double descent"
+keep_en = true
+definition = "모델 크기를 늘릴 때 시험 오차가 보간 문턱 근처에서 커졌다가 그 뒤로 다시 줄어드는 현상."
+
+[[terms]]
+ko = "귀납적 편향"
+en = "inductive bias"
+definition = "데이터만으로 정해지지 않는 부분에서 모델이 특정 해를 선호하게 만드는 가정. 아키텍처·정규화·초기화에서 온다."
+
+[[terms]]
+ko = "스케일링 법칙"
+en = "scaling law"
+definition = "모델 크기·데이터 양·계산량이 늘 때 손실이 거듭제곱 꼴로 줄어드는 경험적 관계."
+
+[[terms]]
+ko = "그룹 분할"
+en = "group split"
+definition = "같은 개체·셀·환자·분자 골격에서 나온 샘플을 한쪽 분할에만 두는 데이터 분할."
+
+[[terms]]
+ko = "검증 데이터"
+en = "validation data"
+definition = "하이퍼파라미터와 모델 선택에 쓰는 데이터. 최종 성능 보고에는 쓰지 않는다."
+
+[[terms]]
+ko = "시험 데이터"
+en = "test data"
+definition = "모든 선택이 끝난 뒤 최종 성능을 한 번 보고하는 데 쓰는 데이터."
+
+[[terms]]
+ko = "교차검증"
+en = "cross-validation"
+definition = "데이터를 k개 fold로 나누어 번갈아 검증하며 성능을 추정하는 방법. 그룹·시간 구조를 반영해 나눈다."
+
+[[terms]]
+ko = "탐색적 분석"
+en = "exploratory data analysis, EDA"
+definition = "모델링 전에 분포·결측·이상치·관계를 요약 통계와 그림으로 살피는 단계."
+
+[[terms]]
+ko = "결측"
+en = "missing value"
+definition = "관측되지 않은 값. 왜 빠졌는지(MCAR·MAR·MNAR)에 따라 처리 방법과 편향이 달라진다."
+
+[[terms]]
+ko = "이상치"
+en = "outlier"
+definition = "나머지 데이터와 크게 동떨어진 관측. 측정 오류일 수도, 중요한 현상일 수도 있다."
+
+[[terms]]
+ko = "배치 효과"
+en = "batch effect"
+definition = "측정 장비·날짜·실험 배치 같은 기술적 요인이 만든 체계적 차이. 생물학적 신호와 혼동되기 쉽다."
+
+[[terms]]
+ko = "데이터시트"
+en = "datasheet"
+definition = "데이터셋의 수집 목적·과정·구성·한계·라이선스를 적은 문서."
+
+[[terms]]
+ko = "합성 데이터"
+en = "synthetic data"
+definition = "시뮬레이터나 생성모델로 만든 데이터. 실제 데이터와의 간극(sim-to-real gap)을 함께 평가해야 한다."
+
+[[terms]]
+ko = "혼동행렬"
+en = "confusion matrix"
+definition = "분류 결과를 참 클래스와 예측 클래스의 조합별 개수로 정리한 표."
+
+[[terms]]
+ko = "정밀도"
+en = "precision"
+definition = "양성으로 예측한 것 중 실제 양성의 비율 TP/(TP + FP)."
+
+[[terms]]
+ko = "재현율"
+en = "recall"
+definition = "실제 양성 중 양성으로 맞힌 비율 TP/(TP + FN)."
+
+[[terms]]
+ko = "ROC 곡선"
+en = "receiver operating characteristic curve"
+definition = "문턱값을 바꾸며 위양성률 대 진양성률을 그린 곡선. 아래 면적이 AUC다."
+
+[[terms]]
+ko = "지도학습"
+en = "supervised learning"
+definition = "입력과 정답 쌍에서 입력→출력 사상을 배우는 학습."
+
+[[terms]]
+ko = "비지도학습"
+en = "unsupervised learning"
+definition = "정답 없이 데이터의 구조(군집·저차원 표현·밀도)를 찾는 학습."
+
+[[terms]]
+ko = "정규화"
+en = "regularization"
+definition = "과적합을 막기 위해 모델의 복잡도에 벌점을 주거나 제약을 두는 것. L2(ridge)·L1(lasso)이 대표적이다."
+
+[[terms]]
+ko = "로지스틱 회귀"
+en = "logistic regression"
+definition = "선형 점수에 sigmoid를 씌워 클래스 확률을 모델링하는 분류 모형."
+
+[[terms]]
+ko = "커널"
+en = "kernel"
+definition = "두 입력의 유사도를 특징 공간의 내적으로 주는 함수 k(x, x′). SVM·GP에 쓰인다."
+
+[[terms]]
+ko = "서포트 벡터 머신"
+en = "support vector machine, SVM"
+definition = "클래스 사이 마진을 최대화하는 결정 경계를 찾는 분류기."
+
+[[terms]]
+ko = "트리"
+en = "decision tree"
+definition = "특징의 문턱값으로 공간을 축에 평행하게 반복 분할해 예측하는 모델."
+
+[[terms]]
+ko = "앙상블"
+en = "ensemble"
+definition = "여러 모델의 예측을 평균하거나 투표해 결합하는 방법. random forest와 gradient boosting이 대표적이다."
+
+[[terms]]
+ko = "군집"
+en = "clustering"
+definition = "정답 없이 비슷한 샘플끼리 묶는 비지도학습. k-means가 대표적이다."
+
+[[terms]]
+ko = "생존분석"
+en = "survival analysis"
+definition = "사건 발생까지의 시간을 중도절단을 고려해 모델링하는 분석."
+
+[[terms]]
+ko = "중도절단"
+en = "censoring"
+definition = "관측 기간이 끝나 사건 시점을 정확히 모르고 '그때까지는 일어나지 않았다'만 아는 상태."
+
+[[terms]]
+ko = "인과추론"
+en = "causal inference"
+definition = "관측·실험 데이터에서 개입의 효과를 추정하는 방법론. 상관과 인과를 가정으로 구분한다."
+
+[[terms]]
+ko = "다층 퍼셉트론"
+en = "multilayer perceptron, MLP"
+definition = "아핀 층과 비선형 활성화를 번갈아 쌓은 완전연결 신경망."
+
+[[terms]]
+ko = "활성화 함수"
+en = "activation function"
+definition = "아핀 층 뒤에 원소별로 적용하는 비선형 함수. ReLU·GELU·tanh 등."
+
+[[terms]]
+ko = "loss"
+en = "loss function"
+keep_en = true
+definition = "예측과 정답의 차이를 수치로 재는 함수. 최적화가 최소화하는 대상이다."
+
+[[terms]]
+ko = "batch"
+en = "batch"
+keep_en = true
+definition = "한 번의 갱신에 함께 쓰는 샘플 묶음. 크기가 gradient 잡음과 메모리 사용을 정한다."
+
+[[terms]]
+ko = "epoch"
+en = "epoch"
+keep_en = true
+definition = "학습 데이터 전체를 한 번 다 사용하는 학습 단위."
+
+[[terms]]
+ko = "dropout"
+en = "dropout"
+keep_en = true
+definition = "학습 중 무작위로 활성값 일부를 0으로 만드는 정규화. 평가 시에는 꺼야 한다(eval 모드)."
+
+[[terms]]
+ko = "BatchNorm"
+en = "batch normalization"
+keep_en = true
+definition = "mini-batch 통계로 활성값을 정규화하는 층. 학습·평가 모드에서 쓰는 통계가 다르다."
+
+[[terms]]
+ko = "조기 종료"
+en = "early stopping"
+definition = "검증 손실이 더 이상 좋아지지 않으면 학습을 멈추는 정규화 기법."
+
+[[terms]]
+ko = "합성곱 신경망"
+en = "convolutional neural network, CNN"
+definition = "국소 필터를 위치마다 공유해 적용하는 신경망. 평행이동 등변성을 가진다."
+
+[[terms]]
+ko = "수용 영역"
+en = "receptive field"
+definition = "출력 한 칸에 영향을 주는 입력 영역의 범위."
+
+[[terms]]
+ko = "잔차 연결"
+en = "residual connection"
+definition = "층의 입력을 출력에 더하는 연결 x + f(x). 깊은 망의 gradient 흐름을 돕는다."
+
+[[terms]]
+ko = "순환 신경망"
+en = "recurrent neural network, RNN"
+definition = "은닉 상태를 시간 단계마다 갱신하며 시퀀스를 처리하는 신경망."
+
+[[terms]]
+ko = "상태공간 모델"
+en = "state-space model, SSM"
+definition = "관측을 잠재 상태의 동역학과 관측식으로 설명하는 모델. 딥러닝에서는 선형 상태공간 층을 쌓은 시퀀스 모델도 뜻한다."
+
+[[terms]]
+ko = "attention"
+en = "attention"
+keep_en = true
+definition = "query와 key의 유사도로 가중치를 계산해 value를 가중합하는 연산. Transformer의 핵심이다."
+
+[[terms]]
+ko = "Transformer"
+en = "Transformer"
+keep_en = true
+definition = "self-attention과 위치별 MLP 블록을 잔차 연결로 쌓은 아키텍처."
+
+[[terms]]
+ko = "토큰"
+en = "token"
+definition = "언어모델이 처리하는 단위(단어 조각 등). 어휘 사전의 정수 ID로 표현된다."
+
+[[terms]]
+ko = "대규모 언어모델"
+en = "large language model, LLM"
+definition = "대량의 텍스트로 다음 토큰 예측을 사전학습한 매우 큰 언어모델. 대부분 Transformer 구조다."
+
+[[terms]]
+ko = "그래프 신경망"
+en = "graph neural network, GNN"
+definition = "이웃 노드끼리 메시지를 주고받아 노드·그래프 표현을 갱신하는 신경망. 순열 등변이다."
+
+[[terms]]
+ko = "embedding"
+en = "embedding"
+keep_en = true
+definition = "이산 객체나 입력을 학습된 연속 벡터로 나타낸 것."
+
+[[terms]]
+ko = "linear probe"
+en = "linear probe"
+keep_en = true
+definition = "고정된 표현 위에 선형 분류기·회귀기만 학습해 표현에 담긴 정보를 재는 방법."
+
+[[terms]]
+ko = "생성모델"
+en = "generative model"
+definition = "데이터 분포 p(x)(또는 p(x|c))에서 새 표본을 만들거나 밀도를 평가하는 모델."
+
+[[terms]]
+ko = "자기회귀 모델"
+en = "autoregressive model"
+definition = "결합분포를 p(x) = Π p(x_t | x_<t)로 분해해 앞선 값으로 다음 값을 예측하는 모델."
+
+[[terms]]
+ko = "exposure bias"
+en = "exposure bias"
+keep_en = true
+definition = "학습 때는 정답 이전 값을, 생성 때는 자기 예측을 입력으로 받아 오차가 누적되는 불일치."
+
+[[terms]]
+ko = "VAE"
+en = "variational autoencoder"
+keep_en = true
+definition = "인코더로 잠재변수의 근사 사후분포를, 디코더로 우도를 모델링하고 ELBO로 학습하는 잠재변수 생성모델."
+
+[[terms]]
+ko = "GAN"
+en = "generative adversarial network"
+keep_en = true
+definition = "생성자와 판별자를 적대적으로 학습시켜 생성자가 데이터와 구별되지 않는 표본을 만들게 하는 모델."
+
+[[terms]]
+ko = "normalizing flow"
+en = "normalizing flow"
+keep_en = true
+definition = "가역 변환의 합성으로 단순한 분포를 데이터 분포로 보내고 변수변환으로 정확한 밀도를 계산하는 모델."
+
+[[terms]]
+ko = "확산 모델"
+en = "diffusion model"
+definition = "데이터에 잡음을 점점 더하는 과정을 거꾸로 되돌리도록 학습해 잡음에서 표본을 만드는 생성모델."
+
+[[terms]]
+ko = "score"
+en = "score function"
+keep_en = true
+definition = "로그밀도의 gradient ∇ₓ log p(x). 확산 모델은 잡음 수준별 score를 학습한다."
+
+[[terms]]
+ko = "flow matching"
+en = "flow matching"
+keep_en = true
+definition = "잡음 분포에서 데이터 분포로 가는 속도장을 회귀로 학습해 ODE로 표본을 만드는 방법."
+
+[[terms]]
+ko = "자기지도학습"
+en = "self-supervised learning"
+definition = "데이터 자체에서 만든 과제(가림 복원·대조 등)로 표현을 학습하는 방법."
+
+[[terms]]
+ko = "contrastive learning"
+en = "contrastive learning"
+keep_en = true
+definition = "같은 샘플의 두 변형은 가깝게, 다른 샘플은 멀게 표현하도록 학습하는 자기지도학습."
+
+[[terms]]
+ko = "Foundation Model"
+en = "foundation model"
+keep_en = true
+definition = "대규모 데이터로 사전학습해 여러 하류 과제에 미세조정·적응시켜 쓰는 모델."
+
+[[terms]]
+ko = "사전학습"
+en = "pretraining"
+definition = "큰 데이터에서 범용 표현을 먼저 학습하는 단계. 이후 하류 과제에 미세조정한다."
+
+[[terms]]
+ko = "미세조정"
+en = "fine-tuning"
+definition = "사전학습된 모델의 가중치를 하류 과제 데이터로 추가 학습하는 것."
+
+[[terms]]
+ko = "강화학습"
+en = "reinforcement learning, RL"
+definition = "환경과 상호작용하며 누적 보상을 최대화하는 정책을 배우는 학습."
+
+[[terms]]
+ko = "Markov decision process"
+en = "Markov decision process, MDP"
+keep_en = true
+definition = "상태·행동·전이 확률·보상·할인율로 정의되는 순차적 의사결정 문제."
+
+[[terms]]
+ko = "정책"
+en = "policy"
+definition = "상태에서 행동(또는 행동 분포)을 고르는 규칙 π(a|s)."
+
+[[terms]]
+ko = "가치함수"
+en = "value function"
+definition = "어떤 상태(또는 상태-행동)에서 정책을 따를 때 기대되는 할인 누적 보상."
+
+[[terms]]
+ko = "모델 예측 제어"
+en = "model predictive control, MPC"
+definition = "매 시점 모델로 유한 구간의 최적 제어를 풀고 첫 행동만 실행하기를 반복하는 제어."
+
+[[terms]]
+ko = "밴딧"
+en = "bandit"
+definition = "상태 전이 없이 여러 선택지 중 보상이 큰 것을 탐색·활용 균형으로 찾는 문제."
+
+[[terms]]
+ko = "불확실성 정량화"
+en = "uncertainty quantification, UQ"
+definition = "예측이나 추정값이 얼마나 불확실한지를 분포·구간으로 나타내고 평가하는 일."
+
+[[terms]]
+ko = "CRPS"
+en = "continuous ranked probability score"
+keep_en = true
+definition = "예측 누적분포함수와 관측값에서 뛰는 계단함수의 차이를 제곱해 적분한 적정 점수 규칙. 관측과 같은 단위를 가진다."
+
+[[terms]]
+ko = "conformal prediction"
+en = "conformal prediction"
+keep_en = true
+definition = "교환가능성 가정 아래 보정 데이터의 점수 분위수로 유한 표본에서 coverage를 보장하는 예측 집합을 만드는 방법."
+
+[[terms]]
+ko = "교환가능성"
+en = "exchangeability"
+definition = "관측들의 결합분포가 순서를 바꿔도 같다는 성질. i.i.d.보다 약하며 conformal prediction의 가정이다."
+
+[[terms]]
+ko = "공변량 이동"
+en = "covariate shift"
+definition = "p(y|x)는 같고 입력 분포 p(x)만 달라지는 분포 이동."
+
+[[terms]]
+ko = "OOD"
+en = "out-of-distribution"
+keep_en = true
+definition = "학습 분포 밖에서 온 입력. 모델 출력의 신뢰도가 보장되지 않는다."
+
+[[terms]]
+ko = "해석가능성"
+en = "interpretability"
+definition = "모델이 왜 그런 예측을 했는지 사람이 이해할 수 있게 설명하는 정도와 그 방법."
+
+[[terms]]
+ko = "기여도"
+en = "attribution"
+definition = "예측에 각 입력 특징이 얼마나 기여했는지 나타낸 값. permutation importance·SHAP·gradient 방법이 있다."
+
+[[terms]]
+ko = "지름길"
+en = "shortcut"
+definition = "과제의 본질 대신 학습 데이터에서만 성립하는 우연한 단서로 예측하는 것."
+
+[[terms]]
+ko = "실험 추적"
+en = "experiment tracking"
+definition = "실행마다 설정·코드 버전·metric·산출물을 기록해 비교·재현하게 하는 일."
+
+[[terms]]
+ko = "재현성"
+en = "reproducibility"
+definition = "같은 데이터·코드·환경으로 같은 결과를 다시 얻을 수 있는 성질."
+
+[[terms]]
+ko = "하이퍼파라미터"
+en = "hyperparameter"
+definition = "학습으로 정해지지 않고 사람이나 탐색 알고리즘이 정하는 설정값(학습률·층 수 등)."
+
+[[terms]]
+ko = "sweep"
+en = "sweep"
+keep_en = true
+definition = "하이퍼파라미터 조합을 체계적으로 바꿔 가며 여러 실행을 돌리는 것."
+
+[[terms]]
+ko = "profiling"
+en = "profiling"
+keep_en = true
+definition = "프로그램의 시간·메모리 사용을 연산별로 측정해 병목을 찾는 일."
+
+[[terms]]
+ko = "처리량"
+en = "throughput"
+definition = "단위 시간에 처리하는 샘플·토큰 수. 지연(latency)과 구분한다."
+
+[[terms]]
+ko = "mixed precision"
+en = "mixed precision"
+keep_en = true
+definition = "대부분의 연산을 fp16·bf16으로 하고 민감한 부분만 float32로 유지해 속도와 메모리를 줄이는 학습 방식."
+
+[[terms]]
+ko = "gradient accumulation"
+en = "gradient accumulation"
+keep_en = true
+definition = "여러 mini-batch의 gradient를 더한 뒤 한 번 갱신해 큰 batch를 메모리 안에서 흉내 내는 기법."
+
+[[terms]]
+ko = "activation checkpointing"
+en = "activation checkpointing"
+keep_en = true
+definition = "순전파 활성값 일부만 저장하고 역전파 때 다시 계산해 메모리를 줄이는 기법."
+
+[[terms]]
+ko = "데이터 병렬"
+en = "data parallelism"
+definition = "모델을 장치마다 복제하고 데이터를 나눠 계산한 gradient를 평균하는 분산 학습 방식. PyTorch의 DDP가 대표적이다."
+
+[[terms]]
+ko = "all-reduce"
+en = "all-reduce"
+keep_en = true
+definition = "모든 장치의 값을 합(또는 평균)해 결과를 모든 장치에 돌려주는 집합 통신."
+
+[[terms]]
+ko = "양자화"
+en = "quantization"
+definition = "가중치·활성값을 int8 같은 낮은 비트 수 표현으로 바꿔 추론 비용을 줄이는 것."
+
+[[terms]]
+ko = "distillation"
+en = "knowledge distillation"
+keep_en = true
+definition = "큰 teacher 모델의 출력을 작은 student 모델이 따라 하도록 학습시키는 압축 기법."
+
+[[terms]]
+ko = "ablation"
+en = "ablation"
+keep_en = true
+definition = "구성 요소를 하나씩 빼거나 바꿔 그 요소가 결과에 기여하는지 확인하는 실험."
+
+[[terms]]
+ko = "사전 등록"
+en = "preregistration"
+definition = "데이터를 보기 전에 가설·분석 계획을 기록해 두어 사후 분석 선택의 유연성을 줄이는 관행."
+
+[[terms]]
+ko = "HARKing"
+en = "hypothesizing after the results are known"
+keep_en = true
+definition = "결과를 본 뒤 만든 가설을 처음부터 세운 가설처럼 보고하는 것."
+
+[[terms]]
+ko = "대조군"
+en = "control"
+definition = "처리를 받지 않거나 기준 조건에 둔 비교 집단. 처리 효과를 분리하는 기준이다."
+
+[[terms]]
+ko = "검정력"
+en = "statistical power"
+definition = "실제 효과가 있을 때 검정이 그것을 검출할 확률. 표본 수 설계에 쓴다."
+
+[[terms]]
+ko = "오차 분석"
+en = "error analysis"
+definition = "모델이 틀린 샘플을 모아 유형별로 분류하고 원인을 찾는 분석."
+
+[[terms]]
+ko = "동료 심사"
+en = "peer review"
+definition = "같은 분야 연구자가 투고 원고의 타당성·새로움·명료성을 평가하는 절차."
+
+[[terms]]
+ko = "오픈 사이언스"
+en = "open science"
+definition = "데이터·코드·논문을 공개해 검증과 재사용을 가능하게 하는 연구 관행."
+
+[[terms]]
+ko = "FAIR 원칙"
+en = "FAIR principles"
+definition = "데이터가 찾을 수 있고(Findable), 접근할 수 있고(Accessible), 상호운용되고(Interoperable), 재사용할 수 있어야(Reusable) 한다는 원칙."
+
+[[terms]]
+ko = "과학 머신러닝"
+en = "scientific machine learning"
+definition = "물리 법칙·시뮬레이션 같은 과학 지식과 데이터 기반 학습을 결합하는 분야."
+
+[[terms]]
+ko = "무차원화"
+en = "nondimensionalization"
+definition = "특성 척도로 변수를 나누어 단위 없는 방정식으로 바꾸는 것. 변수 크기를 맞추고 지배 무차원수를 드러낸다."
+
+[[terms]]
+ko = "물리 정보 신경망"
+en = "physics-informed neural network, PINN"
+definition = "PDE 잔차·경계조건을 손실에 넣어 신경망이 방정식의 해를 근사하도록 학습하는 방법."
+
+[[terms]]
+ko = "Neural ODE"
+en = "neural ODE"
+keep_en = true
+definition = "상태의 시간 도함수를 신경망으로 두고 ODE 솔버로 적분해 궤적을 만드는 모델."
+
+[[terms]]
+ko = "adjoint 방법"
+en = "adjoint method"
+definition = "ODE·PDE 해를 거친 목적함수의 gradient를 역방향 adjoint 방정식으로 계산하는 방법. 메모리가 시간 길이에 덜 의존한다."
+
+[[terms]]
+ko = "Neural Operator"
+en = "neural operator"
+keep_en = true
+definition = "함수(초기조건·계수장)를 함수(해)로 보내는 연산자를 학습하는 모델. FNO·DeepONet이 대표적이다."
+
+[[terms]]
+ko = "rollout"
+en = "rollout"
+keep_en = true
+definition = "학습된 한 step 모델을 자기 출력에 반복 적용해 긴 궤적을 만드는 것. 오차가 누적될 수 있다."
+
+[[terms]]
+ko = "대리모델"
+en = "surrogate model"
+definition = "비싼 시뮬레이션이나 실험의 입력→출력 관계를 근사하는 값싼 모델."
+
+[[terms]]
+ko = "하이브리드 모델"
+en = "hybrid model"
+definition = "물리 모델과 학습된 구성 요소(잔차·closure·파라미터)를 결합한 모델."
+
+[[terms]]
+ko = "closure"
+en = "closure"
+keep_en = true
+definition = "해상하지 않은 작은 척도의 효과를 해상한 변수의 함수로 근사하는 항. 난류·기후 모델에서 학습 대상이 된다."
+
+[[terms]]
+ko = "시스템 식별"
+en = "system identification"
+definition = "입출력 데이터에서 동역학 모델의 구조나 파라미터를 추정하는 일."
+
+[[terms]]
+ko = "식별 가능성"
+en = "identifiability"
+definition = "데이터가 파라미터를 유일하게 결정할 수 있는 성질. 식별 불가능하면 다른 파라미터가 같은 관측을 낸다."
+
+[[terms]]
+ko = "Kalman filter"
+en = "Kalman filter"
+keep_en = true
+definition = "선형 가우시안 상태공간 모델에서 예측과 관측 갱신을 번갈아 상태의 사후분포를 순차적으로 계산하는 방법."
+
+[[terms]]
+ko = "자료동화"
+en = "data assimilation"
+definition = "관측과 수치 모델 예측을 결합해 상태를 추정하는 일. 기상 예보의 초기장을 만든다."
+
+[[terms]]
+ko = "역문제"
+en = "inverse problem"
+definition = "관측된 결과로부터 원인(파라미터·초기조건·원천)을 추정하는 문제. 흔히 해가 유일하지 않거나 불안정하다."
+
+[[terms]]
+ko = "잘 놓인 문제"
+en = "well-posed problem"
+definition = "해가 존재하고, 유일하고, 데이터에 연속적으로 의존한다는 Hadamard의 세 조건을 만족하는 문제. 하나라도 깨지면 잘못 놓인(ill-posed) 문제다."
+
+[[terms]]
+ko = "시뮬레이션 기반 추론"
+en = "simulation-based inference"
+definition = "우도를 직접 계산할 수 없는 시뮬레이터에서 표본을 만들어 파라미터의 사후분포를 추정하는 방법."
+
+[[terms]]
+ko = "분자동역학"
+en = "molecular dynamics"
+definition = "원자 사이 힘으로 Newton 운동방정식을 적분해 원자 궤적을 시뮬레이션하는 방법."
