@@ -605,6 +605,32 @@ def new_chapter(part_dir: str, slug: str, title: str, title_en: str) -> Path:
     return cdir / "index.md"
 
 
+def check_bib(errors: Errors) -> None:
+    """data/references.bib의 항목마다 키가 하나뿐이고, 괄호가 맞고, 필드가 겹치지 않는지 본다.
+    여러 브랜치가 파일 끝에 덧붙이는 병합에서 항목이 서로 섞이는 것을 잡는다."""
+    path = ROOT / "data" / "references.bib"
+    if not path.exists():
+        return
+    text = path.read_text(encoding="utf-8")
+    seen: set[str] = set()
+    for chunk in re.split(r"\n(?=@\w+\{)", text):
+        m = re.match(r"@\w+\{([^,\s]+),", chunk)
+        if not m:
+            continue
+        key = m.group(1)
+        if key in seen:
+            errors.add(path, f"참고문헌 키 중복: {key}")
+        seen.add(key)
+        body = chunk.rstrip()
+        fields = re.findall(r"^\s*(\w+)\s*=", body, flags=re.M)
+        lines = [l for l in body.split("\n")[1:] if l.strip()]
+        missing_comma = any(
+            re.match(r"^\s*\w+\s*=", b) and not a.rstrip().endswith(",") for a, b in zip(lines, lines[1:])
+        )
+        if body.count("{") != body.count("}") or not body.endswith("}") or len(fields) != len(set(fields)) or missing_comma:
+            errors.add(path, f"참고문헌 항목이 깨짐(괄호·쉼표·중복 필드): {key}")
+
+
 # ------------------------------------------------------------------------ main
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -630,6 +656,7 @@ def main() -> int:
 
     if args.cmd == "check":
         check(parts, config, errors)
+        check_bib(errors)
         if not errors.items and (
             not OUTLINE.exists() or OUTLINE.read_text(encoding="utf-8") != render_outline(parts, config)
         ):
