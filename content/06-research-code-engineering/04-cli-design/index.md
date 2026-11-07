@@ -181,6 +181,8 @@ good {'lr': 0.0003, 'epochs': 20, 'seed': 0}
 
 두 parser 모두 명령행의 `--epochs 20`은 반영했다. 그러나 `bad`는 사용자가 건드리지 않은 `lr`을 parser 기본값 0.001로 되돌려, 설정 파일의 3e-4를 지웠다. `good`은 옵션의 parser 기본값을 `None`으로 두고, `None`이 아닌 값만 병합한다. `default=argparse.SUPPRESS`를 주어 주지 않은 옵션이 `Namespace`에 아예 나타나지 않게 하는 방법도 있다.
 
+::widget{name="argparse-sandbox"}
+
 ::quiz{id="parser-default-overrides-file"}
 
 **이름을 하나로.** 명령행 옵션과 설정 키의 이름이 다르면(`--learning-rate`와 `train.lr`, `--bs`와 `train.batch_size`), 사용자는 두 이름의 대응을 외워야 하고, 저장된 설정에서 명령행을 거꾸로 찾기 어렵다. 가장 단순한 해결은 옵션의 `dest`를 설정 키의 점 경로로 두는 것이다.
