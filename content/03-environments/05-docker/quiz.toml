@@ -25,29 +25,6 @@ text = "컨테이너는 읽기 전용이라 파일을 수정할 수 없다."
 feedback = "컨테이너에는 쓰기 가능한 layer가 있어 수정할 수 있다. 다만 그 수정은 컨테이너와 함께 사라진다."
 
 [[questions]]
-id = "tag-vs-digest"
-type = "single"
-objective = 1
-prompt = "논문 부록에 실험 환경을 `lab/proj:latest`라고 적었다. 1년 뒤 다른 사람이 같은 image를 받을 수 있도록 하려면 무엇을 함께 적어야 하는가?"
-explanation = "tag는 registry에서 언제든 다른 image를 가리키도록 옮길 수 있는 이름이다. digest(`sha256:...`)는 image 내용의 해시라서, 같은 digest는 항상 같은 내용을 가리킨다. 기록에는 `이름@sha256:...` 형식의 digest를 남긴다. 단, registry에서 그 image가 지워지면 digest로도 받을 수 없으므로 보관 정책도 함께 정한다."
-
-[[questions.choices]]
-text = "image의 digest(`sha256:...`)"
-correct = true
-
-[[questions.choices]]
-text = "pull한 날짜"
-feedback = "날짜를 알아도 그 시점에 tag가 가리키던 image를 다시 찾을 방법이 없다."
-
-[[questions.choices]]
-text = "`latest` 대신 `v1` 같은 버전 tag를 붙이면 충분하다."
-feedback = "버전 tag도 결국 tag다. 누군가 같은 tag로 다시 push하면 다른 내용을 가리킨다. 사람이 읽기 좋은 이름일 뿐 내용을 보증하지 않는다."
-
-[[questions.choices]]
-text = "Dockerfile만 있으면 언제든 같은 image를 다시 빌드할 수 있으므로 따로 적을 필요가 없다."
-feedback = "Dockerfile의 base image tag, apt 패키지, 내려받는 파일이 시간에 따라 바뀌므로, 같은 Dockerfile도 나중에 빌드하면 다른 image가 될 수 있다."
-
-[[questions]]
 id = "layer-order"
 type = "single"
 objective = 2

@@ -24,7 +24,6 @@ def test_digest_is_content_hash():
     a = hashlib.sha256(b'{"layers": ["base", "numpy-2.5.4"]}').hexdigest()
     b = hashlib.sha256(b'{"layers": ["base", "numpy-2.5.5"]}').hexdigest()
     assert a != b and a == hashlib.sha256(b'{"layers": ["base", "numpy-2.5.4"]}').hexdigest()
-    assert correct("tag-vs-digest") == [0]
 
 
 def test_layer_order():
