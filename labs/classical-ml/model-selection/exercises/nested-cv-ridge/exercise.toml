@@ -1,0 +1,6 @@
+title = "ridge 회귀의 nested CV"
+chapter = "classical-ml/model-selection"
+objective = 3
+exec = "browser"
+entry = "nested_cv_mse"
+timeout_s = 10

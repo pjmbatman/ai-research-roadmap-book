@@ -1072,3 +1072,259 @@
   year      = {2017},
   note      = {확인: PMLR 서지 기록. 정책 갱신마다 제약 만족을 보장하는 trust region 계열 방법}
 }
+
+@article{rousseeuw1987silhouettes,
+  author  = {Rousseeuw, Peter J.},
+  title   = {Silhouettes: A Graphical Aid to the Interpretation and Validation of Cluster Analysis},
+  journal = {Journal of Computational and Applied Mathematics},
+  volume  = {20},
+  pages   = {53--65},
+  year    = {1987},
+  doi     = {10.1016/0377-0427(87)90125-7},
+  note    = {확인: 서지 기록(bibsonomy·MaRDI)과 초록. 군집마다 촘촘함과 분리를 비교하는 silhouette, 평균 silhouette 폭으로 군집 수 선택}
+}
+
+@inproceedings{ester1996density,
+  author    = {Ester, Martin and Kriegel, Hans-Peter and Sander, J{\"o}rg and Xu, Xiaowei},
+  title     = {A Density-Based Algorithm for Discovering Clusters in Large Spatial Databases with Noise},
+  booktitle = {Proceedings of the Second International Conference on Knowledge Discovery and Data Mining (KDD-96)},
+  pages     = {226--231},
+  year      = {1996},
+  note      = {확인: 서지 기록(bibsonomy)과 원문 PDF 사본. DBSCAN, 반경 Eps 안의 최소 점 수로 정의한 밀도 기반 군집}
+}
+
+@article{scholkopf1998nonlinear,
+  author  = {Sch{\"o}lkopf, Bernhard and Smola, Alexander and M{\"u}ller, Klaus-Robert},
+  title   = {Nonlinear Component Analysis as a Kernel Eigenvalue Problem},
+  journal = {Neural Computation},
+  volume  = {10},
+  number  = {5},
+  pages   = {1299--1319},
+  year    = {1998},
+  doi     = {10.1162/089976698300017467},
+  note    = {확인: MPI 출판 목록과 서지 기록. 커널로 특징 공간의 주성분을 계산하는 kernel PCA}
+}
+
+@article{hyvarinen2000independent,
+  author  = {Hyv{\"a}rinen, Aapo and Oja, Erkki},
+  title   = {Independent Component Analysis: Algorithms and Applications},
+  journal = {Neural Networks},
+  volume  = {13},
+  number  = {4--5},
+  pages   = {411--430},
+  year    = {2000},
+  doi     = {10.1016/S0893-6080(00)00026-5},
+  note    = {확인: dblp·bibsonomy 서지 기록과 초록. 비가우스 데이터의 독립 성분을 찾는 ICA, 원천 분리와 EEG 잡음 제거 응용}
+}
+
+@inproceedings{liu2008isolation,
+  author    = {Liu, Fei Tony and Ting, Kai Ming and Zhou, Zhi-Hua},
+  title     = {Isolation Forest},
+  booktitle = {Proceedings of the 8th IEEE International Conference on Data Mining (ICDM 2008)},
+  pages     = {413--422},
+  year      = {2008},
+  doi       = {10.1109/ICDM.2008.17},
+  note      = {확인: researchr 서지 기록과 IEEE 초록. 정상 점을 모델링하지 않고 무작위 분할로 이상 점을 고립시키는 방법}
+}
+
+@article{vandermaaten2008visualizing,
+  author  = {van der Maaten, Laurens and Hinton, Geoffrey},
+  title   = {Visualizing Data using t-SNE},
+  journal = {Journal of Machine Learning Research},
+  volume  = {9},
+  pages   = {2579--2605},
+  year    = {2008},
+  note    = {확인: JMLR 논문 페이지. t-SNE, 저차원에서 Student t 분포를 쓰는 이웃 확률 보존. SNE 절에서 perplexity의 전형적인 값 5–50}
+}
+
+@article{wattenberg2016how,
+  author  = {Wattenberg, Martin and Vi{\'e}gas, Fernanda and Johnson, Ian},
+  title   = {How to Use t-SNE Effectively},
+  journal = {Distill},
+  year    = {2016},
+  doi     = {10.23915/distill.00002},
+  note    = {확인: distill.pub 원문. perplexity에 따른 변화, 군집 크기·군집 사이 거리 해석의 함정, 무작위 잡음에서 생기는 덩어리}
+}
+
+@misc{mcinnes2018umap,
+  author        = {McInnes, Leland and Healy, John and Melville, James},
+  title         = {{UMAP}: Uniform Manifold Approximation and Projection for Dimension Reduction},
+  year          = {2018},
+  eprint        = {1802.03426},
+  archivePrefix = {arXiv},
+  note          = {확인: arXiv 목록과 초록. 최근접 이웃 그래프 구조를 보존하는 차원 축소}
+}
+
+@inproceedings{elkan2001foundations,
+  author    = {Elkan, Charles},
+  title     = {The Foundations of Cost-Sensitive Learning},
+  booktitle = {Proceedings of the Seventeenth International Joint Conference on Artificial Intelligence (IJCAI 2001)},
+  pages     = {973--978},
+  year      = {2001},
+  note      = {확인: mlanthology·researchr 서지 기록과 저자 사본 목록. 기대 비용이 가장 작은 클래스를 고르는 비용 민감 결정}
+}
+
+@article{varma2006bias,
+  author  = {Varma, Sudhir and Simon, Richard},
+  title   = {Bias in Error Estimation When Using Cross-Validation for Model Selection},
+  journal = {BMC Bioinformatics},
+  volume  = {7},
+  pages   = {91},
+  year    = {2006},
+  doi     = {10.1186/1471-2105-7-91},
+  note    = {확인: PMC1397873 원문과 초록. 최적 파라미터의 CV 오차가 독립 데이터 오차보다 크게 낙관적이며 nested CV가 거의 편향 없는 추정을 줌}
+}
+
+@article{cawley2010overfitting,
+  author  = {Cawley, Gavin C. and Talbot, Nicola L. C.},
+  title   = {On Over-fitting in Model Selection and Subsequent Selection Bias in Performance Evaluation},
+  journal = {Journal of Machine Learning Research},
+  volume  = {11},
+  pages   = {2079--2107},
+  year    = {2010},
+  note    = {확인: JMLR 논문 페이지와 초록. 모델 선택 기준의 분산이 선택 과정의 과적합과 평가의 선택 편향을 낳음}
+}
+
+@article{bergstra2012random,
+  author  = {Bergstra, James and Bengio, Yoshua},
+  title   = {Random Search for Hyper-Parameter Optimization},
+  journal = {Journal of Machine Learning Research},
+  volume  = {13},
+  pages   = {281--305},
+  year    = {2012},
+  note    = {확인: JMLR 논문 페이지와 PDF. 같은 예산에서 random search가 grid search보다 효율적이며 중요한 하이퍼파라미터는 소수인 경우가 많음}
+}
+
+@inproceedings{snoek2012practical,
+  author    = {Snoek, Jasper and Larochelle, Hugo and Adams, Ryan P.},
+  title     = {Practical {B}ayesian Optimization of Machine Learning Algorithms},
+  booktitle = {Advances in Neural Information Processing Systems 25},
+  pages     = {2951--2959},
+  year      = {2012},
+  eprint    = {1206.2944},
+  archivePrefix = {arXiv},
+  note      = {확인: NeurIPS 논문집 메타데이터와 arXiv 초록. 일반화 성능을 Gaussian process로 모델링하는 하이퍼파라미터 탐색}
+}
+
+@article{saito2015precision,
+  author  = {Saito, Takaya and Rehmsmeier, Marc},
+  title   = {The Precision-Recall Plot Is More Informative than the {ROC} Plot When Evaluating Binary Classifiers on Imbalanced Datasets},
+  journal = {PLoS ONE},
+  volume  = {10},
+  number  = {3},
+  pages   = {e0118432},
+  year    = {2015},
+  doi     = {10.1371/journal.pone.0118432},
+  note    = {확인: PMC4349800 원문과 초록. 불균형 데이터에서 ROC 곡선의 해석이 오도될 수 있고 PR 곡선이 더 많은 정보를 줌}
+}
+
+@article{kalman1960new,
+  author  = {Kalman, Rudolph E.},
+  title   = {A New Approach to Linear Filtering and Prediction Problems},
+  journal = {Journal of Basic Engineering},
+  volume  = {82},
+  number  = {1},
+  pages   = {35--45},
+  year    = {1960},
+  note    = {확인: bibsonomy 서지 기록과 초록. 선형 시스템의 최적 상태 추정을 재귀적으로 계산하는 Kalman filter}
+}
+
+@article{rauch1965maximum,
+  author  = {Rauch, H. E. and Tung, F. and Striebel, C. T.},
+  title   = {Maximum Likelihood Estimates of Linear Dynamic Systems},
+  journal = {AIAA Journal},
+  volume  = {3},
+  number  = {8},
+  pages   = {1445--1450},
+  year    = {1965},
+  note    = {확인: Scinapse·bibbase 서지 기록과 초록. 필터링과 평활 추정 사이의 차분 방정식(RTS smoother)}
+}
+
+@article{tashman2000outofsample,
+  author  = {Tashman, Leonard J.},
+  title   = {Out-of-Sample Tests of Forecasting Accuracy: An Analysis and Review},
+  journal = {International Journal of Forecasting},
+  volume  = {16},
+  number  = {4},
+  pages   = {437--450},
+  year    = {2000},
+  note    = {확인: RePEc·IAOR 서지 기록과 초록. 고정 원점과 rolling origin, 표본 외 평가의 구조와 구현 지침}
+}
+
+@article{bergmeir2018note,
+  author  = {Bergmeir, Christoph and Hyndman, Rob J. and Koo, Bonsoo},
+  title   = {A Note on the Validity of Cross-Validation for Evaluating Autoregressive Time Series Prediction},
+  journal = {Computational Statistics \& Data Analysis},
+  volume  = {120},
+  pages   = {70--83},
+  year    = {2018},
+  doi     = {10.1016/j.csda.2017.11.003},
+  note    = {확인: RePEc·dblp 서지 기록과 초록. 오차가 무상관인 순수 자기회귀 모델에서는 표준 K-fold CV를 쓸 수 있음}
+}
+
+@book{hyndman2021forecasting,
+  author    = {Hyndman, Rob J. and Athanasopoulos, George},
+  title     = {Forecasting: Principles and Practice},
+  edition   = {3},
+  publisher = {OTexts},
+  address   = {Melbourne, Australia},
+  year      = {2021},
+  url       = {https://otexts.com/fpp3/},
+  note      = {확인: OTexts 공개 교과서(3판). 분해, 지수평활, ARIMA, rolling origin의 시계열 교차검증}
+}
+
+@article{kaplan1958nonparametric,
+  author  = {Kaplan, E. L. and Meier, Paul},
+  title   = {Nonparametric Estimation from Incomplete Observations},
+  journal = {Journal of the American Statistical Association},
+  volume  = {53},
+  number  = {282},
+  pages   = {457--481},
+  year    = {1958},
+  doi     = {10.1080/01621459.1958.10501452},
+  note    = {확인: 서지 기록(bibbase·Bohrium)과 초록. 중도절단된 수명 데이터의 곱-극한(product-limit) 추정량, 수명과 독립인 중도절단 가정}
+}
+
+@article{cox1972regression,
+  author  = {Cox, D. R.},
+  title   = {Regression Models and Life-Tables},
+  journal = {Journal of the Royal Statistical Society: Series B (Methodological)},
+  volume  = {34},
+  number  = {2},
+  pages   = {187--220},
+  year    = {1972},
+  doi     = {10.1111/j.2517-6161.1972.tb00899.x},
+  note    = {확인: CMU 저널클럽 PDF 사본과 EPA HERO 서지 기록. 공변량의 위험비와 지정하지 않은 기저 위험의 곱, 조건부 likelihood}
+}
+
+@article{rosenbaum1983central,
+  author  = {Rosenbaum, Paul R. and Rubin, Donald B.},
+  title   = {The Central Role of the Propensity Score in Observational Studies for Causal Effects},
+  journal = {Biometrika},
+  volume  = {70},
+  number  = {1},
+  pages   = {41--55},
+  year    = {1983},
+  note    = {확인: CMU 저널클럽 PDF 사본과 초록. 성향점수로 보정하면 관측된 공변량에 의한 편향을 모두 제거하기에 충분}
+}
+
+@article{pearl1995causal,
+  author  = {Pearl, Judea},
+  title   = {Causal Diagrams for Empirical Research},
+  journal = {Biometrika},
+  volume  = {82},
+  number  = {4},
+  pages   = {669--710},
+  year    = {1995},
+  note    = {확인: UCI 강의 자료의 논문 스캔(토론 포함 669–710). 인과 그래프와 back-door 기준, 보정 공식}
+}
+
+@book{hernan2020causal,
+  author    = {Hern{\'a}n, Miguel A. and Robins, James M.},
+  title     = {Causal Inference: What If},
+  publisher = {Chapman \& Hall/CRC},
+  address   = {Boca Raton},
+  year      = {2020},
+  url       = {https://miguelhernan.org/whatifbook},
+  note      = {확인: 저자 웹페이지의 권장 인용과 공개 PDF. 잠재 결과와 인과 그래프를 함께 다루는 교과서}
+}

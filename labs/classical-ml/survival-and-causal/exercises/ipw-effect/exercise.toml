@@ -1,0 +1,6 @@
+title = "성향점수 가중으로 처치 효과 추정하기"
+chapter = "classical-ml/survival-and-causal"
+objective = 3
+exec = "browser"
+entry = "ipw_effect"
+timeout_s = 10
