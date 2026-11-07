@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1266문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1289문항 · 위젯 23개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -805,20 +805,20 @@ _기상·기후 데이터의 기초, 데이터 기반 기상 예측, 다운스�
 
 _분자와 결정의 표현, 물성 예측, 기계학습 원자간 퍼텐셜, 분자·재료 생성과 역설계, 데이터와 평가의 함정을 다룬다._
 
-- **28.1** [분자와 결정의 표현](content/28-chemistry-and-materials/01-molecular-representations/index.md) · `필수`
-  - 문자열과 지문 · 그래프 표현 · 3차원 표현 · 주기적 결정 · 표현의 선택
+- **28.1** [분자와 결정의 표현](content/28-chemistry-and-materials/01-molecular-representations/index.md) · `필수` · 퀴즈 6 · 위젯: Coulomb 행렬 고윳값의 불변성
+  - 문자열과 지문 · 그래프 표현 · 3차원 표현 · 주기적 결정 · 표현의 선택 · 참고 문헌
   - 선수: 18.6 그래프 신경망과 기하학적 딥러닝
-- **28.2** [물성 예측](content/28-chemistry-and-materials/02-property-prediction/index.md) · `필수`
-  - 데이터 · 분할 · 모델 · 불확실성
+- **28.2** [물성 예측](content/28-chemistry-and-materials/02-property-prediction/index.md) · `필수` · 퀴즈 4 · 위젯: 무작위 분할 vs scaffold 분할
+  - 데이터 · 분할 · 모델 · 불확실성 · 참고 문헌
   - 선수: 28.1 분자와 결정의 표현, 21.1 불확실성 정량화
-- **28.3** [기계학습 원자간 퍼텐셜](content/28-chemistry-and-materials/03-interatomic-potentials/index.md) · `심화`
-  - 문제 정의 · 학습 데이터 · 모델 · 시뮬레이션에서의 평가
+- **28.3** [기계학습 원자간 퍼텐셜](content/28-chemistry-and-materials/03-interatomic-potentials/index.md) · `심화` · 퀴즈 5 · 위젯: 분자동역학 에너지 보존
+  - 문제 정의 · 학습 데이터 · 모델 · 시뮬레이션에서의 평가 · 참고 문헌
   - 선수: 28.1 분자와 결정의 표현, 24.8 대칭성을 반영한 과학 모델
-- **28.4** [분자·재료 생성과 역설계](content/28-chemistry-and-materials/04-molecular-design/index.md) · `심화`
-  - 생성 방식 · 최적화와 탐색 · 평가 · 실험 검증
+- **28.4** [분자·재료 생성과 역설계](content/28-chemistry-and-materials/04-molecular-design/index.md) · `심화` · 퀴즈 4 · 위젯: 예측 모델 착취와 적용 영역
+  - 생성 방식 · 합성 분자 공간 · 최적화와 탐색 · 평가 · 실험 검증 · 참고 문헌
   - 선수: 28.2 물성 예측, 19.7 생성모델의 평가
-- **28.5** [화학·재료 데이터와 평가의 함정](content/28-chemistry-and-materials/05-chemistry-evaluation/index.md) · `필수`
-  - 데이터 품질 · 누수 · 벤치마크 · 실제 활용과의 간극
+- **28.5** [화학·재료 데이터와 평가의 함정](content/28-chemistry-and-materials/05-chemistry-evaluation/index.md) · `필수` · 퀴즈 4 · 위젯: 근접 중복 누수 임계 탐색
+  - 데이터 품질 · 누수 · 벤치마크 · 실제 활용과의 간극 · 참고 문헌
   - 선수: 28.2 물성 예측
 
 ### 제29부. 생명과학 <sub>Life Sciences</sub>
