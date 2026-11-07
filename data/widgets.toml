@@ -42,7 +42,7 @@ status = "prototype"
 [[widgets]]
 name = "ode-stability"
 title = "ODE solver의 step 크기와 안정성"
-chapters = ["numerical-methods/ode-solvers"]
+chapters = ["numerical-methods/ode-solvers", "scientific-ml/neural-ode-and-differentiable-simulation"]
 status = "prototype"
 
 [[widgets]]
@@ -78,13 +78,13 @@ status = "prototype"
 [[widgets]]
 name = "gp-regression"
 title = "Gaussian process 회귀"
-chapters = ["bayesian-inference/gaussian-processes"]
+chapters = ["bayesian-inference/gaussian-processes", "scientific-ml/hybrid-and-surrogate-models", "scientific-discovery/experimental-design", "scientific-discovery/autonomous-experimentation"]
 status = "prototype"
 
 [[widgets]]
 name = "split-leakage"
 title = "데이터 분할과 누수"
-chapters = ["data/splitting-and-leakage"]
+chapters = ["data/splitting-and-leakage", "classical-ml/model-selection", "classical-ml/time-series-analysis"]
 status = "prototype"
 
 [[widgets]]
@@ -108,7 +108,7 @@ status = "prototype"
 [[widgets]]
 name = "calibration-diagram"
 title = "Calibration과 reliability diagram"
-chapters = ["reliability/evaluating-predictive-distributions"]
+chapters = ["reliability/evaluating-predictive-distributions", "earth-and-climate/climate-evaluation"]
 status = "prototype"
 
 [[widgets]]

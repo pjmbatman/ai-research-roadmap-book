@@ -472,10 +472,10 @@ _강한 기준 모델, 선형·커널·트리 모델, 비지도학습, 모델 �
 - **16.5** [비지도학습과 표현 탐색](content/16-classical-ml/05-unsupervised-learning/index.md) · `필수` · 퀴즈 6
   - 차원 축소 · 군집 · 밀도 추정과 이상 탐지 · 시각화 · 군집의 의미 · 참고 문헌
   - 선수: 7.6 SVD·PCA·저랭크 근사
-- **16.6** [모델 선택과 평가](content/16-classical-ml/06-model-selection/index.md) · `필수` · 퀴즈 6
+- **16.6** [모델 선택과 평가](content/16-classical-ml/06-model-selection/index.md) · `필수` · 퀴즈 6 · 위젯: 데이터 분할과 누수
   - 교차검증 · 회귀 metric · 분류 metric · threshold 선택 · 하이퍼파라미터 탐색 · 진단 · 참고 문헌
   - 선수: 16.1 기준 모델의 철학, 12.5 모델 비교의 통계
-- **16.7** [시계열 분석](content/16-classical-ml/07-time-series-analysis/index.md) · `필수` · 퀴즈 7
+- **16.7** [시계열 분석](content/16-classical-ml/07-time-series-analysis/index.md) · `필수` · 퀴즈 7 · 위젯: 데이터 분할과 누수
   - 시계열의 구조 · 고전 모델 · 상태공간 모델 · 예측·필터링·평활 · 평가 · 참고 문헌
   - 선수: 16.6 모델 선택과 평가, 11.7 확률과정 기초
 - **16.8** [생존분석과 인과추론 기초](content/16-classical-ml/08-survival-and-causal/index.md) · `심화` · 퀴즈 7
@@ -719,13 +719,13 @@ _물리 모델과 학습 문제의 대응, PINN, Neural ODE와 미분가능 시�
 - **24.2** [물리 정보 신경망(PINN)](content/24-scientific-ml/02-pinn/index.md) · `심화` · 퀴즈 7
   - 목적함수 · 도함수 계산 · 제약의 부과 · 학습의 어려움 · 개선 기법 · 평가 · 참고 문헌
   - 선수: 24.1 물리 모델과 학습 문제, 8.4 자동미분과 역전파
-- **24.3** [Neural ODE와 미분가능 시뮬레이션](content/24-scientific-ml/03-neural-ode-and-differentiable-simulation/index.md) · `심화` · 퀴즈 6
+- **24.3** [Neural ODE와 미분가능 시뮬레이션](content/24-scientific-ml/03-neural-ode-and-differentiable-simulation/index.md) · `심화` · 퀴즈 6 · 위젯: ODE solver의 step 크기와 안정성
   - Neural ODE · solver를 통한 미분 · universal differential equation · 미분가능 시뮬레이터 · 수치적 주의점 · 참고 문헌
   - 선수: 24.1 물리 모델과 학습 문제, 9.6 ODE 수치해법
 - **24.4** [Neural Operator와 동역학 학습](content/24-scientific-ml/04-neural-operators/index.md) · `심화` · 퀴즈 6
   - operator learning · DeepONet · FNO · 다른 계열 · 일반화 · 시간 동역학 · 제약 · 참고 문헌
   - 선수: 24.1 물리 모델과 학습 문제, 7.9 함수공간과 연산자
-- **24.5** [하이브리드 모델과 대리모델](content/24-scientific-ml/05-hybrid-and-surrogate-models/index.md) · `필수` · 퀴즈 6
+- **24.5** [하이브리드 모델과 대리모델](content/24-scientific-ml/05-hybrid-and-surrogate-models/index.md) · `필수` · 퀴즈 6 · 위젯: Gaussian process 회귀
   - 결합 방식 · 대리모델 · 다중 충실도 · 능동 학습 · 공정한 비교 · 참고 문헌
   - 선수: 24.1 물리 모델과 학습 문제, 13.7 Gaussian Process
 - **24.6** [시스템 식별과 상태 추정](content/24-scientific-ml/06-system-identification-and-estimation/index.md) · `필수` · 퀴즈 6
@@ -748,10 +748,10 @@ _시뮬레이션 기반 추론, 방정식 발견, 능동 학습과 베이지안 
 - **25.2** [방정식 발견과 기호 회귀](content/25-scientific-discovery/02-equation-discovery/index.md) · `심화` · 퀴즈 6
   - 희소 회귀로 동역학 찾기 · 기호 회귀 · 해석 가능성과 단순성 · 검증 · 참고 문헌
   - 선수: 24.1 물리 모델과 학습 문제, 16.2 선형 모델과 정규화
-- **25.3** [능동 학습과 베이지안 실험 설계](content/25-scientific-discovery/03-experimental-design/index.md) · `필수` · 퀴즈 6
+- **25.3** [능동 학습과 베이지안 실험 설계](content/25-scientific-discovery/03-experimental-design/index.md) · `필수` · 퀴즈 6 · 위젯: Gaussian process 회귀
   - 왜 실험을 고르는가 · 능동 학습 · 베이지안 실험 설계 · 베이지안 최적화와의 관계 · 평가 · 참고 문헌
   - 선수: 10.7 특수한 최적화 문제, 21.1 불확실성 정량화
-- **25.4** [자율 실험과 closed-loop 연구](content/25-scientific-discovery/04-autonomous-experimentation/index.md) · `심화` · 퀴즈 6
+- **25.4** [자율 실험과 closed-loop 연구](content/25-scientific-discovery/04-autonomous-experimentation/index.md) · `심화` · 퀴즈 6 · 위젯: Gaussian process 회귀
   - closed-loop의 구성 · 자율 실험실 · 다목적과 제약 · 운영 문제 · 참고 문헌
   - 선수: 25.3 능동 학습과 베이지안 실험 설계
 - **25.5** [과학 Foundation Model과 AI 에이전트](content/25-scientific-discovery/05-scientific-foundation-models/index.md) · `심화` · 퀴즈 6
@@ -797,7 +797,7 @@ _기상·기후 데이터의 기초, 데이터 기반 기상 예측, 다운스�
 - **27.3** [다운스케일링과 기후 모델 에뮬레이션](content/27-earth-and-climate/03-downscaling-and-emulation/index.md) · `심화` · 퀴즈 5
   - 다운스케일링 · 생성모델 기반 다운스케일링 · 기후 모델 에뮬레이션 · 평가 · 참고 문헌
   - 선수: 27.1 기상·기후 데이터의 기초, 19.1 생성모델의 공통 문제 정의
-- **27.4** [기상·기후 예측의 평가](content/27-earth-and-climate/04-climate-evaluation/index.md) · `필수` · 퀴즈 6
+- **27.4** [기상·기후 예측의 평가](content/27-earth-and-climate/04-climate-evaluation/index.md) · `필수` · 퀴즈 6 · 위젯: Calibration과 reliability diagram
   - 결정론적 지표 · 확률적 지표 · 흐릿함의 함정 · 극한과 사건 · 트렌드와 비정상성 · 물리적 일관성 · 참고 문헌
   - 선수: 27.2 데이터 기반 기상 예측, 21.2 예측분포와 구간의 평가
 
