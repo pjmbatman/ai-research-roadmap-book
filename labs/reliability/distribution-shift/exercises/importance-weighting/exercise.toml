@@ -1,0 +1,6 @@
+title = "중요도 가중으로 운영 환경의 성능 추정하기"
+chapter = "reliability/distribution-shift"
+objective = 2
+exec = "browser"
+entry = "weighted_risk"
+timeout_s = 10
