@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 958문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 978문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -694,13 +694,13 @@ _문헌 탐색, 논문 읽기와 재현, 연구 질문과 가설, 실험 설계,
 - **23.10** [발표와 학술 소통](content/23-research-practice/10-presentations/index.md) · `필수`
   - 발표의 종류 · 구성 · 슬라이드 · 질의응답
   - 선수: 23.9 Figure와 Table 제작
-- **23.11** [투고와 동료 심사](content/23-research-practice/11-peer-review/index.md) · `심화`
-  - 투고 과정 · 리뷰 받기 · 리뷰 쓰기 · 거절 이후
+- **23.11** [투고와 동료 심사](content/23-research-practice/11-peer-review/index.md) · `심화` · 퀴즈 7
+  - 투고 과정 · 리뷰 받기 · 리뷰 쓰기 · 거절 이후 · 참고 문헌
   - 선수: 23.8 논문 작성
-- **23.12** [연구 윤리와 오픈 사이언스](content/23-research-practice/12-research-ethics/index.md) · `필수`
-  - 연구 무결성 · 저자와 인용 · 데이터와 라이선스 · AI 도구 사용 · 오픈 사이언스
-- **23.13** [도메인 과학자와의 협업](content/23-research-practice/13-interdisciplinary-collaboration/index.md) · `필수`
-  - 공통 언어 만들기 · 문제 정의 합의 · 평가 기준의 조율 · 데이터와 실험 · 협업의 운영
+- **23.12** [연구 윤리와 오픈 사이언스](content/23-research-practice/12-research-ethics/index.md) · `필수` · 퀴즈 7
+  - 연구 무결성 · 저자와 인용 · 데이터와 라이선스 · AI 도구 사용 · 오픈 사이언스 · 참고 문헌
+- **23.13** [도메인 과학자와의 협업](content/23-research-practice/13-interdisciplinary-collaboration/index.md) · `필수` · 퀴즈 6
+  - 공통 언어 만들기 · 문제 정의 합의 · 평가 기준의 조율 · 데이터와 실험 · 협업의 운영 · 참고 문헌
   - 선수: 23.4 연구 질문과 가설
 
 ## `SML` 과학 머신러닝 <sub>Scientific Machine Learning</sub>
