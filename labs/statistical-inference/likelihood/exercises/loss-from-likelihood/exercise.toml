@@ -1,0 +1,6 @@
+title = "손실함수를 우도에서 유도하기"
+chapter = "statistical-inference/likelihood"
+objective = 3
+exec = "browser"
+entry = "gaussian_nll"
+timeout_s = 10
