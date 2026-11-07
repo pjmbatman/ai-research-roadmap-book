@@ -216,6 +216,8 @@ $$
 
 $Y \sim \mathcal{N}(\mu(\mathbf{x}), \sigma(\mathbf{x})^2)$는 그 점의 예측분포, $\Phi$와 $\varphi$는 표준정규분포의 누적분포함수와 밀도다. **expected improvement**(EI)는 현재 최선보다 얼마나 좋아질지의 기댓값으로, Jones 외(1998)의 EGO 알고리즘이 쓴 기준이다. 둘째는 신뢰 구간의 아래쪽 경계를 최소화하는 규칙으로, 최대화 문제에서는 위쪽 경계 $\mu + \kappa\sigma$를 최대화하는 **UCB**(upper confidence bound)라 부른다. Srinivas 외(2010)는 GP-UCB의 regret 상한을 보였다. 두 획득함수 모두 평균이 좋은 곳(**활용**, exploitation)과 불확실성이 큰 곳(**탐색**, exploration)을 함께 선호한다.
 
+::widget{name="bayes-opt-1d"}
+
 ::quiz{id="ei-exploration"}
 
 $[0, 2]$에서 봉우리가 여러 개인 1차원 함수를 "비싼 시뮬레이터"로 보고, RBF 커널 GP와 EI로 15번 평가한다. 처음 3점은 무작위로 고르고, 시드 20개에서 random search와 비교한다. 성능은 그때까지 찾은 최솟값과 참 최솟값의 차이, 즉 **regret**으로 잰다.
