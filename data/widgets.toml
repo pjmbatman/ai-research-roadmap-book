@@ -187,37 +187,37 @@ status = "planned"
 name = "docker-layer-cache"
 title = "Dockerfile 레이어 캐시"
 chapters = ["environments/docker"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "commit-dag"
 title = "merge·rebase·reset과 커밋 그래프"
 chapters = ["git-and-agents/git-fundamentals"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "selection-bias"
 title = "시도 횟수와 test 낙관 편향"
 chapters = ["git-and-agents/agentic-workflow"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "broadcasting-shapes"
 title = "브로드캐스팅 규칙"
 chapters = ["python-and-computing/scientific-python"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "strides-cache"
 title = "메모리 배치와 캐시 라인"
 chapters = ["python-and-computing/computer-architecture"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "roofline"
 title = "roofline 모델"
 chapters = ["python-and-computing/computer-architecture"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "config-merge"
