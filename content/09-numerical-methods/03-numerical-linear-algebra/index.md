@@ -156,6 +156,8 @@ CG           반복 수: 25
 
 Jacobi의 축소율은 $\cos(\pi/51) \approx 0.998$이라 오차를 $10^{-8}$배로 줄이는 데 약 $\ln 10^{-8} / \ln 0.998 \approx 9700$번이 든다. Gauss–Seidel은 이 문제에서 축소율이 Jacobi의 제곱이라 절반이다. 둘 다 격자가 촘촘해질수록 반복 수가 $n^2$에 비례해 늘어 그대로는 실용적이지 않다. CG는 25번에 끝났다. $n = 50$보다도 적은 것은, 오른쪽 변 $\mathbf{b} = \mathbf{1}$이 좌우 대칭이라 대칭인 고유벡터 25개 방향의 성분만 가지고 있고, CG가 그 방향들만 처리하면 되기 때문이다. 정적 반복법은 그 자체보다 **multigrid 방법의 smoother**(고주파 오차를 빠르게 지우는 단계)로 더 많이 쓰인다.
 
+::widget{name="iterative-solver-race"}
+
 ::quiz{id="cg-requirements"}
 
 **전처리.** CG의 반복 수가 $\sqrt{\kappa}$에 비례하므로, 9.2장의 전처리가 여기서 실용적인 의미를 갖는다. $\mathbf{M} \approx \mathbf{A}$이면서 $\mathbf{M}^{-1}\mathbf{v}$가 싼 행렬을 골라 $\kappa(\mathbf{M}^{-1}\mathbf{A})$를 줄인다. 대각(Jacobi) 전처리, 분해 과정에서 fill-in을 버리는 불완전 Cholesky·LU, PDE 행렬에서 격자 크기와 거의 무관한 반복 수를 내는 multigrid가 대표적이다. 대규모 PDE solver의 성능은 대부분 전처리가 정한다. 전처리 없는 CG를 큰 문제에 그대로 쓰고 "반복법은 느리다"고 결론 내리지 않는다.
