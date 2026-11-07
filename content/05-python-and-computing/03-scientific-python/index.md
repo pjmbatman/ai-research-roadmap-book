@@ -165,6 +165,8 @@ diff shape: (5, 5)
 
 예측이 정답보다 정확히 0.1씩 크므로 MSE는 $0.1^2 = 0.01$이어야 한다. 그런데 shape이 어긋난 식은 25개 쌍 전체의 차이를 평균해 0.3032를 냈다. 오류 메시지는 없다. 학습 loss로 이 값을 쓰면 모델은 "모든 정답의 평균"을 맞추도록 학습되어, 예측이 평균 근처로 뭉친다. 방어책은 손실을 계산하기 직전에 `assert y_pred.shape == y_true.shape`를 두는 것이다.
 
+::widget{name="broadcasting-shapes"}
+
 ::quiz{id="broadcast-column-minus-row"}
 
 **벡터화.** 두 번째 부분은 같은 broadcasting을 **의도적으로** 쓴 예다. 입자 $N$개의 모든 쌍 거리
