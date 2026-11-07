@@ -1,0 +1,6 @@
+title = "두 가우시안 사이의 KL"
+chapter = "information-and-learning-theory/entropy-and-kl"
+objective = 2
+exec = "browser"
+entry = "gaussian_kl"
+timeout_s = 10
