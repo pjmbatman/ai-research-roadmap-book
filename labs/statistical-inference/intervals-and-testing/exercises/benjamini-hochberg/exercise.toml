@@ -1,0 +1,6 @@
+title = "Benjamini–Hochberg 절차 구현하기"
+chapter = "statistical-inference/intervals-and-testing"
+objective = 3
+exec = "browser"
+entry = "bh_reject"
+timeout_s = 10
