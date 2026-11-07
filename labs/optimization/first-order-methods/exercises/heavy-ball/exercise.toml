@@ -1,0 +1,6 @@
+title = "Heavy ball momentum 구현하기"
+chapter = "optimization/first-order-methods"
+objective = 2
+exec = "browser"
+entry = "heavy_ball"
+timeout_s = 10

@@ -1,0 +1,6 @@
+title = "이차함수에서 GD의 최대 안정 학습률"
+chapter = "optimization/first-order-methods"
+objective = 1
+exec = "browser"
+entry = "max_stable_lr"
+timeout_s = 10
