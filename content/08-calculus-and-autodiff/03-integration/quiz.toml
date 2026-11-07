@@ -1,0 +1,122 @@
+# 8.3 적분과 변수변환 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "iterated-integral-limits"
+type = "single"
+objective = 1
+prompt = '''삼각형 영역 $0 \le y \le x \le 1$ 위의 적분 $\displaystyle\int_0^1\!\int_0^x f(x, y)\,dy\,dx$를 $x$에 대해 먼저 적분하는 순서로 바꾸면?'''
+explanation = '''영역은 $0 \le y \le x \le 1$이다. $y$를 바깥 변수로 고정하면 $x$는 $y$부터 1까지 움직인다. 따라서 $\int_0^1\!\int_y^1 f(x, y)\,dx\,dy$다. 적분 순서를 바꿀 때는 적분 기호의 위치가 아니라 **영역**을 다시 기술해야 한다. 영역을 그림으로 그리고, 바깥 변수를 고정한 선분이 영역을 어디서 들어가고 나가는지 읽는다.'''
+
+[[questions.choices]]
+text = '''$\displaystyle\int_0^1\!\int_y^1 f(x, y)\,dx\,dy$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\displaystyle\int_0^1\!\int_0^y f(x, y)\,dx\,dy$'''
+feedback = "이 적분의 영역은 0 ≤ x ≤ y ≤ 1로, 대각선 반대편 삼각형이다. 한계를 그대로 옮기지 말고 영역을 다시 읽어야 한다."
+
+[[questions.choices]]
+text = '''$\displaystyle\int_0^1\!\int_0^1 f(x, y)\,dx\,dy$'''
+feedback = "정사각형 전체를 적분하게 된다. 영역이 삼각형이므로 안쪽 적분의 한계가 바깥 변수에 의존해야 한다."
+
+[[questions.choices]]
+text = '''$\displaystyle\int_0^x\!\int_0^1 f(x, y)\,dx\,dy$'''
+feedback = "바깥 적분의 한계에 안쪽에서 적분해 사라지는 변수 x가 들어 있어 값이 정해지지 않는다. 바깥 적분의 한계는 상수여야 한다."
+
+[[questions]]
+id = "triangle-integral"
+type = "numeric"
+objective = 1
+prompt = '''$\displaystyle\iint_{0 \le y \le x \le 1} xy\,dA$의 값은?'''
+answer = 0.125
+tolerance = 0.001
+explanation = '''$\int_0^1\!\int_0^x xy\,dy\,dx = \int_0^1 x\cdot\frac{x^2}{2}\,dx = \frac{1}{2}\cdot\frac{1}{4} = \frac{1}{8}$이다. 반대 순서로 해도 $\int_0^1 y\cdot\frac{1 - y^2}{2}\,dy = \frac{1}{2}\big(\frac{1}{2} - \frac{1}{4}\big) = \frac{1}{8}$로 같다. 정사각형 전체로 적분하면 $1/4$이 나온다.'''
+
+[[questions]]
+id = "det-area-scaling"
+type = "numeric"
+objective = 2
+prompt = '''선형사상 $\mathbf{x} \mapsto \mathbf{A}\mathbf{x}$, $\mathbf{A} = \begin{bmatrix} 2 & 1 \\ 1 & 3 \end{bmatrix}$이 단위 정사각형 $[0, 1]^2$을 보낸 평행사변형의 넓이는?'''
+answer = 5
+tolerance = 0
+slider = { min = 0, max = 10, step = 1 }
+explanation = '''선형사상은 모든 영역의 넓이를 $\lvert\det\mathbf{A}\rvert$배 한다. $\det\mathbf{A} = 2 \cdot 3 - 1 \cdot 1 = 5$이므로 넓이는 5다. 평행사변형의 두 변 $(2, 1)$, $(1, 3)$의 외적 크기로 계산해도 같다. 대각 성분의 곱(6)이나 성분의 합(7)은 넓이가 아니다.'''
+
+[[questions]]
+id = "polar-jacobian"
+type = "single"
+objective = 2
+prompt = '''극좌표 $x = r\cos\theta$, $y = r\sin\theta$로 적분 변수를 바꿀 때 $dx\,dy$는?'''
+explanation = '''변환 $(r, \theta) \mapsto (x, y)$의 Jacobian 행렬식은 $\cos\theta \cdot r\cos\theta - (-r\sin\theta)\sin\theta = r$이다. 따라서 $dx\,dy = r\,dr\,d\theta$다. 직관적으로, 반지름 $r$에서 각도 $d\theta$가 만드는 호의 길이는 $r\,d\theta$이므로 작은 칸의 넓이는 $dr \times r\,d\theta$다. 원점에서 먼 칸일수록 넓다.'''
+
+[[questions.choices]]
+text = '''$r\,dr\,d\theta$'''
+correct = true
+
+[[questions.choices]]
+text = '''$dr\,d\theta$'''
+feedback = "Jacobian 행렬식을 빠뜨렸다. 이렇게 단위원의 넓이를 계산하면 π가 아니라 2π가 나온다. (r, θ) 평면의 같은 크기 칸도 원점에서 멀수록 (x, y) 평면에서 넓은 영역에 대응한다."
+
+[[questions.choices]]
+text = '''$r^2\,dr\,d\theta$'''
+feedback = "3차원 구면좌표의 r² sin φ와 혼동한 것이다. 2차원 극좌표에서는 길이 방향 하나(호)만 r배 늘어난다."
+
+[[questions.choices]]
+text = '''$\dfrac{1}{r}\,dr\,d\theta$'''
+feedback = "역변환 (x, y) → (r, θ)의 Jacobian 행렬식(1/r)이다. 적분 변수를 (r, θ)로 바꿀 때는 새 변수에서 옛 변수로 가는 변환의 행렬식을 곱한다."
+
+[[questions]]
+id = "gaussian-normalizer"
+type = "single"
+objective = 2
+prompt = '''$\mathbf{x} \in \mathbb{R}^d$, 공분산 $\boldsymbol{\Sigma}$(양의 정부호)에 대해 $\displaystyle\int_{\mathbb{R}^d} \exp\!\big(-\tfrac{1}{2}\mathbf{x}^\top\boldsymbol{\Sigma}^{-1}\mathbf{x}\big)\,d\mathbf{x}$의 값은?'''
+explanation = '''$\boldsymbol{\Sigma} = \mathbf{L}\mathbf{L}^\top$으로 분해하고 $\mathbf{x} = \mathbf{L}\mathbf{u}$로 변수를 바꾸면 지수는 $-\tfrac{1}{2}\lVert\mathbf{u}\rVert^2$, $d\mathbf{x} = \lvert\det\mathbf{L}\rvert\,d\mathbf{u} = \det(\boldsymbol{\Sigma})^{1/2}d\mathbf{u}$다. 남은 적분은 1차원 가우시안 적분 $\sqrt{2\pi}$의 $d$제곱이므로 결과는 $(2\pi)^{d/2}\det(\boldsymbol{\Sigma})^{1/2}$이다. 공분산이 클수록(분포가 넓을수록) 적분값이 커지는 것이 맞다.'''
+
+[[questions.choices]]
+text = '''$(2\pi)^{d/2}\det(\boldsymbol{\Sigma})^{1/2}$'''
+correct = true
+
+[[questions.choices]]
+text = '''$(2\pi)^{d/2}\det(\boldsymbol{\Sigma})^{-1/2}$'''
+feedback = "정규화된 밀도의 앞에 붙는 계수 (2π)^{-d/2} det(Σ)^{-1/2}와 혼동했다. 적분값은 그 계수의 역수다. 분포가 넓을수록 적분값이 커져야 한다는 점으로 확인할 수 있다."
+
+[[questions.choices]]
+text = '''$(2\pi)^{d/2}$'''
+feedback = "Σ = I일 때만 맞다. x = L u로 변수를 바꿀 때 생기는 Jacobian 행렬식 |det L| = det(Σ)^{1/2}를 빠뜨렸다."
+
+[[questions.choices]]
+text = '''$\sqrt{2\pi}\,\det\boldsymbol{\Sigma}$'''
+feedback = "차원 d에 따른 (2π)의 거듭제곱과 행렬식의 제곱근을 모두 놓쳤다. 1차원에서 분산 σ²이면 적분값은 σ√(2π)로, 분산이 아니라 표준편차에 비례한다."
+
+[[questions]]
+id = "density-transform-scale"
+type = "numeric"
+objective = 3
+prompt = '''$X \sim \mathrm{Uniform}(0, 1)$이고 $Y = 3X + 1$이다. $Y$의 확률밀도 $p_Y(2)$는?'''
+answer = 0.3333
+tolerance = 0.01
+explanation = '''$Y$는 구간 $(1, 4)$에 균등하게 퍼지므로 $p_Y(y) = 1/3$이다. 공식으로는 $p_Y(y) = p_X\big((y - 1)/3\big)\cdot\lvert dx/dy\rvert = 1 \cdot \tfrac{1}{3}$이다. 변환이 구간을 3배로 늘리면 같은 확률이 3배 넓은 구간에 퍼지므로 밀도는 1/3배가 된다. 늘어나는 배율 3을 곱하면 전체 적분이 9가 되어 확률밀도가 아니다.'''
+
+[[questions]]
+id = "flow-logdet-sign"
+type = "single"
+objective = 3
+prompt = '''normalizing flow에서 $\mathbf{z} \sim p_Z$이고 $\mathbf{x} = f(\mathbf{z})$($f$는 가역이고 미분 가능)이다. 관측 $\mathbf{x}$의 로그우도는?'''
+explanation = '''밀도 변환 공식 $p_X(\mathbf{x}) = p_Z(\mathbf{z})\,\lvert\det\mathbf{J}_f(\mathbf{z})\rvert^{-1}$($\mathbf{z} = f^{-1}(\mathbf{x})$)에 로그를 취하면 $\log p_X(\mathbf{x}) = \log p_Z(\mathbf{z}) - \log\lvert\det\mathbf{J}_f(\mathbf{z})\rvert$다. $f$가 공간을 늘리는 곳(행렬식이 큰 곳)에서는 확률이 넓게 퍼져 밀도가 낮아지므로 빼는 것이 맞다. $f$가 여러 층의 합성이면 층마다의 로그 행렬식을 모두 뺀다.'''
+
+[[questions.choices]]
+text = '''$\log p_Z(\mathbf{z}) - \log\lvert\det\mathbf{J}_f(\mathbf{z})\rvert$, 여기서 $\mathbf{z} = f^{-1}(\mathbf{x})$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\log p_Z(\mathbf{z}) + \log\lvert\det\mathbf{J}_f(\mathbf{z})\rvert$'''
+feedback = "부호가 반대다. 이 식은 역변환 f^{-1}의 Jacobian으로 쓸 때의 형태(log p_Z + log|det J_{f^{-1}}(x)|)와 혼동한 것이다. f가 공간을 늘리면 밀도는 낮아져야 한다."
+
+[[questions.choices]]
+text = '''$\log p_Z(\mathbf{z})$'''
+feedback = "Jacobian 항을 빠뜨렸다. 그러면 x의 '밀도'가 적분해서 1이 되지 않고, 학습은 공간을 마음대로 늘리고 줄이는 쪽으로 망가진다."
+
+[[questions.choices]]
+text = '''$\log p_Z(\mathbf{z}) - \log\det\mathbf{J}_f(\mathbf{z})$ (절댓값 없이)'''
+feedback = "방향을 뒤집는 변환(반사)에서는 행렬식이 음수가 되어 로그가 정의되지 않는다. 부피 배율은 행렬식의 절댓값이다."

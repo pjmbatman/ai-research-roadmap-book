@@ -1,0 +1,6 @@
+title = "softmax cross-entropy와 그 gradient"
+chapter = "calculus-and-autodiff/matrix-calculus"
+objective = 3
+exec = "browser"
+entry = "softmax_ce"
+timeout_s = 10

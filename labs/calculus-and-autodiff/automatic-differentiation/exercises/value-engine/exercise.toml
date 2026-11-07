@@ -1,0 +1,6 @@
+title = "스칼라 자동미분 엔진 만들기"
+chapter = "calculus-and-autodiff/automatic-differentiation"
+objective = 2
+exec = "browser"
+entry = "Value"
+timeout_s = 10
