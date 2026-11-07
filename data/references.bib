@@ -284,6 +284,114 @@
   year    = {1978},
   doi     = {10.1056/NEJM197811022991808},
   note    = {확인: 서지 기록과 초록(하버드 의대 부속 병원 4곳의 전공의·의대생·전문의 60명 대상). 유병률 1/1000·위양성률 5% 문항, 가장 흔한 답 95%와 정답 약 2%는 후속 재현 연구의 서술로 확인}
+  note    = {확인: 서지 기록(웹 검색). 대칭 제안과 밀도 비에 따른 수용으로 볼츠만 분포를 샘플링하는 Metropolis 알고리즘}
+}
+
+@article{hastings1970monte,
+  author  = {Hastings, W. K.},
+  title   = {Monte Carlo Sampling Methods Using Markov Chains and Their Applications},
+  journal = {Biometrika},
+  volume  = {57},
+  number  = {1},
+  pages   = {97--109},
+  year    = {1970},
+  doi     = {10.1093/biomet/57.1.97},
+  note    = {확인: 서지 기록과 초록(웹 검색). Metropolis 방법의 일반화}
+}
+
+@article{gelman1992inference,
+  author  = {Gelman, Andrew and Rubin, Donald B.},
+  title   = {Inference from Iterative Simulation Using Multiple Sequences},
+  journal = {Statistical Science},
+  volume  = {7},
+  number  = {4},
+  pages   = {457--472},
+  year    = {1992},
+  doi     = {10.1214/ss/1177011136},
+  note    = {확인: Project Euclid 서지 기록(웹 검색). 과분산된 시작점의 여러 체인을 비교하는 수렴 진단}
+}
+
+@article{roberts1997weak,
+  author  = {Roberts, G. O. and Gelman, A. and Gilks, W. R.},
+  title   = {Weak Convergence and Optimal Scaling of Random Walk Metropolis Algorithms},
+  journal = {The Annals of Applied Probability},
+  volume  = {7},
+  number  = {1},
+  pages   = {110--120},
+  year    = {1997},
+  doi     = {10.1214/aoap/1034625254},
+  note    = {확인: 서지 기록과 초록(웹 검색). 점근적으로 최적인 수용률 0.234}
+}
+
+@incollection{neal2011mcmc,
+  author    = {Neal, Radford M.},
+  title     = {MCMC Using Hamiltonian Dynamics},
+  booktitle = {Handbook of Markov Chain Monte Carlo},
+  editor    = {Brooks, Steve and Gelman, Andrew and Jones, Galin L. and Meng, Xiao-Li},
+  publisher = {Chapman \& Hall/CRC},
+  chapter   = {5},
+  pages     = {113--162},
+  year      = {2011},
+  doi       = {10.1201/b10905},
+  eprint    = {1206.1901},
+  archivePrefix = {arXiv},
+  note      = {확인: 저자 페이지 초록과 서지 기록(웹 검색). leapfrog 적분과 HMC 해설}
+}
+
+@article{hoffman2014no,
+  author  = {Hoffman, Matthew D. and Gelman, Andrew},
+  title   = {The No-U-Turn Sampler: Adaptively Setting Path Lengths in Hamiltonian Monte Carlo},
+  journal = {Journal of Machine Learning Research},
+  volume  = {15},
+  pages   = {1593--1623},
+  year    = {2014},
+  note    = {확인: JMLR 논문 페이지(웹 검색). 되돌아오기 시작하면 멈추는 규칙으로 걸음 수를 자동 결정, dual averaging으로 보폭 적응}
+}
+
+@article{vehtari2021rank,
+  author  = {Vehtari, Aki and Gelman, Andrew and Simpson, Daniel and Carpenter, Bob and B{\"u}rkner, Paul-Christian},
+  title   = {Rank-Normalization, Folding, and Localization: An Improved $\widehat{R}$ for Assessing Convergence of MCMC},
+  journal = {Bayesian Analysis},
+  volume  = {16},
+  number  = {2},
+  pages   = {667--718},
+  year    = {2021},
+  doi     = {10.1214/20-BA1221},
+  note    = {확인: Project Euclid 서지 기록과 초록(웹 검색). 순위 정규화 R-hat, bulk/tail ESS. R-hat < 1.01, ESS > 400 권고는 2차 자료로 확인}
+}
+
+@article{blei2017variational,
+  author  = {Blei, David M. and Kucukelbir, Alp and McAuliffe, Jon D.},
+  title   = {Variational Inference: A Review for Statisticians},
+  journal = {Journal of the American Statistical Association},
+  volume  = {112},
+  number  = {518},
+  pages   = {859--877},
+  year    = {2017},
+  doi     = {10.1080/01621459.2017.1285773},
+  eprint  = {1601.00670},
+  archivePrefix = {arXiv},
+  note    = {확인: 서지 기록과 초록(웹 검색). 최적화로 밀도를 근사하는 VI, mean-field, 지수족 모델의 CAVI, 확률적 최적화 변형}
+}
+
+@article{hoffman2013stochastic,
+  author  = {Hoffman, Matthew D. and Blei, David M. and Wang, Chong and Paisley, John},
+  title   = {Stochastic Variational Inference},
+  journal = {Journal of Machine Learning Research},
+  volume  = {14},
+  pages   = {1303--1347},
+  year    = {2013},
+  note    = {확인: JMLR 논문 페이지(웹 검색). 대규모 데이터를 위한 확률적 변분추론}
+}
+
+@inproceedings{kingma2014auto,
+  author    = {Kingma, Diederik P. and Welling, Max},
+  title     = {Auto-Encoding Variational Bayes},
+  booktitle = {2nd International Conference on Learning Representations (ICLR)},
+  year      = {2014},
+  eprint    = {1312.6114},
+  archivePrefix = {arXiv},
+  note      = {확인: arXiv 기록과 학회 정보(웹 검색). 변분 하한의 재매개변수화로 미분 가능한 추정량(SGVB)과 VAE}
 }
 
 @book{rasmussen2006gaussian,
@@ -306,4 +414,64 @@
   year    = {1960},
   doi     = {10.1115/1.3662552},
   note    = {확인: 서지 기록(ASME, 1960년 3월). 선형 동역학계의 상태를 잡음 섞인 관측으로 순차 추정하는 필터}
+  isbn      = {0-262-18253-X},
+  url       = {https://gaussianprocess.org/gpml/},
+  note      = {확인: 저자 웹사이트의 서지 정보(웹 검색). 4.2절에 level-crossing 수와 길이척도의 관계}
+}
+
+@misc{gelman2020bayesian,
+  author  = {Gelman, Andrew and Vehtari, Aki and Simpson, Daniel and Margossian, Charles C. and Carpenter, Bob and Yao, Yuling and Kennedy, Lauren and Gabry, Jonah and B{\"u}rkner, Paul-Christian and Modr{\'a}k, Martin},
+  title   = {Bayesian Workflow},
+  year    = {2020},
+  eprint  = {2011.01808},
+  archivePrefix = {arXiv},
+  note    = {확인: arXiv 기록과 초록(웹 검색). 모델 구축·점검·계산 문제 해결·모델 비교를 포함하는 반복 과정으로서의 베이지안 분석}
+}
+
+@article{gabry2019visualization,
+  author  = {Gabry, Jonah and Simpson, Daniel and Vehtari, Aki and Betancourt, Michael and Gelman, Andrew},
+  title   = {Visualization in Bayesian Workflow},
+  journal = {Journal of the Royal Statistical Society: Series A (Statistics in Society)},
+  volume  = {182},
+  number  = {2},
+  pages   = {389--402},
+  year    = {2019},
+  eprint  = {1709.01449},
+  archivePrefix = {arXiv},
+  note    = {확인: 서지 기록(Aalto 연구 포털)과 초록(웹 검색). 워크플로 전 단계에서의 시각화}
+}
+
+@misc{talts2018validating,
+  author  = {Talts, Sean and Betancourt, Michael and Simpson, Daniel and Vehtari, Aki and Gelman, Andrew},
+  title   = {Validating Bayesian Inference Algorithms with Simulation-Based Calibration},
+  year    = {2018},
+  eprint  = {1804.06788},
+  archivePrefix = {arXiv},
+  note    = {확인: arXiv 기록과 초록(웹 검색). 사전에서 뽑은 참값의 사후 표본 내 순위가 균일하다는 성질을 이용한 계산 검증}
+}
+
+@article{vehtari2017practical,
+  author  = {Vehtari, Aki and Gelman, Andrew and Gabry, Jonah},
+  title   = {Practical Bayesian Model Evaluation Using Leave-One-Out Cross-Validation and WAIC},
+  journal = {Statistics and Computing},
+  volume  = {27},
+  number  = {5},
+  pages   = {1413--1432},
+  year    = {2017},
+  doi     = {10.1007/s11222-016-9696-4},
+  eprint  = {1507.04544},
+  archivePrefix = {arXiv},
+  note    = {확인: 서지 기록과 초록(웹 검색). PSIS-LOO, WAIC, 예측 오차 비교의 표준오차}
+}
+
+@article{rubin1981estimation,
+  author  = {Rubin, Donald B.},
+  title   = {Estimation in Parallel Randomized Experiments},
+  journal = {Journal of Educational Statistics},
+  volume  = {6},
+  number  = {4},
+  pages   = {377--401},
+  year    = {1981},
+  doi     = {10.3102/10769986006004377},
+  note    = {확인: 서지 기록(웹 검색). 여덟 학교의 SAT 코칭 실험(eight schools). 데이터 값은 Stan·PyMC 등 여러 2차 자료에서 일치를 확인했고 원 논문 표와의 대조는 하지 않음}
 }
