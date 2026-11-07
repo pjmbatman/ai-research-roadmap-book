@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 798문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 825문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -501,19 +501,19 @@ _신경망의 구성 요소, PyTorch의 tensor·autograd·Module·DataLoader, fo
 - **17.5** [학습 루프 해부: forward → loss → backward → update](content/17-deep-learning-pytorch/05-training-loop/index.md) · `필수` · 퀴즈 7 · 위젯: 학습 루프 단계 재생기
   - 전체 흐름 · 수식과 코드 · 역할의 구분 · 단위의 구분 · 실전 요소 · end-to-end라는 말의 의미 · 참고 문헌
   - 선수: 17.3 nn.Module과 모델 구성, 17.4 Dataset과 DataLoader, 10.4 적응적 방법과 학습 레시피, 14.3 목적함수 설계의 원리
-- **17.6** [평가·추론·체크포인트](content/17-deep-learning-pytorch/06-evaluation-and-checkpoints/index.md) · `필수`
+- **17.6** [평가·추론·체크포인트](content/17-deep-learning-pytorch/06-evaluation-and-checkpoints/index.md) · `필수` · 퀴즈 6
   - 평가 모드 · metric 집계 · 체크포인트의 내용 · best와 last · 재개와 추론 · inference contract
   - 선수: 17.5 학습 루프 해부: forward → loss → backward → update
-- **17.7** [Trainer 설계: 직접 작성과 프레임워크](content/17-deep-learning-pytorch/07-trainer-design/index.md) · `필수`
+- **17.7** [Trainer 설계: 직접 작성과 프레임워크](content/17-deep-learning-pytorch/07-trainer-design/index.md) · `필수` · 퀴즈 6
   - trainer.py의 책임 · 확장 지점 · eval.py의 분리 · 프레임워크 · 도입 판단
   - 선수: 17.6 평가·추론·체크포인트, 6.3 설정 관리
-- **17.8** [학습 모니터링과 대시보드](content/17-deep-learning-pytorch/08-dashboards/index.md) · `필수`
+- **17.8** [학습 모니터링과 대시보드](content/17-deep-learning-pytorch/08-dashboards/index.md) · `필수` · 퀴즈 5
   - 무엇을 기록하는가 · TensorBoard · 다른 도구 · 학습 곡선 해석 · 대시보드와 원본의 일치
   - 선수: 17.5 학습 루프 해부: forward → loss → backward → update
-- **17.9** [학습 실패 진단](content/17-deep-learning-pytorch/09-debugging-training/index.md) · `필수`
+- **17.9** [학습 실패 진단](content/17-deep-learning-pytorch/09-debugging-training/index.md) · `필수` · 퀴즈 5
   - 단계적 접근 · 증상별 진단 · 흔한 원인 · 도구 · 디버깅 기록
   - 선수: 17.8 학습 모니터링과 대시보드
-- **17.10** [PyTorch 생태계와 대안](content/17-deep-learning-pytorch/10-pytorch-ecosystem/index.md) · `참조`
+- **17.10** [PyTorch 생태계와 대안](content/17-deep-learning-pytorch/10-pytorch-ecosystem/index.md) · `참조` · 퀴즈 5
   - 컴파일과 성능 · 도메인 라이브러리 · 과학 계산 연계 · 대안 프레임워크 · 라이브러리 선택 원칙
   - 선수: 17.7 Trainer 설계: 직접 작성과 프레임워크
 
