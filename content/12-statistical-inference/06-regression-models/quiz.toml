@@ -1,0 +1,109 @@
+# 12.6 회귀모형의 통계적 관점 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "ols-assumptions"
+type = "multiple"
+objective = 1
+prompt = '''선형모형 $y = \mathbf{x}^\top\boldsymbol\beta + \varepsilon$의 최소제곱 추정에 대해 옳은 것을 모두 고르시오.'''
+explanation = '''계수 추정값이 불편이려면 선형성과 $\mathbb{E}[\varepsilon \mid \mathbf{x}] = 0$이면 충분하다. 독립성과 등분산은 계수를 편향시키지 않지만, 공식 $\hat\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$로 계산한 표준오차를 틀리게 만든다. 정규성은 작은 표본에서 $t$ 구간이 정확하기 위해 필요하고, 표본이 크면 중심극한정리로 구간이 근사적으로 맞는다. 정규성이 깨졌다고 계수가 편향되지는 않는다.'''
+
+[[questions.choices]]
+text = '''선형성과 $\mathbb{E}[\varepsilon \mid \mathbf{x}] = 0$이 성립하면 계수 추정값은 불편이다.'''
+correct = true
+
+[[questions.choices]]
+text = "오차가 이분산이거나 서로 상관되어 있으면, 계수는 불편이어도 표준 공식의 표준오차가 틀린다."
+correct = true
+
+[[questions.choices]]
+text = "오차가 정규분포가 아니면 계수 추정값이 편향된다."
+feedback = "불편성 증명에는 정규성이 쓰이지 않는다. 정규성은 작은 표본에서 구간과 검정이 정확하기 위한 조건이다."
+
+[[questions.choices]]
+text = "잔차의 히스토그램이 정규분포처럼 보이면 다른 가정도 모두 성립한다."
+feedback = "정규성은 네 가정 중 하나일 뿐이고 가장 덜 중요한 편이다. 곡률·이분산·자기상관은 잔차를 적합값과 시간 순서에 대해 그려야 보인다."
+
+[[questions]]
+id = "poisson-rate-ratio"
+type = "numeric"
+objective = 1
+prompt = '''log link를 쓰는 Poisson 회귀에서 온도(10 °C 단위)의 계수가 $\beta_1 = 0.693$으로 추정되었다. 온도가 10 °C 오르면 사건 발생률은 몇 배가 되는가? (소수 둘째 자리까지)'''
+answer = 2.0
+tolerance = 0.01
+explanation = '''$\log \mathbb{E}[y] = \beta_0 + \beta_1 x$이므로 $x$가 1 오르면 $\mathbb{E}[y]$는 $e^{\beta_1}$배가 된다. $e^{0.693} \approx 2.00$, 즉 발생률이 두 배가 된다. log link에서 계수는 더하는 양이 아니라 **곱하는 비율**의 로그다. "발생 횟수가 0.693개 늘어난다"는 해석은 identity link의 해석이다.'''
+
+[[questions]]
+id = "logistic-coefficient"
+type = "single"
+objective = 1
+prompt = '''불량 여부(0/1)를 공정 압력으로 예측하는 로지스틱 회귀에서 압력 계수가 0.4로 추정되었다. 옳은 해석은?'''
+explanation = '''로지스틱 회귀는 $\log\frac{\pi}{1-\pi} = \beta_0 + \beta_1 x$를 모델링한다. 압력이 1단위 오르면 log-odds가 0.4 늘고, odds는 $e^{0.4} \approx 1.49$배가 된다. 확률 자체의 변화량은 기준 확률에 따라 달라진다. 확률이 0.5 근처면 약 $0.4 \times 0.25 = 0.1$, 0.01 근처면 약 0.004만큼 변한다.'''
+
+[[questions.choices]]
+text = "압력이 1단위 오르면 불량 확률이 0.4만큼 오른다."
+feedback = "그것은 확률을 직접 선형으로 모델링할 때의 해석이다. 로지스틱 회귀의 계수는 log-odds의 변화이고, 확률 변화량은 기준 확률에 따라 다르다."
+
+[[questions.choices]]
+text = '''압력이 1단위 오르면 불량의 odds가 $e^{0.4} \approx 1.49$배가 된다.'''
+correct = true
+
+[[questions.choices]]
+text = "압력이 1단위 오르면 불량 확률이 $e^{0.4}$배가 된다."
+feedback = "odds와 확률은 다르다. 확률이 작을 때만 odds 비율이 확률 비율에 가깝다."
+
+[[questions]]
+id = "residual-funnel"
+type = "single"
+objective = 2
+prompt = '''잔차를 적합값에 대해 그렸더니, 적합값이 커질수록 잔차가 깔때기처럼 넓게 퍼진다. 가장 적절한 판단과 대응은?'''
+explanation = '''깔때기 모양은 오차의 분산이 적합값(또는 입력)에 따라 커지는 이분산이다. 최소제곱 계수는 여전히 불편이지만, 표준오차와 구간이 틀리고 비효율적이다. 대응은 분산 구조를 모형에 넣는 것이다. 가중최소제곱, 분산이 평균과 함께 커지는 GLM(Poisson·Gamma), 로그 변환, 이분산 회귀(12.3장), 또는 이분산에 robust한 표준오차가 선택지다.'''
+
+[[questions.choices]]
+text = "계수가 편향되었으므로 결과를 버려야 한다."
+feedback = "이분산은 계수를 편향시키지 않는다. 문제는 표준오차와 효율이다."
+
+[[questions.choices]]
+text = "이분산이다. 계수는 불편이지만 표준오차가 틀리므로 분산 구조를 모형에 넣거나 robust 표준오차를 쓴다."
+correct = true
+
+[[questions.choices]]
+text = "잔차의 평균이 0이므로 문제가 없다."
+feedback = "최소제곱 잔차의 평균은 절편이 있으면 항상 0이다. 진단은 잔차의 패턴(퍼짐·곡률·순서)을 본다."
+
+[[questions]]
+id = "durbin-watson"
+type = "numeric"
+objective = 2
+prompt = '''시간 순서로 측정한 데이터에 회귀를 적합했더니 잔차의 lag-1 자기상관이 0.6이었다. Durbin–Watson 통계량의 근사값 $d \approx 2(1 - \hat\rho)$는? (소수 첫째 자리까지)'''
+answer = 0.8
+tolerance = 0.01
+explanation = '''$d \approx 2(1 - 0.6) = 0.8$이다. 잔차가 독립이면 $d \approx 2$이고, 양의 자기상관이 있으면 2보다 작아진다. 양의 자기상관이 있는 오차에 독립을 가정한 표준오차를 쓰면, 이웃한 측정이 사실상 같은 정보를 반복하는데도 독립 정보로 세어 대개 표준오차를 과소평가한다.'''
+
+[[questions]]
+id = "design-effect"
+type = "numeric"
+objective = 1
+prompt = '''배터리 셀 10개에서 셀마다 20번씩 측정했다. 같은 셀 안 측정값의 상관(ICC)이 $\rho = 0.5$다. 셀 단위 효과를 추정할 때의 설계 효과 $1 + (m - 1)\rho$는? (소수 첫째 자리까지)'''
+answer = 10.5
+tolerance = 0.05
+explanation = '''$m = 20$이므로 $1 + 19 \times 0.5 = 10.5$다. 측정 200개를 독립으로 보고 계산한 분산을 약 10.5배 키워야 실제 분산에 가깝다는 뜻이고, 유효 표본 크기는 $200/10.5 \approx 19$다. 셀 수 10의 두 배 정도일 뿐이다. 같은 셀을 더 많이 측정하는 것보다 셀을 늘리는 것이 셀 단위 효과의 정밀도를 훨씬 더 높인다.'''
+
+[[questions]]
+id = "high-leverage-point"
+type = "single"
+objective = 2
+prompt = '''열화 데이터에서 마지막 사이클의 측정값 하나가 Cook's distance 1.3으로 다른 점들보다 훨씬 크다. 이 점의 leverage도 평균의 두 배다. 가장 적절한 대응은?'''
+explanation = '''Cook's distance가 크다는 것은 그 점 하나가 적합 결과를 크게 바꾼다는 뜻이다. 이유가 측정 오류인지(기록·장비 문제), 모형이 틀린 신호인지(마지막 구간에서 열화가 가속) 확인해야 한다. 오류라는 독립적인 근거가 있으면 빼고, 그렇지 않으면 그 점을 넣고 뺀 두 결과를 함께 보고한다. 결과가 나빠 보인다는 이유만으로 빼는 것은 12.4장의 선택 편향이다.'''
+
+[[questions.choices]]
+text = "영향이 큰 점은 이상치이므로 바로 삭제한다."
+feedback = "영향이 크다는 것과 틀렸다는 것은 다르다. 가장자리의 정상 측정이 모형의 결함(예: 가속 열화)을 드러내는 것일 수 있다."
+
+[[questions.choices]]
+text = "측정 기록과 모형을 확인해 원인을 찾고, 그 점을 넣은 결과와 뺀 결과를 함께 보고한다."
+correct = true
+
+[[questions.choices]]
+text = "잔차가 크지 않으면 영향도 없으므로 무시한다."
+feedback = "leverage가 큰 점은 회귀선을 자기 쪽으로 끌어당기므로 잔차가 작게 보일 수 있다. 잔차만 보지 말고 Cook's distance처럼 leverage를 함께 반영한 지표를 본다."

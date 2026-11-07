@@ -1,0 +1,6 @@
+title = "최소제곱 계수의 표준오차"
+chapter = "statistical-inference/regression-models"
+objective = 1
+exec = "browser"
+entry = "ols_fit"
+timeout_s = 15
