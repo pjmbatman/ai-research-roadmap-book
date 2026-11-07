@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 // 위젯 등록부. 구현이 있는 위젯만 동적으로 불러오고, 아직 없는 위젯(status = planned)은 무엇을 하게 될지 안내하는 자리만 그린다.
 import type { PageData } from "../client/main";
 
