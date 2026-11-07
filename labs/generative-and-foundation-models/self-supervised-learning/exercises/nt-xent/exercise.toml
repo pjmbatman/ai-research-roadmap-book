@@ -1,0 +1,6 @@
+title = "NT-Xent(대칭 InfoNCE) 손실"
+chapter = "generative-and-foundation-models/self-supervised-learning"
+objective = 1
+exec = "browser"
+entry = "nt_xent"
+timeout_s = 10

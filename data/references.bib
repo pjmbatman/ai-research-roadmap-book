@@ -1422,3 +1422,82 @@
   archivePrefix = {arXiv},
   note      = {확인: USENIX Security 2023 발표 페이지. 확산 모델에서 학습 이미지 천 개 이상 추출, 중복 제거·차분 프라이버시의 한계}
 }
+
+@inproceedings{chen2020simple,
+  author    = {Chen, Ting and Kornblith, Simon and Norouzi, Mohammad and Hinton, Geoffrey},
+  title     = {A Simple Framework for Contrastive Learning of Visual Representations},
+  booktitle = {Proceedings of the 37th International Conference on Machine Learning},
+  series    = {PMLR},
+  volume    = {119},
+  pages     = {1597--1607},
+  year      = {2020},
+  note      = {확인: PMLR 서지 기록과 초록. SimCLR; 증강 조합, 비선형 projection head, 큰 batch·긴 학습의 효과}
+}
+
+@inproceedings{wang2020understanding,
+  author    = {Wang, Tongzhou and Isola, Phillip},
+  title     = {Understanding Contrastive Representation Learning through Alignment and Uniformity on the Hypersphere},
+  booktitle = {Proceedings of the 37th International Conference on Machine Learning},
+  series    = {PMLR},
+  volume    = {119},
+  pages     = {9929--9939},
+  year      = {2020},
+  note      = {확인: PMLR 서지 기록과 초록. negative가 무한히 많을 때 contrastive 손실이 정렬·균일성 두 항으로 분해됨}
+}
+
+@misc{grill2020bootstrap,
+  author        = {Grill, Jean-Bastien and Strub, Florian and others},
+  title         = {Bootstrap Your Own Latent: A New Approach to Self-Supervised Learning},
+  year          = {2020},
+  eprint        = {2006.07733},
+  archivePrefix = {arXiv},
+  note          = {확인: arXiv 초록. online 신경망이 이동평균 target 신경망의 표현을 예측, negative 쌍 없이 학습}
+}
+
+@inproceedings{chen2021exploring,
+  author    = {Chen, Xinlei and He, Kaiming},
+  title     = {Exploring Simple Siamese Representation Learning},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages     = {15750--15758},
+  year      = {2021},
+  note      = {확인: CVF open access 페이지와 초록. 붕괴 해가 존재하며 stop-gradient가 붕괴 방지에 핵심}
+}
+
+@inproceedings{bardes2022vicreg,
+  author    = {Bardes, Adrien and Ponce, Jean and LeCun, Yann},
+  title     = {{VICReg}: Variance-Invariance-Covariance Regularization for Self-Supervised Learning},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2022},
+  eprint    = {2105.04906},
+  archivePrefix = {arXiv},
+  note      = {확인: arXiv 초록(ICLR 2022 채택)과 HAL 기록. 차원별 분산 hinge 항과 공분산 항으로 붕괴 방지}
+}
+
+@inproceedings{jing2022understanding,
+  author    = {Jing, Li and Vincent, Pascal and LeCun, Yann and Tian, Yuandong},
+  title     = {Understanding Dimensional Collapse in Contrastive Self-supervised Learning},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2022},
+  eprint    = {2110.09348},
+  archivePrefix = {arXiv},
+  note      = {확인: arXiv 초록과 ICLR 2022 포스터 페이지. contrastive 학습에서도 차원 붕괴가 일어나며 강한 증강과 암묵적 정규화가 원인}
+}
+
+@inproceedings{he2022masked,
+  author    = {He, Kaiming and Chen, Xinlei and Xie, Saining and Li, Yanghao and Doll{\'a}r, Piotr and Girshick, Ross},
+  title     = {Masked Autoencoders Are Scalable Vision Learners},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages     = {16000--16009},
+  year      = {2022},
+  note      = {확인: CVF open access 페이지. 무작위 패치를 높은 비율(예: 75%)로 가리고 보이는 패치만 encoder에 넣어 픽셀 복원}
+}
+
+@inproceedings{assran2023self,
+  author    = {Assran, Mahmoud and Duval, Quentin and Misra, Ishan and Bojanowski, Piotr and Vincent, Pascal and Rabbat, Michael and LeCun, Yann and Ballas, Nicolas},
+  title     = {Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages     = {15619--15629},
+  year      = {2023},
+  doi       = {10.1109/CVPR52729.2023.01499},
+  note      = {확인: CVF open access 페이지. 문맥 블록의 표현으로 목표 블록의 표현을 예측, 손으로 설계한 증강 없이 학습}
+}
