@@ -1,0 +1,6 @@
+title = "Holm 보정 구현하기"
+chapter = "research-practice/analyzing-results"
+objective = 2
+exec = "browser"
+entry = "holm"
+timeout_s = 10
