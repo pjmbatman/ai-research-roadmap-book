@@ -1,0 +1,6 @@
+title = "지연 계산하는 batch generator"
+chapter = "python-and-computing/python-language"
+objective = 2
+exec = "browser"
+entry = "batched"
+timeout_s = 10

@@ -1,0 +1,120 @@
+# 5.5 컴퓨터 구조와 병렬 계산 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "row-major-traversal"
+type = "single"
+objective = 1
+prompt = '''`A = np.zeros((4000, 4000))`(기본 C order)의 모든 원소를 Python 이중 반복문(또는 같은 순서로 도는 컴파일된 코드)으로 훑는다. 캐시를 잘 쓰는 순서는?'''
+explanation = '''C order(row-major)에서는 마지막 축, 즉 한 행 안의 원소들이 메모리에 연속으로 놓인다. 바깥 반복문이 행 `i`, 안쪽 반복문이 열 `j`를 돌면 메모리를 순서대로 읽어, 한 번 가져온 캐시 라인(보통 64 byte = float64 8개)을 모두 쓴다. 반대 순서는 매 접근마다 한 행(32,000 byte)씩 건너뛰어 캐시 라인을 하나만 쓰고 버린다. Fortran order(column-major, MATLAB·Fortran의 기본)라면 반대가 된다.'''
+
+[[questions.choices]]
+text = "바깥 반복문이 행 `i`, 안쪽 반복문이 열 `j` (`A[i, j]`에서 `j`가 가장 빨리 변함)"
+correct = true
+
+[[questions.choices]]
+text = "바깥 반복문이 열 `j`, 안쪽 반복문이 행 `i`"
+feedback = "이 순서는 안쪽 반복마다 strides[0] = 32,000 byte씩 건너뛴다. Fortran order 배열이었다면 맞는 순서다."
+
+[[questions.choices]]
+text = "메모리는 임의 접근(random access)이므로 순서는 성능과 무관하다."
+feedback = "'임의 접근'은 어느 주소든 읽을 수 있다는 뜻이지 비용이 같다는 뜻이 아니다. 캐시와 prefetch 때문에 연속 접근이 훨씬 빠르다."
+
+[[questions]]
+id = "float-equality"
+type = "single"
+objective = 1
+prompt = '''Python에서 `0.1 + 0.2 == 0.3`의 결과와 그 이유로 옳은 것은?'''
+explanation = '''0.1, 0.2, 0.3은 2진 부동소수점으로 정확히 표현되지 않아 가장 가까운 표현 가능한 값으로 반올림된다. `0.1 + 0.2`의 결과는 `0.30000000000000004`로, `0.3`의 표현과 마지막 비트가 다르다. 그래서 `False`다. 부동소수점 결과는 `==` 대신 허용 오차를 두고 비교한다(`math.isclose`, `np.isclose`, `np.allclose`). 이는 Python의 버그가 아니라 IEEE 754 2진 부동소수점을 쓰는 모든 언어에서 같다.'''
+
+[[questions.choices]]
+text = "`False` — 세 수 모두 2진 부동소수점으로 정확히 표현되지 않아 반올림 오차가 남기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "`True` — 소수 첫째 자리 계산이므로 정확하다."
+feedback = "10진수로는 유한 소수지만 2진수로는 무한소수(0.1 = 0.0001100110011...)다. 유한한 비트로 자르면서 오차가 생긴다."
+
+[[questions.choices]]
+text = "`False` — Python의 float 덧셈 구현에 알려진 버그가 있기 때문이다."
+feedback = "버그가 아니라 2진 부동소수점의 성질이다. C, Java, JavaScript에서도 같은 결과가 나온다."
+
+[[questions.choices]]
+text = "`False` — 그래서 `float32`로 바꾸면 해결된다."
+feedback = "float32는 유효 숫자가 더 적어 오차가 더 크다. 해결책은 허용 오차를 둔 비교다."
+
+[[questions]]
+id = "gil-cpu-threads"
+type = "single"
+objective = 2
+prompt = '''GIL이 있는 일반 CPython에서, 순수 Python으로 쓴 CPU 계산(큰 반복문) 4개를 `ThreadPoolExecutor(max_workers=4)`로 4코어 기계에서 돌렸다. 하나씩 순서대로 돌릴 때와 비교한 전체 시간은?'''
+explanation = '''GIL(global interpreter lock)은 한 프로세스 안에서 Python 바이트코드를 한 번에 한 스레드만 실행하게 한다. 순수 Python 계산은 GIL을 쥔 채 돌므로 스레드 4개가 번갈아 실행될 뿐, 전체 시간은 순차 실행과 비슷하다(전환 비용 때문에 조금 느릴 수도 있다). CPU 계산을 여러 코어에 나누려면 프로세스(`ProcessPoolExecutor`, `multiprocessing`)를 쓰거나, GIL을 놓고 도는 NumPy 같은 컴파일된 코드에 계산을 맡긴다. GIL을 끈 free-threaded 빌드에서는 결과가 달라진다.'''
+
+[[questions.choices]]
+text = "약 1/4로 줄어든다."
+feedback = "스레드가 4개라도 GIL 때문에 Python 바이트코드는 한 번에 하나만 실행된다."
+
+[[questions.choices]]
+text = "순차 실행과 비슷하다."
+correct = true
+
+[[questions.choices]]
+text = "스레드끼리 데이터를 복사하느라 4배 느려진다."
+feedback = "스레드는 같은 메모리를 공유하므로 데이터를 복사하지 않는다. 복사 비용은 프로세스 사이에서 생긴다."
+
+[[questions]]
+id = "threads-for-io"
+type = "multiple"
+objective = 2
+prompt = '''GIL이 있는 CPython에서 **스레드**로 나누면 전체 시간이 크게 줄어들 수 있는 작업을 모두 고르시오.'''
+explanation = '''스레드는 기다리는 동안 GIL을 놓는 작업에서 효과가 있다. 네트워크 요청, 디스크 읽기, `time.sleep` 같은 I/O 대기와, 실행 중 GIL을 놓는 컴파일된 코드(NumPy의 큰 배열 연산, 많은 압축·이미지 디코딩 라이브러리)가 그렇다. 순수 Python 반복문은 GIL을 쥔 채 돌기 때문에 스레드로 나눠도 빨라지지 않는다. 이런 작업은 프로세스로 나눈다.'''
+
+[[questions.choices]]
+text = "원격 서버에서 파일 수백 개를 내려받기"
+correct = true
+
+[[questions.choices]]
+text = "디스크에서 이미지 파일 수천 개를 읽기"
+correct = true
+
+[[questions.choices]]
+text = "순수 Python 반복문으로 시뮬레이션 수천 번 돌리기"
+feedback = "순수 Python 계산은 실행 내내 GIL을 쥔다. 스레드 대신 프로세스로 나누거나 NumPy로 벡터화한다."
+
+[[questions.choices]]
+text = "순수 Python으로 쓴 문자열 파싱을 수백만 줄에 적용하기"
+feedback = "파싱 자체가 Python 바이트코드로 돌면 GIL 때문에 스레드 효과가 없다. 파일을 읽는 대기 시간만 겹칠 수 있다."
+
+[[questions]]
+id = "async-gpu-timing"
+type = "single"
+objective = 3
+prompt = '''PyTorch에서 GPU 행렬 곱을 다음처럼 쟀더니 0.1 ms가 나왔다. 이 숫자가 의미하는 것은?
+
+```python
+t0 = time.perf_counter()
+y = x @ w            # x, w는 GPU 텐서
+t1 = time.perf_counter()
+```'''
+explanation = '''CUDA 연산은 비동기로 실행된다. `x @ w`는 GPU에 kernel을 **예약(launch)**하고 계산이 끝나기 전에 CPU로 돌아온다. 그래서 측정값은 대부분 kernel을 예약하는 시간이다. 실제 계산 시간을 재려면 측정 구간 앞뒤에 `torch.cuda.synchronize()`를 부르거나 CUDA event로 재고, 첫 실행의 초기화 비용을 빼기 위해 warm-up 후 여러 번 반복한다. 반대로 `loss.item()`, `.cpu()`, `print(tensor)`처럼 GPU 값을 CPU로 가져오는 코드는 암묵적으로 동기화를 일으켜, 그 줄이 엉뚱하게 느린 것처럼 보이게 만든다.'''
+
+[[questions.choices]]
+text = "행렬 곱의 실제 GPU 계산 시간"
+feedback = "GPU 연산은 비동기다. 계산이 끝나기를 기다리지 않았으므로 계산 시간이 아니다."
+
+[[questions.choices]]
+text = "주로 kernel을 GPU에 예약하고 돌아오는 데 걸린 시간"
+correct = true
+
+[[questions.choices]]
+text = "CPU에서 계산한 시간. GPU 텐서라도 `@`는 CPU에서 계산된다."
+feedback = "GPU 텐서의 연산은 GPU에서 실행된다. 문제는 CPU가 그 완료를 기다리지 않았다는 점이다."
+
+[[questions]]
+id = "vector-add-intensity"
+type = "numeric"
+objective = 3
+prompt = '''`float32` 벡터 덧셈 $\mathbf{z} = \mathbf{x} + \mathbf{y}$ (원소 $n$개)의 연산 강도(FLOP/byte)는? 덧셈 1번을 1 FLOP으로, 메모리 이동은 두 벡터 읽기와 한 벡터 쓰기로 센다. 소수 셋째 자리까지.'''
+answer = 0.083
+tolerance = 0.002
+explanation = '''FLOP은 $n$, 메모리 이동은 $3 \times 4n = 12n$ byte이므로 연산 강도는 $1/12 \approx 0.083$ FLOP/byte다. 연산 강도가 장치의 경계값(최대 FLOP/s ÷ 메모리 대역폭, 최신 GPU에서는 대개 수십 이상)보다 훨씬 낮으므로, 벡터 덧셈은 연산이 아니라 메모리 대역폭이 시간을 정한다. 원소별 연산(활성화 함수, 정규화, 덧셈)을 여러 개 이어 쓰면 매번 메모리를 왕복하므로, 이를 하나의 kernel로 묶는 kernel fusion이 효과를 낸다.'''
