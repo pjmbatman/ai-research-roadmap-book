@@ -1,0 +1,6 @@
+title = "접촉 지도와 접촉 예측의 정밀도"
+chapter = "life-sciences/protein-structure"
+objective = 1
+exec = "browser"
+entry = "contact_map"
+timeout_s = 10
