@@ -1,0 +1,6 @@
+title = "Kahan 보정 합"
+chapter = "numerical-methods/floating-point"
+objective = 2
+exec = "browser"
+entry = "kahan_sum"
+timeout_s = 10

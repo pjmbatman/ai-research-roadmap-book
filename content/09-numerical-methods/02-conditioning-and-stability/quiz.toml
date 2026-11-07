@@ -1,0 +1,113 @@
+# 9.2 조건수·안정성·수렴 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "cond-or-algorithm"
+type = "single"
+objective = 1
+prompt = '''조건수가 $\kappa(\mathbf{A}) \approx 10^{12}$인 선형시스템을 float64에서 `np.linalg.solve`(부분 피벗팅 LU)로 풀었더니, 잔차는 $\|\mathbf{b} - \mathbf{A}\hat{\mathbf{x}}\| / (\|\mathbf{A}\|\|\hat{\mathbf{x}}\|) \approx 10^{-16}$인데 해의 상대 오차는 $10^{-5}$였다. 가장 타당한 해석은?'''
+explanation = '''backward error(정규화한 잔차)가 machine epsilon 수준이므로 알고리즘은 "조금 바뀐 입력에 대한 정확한 답"을 냈다. 즉 backward stable하게 동작했다. 그런데도 forward error가 $10^{-5}$인 것은 그 작은 입력 변화가 조건수 $10^{12}$배로 증폭되었기 때문이다. 경험식 forward error $\lesssim \kappa \times$ backward error $= 10^{12} \times 10^{-16} = 10^{-4}$와 맞는다. 다른 안정한 solver로 바꿔도 크게 나아지지 않는다. 문제를 다시 세우거나(스케일링, 정규화, 변수 재설정) 더 높은 정밀도를 써야 한다.'''
+
+[[questions.choices]]
+text = "알고리즘은 안정하게 동작했고, 오차는 문제의 나쁜 조건 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "LU 분해가 불안정해서 생긴 오차이므로 QR이나 SVD로 바꾸면 오차가 1e-16 수준으로 줄어든다."
+feedback = "잔차가 eps 수준이라는 것이 알고리즘이 안정하다는 증거다. 어떤 backward stable 알고리즘도 이 문제에서 약 κ·eps = 1e-4보다 정확한 답을 보장하지 못한다."
+
+[[questions.choices]]
+text = "잔차가 1e-16이므로 해의 상대 오차도 사실은 1e-16 수준이고, 1e-5는 측정 실수다."
+feedback = "작은 잔차는 작은 오차를 뜻하지 않는다. 조건이 나쁜 시스템에서는 잔차가 아주 작은 x̂도 참값에서 멀리 떨어질 수 있다."
+
+[[questions.choices]]
+text = "반복 횟수가 부족해서 생긴 절단 오차다."
+feedback = "LU는 정해진 횟수의 연산으로 끝나는 직접법이라 반복을 늘릴 수 없다. 오차는 반올림 오차가 조건수로 증폭된 것이다."
+
+[[questions]]
+id = "digits-lost"
+type = "numeric"
+objective = 1
+prompt = '''float64(유효숫자 약 16자리)에서 조건수 $\kappa(\mathbf{A}) = 10^{10}$인 선형시스템을 backward stable한 solver로 풀었다. 해에서 믿을 수 있는 유효숫자는 대략 몇 자리인가?'''
+answer = 6
+tolerance = 1
+slider = { min = 0, max = 16, step = 1, unit = "자리" }
+explanation = '''forward error는 대략 $\kappa \times \varepsilon \approx 10^{10} \times 10^{-16} = 10^{-6}$이다. 경험칙으로 조건수 $10^{k}$는 유효숫자 $k$자리를 잃게 한다. $16 - 10 = 6$자리 정도가 남는다. 이것은 상한에 가까운 추정이고, 실제 오차는 오른쪽 변 $\mathbf{b}$의 방향에 따라 더 작을 수 있다.'''
+
+[[questions]]
+id = "quadratic-small-root"
+type = "single"
+objective = 1
+prompt = '''$x^2 - 10^8 x + 1 = 0$의 작은 근(약 $10^{-8}$)을 근의 공식 $(-b - \sqrt{b^2 - 4c})/2$로 float64에서 계산하면 상대 오차가 약 25%다. 원인은?'''
+explanation = '''작은 근은 계수의 작은 변화에 거의 비례해서만 변하는, 조건이 좋은 문제다(계수에 대한 상대 조건수가 약 1). 오차는 알고리즘에서 생긴다. $-b = 10^8$과 $\sqrt{b^2-4c} \approx 10^8 - 2 \times 10^{-8}$은 거의 같아서 뺄셈에서 앞자리가 모두 상쇄되고, $\sqrt{\cdot}$의 반올림 오차(약 $10^{-8}$ 크기)만 남는다. 큰 근을 상쇄 없이 구한 뒤 Vieta 관계 $x_1 x_2 = c$로 작은 근을 구하면 모든 자릿수가 정확하다.'''
+
+[[questions.choices]]
+text = "문제는 조건이 좋은데, 근의 공식이 거의 같은 두 수를 빼는 불안정한 알고리즘이기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "근이 1e-8로 아주 작아서 문제 자체의 조건수가 크기 때문이다."
+feedback = "값이 작다는 것과 조건이 나쁘다는 것은 다르다. 이 근은 계수를 상대적으로 조금 바꾸면 상대적으로 조금만 변한다. 같은 문제를 다른 식으로 풀면 오차가 0이 된다는 점이 알고리즘 탓이라는 증거다."
+
+[[questions.choices]]
+text = "float64의 표현 범위를 벗어나 underflow가 일어났기 때문이다."
+feedback = "1e-8은 float64의 최소 정규수(약 1e-308)보다 훨씬 크다. underflow가 아니라 상쇄의 문제다."
+
+[[questions.choices]]
+text = "판별식 b^2 - 4c가 overflow했기 때문이다."
+feedback = "b^2 = 1e16은 float64 범위(약 1e308) 안에 있다. 문제는 그 제곱근을 b와 빼는 단계에서 생긴다."
+
+[[questions]]
+id = "order-from-errors"
+type = "numeric"
+objective = 2
+prompt = '''어떤 반복법의 오차가 $e_1 = 10^{-2}$, $e_2 = 10^{-4}$, $e_3 = 10^{-8}$이었다. $e_{k+1} \approx C e_k^{\,p}$로 볼 때 수렴 차수 $p$는?'''
+answer = 2
+tolerance = 0.05
+explanation = '''$p \approx \log(e_3/e_2) / \log(e_2/e_1) = \log(10^{-4}) / \log(10^{-2}) = (-4)/(-2) = 2$. 오차의 지수(맞는 자릿수)가 매 반복 두 배가 되는 2차 수렴으로, Newton 방법의 전형적인 모습이다. 선형 수렴이라면 오차가 매번 일정한 비율로 줄어 자릿수가 일정하게 늘어난다(예: $10^{-2}, 10^{-4}, 10^{-6}$).'''
+
+[[questions]]
+id = "gd-iterations-kappa"
+type = "single"
+objective = 2
+prompt = '''이차 함수 $f(\mathbf{x}) = \tfrac{1}{2}\mathbf{x}^\top\mathbf{A}\mathbf{x}$를 최적의 고정 step으로 gradient descent해 오차를 $10^{-8}$배로 줄이려 한다. $\mathbf{A}$의 조건수가 100에서 10000으로 커지면 필요한 반복 수는 대략 어떻게 되는가?'''
+explanation = '''최적 고정 step에서 오차는 매 반복 $(\kappa - 1)/(\kappa + 1)$배로 줄어드는 선형 수렴을 한다. $\kappa$가 크면 $\log\frac{\kappa+1}{\kappa-1} \approx 2/\kappa$이므로 필요한 반복 수는 $\tfrac{\kappa}{2}\log(10^{8})$, 즉 조건수에 비례한다. 조건수가 100배 커지면 반복 수도 약 100배가 된다. 수렴 차수(선형)는 그대로이고 상수(축소율)가 1에 가까워지는 것이다.'''
+
+[[questions.choices]]
+text = "약 100배로 늘어난다."
+correct = true
+
+[[questions.choices]]
+text = "약 2배로 늘어난다(로그에 비례)."
+feedback = "반복 수는 목표 정확도에 대해 로그로 늘지만, 조건수에 대해서는 선형으로 는다. 축소율 (κ-1)/(κ+1)이 1에 가까워질수록 한 번에 줄어드는 양이 작아진다."
+
+[[questions.choices]]
+text = "변하지 않는다. 최적 step을 쓰면 조건수와 무관하다."
+feedback = "최적 step은 가장 큰 고유값 방향에서 발산하지 않으면서 가장 작은 고유값 방향에서 최대한 빨리 가도록 고른 타협이다. 두 방향의 곡률 비(조건수)가 크면 타협의 결과도 느리다."
+
+[[questions.choices]]
+text = "수렴 차수가 1에서 1/2로 떨어진다."
+feedback = "수렴 차수는 그대로 1(선형)이다. 바뀌는 것은 선형 수렴의 축소율이다."
+
+[[questions]]
+id = "scaling-changes-kappa"
+type = "multiple"
+objective = 2
+prompt = '''기준 상태에서의 온도 변화 [K](크기 약 10)와 압력 변화 [Pa](크기 약 $10^4$)를 특징으로 선형 회귀를 하는데, 설계 행렬 $\mathbf{X}$의 조건수가 약 $10^3$으로 크다. 조건수를 줄이는 데 효과가 있는 것을 모두 고르시오.'''
+explanation = '''두 열의 크기가 약 1000배 다르면, 두 특징이 서로 독립이어도 조건수가 그 비율만큼 커진다. 열마다 다른 상수로 나누는 스케일링(표준화, 단위 변경)은 열의 크기를 맞춰 조건수를 1 근처로 줄인다. 이것이 대각 전처리의 가장 단순한 형태다. 반면 행렬 전체에 같은 상수를 곱하면 $\kappa(c\mathbf{X}) = \kappa(\mathbf{X})$로 조건수가 변하지 않는다. float32로 바꾸는 것은 조건수가 아니라 정밀도를 바꾸며, 같은 조건수에서 오차를 오히려 키운다. (특징에 큰 공통 offset이 있으면, 예컨대 절대 온도 300 K 근처라면 열들이 상수 벡터와 거의 평행해지므로 평균을 빼는 중심화도 필요하다.)'''
+
+[[questions.choices]]
+text = "각 열을 평균과 표준편차로 표준화한다."
+correct = true
+
+[[questions.choices]]
+text = "압력 변화의 단위를 Pa에서 kPa로 바꿔 두 열의 크기를 비슷하게 맞춘다."
+correct = true
+
+[[questions.choices]]
+text = "X 전체를 1e-3배 한다."
+feedback = "모든 원소에 같은 상수를 곱하면 가장 큰 특잇값과 가장 작은 특잇값이 같은 비율로 변해 조건수는 그대로다."
+
+[[questions.choices]]
+text = "계산을 float32로 바꿔 큰 수를 덜 정밀하게 저장한다."
+feedback = "조건수는 문제의 성질이라 저장 형식과 무관하다. 정밀도를 낮추면 κ·eps가 커져 오차만 커진다."

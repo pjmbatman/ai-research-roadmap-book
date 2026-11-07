@@ -1,0 +1,6 @@
+title = "오차 수열에서 수렴 차수 추정하기"
+chapter = "numerical-methods/conditioning-and-stability"
+objective = 2
+exec = "browser"
+entry = "estimate_order"
+timeout_s = 10

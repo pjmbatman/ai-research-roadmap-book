@@ -1,0 +1,6 @@
+title = "이분법으로 근 찾기"
+chapter = "numerical-methods/nonlinear-equations"
+objective = 1
+exec = "browser"
+entry = "bisection"
+timeout_s = 10
