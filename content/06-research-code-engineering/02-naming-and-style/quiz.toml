@@ -1,0 +1,126 @@
+# 6.2 네이밍·코딩 컨벤션 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "names-to-fix"
+type = "multiple"
+objective = 1
+prompt = '''배터리 데이터 분석 코드에서 **고쳐야 할** 이름을 모두 고르시오.'''
+explanation = '''`temp`는 온도(temperature)인지 임시값(temporary)인지 이름만으로 알 수 없고, 온도라면 단위도 없다(`temp_c`·`temp_k`로 쓴다). `x2`는 `x`와 어떤 관계인지, 무엇을 담는지 드러내지 않는다. `n_cycles`는 "개수"를 뜻하는 관례적 접두사 `n_`을 쓴 좋은 이름이고, `capacity_ah`는 양과 단위를 함께 드러낸다.'''
+
+[[questions.choices]]
+text = "`temp`"
+correct = true
+
+[[questions.choices]]
+text = "`x2`"
+correct = true
+
+[[questions.choices]]
+text = "`n_cycles`"
+feedback = "`n_` 접두사는 개수를 뜻하는 널리 쓰이는 관례다. 무엇의 개수인지도 드러난다."
+
+[[questions.choices]]
+text = "`capacity_ah`"
+feedback = "양(용량)과 단위(Ah)가 모두 이름에 있다. 단위를 이름에 쓰는 규칙의 좋은 예다."
+
+[[questions]]
+id = "energy-units"
+type = "numeric"
+objective = 2
+prompt = '''`voltage_v = 3.7`, `current_a = 2.0`, `duration_min = 30.0`이다. 전압과 전류가 방전 내내 일정하다고 가정할 때 에너지는 몇 Wh인가?'''
+answer = 3.7
+tolerance = 0.01
+explanation = '''전력은 $3.7\ \mathrm{V} \times 2.0\ \mathrm{A} = 7.4\ \mathrm{W}$이고, 30분은 0.5시간이므로 에너지는 $7.4 \times 0.5 = 3.7\ \mathrm{Wh}$다. 시간을 초로 착각해 `voltage_v * current_a * duration_min / 3600`으로 계산하면 약 0.0617 Wh가 나온다. 정답의 1/60이다. 변수 이름의 `_min`이 이 실수를 막는다.'''
+
+[[questions]]
+id = "broadcast-shape"
+type = "single"
+objective = 2
+prompt = '''`y_pred`의 shape이 `(N, 1)`, `y_true`의 shape이 `(N,)`일 때 `err = y_pred - y_true`의 shape은? (N > 1)'''
+explanation = '''NumPy broadcasting은 뒤쪽 축부터 맞춘다. `(N, 1)`과 `(N,)`은 `(N, 1)`과 `(1, N)`처럼 취급되어 결과가 `(N, N)`이 된다. 오류 없이 실행되고, 그 평균은 의미 없는 숫자다. shape 주석을 달고 `assert y_pred.shape == y_true.shape`로 확인하면 이 버그를 바로 잡는다.'''
+
+[[questions.choices]]
+text = "`(N,)`"
+feedback = "원소별로 빼질 것이라 기대했지만, NumPy는 뒤쪽 축부터 맞춰 broadcasting한다."
+
+[[questions.choices]]
+text = "`(N, 1)`"
+feedback = "`y_true`의 `(N,)`은 `(1, N)`처럼 취급된다. 두 축이 모두 늘어난다."
+
+[[questions.choices]]
+text = "`(N, N)`"
+correct = true
+
+[[questions.choices]]
+text = "shape이 달라서 오류가 난다."
+feedback = "크기 1인 축은 broadcasting으로 늘어나므로 오류가 나지 않는다. 오류가 나지 않는다는 점이 이 버그를 위험하게 만든다."
+
+[[questions]]
+id = "forecast-window-leak"
+type = "single"
+objective = 2
+prompt = '''시계열 예측에서 입력을 `x = series[t0 - lookback + 1 : t0 + 1]`, 목표를 `y = series[t0 : t0 + horizon]`으로 잘랐다. 무엇이 문제인가?'''
+explanation = '''입력은 시각 $t_0$를 포함하고, 목표도 시각 $t_0$부터 시작한다. 그래서 목표의 첫 값이 입력의 마지막 값과 같다. 모델은 첫 스텝을 "예측"할 필요 없이 입력을 복사하면 되고, 검증 오차가 실제보다 좋게 나온다. 목표는 `series[t0 + 1 : t0 + 1 + horizon]`이어야 한다. `t0`가 입력의 마지막 시각인지 첫 예측 시각인지를 이름과 docstring에 정해 두면 이런 off-by-one을 줄인다.'''
+
+[[questions.choices]]
+text = "입력의 마지막 값(시각 t0)이 목표의 첫 값에도 들어가, 첫 스텝 예측이 입력 복사로 맞혀진다."
+correct = true
+
+[[questions.choices]]
+text = "입력 길이가 lookback보다 하나 짧다."
+feedback = "`t0 - lookback + 1`부터 `t0`까지(끝 인덱스 `t0 + 1`은 제외)이므로 길이는 정확히 lookback이다."
+
+[[questions.choices]]
+text = "목표가 미래가 아니라 과거 구간이다."
+feedback = "목표는 t0부터 시작하므로 대부분 미래다. 문제는 첫 값 하나가 입력과 겹친다는 것이다."
+
+[[questions.choices]]
+text = "문제없다. 파이썬 slicing은 끝 인덱스를 포함하지 않으므로 겹치지 않는다."
+feedback = "입력의 끝 인덱스 `t0 + 1`은 제외되지만 `t0`는 포함된다. 목표도 `t0`부터 시작하므로 `series[t0]`가 양쪽에 있다."
+
+[[questions]]
+id = "formatter-vs-linter"
+type = "single"
+objective = 3
+prompt = '''formatter를 실행해 통과했는데, 쓰지 않는 import와 정의되지 않은 이름이 코드에 그대로 남아 있다. 왜 그런가?'''
+explanation = '''formatter는 공백·줄바꿈·따옴표 같은 **모양**만 바꾸고 코드의 의미는 바꾸지 않도록 설계된다. 쓰지 않는 import, 정의되지 않은 이름, 가변 기본값 같은 **의미상의 문제**는 linter가 찾는다. 타입이 맞지 않는 호출은 type checker가 찾는다. 세 도구는 서로 다른 층의 문제를 맡으므로 함께 쓴다.'''
+
+[[questions.choices]]
+text = "formatter 설정에서 해당 규칙을 켜지 않았기 때문이다."
+feedback = "formatter에는 그런 규칙이 없다. 모양을 바꿀 뿐 코드를 지우거나 이름을 검사하지 않는다."
+
+[[questions.choices]]
+text = "formatter는 코드의 모양만 바꾸고, 의미상의 문제는 linter가 찾기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "type checker를 함께 실행하지 않았기 때문이다."
+feedback = "type checker는 타입이 맞지 않는 호출을 찾는다. 쓰지 않는 import는 linter의 일이다."
+
+[[questions.choices]]
+text = "pre-commit을 설치하지 않았기 때문이다."
+feedback = "pre-commit은 도구를 커밋 전에 실행해 줄 뿐이다. 어떤 문제를 찾는지는 실행하는 도구가 정한다."
+
+[[questions]]
+id = "precommit-needs-ci"
+type = "single"
+objective = 3
+prompt = '''연구실 저장소에 pre-commit 설정을 추가했다. 같은 검사를 CI에서도 실행해야 하는 가장 중요한 이유는?'''
+explanation = '''pre-commit hook은 각자의 컴퓨터에 설치해야 동작하고, `git commit --no-verify`로 건너뛸 수도 있다. 웹 편집기나 다른 도구로 만든 커밋에는 실행되지 않는다. 그래서 pre-commit은 빠른 피드백 도구이고, 규칙을 **강제**하는 곳은 모든 PR에서 같은 검사를 실행하는 CI다.'''
+
+[[questions.choices]]
+text = "pre-commit은 각자 설치해야 하고 건너뛸 수도 있어, 규칙이 모든 커밋에 적용된다는 보장이 없기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "pre-commit은 원격 서버에서 실행되므로 로컬 코드를 검사하지 못하기 때문이다."
+feedback = "반대다. pre-commit은 로컬 Git hook으로 커밋 직전에 실행된다."
+
+[[questions.choices]]
+text = "CI에서 실행해야 formatter가 코드를 자동으로 고쳐 저장소에 반영하기 때문이다."
+feedback = "CI의 역할은 대개 검사와 보고다. 자동 수정은 로컬에서 하고, CI는 규칙을 어긴 변경을 통과시키지 않는다."
+
+[[questions.choices]]
+text = "필요 없다. pre-commit을 설정 파일로 커밋했으면 모두에게 자동으로 적용된다."
+feedback = "설정 파일을 커밋해도 각자 `pre-commit install`을 해야 hook이 동작한다. 설치하지 않은 사람의 커밋은 검사되지 않는다."
