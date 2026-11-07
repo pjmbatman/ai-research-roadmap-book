@@ -1,0 +1,6 @@
+title = "CC-CV 충전 시간"
+chapter = "battery-ai/charging-optimization"
+objective = 1
+exec = "browser"
+entry = "cc_cv_time"
+timeout_s = 10
