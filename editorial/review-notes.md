@@ -38,14 +38,14 @@
 - 16.5–16.8의 일부 셀은 Pyodide에서 scikit-learn이 내는 threadpoolctl 경고를 숨기는 줄을 본문에 갖고 있다. 실행기(`py.worker.ts`)에서 경고를 거르면 이 줄을 뺄 수 있다.
 - `np.linalg.cholesky`는 Pyodide에서 양의 정부호가 아닌 행렬에 오류 대신 NaN을 낸다. 판정에 쓰는 셀은 `scipy.linalg.cholesky`를 쓴다(7.5, 11.4).
 
-## 3. 위젯 후보
+## 3. 위젯
 
-구현된 위젯은 `data/widgets.toml`의 `prototype`이다. 집필 에이전트가 제안한 후보는 아래와 같다. 만들기로 하면 `status = "planned"`로 등록하고 장에 넣는다.
+`data/widgets.toml`의 120개 위젯이 모두 구현되어(`status = "prototype"`) 각 장의 해당 절에 들어 있다. 위젯을 만들 때 계산부를 Node로 돌려 NumPy·SciPy 또는 장의 출력과 대조했다. 리뷰 때 확인할 것:
 
-| 부 | 후보 |
-|---|---|
-| 1–6 | 분할 단위·예측 구간(1.3), seed 변동(1.5), tmux 구조·SSH 터널 방향(2부), CUDA 버전 계층·Docker 캐시(3부), commit DAG·선택 편향(4부), broadcasting·stride·roofline(5부), 설정 병합·argparse(6부) |
-| 7–10 | 고유벡터·사영(7부), einsum 축·slerp·등변성 검사(7.7–7.10), 기울기·Hessian 등고선(8.1), Newton 끌개·반복법 경주·조건수 타원(9.1–9.4), Runge 보간·CFL(9.5–9.7), 손실 단면·1D 베이지안 최적화(10부) |
-| 11–16 | 기저율(11.3), CLT·중요도 가중·Metropolis(11.5–11.7), 신뢰구간 포함률·부트스트랩·잔차 진단(12부), 부분 풀링·GMM EM(13부), KL 방향·double descent·MI 편향(14부), 실험 설계 커버리지·window 누수·robust 이상치(15부), 정규화 경로·트리 과적합·t-SNE perplexity·KM 곡선(16부) |
-| 17–22 | smoothing 착시·학습 곡선 진단(17부), receptive field·SSM 커널·temperature·over-smoothing(18부), GAN 동역학·coupling flow·VAE 붕괴·flow 경로·생성 지표 실패·LoRA 랭크(19부), gridworld·밴딧 후회·LQR/MPC(20부), conformal 포함률·비용 임계값(21부), checkpointing·ring all-reduce·배치 지연(22부) |
-| 23–31 | 인용 그래프·검정력·요인 설계·오차막대·축 왜곡·컬러맵(23부), PINN 손실 균형·스펙트럼 합성곱·칼만 필터·L-curve(24부), ABC 허용 오차·EIG·Pareto(25부), 격자 해상도·POD·closure·빔 Pareto(26부), 위도 가중·spread-skill·에너지 스펙트럼(27부), 상동성 분할·Kabsch 정렬·배치 보정(29부), SOC 필터·충전 Pareto(30부), 역량 레이더(31부) |
+- **장 본문과 수치가 다른 위젯**: 위젯이 데이터를 새로 만들거나 자체 난수를 써서 장의 예시 숫자와 다르다(예: robust-outlier 6/10 대 본문 4/10, knn-rbf-scale 2D R², tree-boosting-overfit 시험 RMSE, bandit-regret·lqr-mpc·lora-rank 일부). 메시지는 같지만 숫자를 맞출지 정한다.
+- **위젯이 드러낸 본문 확인 사항**:
+  - 18.7: 무작위 분할에서 1-최근접 이웃의 이득을 "한 시간 어긋난 train window"로 설명하지만, L=48에서 1-최근접 이웃이 겹치는 window를 고르는 비율은 약 26%(L=96에서 약 67%)다.
+  - 16.3: 표준화하지 않은 RBF도 길이척도가 크면 시험 R²가 0.95까지 오른다. "표준화하지 않으면 실패한다"는 서술의 강도를 확인한다.
+  - 18.6 over-smoothing 위젯의 잔차 연결은 initial residual `(1−α)ÂH + αX`(α=0.2)로 구현했다.
+- **수업 시트 배치**: 넓은 화면(960px 이상)에서는 시트를 창 높이까지 늘리고 조작·readouts 판을 그림 오른쪽에 둔다. 좁은 화면에서는 시트 안에서 스크롤한다.
+- 위젯 모음 페이지 `/widgets/`에서 한 번에 조작해 볼 수 있다.
