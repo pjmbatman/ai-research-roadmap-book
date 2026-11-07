@@ -1,0 +1,6 @@
+title = "측정된 점들의 Pareto front"
+chapter = "scientific-discovery/autonomous-experimentation"
+objective = 1
+exec = "browser"
+entry = "pareto_mask"
+timeout_s = 10
