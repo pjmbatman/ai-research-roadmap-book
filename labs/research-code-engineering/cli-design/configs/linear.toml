@@ -1,0 +1,6 @@
+[model]
+name = "linear"
+
+[train]
+lr = 0.05
+seed = 3

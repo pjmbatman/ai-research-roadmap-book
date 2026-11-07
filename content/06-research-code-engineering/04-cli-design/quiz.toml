@@ -1,0 +1,145 @@
+# 6.4 CLI 설계 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "abbrev-prefix"
+type = "single"
+objective = 1
+prompt = '''parser에는 `--epochs`와 `--lr-schedule` 두 옵션만 있고, `allow_abbrev`는 기본값(True)이다. 사용자가 학습률을 바꾸려고 `--lr 3e-4`를 넘기면 `parse_args`는 어떻게 하는가?'''
+explanation = '''argparse는 기본적으로 옵션 이름의 **고유한 접두사**를 그 옵션으로 받아들인다. `--lr`은 `--lr-schedule`의 유일한 접두사이므로 `lr_schedule='3e-4'`로 해석된다. 오류도 경고도 없다. 학습률 옵션이 없다는 사실이 드러나지 않고, 엉뚱한 설정이 바뀐다. 연구용 CLI에서는 `allow_abbrev=False`로 이 동작을 끄는 편이 안전하다.'''
+
+[[questions.choices]]
+text = "알 수 없는 옵션이라며 오류를 내고 종료한다."
+feedback = "`allow_abbrev=False`일 때의 동작이다. 기본값에서는 접두사 일치를 허용한다."
+
+[[questions.choices]]
+text = "`lr_schedule`을 문자열 `'3e-4'`로 설정한다."
+correct = true
+
+[[questions.choices]]
+text = "`args.lr = 0.0003`이라는 새 속성을 만든다."
+feedback = "argparse는 등록되지 않은 옵션으로 속성을 만들지 않는다."
+
+[[questions.choices]]
+text = "`--lr 3e-4`를 조용히 무시하고 나머지만 해석한다."
+feedback = "조용히 버리는 것은 `parse_known_args`가 모르는 인자를 다루는 방식이다. 여기서는 접두사 일치 때문에 다른 옵션으로 해석된다."
+
+[[questions]]
+id = "parse-known-args-risk"
+type = "single"
+objective = 1
+prompt = '''학습 스크립트의 진입점에서 `args, _ = parser.parse_known_args()`를 쓰고 있다. 이 방식의 가장 큰 위험은?'''
+explanation = '''`parse_known_args`는 모르는 인자를 오류 없이 별도 리스트로 돌려준다. 그 리스트를 버리면 `--learning-rate 3e-4`처럼 이름을 틀린 인자가 아무 효과 없이 사라진다. 실험자는 값을 바꿨다고 믿고 결과를 해석한다. 다른 프로그램에 인자를 넘겨주는 래퍼처럼 모르는 인자를 의도적으로 받아야 하는 경우가 아니면 `parse_args`를 쓴다.'''
+
+[[questions.choices]]
+text = "오타가 난 인자가 오류 없이 버려져, 바꿨다고 믿은 설정이 바뀌지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "`parse_args`보다 훨씬 느리다."
+feedback = "속도 차이는 문제가 되지 않는다. 문제는 모르는 인자를 다루는 방식이다."
+
+[[questions.choices]]
+text = "위치 인자를 해석하지 못한다."
+feedback = "`parse_known_args`도 위치 인자를 해석한다. 등록되지 않은 인자만 따로 모은다."
+
+[[questions.choices]]
+text = "type 변환을 하지 않아 모든 값이 문자열로 남는다."
+feedback = "등록된 옵션의 type 변환은 `parse_args`와 같다."
+
+[[questions]]
+id = "parser-default-overrides-file"
+type = "single"
+objective = 2
+prompt = '''설정 파일에 `lr = 3e-4`가 있다. parser는 `add_argument("--lr", type=float, default=1e-3)`로 정의했고, 명령행에서는 `--lr`을 주지 않았다. 최종 설정을 `{**defaults, **file_cfg, **vars(args)}`로 만들면 `lr`은?'''
+explanation = '''`--lr`을 주지 않아도 `vars(args)`에는 parser의 기본값 `lr=0.001`이 들어 있다. 명령행 층이 가장 나중에 병합되므로, 이 값이 설정 파일의 `3e-4`를 덮어쓴다. 사용자가 명시하지 않은 값이 명시한 값을 이기는 셈이다. 명령행 옵션의 parser 기본값은 `None`(또는 `argparse.SUPPRESS`)으로 두고, 실제로 주어진 값만 병합해야 우선순위가 지켜진다.'''
+
+[[questions.choices]]
+text = "0.0003"
+feedback = "기대한 우선순위의 결과다. 하지만 parser 기본값 1e-3이 `vars(args)`에 들어 있어 설정 파일 값을 덮어쓴다."
+
+[[questions.choices]]
+text = "0.001"
+correct = true
+
+[[questions.choices]]
+text = "`None`"
+feedback = "parser에 `default=1e-3`을 줬으므로 주지 않은 옵션의 값은 None이 아니라 1e-3이다."
+
+[[questions.choices]]
+text = "같은 키가 두 층에 있어 오류가 난다."
+feedback = "dict 펼치기는 뒤의 값이 앞의 값을 조용히 덮어쓴다. 오류가 나지 않는다는 점이 이 버그를 위험하게 만든다."
+
+[[questions]]
+id = "keep-precedence"
+type = "multiple"
+objective = 2
+prompt = '''"기본값 < 설정 파일 < 명령행" 우선순위를 지키는 설계를 모두 고르시오.'''
+explanation = '''핵심은 "명령행에서 **주지 않은** 옵션이 앞의 층을 덮어쓰지 않게 하는 것"이다. parser 기본값을 `None`으로 두고 `None`이 아닌 값만 병합하거나, `default=argparse.SUPPRESS`로 주지 않은 옵션이 Namespace에 아예 나타나지 않게 하면 된다. parser 기본값을 기본 설정과 같게 맞추면 주지 않은 옵션이 설정 파일을 덮어쓴다. 병합 순서를 바꾸면 우선순위 자체가 뒤집힌다.'''
+
+[[questions.choices]]
+text = "옵션의 parser 기본값을 `None`으로 두고, `None`이 아닌 값만 병합한다."
+correct = true
+
+[[questions.choices]]
+text = "옵션에 `default=argparse.SUPPRESS`를 주어, 주지 않은 옵션이 Namespace에 나타나지 않게 한다."
+correct = true
+
+[[questions.choices]]
+text = "옵션의 parser 기본값을 기본 설정 파일의 값과 똑같이 맞춰 둔다."
+feedback = "주지 않은 옵션도 그 기본값으로 Namespace에 들어가 설정 파일 값을 덮어쓴다. 두 곳의 기본값이 어긋나기 시작하면 더 혼란스러워진다."
+
+[[questions.choices]]
+text = "명령행 인자를 먼저 병합하고 설정 파일을 그 위에 덮어쓴다."
+feedback = "설정 파일이 명령행보다 우선하게 된다. 이번 실행에서만 바꾸려고 준 값이 무시된다."
+
+[[questions]]
+id = "subcommand-option-position"
+type = "single"
+objective = 1
+prompt = '''`--seed` 옵션을 subcommand parser가 아니라 **최상위 parser**에 정의했다. 다음 중 `--seed`가 제대로 해석되는 명령은?'''
+explanation = '''최상위 parser의 옵션은 subcommand 이름 **앞**에 와야 한다. subcommand 이름이 나오면 나머지 인자는 그 subcommand의 parser가 해석하고, 그 parser는 `--seed`를 모르므로 오류가 난다. 사용자가 이 순서를 기억하게 만드는 대신, 공유 옵션을 `parents=[common]`으로 각 subcommand에 넣으면 `soh train --seed 1`과 `soh eval --seed 1`이 모두 동작한다.'''
+
+[[questions.choices]]
+text = "`soh --seed 1 train configs/base.toml`"
+correct = true
+
+[[questions.choices]]
+text = "`soh train configs/base.toml --seed 1`"
+feedback = "subcommand 이름 뒤의 인자는 train parser가 해석한다. train parser에는 `--seed`가 없어 오류가 난다."
+
+[[questions.choices]]
+text = "둘 다 된다. argparse가 옵션의 위치를 자동으로 맞춘다."
+feedback = "최상위 parser와 subcommand parser는 인자를 나눠 해석한다. 위치에 따라 해석하는 parser가 달라진다."
+
+[[questions.choices]]
+text = "둘 다 안 된다. 최상위 parser에는 옵션을 정의할 수 없다."
+feedback = "최상위 parser에도 옵션을 정의할 수 있다. 다만 subcommand 이름 앞에 와야 한다."
+
+[[questions]]
+id = "console-script-entry"
+type = "single"
+objective = 1
+prompt = '''`pyproject.toml`에 다음을 적고 패키지를 설치했다. 셸에서 `soh train --help`를 실행하면 무슨 일이 일어나는가?
+
+```toml
+[project.scripts]
+soh = "soh_tools.cli:main"
+```'''
+explanation = '''`[project.scripts]`는 패키지를 설치할 때 실행 파일 `soh`를 만든다. 이 실행 파일은 `soh_tools.cli` 모듈을 import하고 `main()` 함수를 호출한다. 모듈은 import되는 것이므로 `if __name__ == "__main__":` 블록은 실행되지 않는다. 따라서 `main()`이 인자를 받지 않아도 `sys.argv`에서 명령행을 읽도록(예: `parser.parse_args()`) 만들어야 한다. 설치하지 않은 상태에서는 `soh` 명령이 없다.'''
+
+[[questions.choices]]
+text = "설치할 때 만들어진 `soh` 실행 파일이 `soh_tools.cli`를 import하고 `main()`을 호출한다."
+correct = true
+
+[[questions.choices]]
+text = '''`soh_tools/cli.py`를 스크립트로 실행하므로 `if __name__ == "__main__":` 블록이 실행된다.'''
+feedback = "모듈은 import되므로 `__name__`은 `\"soh_tools.cli\"`다. 그 블록은 실행되지 않고, 지정한 함수 `main`이 직접 호출된다."
+
+[[questions.choices]]
+text = "설치하지 않아도 `pyproject.toml`이 있는 디렉터리에서는 `soh` 명령이 동작한다."
+feedback = "실행 파일은 설치 단계에서 만들어진다. 설치 전에는 `python -m` 등으로 실행해야 한다."
+
+[[questions.choices]]
+text = "`python -m soh`와 같은 의미다."
+feedback = "`python -m`은 모듈 이름을 받는다. 여기서 `soh`는 명령 이름일 뿐 모듈 이름이 아니다. `python -m soh_tools`가 동작하려면 `soh_tools/__main__.py`가 필요하다."

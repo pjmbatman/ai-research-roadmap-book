@@ -1,0 +1,6 @@
+title = "단위 접미사를 SI 단위로 바꾸기"
+chapter = "research-code-engineering/naming-and-style"
+objective = 2
+exec = "browser"
+entry = "to_si"
+timeout_s = 10

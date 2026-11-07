@@ -1,0 +1,6 @@
+title = "기본값·설정 파일·명령행을 출처와 함께 병합하기"
+chapter = "research-code-engineering/cli-design"
+objective = 2
+exec = "browser"
+entry = "resolve_config"
+timeout_s = 10
