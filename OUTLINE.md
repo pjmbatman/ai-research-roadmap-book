@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1248문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1266문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -856,14 +856,14 @@ _ML 연구자를 위한 배터리 기초, 배터리 모델 계층, 데이터셋�
 - **30.4** [상태 추정과 수명 예측](content/30-battery-ai/04-state-and-lifetime-prediction/index.md) · `필수` · 퀴즈 6
   - 문제 정의 · SOC·SOH 추정 · 수명 예측 · 불확실성 · 평가 · 참고 문헌
   - 선수: 30.3 배터리 데이터셋과 데이터 함정, 21.1 불확실성 정량화
-- **30.5** [파라미터 추정과 하이브리드 모델링](content/30-battery-ai/05-parameter-estimation/index.md) · `심화`
-  - 파라미터 추정 · 대리모델 · 하이브리드 모델 · 평가
+- **30.5** [파라미터 추정과 하이브리드 모델링](content/30-battery-ai/05-parameter-estimation/index.md) · `심화` · 퀴즈 6 · 위젯: 등가회로 모델 시뮬레이터
+  - 파라미터 추정 · 대리모델 · 하이브리드 모델 · 평가 · 참고 문헌
   - 선수: 30.2 배터리 모델의 계층, 24.6 시스템 식별과 상태 추정
-- **30.6** [충전 최적화와 제어](content/30-battery-ai/06-charging-optimization/index.md) · `심화`
-  - 문제 정의 · 방법 · 실험 설계 · sim-to-real · 안전 제약
+- **30.6** [충전 최적화와 제어](content/30-battery-ai/06-charging-optimization/index.md) · `심화` · 퀴즈 6
+  - 문제 정의 · 방법 · 실험 설계 · sim-to-real · 안전 제약 · 참고 문헌
   - 선수: 30.2 배터리 모델의 계층, 20.3 모델 기반 방법과 최적제어
-- **30.7** [배터리 Foundation Model](content/30-battery-ai/07-battery-foundation-models/index.md) · `심화`
-  - 데이터 통합 · 사전학습 과제 · 분할과 중복 · 전이 평가 · 분석
+- **30.7** [배터리 Foundation Model](content/30-battery-ai/07-battery-foundation-models/index.md) · `심화` · 퀴즈 6
+  - 데이터 통합 · 사전학습 과제 · 분할과 중복 · 전이 평가 · 분석 · 참고 문헌
   - 선수: 30.3 배터리 데이터셋과 데이터 함정, 19.9 사전학습·전이·Foundation Model
 
 ## `CAP` 종합 프로젝트 <sub>Capstone Projects</sub>
