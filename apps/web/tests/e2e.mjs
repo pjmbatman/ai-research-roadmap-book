@@ -382,7 +382,8 @@ await test("모바일 폭에서 메인·퀘스트·실습실이 가로로 넘치
 
 await browser.close();
 server.close();
-const real = errors.filter((e) => !/favicon/.test(e));
+// 페이지 전환 애니메이션(View Transition)이 빠른 연속 이동으로 끊길 때 Chrome이 남기는 알림은 앱 오류가 아니다.
+const real = errors.filter((e) => !/favicon|Transition was aborted because of invalid state/.test(e));
 if (real.length) { console.log(`\n콘솔 오류 ${real.length}개:\n  ${real.slice(0, 15).join("\n  ")}`); }
 const failed = results.filter(([ok]) => !ok).length;
 console.log(`\n${results.length - failed}/${results.length} 통과, 콘솔 오류 ${real.length}개`);

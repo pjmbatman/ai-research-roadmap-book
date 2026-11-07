@@ -743,5 +743,6 @@ body.lab-body { overflow: hidden; background: #0b0d12; }
   .l-top .clock, .l-top .ttl { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
   *, *::before, *::after { animation-duration: 0.001s !important; animation-iteration-count: 1 !important; transition-duration: 0.001s !important; }
 }
