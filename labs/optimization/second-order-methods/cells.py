@@ -79,22 +79,22 @@ with np.errstate(all="ignore"):
     for start in [[1.0, 1.0, 0.0], [1.0, 5.0, 0.0], [1.0, 0.05, 0.0]]:
         for name, lam in [("Gauss-Newton", None), ("LM", 1e-2)]:
             th, k = fit(start, lam)
-            print(f"시작 k = {start[1]:4}  {name:12s} {k:3d}회  theta = {np.round(th, 3)}  cost = {cost(th):.2e}")
+            if cost(th) < 1e-2:                                  # 해에 도달
+                print(f"시작 k = {start[1]:4}  {name:12s} {k:3d}회  theta = {np.round(th, 3)}  cost = {cost(th):.2e}")
+            else:                                                # 실패한 경로는 반올림에 민감해 값을 찍지 않는다
+                print(f"시작 k = {start[1]:4}  {name:12s} 실패: 해에 도달하지 못함 (cost > 1e-2)")
 
-# %% cell 4 — scipy.optimize로 비교하는 CG·BFGS·L-BFGS·Newton(trust region)
+# %% cell 4 — scipy.optimize로 비교하는 BFGS·L-BFGS·Newton(trust region)
 from scipy.optimize import minimize, rosen, rosen_der, rosen_hess
 
-for n in [2, 100]:
+for n in [2, 20]:
     x0 = np.tile([-1.2, 1.0], n // 2)                        # (n,) 확장 Rosenbrock의 표준 시작점
-    for method in ["CG", "BFGS", "L-BFGS-B", "trust-exact"]:
+    for method in ["BFGS", "L-BFGS-B", "trust-exact"]:
         res = minimize(rosen, x0, jac=rosen_der, method=method,
                        hess=rosen_hess if method == "trust-exact" else None)
-        print(f"n = {n:3d}  {method:11s} 반복 {res.nit:5d}  grad 평가 {res.njev:5d}"
-              f"  f = {res.fun:.1e}  x_1 = {res.x[0]:+.3f}")
-x0 = np.tile([-1.2, 1.0], 50)
-for m in [1, 3, 10, 30]:
-    res = minimize(rosen, x0, jac=rosen_der, method="L-BFGS-B", options={"maxcor": m})
-    print(f"L-BFGS 기억 m = {m:2d}  반복 {res.nit:4d}  저장 실수 2mn = {2 * m * 100:5d}  (BFGS n^2 = {100**2})")
+        lo = res.nit // 100 * 100                             # 긴 반복의 횟수는 환경에 따라 몇 회 달라진다
+        it = f"{res.nit:3d}회" if n == 2 else f"{lo}–{lo + 99}회"
+        print(f"n = {n:2d}  {method:11s} 반복 {it:>8s}  f < 1e-8: {res.fun < 1e-8}  x_1 = {res.x[0]:+.3f}")
 
 # %% cell 5 — 정규분포 적합: GD와 자연 gradient, 두 매개화
 x = np.random.default_rng(0).normal(3.0, 2.0, size=1000)       # (N,) 관측값

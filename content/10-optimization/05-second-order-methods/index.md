@@ -199,19 +199,22 @@ with np.errstate(all="ignore"):
     for start in [[1.0, 1.0, 0.0], [1.0, 5.0, 0.0], [1.0, 0.05, 0.0]]:
         for name, lam in [("Gauss-Newton", None), ("LM", 1e-2)]:
             th, k = fit(start, lam)
-            print(f"시작 k = {start[1]:4}  {name:12s} {k:3d}회  theta = {np.round(th, 3)}  cost = {cost(th):.2e}")
+            if cost(th) < 1e-2:                                  # 해에 도달
+                print(f"시작 k = {start[1]:4}  {name:12s} {k:3d}회  theta = {np.round(th, 3)}  cost = {cost(th):.2e}")
+            else:                                                # 실패한 경로는 반올림에 민감해 값을 찍지 않는다
+                print(f"시작 k = {start[1]:4}  {name:12s} 실패: 해에 도달하지 못함 (cost > 1e-2)")
 ```
 
 ```output
 시작 k =  1.0  Gauss-Newton   6회  theta = [2.004 0.816 0.507]  cost = 4.60e-03
 시작 k =  1.0  LM             6회  theta = [2.004 0.816 0.507]  cost = 4.60e-03
-시작 k =  5.0  Gauss-Newton 100회  theta = [ -0.    -11.245   0.802]  cost = 6.47e+00
+시작 k =  5.0  Gauss-Newton 실패: 해에 도달하지 못함 (cost > 1e-2)
 시작 k =  5.0  LM             8회  theta = [2.004 0.816 0.507]  cost = 4.60e-03
-시작 k = 0.05  Gauss-Newton   8회  theta = [  1.538 137.996   0.965]  cost = 4.55e+00
+시작 k = 0.05  Gauss-Newton 실패: 해에 도달하지 못함 (cost > 1e-2)
 시작 k = 0.05  LM             9회  theta = [2.004 0.816 0.507]  cost = 4.60e-03
 ```
 
-시작값이 참값에 가까우면($k = 1$) 두 방법 모두 6회 만에 같은 해에 도달한다. 시작값이 나쁘면 결과가 갈린다. $k = 5$에서 출발한 Gauss–Newton은 첫 step에서 선형화가 틀린 큰 step을 받아들여 $k$가 음수(시간에 따라 지수적으로 커지는 신호)인 영역으로 튀었고, 100회 뒤에도 돌아오지 못했다. $k = 0.05$에서 출발하면 $k \approx 138$로 튀어, 신호가 첫 측정 시각을 빼고는 사실상 0인 평평한 영역에 멈췄다. 거기서는 gradient가 거의 0이라 알고리즘이 수렴했다고 판단한다. LM은 세 시작점 모두에서 6–9회 만에 같은 해로 갔다. 감쇠가 큰 step을 거절하고 $\lambda$를 키운 덕분이다.
+시작값이 참값에 가까우면($k = 1$) 두 방법 모두 6회 만에 같은 해에 도달한다. 시작값이 나쁘면 결과가 갈린다. $k = 5$와 $k = 0.05$에서 출발한 Gauss–Newton은 둘 다 해에 도달하지 못했다. 선형화가 틀린 큰 step을 그대로 받아들여, $k$가 음수(시간에 따라 지수적으로 커지는 신호)인 영역이나 $k$가 매우 커서 신호가 첫 측정 시각을 빼고는 사실상 0인 평평한 영역으로 튀기 때문이다. 이렇게 실패한 경로는 반올림 오차에도 민감해서, 같은 코드라도 환경(예: 브라우저의 32비트 Python)에 따라 도착점이 달라진다. 그래서 셀은 실패한 경로의 값은 찍지 않는다. LM은 세 시작점 모두에서 6–9회 만에 같은 해로 갔다. 감쇠가 큰 step을 거절하고 $\lambda$를 키운 덕분이다.
 
 **파라미터의 불확실성.** 최소제곱 해에서 $\mathbf{J}^\top\mathbf{J}$는 한 번 더 쓸모가 있다. 잡음이 독립이고 분산이 $\sigma^2$인 정규분포이며 모델이 해 근처에서 거의 선형이면, 추정량의 공분산은 근사적으로
 
@@ -247,44 +250,35 @@ $$
 
 **L-BFGS.** BFGS의 $\mathbf{H}_k$는 $n \times n$ 밀집 행렬이라 Newton 방법과 같은 $n^2$ 메모리 문제가 있다. Liu와 Nocedal(1989)의 **L-BFGS**(limited-memory BFGS)는 행렬을 저장하지 않고 최근 $m$개의 쌍 $(\mathbf{s}_i, \mathbf{y}_i)$만 저장한다. 단위 행렬의 상수배에서 출발해 저장된 쌍으로 BFGS 갱신을 $m$번 적용한 행렬과 gradient의 곱을, two-loop recursion이라는 반복으로 $O(mn)$ 연산에 계산한다. $m$은 보통 3–20이다. 메모리는 $2mn$개의 실수로, $n$에 선형이다.
 
-scipy의 `scipy.optimize.minimize`로 확장 Rosenbrock 함수 $\sum_{i=1}^{n-1}\big[100(x_{i+1} - x_i^2)^2 + (1 - x_i)^2\big]$에서 비교한다. `CG`는 비선형 공액경사법, `trust-exact`는 정확한 Hessian을 쓰는 trust region Newton 방법이다. 메서드 이름과 기본 옵션은 집필 시점의 scipy 기준이므로, 쓰는 버전의 문서에서 확인한다.
+scipy의 `scipy.optimize.minimize`로 확장 Rosenbrock 함수 $\sum_{i=1}^{n-1}\big[100(x_{i+1} - x_i^2)^2 + (1 - x_i)^2\big]$에서 비교한다. `trust-exact`는 정확한 Hessian을 쓰는 trust region Newton 방법이다. 메서드 이름과 기본 옵션은 집필 시점의 scipy 기준이므로, 쓰는 버전의 문서에서 확인한다.
 
 ```python {exec="browser" session="second-order"}
 from scipy.optimize import minimize, rosen, rosen_der, rosen_hess
 
-for n in [2, 100]:
+for n in [2, 20]:
     x0 = np.tile([-1.2, 1.0], n // 2)                        # (n,) 확장 Rosenbrock의 표준 시작점
-    for method in ["CG", "BFGS", "L-BFGS-B", "trust-exact"]:
+    for method in ["BFGS", "L-BFGS-B", "trust-exact"]:
         res = minimize(rosen, x0, jac=rosen_der, method=method,
                        hess=rosen_hess if method == "trust-exact" else None)
-        print(f"n = {n:3d}  {method:11s} 반복 {res.nit:5d}  grad 평가 {res.njev:5d}"
-              f"  f = {res.fun:.1e}  x_1 = {res.x[0]:+.3f}")
-x0 = np.tile([-1.2, 1.0], 50)
-for m in [1, 3, 10, 30]:
-    res = minimize(rosen, x0, jac=rosen_der, method="L-BFGS-B", options={"maxcor": m})
-    print(f"L-BFGS 기억 m = {m:2d}  반복 {res.nit:4d}  저장 실수 2mn = {2 * m * 100:5d}  (BFGS n^2 = {100**2})")
+        lo = res.nit // 100 * 100                             # 긴 반복의 횟수는 환경에 따라 몇 회 달라진다
+        it = f"{res.nit:3d}회" if n == 2 else f"{lo}–{lo + 99}회"
+        print(f"n = {n:2d}  {method:11s} 반복 {it:>8s}  f < 1e-8: {res.fun < 1e-8}  x_1 = {res.x[0]:+.3f}")
 ```
 
 ```output
-n =   2  CG          반복    36  grad 평가    77  f = 1.9e-14  x_1 = +1.000
-n =   2  BFGS        반복    32  grad 평가    39  f = 2.5e-15  x_1 = +1.000
-n =   2  L-BFGS-B    반복    36  grad 평가    44  f = 2.8e-12  x_1 = +1.000
-n =   2  trust-exact 반복    25  grad 평가    23  f = 3.3e-19  x_1 = +1.000
-n = 100  CG          반복  1262  grad 평가  1929  f = 1.8e-10  x_1 = +1.000
-n = 100  BFGS        반복   546  grad 평가   647  f = 1.7e-14  x_1 = +1.000
-n = 100  L-BFGS-B    반복   513  grad 평가   613  f = 9.4e-10  x_1 = +1.000
-n = 100  trust-exact 반복   205  grad 평가   179  f = 4.0e+00  x_1 = -0.993
-L-BFGS 기억 m =  1  반복  728  저장 실수 2mn =   200  (BFGS n^2 = 10000)
-L-BFGS 기억 m =  3  반복  534  저장 실수 2mn =   600  (BFGS n^2 = 10000)
-L-BFGS 기억 m = 10  반복  513  저장 실수 2mn =  2000  (BFGS n^2 = 10000)
-L-BFGS 기억 m = 30  반복  506  저장 실수 2mn =  6000  (BFGS n^2 = 10000)
+n =  2  BFGS        반복      32회  f < 1e-8: True  x_1 = +1.000
+n =  2  L-BFGS-B    반복      36회  f < 1e-8: True  x_1 = +1.000
+n =  2  trust-exact 반복      25회  f < 1e-8: True  x_1 = +1.000
+n = 20  BFGS        반복 100–199회  f < 1e-8: True  x_1 = +1.000
+n = 20  L-BFGS-B    반복 100–199회  f < 1e-8: True  x_1 = +1.000
+n = 20  trust-exact 반복    0–99회  f < 1e-8: False  x_1 = -0.993
 ```
 
-결과를 읽는 법은 세 가지다.
+$n = 20$의 반복 수는 100회 단위 구간으로만 찍었다. 수백 회짜리 반복은 부동소수점 반올림이 조금만 달라도 경로가 갈라져, 같은 코드가 이 브라우저의 Python과 로컬 Python에서 몇 회씩 다른 횟수를 낸다. 결과를 읽는 법은 세 가지다.
 
-- **$n = 2$에서는 네 방법이 모두 25–36회 반복으로 끝난다.** Hessian을 쓰는 trust-exact가 가장 적은 반복(25회)이 들었다. 준뉴턴 방법은 Hessian 없이 gradient만으로 그에 가까운 반복 수를 냈다. CG는 반복 수는 비슷하지만 line search에 gradient를 두 배 더 썼다.
-- **$n = 100$에서는 차이가 벌어진다.** BFGS(546회)와 L-BFGS(513회)가 CG(1262회)보다 두 배 이상 적은 반복으로 같은 해에 갔다. trust-exact는 205회로 가장 적었지만 $x_1 \approx -0.993$, $f \approx 4.0$인 **다른 국소 최솟점**에 멈췄다. 확장 Rosenbrock 함수는 $n \ge 4$이면 이런 국소 최솟점을 갖는다(이 점에서 gradient 노름 $2.6 \times 10^{-6}$, Hessian 최소 고윳값 0.50으로 확인했다). 더 빠른 방법이 더 좋은 해를 찾는다는 보장은 없다. 어느 점으로 가는지는 경로가 정한다.
-- **L-BFGS의 기억 $m$은 수확 체감이 크다.** $m = 1$(728회)에서 $m = 3$(534회)으로 크게 줄고, 그 뒤로는 $m = 30$까지 늘려도 506회다. 메모리는 $m = 10$에서도 BFGS의 5분의 1이고, $n$이 커질수록 차이는 $n/(2m)$배로 벌어진다.
+- **$n = 2$에서는 세 방법이 모두 25–36회 반복으로 끝난다.** Hessian을 쓰는 trust-exact가 가장 적은 반복(25회)이 들었고, 준뉴턴 방법은 Hessian 없이 gradient만으로 그에 가까운 반복 수를 냈다.
+- **$n = 20$에서 trust-exact는 가장 적은 반복으로 멈췄지만 다른 국소 최솟점이었다.** BFGS와 L-BFGS는 100–199회 만에 전역 최솟점 $(1, \dots, 1)$에 갔다. trust-exact는 100회 안에 멈췄지만 $x_1 \approx -0.993$, $f \approx 3.99$인 **다른 국소 최솟점**이다. 확장 Rosenbrock 함수는 $n \ge 4$이면 이런 국소 최솟점을 갖는다(이 점에서 gradient 노름 $1.8 \times 10^{-5}$, Hessian 최소 고윳값 0.50으로 확인했다). 더 빠른 방법이 더 좋은 해를 찾는다는 보장은 없다. 어느 점으로 가는지는 경로가 정한다. 집필 중 비선형 공액경사법(`CG`)도 시험했는데, $n = 100$에서 BFGS의 두 배가 넘는 1200회 이상이 걸렸다.
+- **L-BFGS의 기억 $m$은 수확 체감이 크다.** 집필 시점의 로컬 실행에서 $n = 100$, `options={"maxcor": m}`으로 기억 크기만 바꾸면 반복 수가 $m = 1$에서 728회, $m = 3$에서 534회, $m = 10$에서 513회, $m = 30$에서 506회였다(실행 환경에 따라 몇 회씩 다를 수 있다). $m = 3$ 이후로는 거의 줄지 않는다. 메모리 $2mn$은 $m = 10$에서도 BFGS의 $n^2$보다 $n/(2m)$배 작고, 이 비율은 $n$에 비례해 커진다.
 
 ## 자연 gradient
 
