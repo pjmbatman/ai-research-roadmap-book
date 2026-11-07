@@ -1,0 +1,126 @@
+# 13.3 계층 모델 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "hierarchical-structure"
+type = "single"
+objective = 1
+prompt = '''실험실 5곳이 같은 시료의 물성을 각각 10번씩 측정했다. 실험실마다 장비 보정 상태가 조금씩 달라 실험실 평균이 서로 다를 수 있다. 이 데이터의 구조를 가장 잘 나타내는 계층 모델은? ($i$: 측정, $j$: 실험실)'''
+explanation = '''측정 잡음(실험실 안의 변동)과 실험실 간 변동을 두 층으로 나누고, 실험실 참값 $\theta_j$들이 공통의 모집단 분포 $\mathcal{N}(\mu, \tau^2)$에서 나왔다고 둔다. $\tau$는 고정된 값이 아니라 데이터에서 추정한다. 모든 측정을 하나의 평균으로 두면 실험실 간 변동을 지우고(complete pooling), 실험실마다 서로 무관한 사전분포를 두면 정보를 공유하지 않는다(no pooling).'''
+
+[[questions.choices]]
+text = '''$y_{ij} \sim \mathcal{N}(\theta_j, \sigma^2)$, $\theta_j \sim \mathcal{N}(\mu, \tau^2)$, 그리고 $\mu, \tau$에 사전분포'''
+correct = true
+
+[[questions.choices]]
+text = '''$y_{ij} \sim \mathcal{N}(\mu, \sigma^2)$, 그리고 $\mu, \sigma$에 사전분포'''
+feedback = "실험실 간 차이를 없는 것으로 본 complete pooling이다. 같은 실험실의 측정이 서로 닮는다는 구조를 표현하지 못한다."
+
+[[questions.choices]]
+text = '''$y_{ij} \sim \mathcal{N}(\theta_j, \sigma^2)$, 각 $\theta_j$에 서로 무관한 넓은 사전분포 $\mathcal{N}(0, 100^2)$'''
+feedback = "실험실마다 따로 추정하는 no pooling과 사실상 같다. 실험실들이 비슷하다는 정보를 공유하지 못한다."
+
+[[questions.choices]]
+text = '''$y_{ij} \sim \mathcal{N}(\theta_j, \sigma^2)$, $\theta_j \sim \mathcal{N}(\mu, \tau^2)$, $\tau = 0$으로 고정'''
+feedback = "τ = 0이면 모든 θ_j가 μ와 같아져 complete pooling이 된다. τ는 데이터에서 배워야 한다."
+
+[[questions]]
+id = "shrinkage-factor"
+type = "numeric"
+objective = 2
+prompt = '''측정 잡음 $\sigma = 0.6$, 셀 간 표준편차 $\tau = 0.3$, 모집단 평균 $\mu = 2.0$을 안다고 하자. 측정이 4번인 셀의 표본평균이 1.6이다. 이 셀의 partial pooling 추정값(사후평균)은?'''
+answer = 1.8
+tolerance = 0.001
+explanation = '''표본평균의 표준오차는 $s = 0.6/\sqrt{4} = 0.3$이다. 수축 계수는 $B = s^2/(s^2 + \tau^2) = 0.09/0.18 = 0.5$이므로 추정값은 $0.5 \times 2.0 + 0.5 \times 1.6 = 1.8$이다. 표본평균의 잡음과 셀 간 변동이 같은 크기라서 정확히 중간으로 끌려간다.'''
+
+[[questions]]
+id = "which-shrinks-most"
+type = "single"
+objective = 2
+prompt = '''$\mu, \tau, \sigma$를 안다고 할 때, partial pooling에서 모집단 평균 쪽으로 **가장 많이** 끌려가는(수축 계수 $B_j$가 가장 큰) 그룹은?'''
+explanation = '''$B_j = s_j^2/(s_j^2 + \tau^2)$, $s_j = \sigma/\sqrt{n_j}$이므로 수축의 정도는 그룹 평균의 잡음, 즉 측정 수 $n_j$로만 정해진다. 표본평균이 극단적인지와는 무관하다. 다만 같은 $B_j$라도 평균에서 멀리 떨어진 그룹은 이동 거리 $B_j\lvert\bar{y}_j - \mu\rvert$가 크다.'''
+
+[[questions.choices]]
+text = "측정 수가 가장 적은 그룹"
+correct = true
+
+[[questions.choices]]
+text = "표본평균이 모집단 평균에서 가장 먼 그룹"
+feedback = "멀리 있는 그룹은 이동 거리가 클 뿐 수축 비율 B_j는 측정 수로만 정해진다."
+
+[[questions.choices]]
+text = "측정 수가 가장 많은 그룹"
+feedback = "반대다. 측정이 많으면 표본평균이 정확하므로 거의 수축하지 않는다(본문에서 40번 측정한 셀은 B = 0.09)."
+
+[[questions.choices]]
+text = "모든 그룹이 같은 비율로 수축한다."
+feedback = "그룹마다 측정 수가 다르면 표준오차가 달라 수축 계수도 다르다."
+
+[[questions]]
+id = "pooling-extremes"
+type = "multiple"
+objective = 2
+prompt = '''계층 모델과 partial pooling에 대한 설명으로 옳은 것을 모두 고르시오.'''
+explanation = '''$\tau \to 0$이면 모든 $B_j \to 1$로 complete pooling, $\tau \to \infty$이면 $B_j \to 0$으로 no pooling이 된다. 수축은 그룹 전체의 오차 합을 줄이지만 모든 그룹에서 줄이는 것은 아니다(본문 반복 실험에서 측정 20번인 셀은 0.132에서 0.136으로 조금 늘었다). 그룹이 적으면 τ의 점추정이 0으로 붕괴하기 쉬워(본문에서 14%) empirical Bayes 구간이 과신한다.'''
+
+[[questions.choices]]
+text = '''$\tau \to 0$이면 complete pooling, $\tau \to \infty$이면 no pooling과 같아진다.'''
+correct = true
+
+[[questions.choices]]
+text = "그룹이 적으면 τ의 점추정이 0 근처로 붕괴할 수 있어, τ를 점추정한 구간이 지나치게 좁아질 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "partial pooling은 모든 그룹에서 no pooling보다 오차가 작다."
+feedback = "그룹 전체의 오차 합이 줄어드는 것이다. 측정이 많은 그룹이나 다른 그룹과 크게 다른 그룹에서는 오차가 같거나 조금 커질 수 있다."
+
+[[questions.choices]]
+text = "계층 모델은 그룹 간 차이가 없다고 가정한다."
+feedback = "그룹 간 차이의 크기 τ를 데이터에서 배운다. 차이가 없다고 가정하는 것은 complete pooling이다."
+
+[[questions]]
+id = "funnel-cause"
+type = "single"
+objective = 3
+prompt = '''centered 매개변수화 $(\tau, \theta_1, \ldots, \theta_J)$로 계층 모델을 random-walk Metropolis로 샘플링했더니 작은 $\tau$ 영역이 표본에 거의 나타나지 않았다. 가장 알맞은 설명은?'''
+explanation = '''$\theta_j \mid \tau \sim \mathcal{N}(\mu, \tau^2)$이므로 $\theta_j$가 움직일 수 있는 폭이 $\tau$에 비례한다. $(\log\tau, \theta_j)$ 공간에서 사후분포는 깔때기 모양이고, 작은 $\tau$의 목 부분에서는 아주 작은 보폭이 필요하다. 넓은 입구에 맞춘 고정 보폭으로는 목 안으로 들어가는 제안이 거의 모두 기각된다. non-centered 매개변수화 $\theta_j = \mu + \tau\eta_j$는 같은 모델을 이 의존성이 없는 공간에서 표현한다.'''
+
+[[questions.choices]]
+text = "θ_j의 조건부 퍼짐이 τ에 비례해 깔때기 모양이 생기고, 고정 보폭으로는 좁은 목(작은 τ) 영역에 들어가기 어렵기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "작은 τ는 사후확률이 0이므로 표본에 나타나지 않는 것이 정상이다."
+feedback = "본문 예에서 참 확률 9.1%가 log τ < -2에 있었는데 centered 표본에는 0%였다. 샘플러가 놓친 것이다."
+
+[[questions.choices]]
+text = "수락률이 0.31로 정상이므로 샘플러에는 문제가 없고, 사전분포가 잘못되었다."
+feedback = "수락률은 샘플러가 탐색한 영역 안에서의 성질이다. 탐색하지 못한 영역은 수락률에 드러나지 않는다."
+
+[[questions.choices]]
+text = "파라미터 수(J + 1개)가 너무 많아서다."
+feedback = "같은 파라미터 수의 non-centered 매개변수화는 같은 보폭으로 목 영역을 8.3% 방문했다. 문제는 개수가 아니라 기하다."
+
+[[questions]]
+id = "noncentered-form"
+type = "single"
+objective = 3
+prompt = '''$\theta_j \sim \mathcal{N}(\mu, \tau^2)$를 non-centered 매개변수화로 바르게 쓴 것은?'''
+explanation = '''$\eta_j \sim \mathcal{N}(0, 1)$이면 $\mu + \tau\eta_j \sim \mathcal{N}(\mu, \tau^2)$이므로 모델은 같다. 샘플러는 사전분포에서 서로 독립인 $(\mu, \tau, \eta_j)$ 공간에서 움직이고, $\theta_j$는 계산으로 얻는다.'''
+
+[[questions.choices]]
+text = '''$\theta_j = \mu + \tau\,\eta_j$, $\eta_j \sim \mathcal{N}(0, 1)$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\theta_j = \mu + \eta_j / \tau$, $\eta_j \sim \mathcal{N}(0, 1)$'''
+feedback = "η_j / τ의 표준편차는 1/τ이다. θ_j의 분포가 N(μ, 1/τ²)로 바뀌어 다른 모델이 된다."
+
+[[questions.choices]]
+text = '''$\theta_j = \mu + \eta_j$, $\eta_j \sim \mathcal{N}(0, \tau^2)$'''
+feedback = "모델은 같지만 η_j의 퍼짐이 여전히 τ에 의존하므로 centered와 같은 funnel이 남는다."
+
+[[questions.choices]]
+text = '''$\theta_j \sim \mathcal{N}(\mu, 1)$로 두고 $\tau$를 없앤다'''
+feedback = "그룹 간 변동의 크기를 1로 고정한 다른 모델이다. 재매개변수화는 모델을 바꾸지 않는다."

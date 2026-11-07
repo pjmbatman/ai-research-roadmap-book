@@ -1,0 +1,6 @@
+title = "Beta 사전분포의 갱신과 사후예측분포"
+chapter = "bayesian-inference/bayesian-thinking"
+objective = 1
+exec = "browser"
+entry = "predictive_pmf"
+timeout_s = 10
