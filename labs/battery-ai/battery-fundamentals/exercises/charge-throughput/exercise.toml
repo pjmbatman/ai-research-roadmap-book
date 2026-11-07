@@ -1,0 +1,6 @@
+title = "측정 기록에서 용량·에너지·EFC 계산하기"
+chapter = "battery-ai/battery-fundamentals"
+objective = 1
+exec = "browser"
+entry = "throughput"
+timeout_s = 10
