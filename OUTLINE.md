@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 772문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 798문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -469,17 +469,17 @@ _강한 기준 모델, 선형·커널·트리 모델, 비지도학습, 모델 �
 - **16.4** [트리와 앙상블](content/16-classical-ml/04-trees-and-ensembles/index.md) · `필수` · 퀴즈 7
   - 결정 트리 · bagging과 랜덤 포레스트 · gradient boosting · 표 데이터에서의 위치 · 특징 중요도 · 참고 문헌
   - 선수: 16.1 기준 모델의 철학
-- **16.5** [비지도학습과 표현 탐색](content/16-classical-ml/05-unsupervised-learning/index.md) · `필수`
-  - 차원 축소 · 군집 · 밀도 추정과 이상 탐지 · 시각화 · 군집의 의미
+- **16.5** [비지도학습과 표현 탐색](content/16-classical-ml/05-unsupervised-learning/index.md) · `필수` · 퀴즈 6
+  - 차원 축소 · 군집 · 밀도 추정과 이상 탐지 · 시각화 · 군집의 의미 · 참고 문헌
   - 선수: 7.6 SVD·PCA·저랭크 근사
-- **16.6** [모델 선택과 평가](content/16-classical-ml/06-model-selection/index.md) · `필수`
-  - 교차검증 · 회귀 metric · 분류 metric · threshold 선택 · 하이퍼파라미터 탐색 · 진단
+- **16.6** [모델 선택과 평가](content/16-classical-ml/06-model-selection/index.md) · `필수` · 퀴즈 6
+  - 교차검증 · 회귀 metric · 분류 metric · threshold 선택 · 하이퍼파라미터 탐색 · 진단 · 참고 문헌
   - 선수: 16.1 기준 모델의 철학, 12.5 모델 비교의 통계
-- **16.7** [시계열 분석](content/16-classical-ml/07-time-series-analysis/index.md) · `필수`
-  - 시계열의 구조 · 고전 모델 · 상태공간 모델 · 예측·필터링·평활 · 평가
+- **16.7** [시계열 분석](content/16-classical-ml/07-time-series-analysis/index.md) · `필수` · 퀴즈 7
+  - 시계열의 구조 · 고전 모델 · 상태공간 모델 · 예측·필터링·평활 · 평가 · 참고 문헌
   - 선수: 16.6 모델 선택과 평가, 11.7 확률과정 기초
-- **16.8** [생존분석과 인과추론 기초](content/16-classical-ml/08-survival-and-causal/index.md) · `심화`
-  - 생존분석 · 수명 예측과의 연결 · 인과추론 기초 · 개입과 반사실
+- **16.8** [생존분석과 인과추론 기초](content/16-classical-ml/08-survival-and-causal/index.md) · `심화` · 퀴즈 7
+  - 생존분석 · 수명 예측과의 연결 · 인과추론 기초 · 개입과 반사실 · 참고 문헌
   - 선수: 16.7 시계열 분석
 
 ### 제17부. 딥러닝과 PyTorch <sub>Deep Learning with PyTorch</sub>
