@@ -2152,6 +2152,18 @@
   note      = {확인: USENIX Security 2023 발표 페이지. 확산 모델에서 학습 이미지 천 개 이상 추출, 중복 제거·차분 프라이버시의 한계}
 }
 
+@article{hersbach2020era5,
+  author  = {Hersbach, Hans and Bell, Bill and Berrisford, Paul and Hirahara, Shoji and Hor{\'a}nyi, Andr{\'a}s and Mu{\~n}oz-Sabater, Joaqu{\'i}n and Nicolas, Julien and Peubey, Carole and others},
+  title   = {The {ERA5} Global Reanalysis},
+  journal = {Quarterly Journal of the Royal Meteorological Society},
+  volume  = {146},
+  number  = {730},
+  pages   = {1999--2049},
+  year    = {2020},
+  doi     = {10.1002/qj.3803},
+  note    = {확인: 서지 기록(ADS 2020QJRMS.146.1999H, 출판사 DOI)과 초록. 시간별 자료, 수평 해상도 약 31 km(ERA-Interim 약 80 km)}
+}
+
 @article{brunton2016discovering,
   author  = {Brunton, Steven L. and Proctor, Joshua L. and Kutz, J. Nathan},
   title   = {Discovering Governing Equations from Data by Sparse Identification of Nonlinear Dynamical Systems},
@@ -2276,6 +2288,40 @@
   year      = {2023},
   doi       = {10.1109/CVPR52729.2023.01499},
   note      = {확인: CVF open access 페이지. 문맥 블록의 표현으로 목표 블록의 표현을 예측, 손으로 설계한 증강 없이 학습}
+}
+
+@inproceedings{lorenz1996predictability,
+  author    = {Lorenz, Edward N.},
+  title     = {Predictability -- A Problem Partly Solved},
+  booktitle = {Proceedings of the Seminar on Predictability, 4--8 September 1995},
+  volume    = {1},
+  publisher = {ECMWF},
+  address   = {Reading, UK},
+  year      = {1996},
+  note      = {확인: ECMWF 서지 기록과 재수록본(Palmer, Hagedorn 편, Predictability of Weather and Climate, Cambridge University Press, 2006) 서지. Lorenz-96 모형. 세미나는 1995년, 논문집 연도는 기록에 따라 1995/1996}
+}
+
+@article{rasp2020weatherbench,
+  author  = {Rasp, Stephan and Dueben, Peter D. and Scher, Sebastian and Weyn, Jonathan A. and Mouatadid, Soukayna and Thuerey, Nils},
+  title   = {{WeatherBench}: A Benchmark Data Set for Data-Driven Weather Forecasting},
+  journal = {Journal of Advances in Modeling Earth Systems},
+  volume  = {12},
+  pages   = {e2020MS002203},
+  year    = {2020},
+  doi     = {10.1029/2020MS002203},
+  note    = {확인: 서지 기록과 arXiv 2002.00469. ERA5 기반, 500 hPa 지위고도·850 hPa 기온의 3·5일 예보 벤치마크}
+}
+
+@article{lam2023learning,
+  author  = {Lam, Remi and Sanchez-Gonzalez, Alvaro and Willson, Matthew and others},
+  title   = {Learning Skillful Medium-Range Global Weather Forecasting},
+  journal = {Science},
+  volume  = {382},
+  number  = {6677},
+  pages   = {1416--1421},
+  year    = {2023},
+  doi     = {10.1126/science.adi2336},
+  note    = {확인: 서지 기록과 arXiv 2212.12794. GraphCast: 재분석으로 학습, 0.25° 10일 예보}
 }
 
 @article{hansen1993use,
@@ -2434,6 +2480,29 @@
   note      = {확인: arXiv 목록·ICLR 2021 포스터 페이지와 초록(웹 검색). 메시 그래프 위 message passing으로 시뮬레이션을 학습하는 MeshGraphNets, 학습에 쓴 시뮬레이터보다 1–2 자릿수 빠름}
 }
 
+@article{maraun2016bias,
+  author  = {Maraun, Douglas},
+  title   = {Bias Correcting Climate Change Simulations -- a Critical Review},
+  journal = {Current Climate Change Reports},
+  volume  = {2},
+  pages   = {211--220},
+  year    = {2016},
+  doi     = {10.1007/s40641-016-0050-x},
+  note    = {확인: 출판사 서지 기록(오픈 액세스). 편향 보정의 가정과 한계 검토}
+}
+
+@article{cannon2015bias,
+  author  = {Cannon, Alex J. and Sobie, Stephen R. and Murdock, Trevor Q.},
+  title   = {Bias Correction of {GCM} Precipitation by Quantile Mapping: How Well Do Methods Preserve Changes in Quantiles and Extremes?},
+  journal = {Journal of Climate},
+  volume  = {28},
+  number  = {17},
+  pages   = {6938--6959},
+  year    = {2015},
+  doi     = {10.1175/JCLI-D-14-00754.1},
+  note    = {확인: 서지 기록과 기관 저장소 원문. 표준 QM이 극한의 상대 변화를 부풀리고 quantile delta mapping이 이를 보존함}
+}
+
 @article{karniadakis2021physics,
   author  = {Karniadakis, George Em and Kevrekidis, Ioannis G. and Lu, Lu and Perdikaris, Paris and Wang, Sifan and Yang, Liu},
   title   = {Physics-Informed Machine Learning},
@@ -2563,73 +2632,6 @@
   pages   = {1--97},
   year    = {2023},
   note    = {확인: JMLR 논문 페이지와 BibTeX. neural operator의 일반 틀과 이산화 불변성, 보편 근사}
-@article{hersbach2020era5,
-  author  = {Hersbach, Hans and Bell, Bill and Berrisford, Paul and Hirahara, Shoji and Hor{\'a}nyi, Andr{\'a}s and Mu{\~n}oz-Sabater, Joaqu{\'i}n and Nicolas, Julien and Peubey, Carole and others},
-  title   = {The {ERA5} Global Reanalysis},
-  journal = {Quarterly Journal of the Royal Meteorological Society},
-  volume  = {146},
-  number  = {730},
-  pages   = {1999--2049},
-  year    = {2020},
-  doi     = {10.1002/qj.3803},
-  note    = {확인: 서지 기록(ADS 2020QJRMS.146.1999H, 출판사 DOI)과 초록. 시간별 자료, 수평 해상도 약 31 km(ERA-Interim 약 80 km)}
-}
-
-@inproceedings{lorenz1996predictability,
-  author    = {Lorenz, Edward N.},
-  title     = {Predictability -- A Problem Partly Solved},
-  booktitle = {Proceedings of the Seminar on Predictability, 4--8 September 1995},
-  volume    = {1},
-  publisher = {ECMWF},
-  address   = {Reading, UK},
-  year      = {1996},
-  note      = {확인: ECMWF 서지 기록과 재수록본(Palmer, Hagedorn 편, Predictability of Weather and Climate, Cambridge University Press, 2006) 서지. Lorenz-96 모형. 세미나는 1995년, 논문집 연도는 기록에 따라 1995/1996}
-}
-
-@article{rasp2020weatherbench,
-  author  = {Rasp, Stephan and Dueben, Peter D. and Scher, Sebastian and Weyn, Jonathan A. and Mouatadid, Soukayna and Thuerey, Nils},
-  title   = {{WeatherBench}: A Benchmark Data Set for Data-Driven Weather Forecasting},
-  journal = {Journal of Advances in Modeling Earth Systems},
-  volume  = {12},
-  pages   = {e2020MS002203},
-  year    = {2020},
-  doi     = {10.1029/2020MS002203},
-  note    = {확인: 서지 기록과 arXiv 2002.00469. ERA5 기반, 500 hPa 지위고도·850 hPa 기온의 3·5일 예보 벤치마크}
-}
-
-@article{lam2023learning,
-  author  = {Lam, Remi and Sanchez-Gonzalez, Alvaro and Willson, Matthew and others},
-  title   = {Learning Skillful Medium-Range Global Weather Forecasting},
-  journal = {Science},
-  volume  = {382},
-  number  = {6677},
-  pages   = {1416--1421},
-  year    = {2023},
-  doi     = {10.1126/science.adi2336},
-  note    = {확인: 서지 기록과 arXiv 2212.12794. GraphCast: 재분석으로 학습, 0.25° 10일 예보}
-}
-
-@article{maraun2016bias,
-  author  = {Maraun, Douglas},
-  title   = {Bias Correcting Climate Change Simulations -- a Critical Review},
-  journal = {Current Climate Change Reports},
-  volume  = {2},
-  pages   = {211--220},
-  year    = {2016},
-  doi     = {10.1007/s40641-016-0050-x},
-  note    = {확인: 출판사 서지 기록(오픈 액세스). 편향 보정의 가정과 한계 검토}
-}
-
-@article{cannon2015bias,
-  author  = {Cannon, Alex J. and Sobie, Stephen R. and Murdock, Trevor Q.},
-  title   = {Bias Correction of {GCM} Precipitation by Quantile Mapping: How Well Do Methods Preserve Changes in Quantiles and Extremes?},
-  journal = {Journal of Climate},
-  volume  = {28},
-  number  = {17},
-  pages   = {6938--6959},
-  year    = {2015},
-  doi     = {10.1175/JCLI-D-14-00754.1},
-  note    = {확인: 서지 기록과 기관 저장소 원문. 표준 QM이 극한의 상대 변화를 부풀리고 quantile delta mapping이 이를 보존함}
 }
 
 @article{hamill2001interpretation,

@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1082문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1106문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -788,17 +788,17 @@ _연속체 역학과 시뮬레이션의 기초, 시뮬레이션 대리모델, �
 
 _기상·기후 데이터의 기초, 데이터 기반 기상 예측, 다운스케일링과 기후 모델 에뮬레이션, 예측의 평가를 다룬다._
 
-- **27.1** [기상·기후 데이터의 기초](content/27-earth-and-climate/01-earth-system-data/index.md) · `필수`
-  - 데이터의 종류 · 격자와 좌표 · 변수와 단위 · 저장 형식과 도구
+- **27.1** [기상·기후 데이터의 기초](content/27-earth-and-climate/01-earth-system-data/index.md) · `필수` · 퀴즈 6
+  - 데이터의 종류 · 격자와 좌표 · 변수와 단위 · 저장 형식과 도구 · 기후값과 편차 · 참고 문헌
   - 선수: 15.2 저장 형식과 대용량 데이터
-- **27.2** [데이터 기반 기상 예측](content/27-earth-and-climate/02-weather-forecasting/index.md) · `심화`
-  - 문제 정의 · 모델 구조 · 확률적 예보 · 수치 예보와의 관계
+- **27.2** [데이터 기반 기상 예측](content/27-earth-and-climate/02-weather-forecasting/index.md) · `심화` · 퀴즈 7
+  - 문제 정의 · 모델 구조 · 확률적 예보 · 수치 예보와의 관계 · 참고 문헌
   - 선수: 27.1 기상·기후 데이터의 기초, 18.7 시계열 딥러닝
-- **27.3** [다운스케일링과 기후 모델 에뮬레이션](content/27-earth-and-climate/03-downscaling-and-emulation/index.md) · `심화`
-  - 다운스케일링 · 생성모델 기반 다운스케일링 · 기후 모델 에뮬레이션 · 평가
+- **27.3** [다운스케일링과 기후 모델 에뮬레이션](content/27-earth-and-climate/03-downscaling-and-emulation/index.md) · `심화` · 퀴즈 5
+  - 다운스케일링 · 생성모델 기반 다운스케일링 · 기후 모델 에뮬레이션 · 평가 · 참고 문헌
   - 선수: 27.1 기상·기후 데이터의 기초, 19.1 생성모델의 공통 문제 정의
-- **27.4** [기상·기후 예측의 평가](content/27-earth-and-climate/04-climate-evaluation/index.md) · `필수`
-  - 결정론적 지표 · 확률적 지표 · 흐릿함의 함정 · 극한과 사건 · 물리적 일관성
+- **27.4** [기상·기후 예측의 평가](content/27-earth-and-climate/04-climate-evaluation/index.md) · `필수` · 퀴즈 6
+  - 결정론적 지표 · 확률적 지표 · 흐릿함의 함정 · 극한과 사건 · 트렌드와 비정상성 · 물리적 일관성 · 참고 문헌
   - 선수: 27.2 데이터 기반 기상 예측, 21.2 예측분포와 구간의 평가
 
 ### 제28부. 화학·재료 <sub>Chemistry and Materials</sub>
