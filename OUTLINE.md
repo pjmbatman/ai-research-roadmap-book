@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 916문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 935문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -646,14 +646,14 @@ _실험 추적, 재현성, 실험 자동화와 하이퍼파라미터 탐색, pro
 - **22.4** [Profiling과 학습 효율화](content/22-experiment-operations/04-profiling-and-efficiency/index.md) · `필수` · 퀴즈 6
   - 측정 · profiler · 데이터 공급 · 연산 효율 · 변화의 검증 · 참고 문헌
   - 선수: 17.5 학습 루프 해부: forward → loss → backward → update, 5.5 컴퓨터 구조와 병렬 계산
-- **22.5** [GPU 메모리 관리](content/22-experiment-operations/05-memory-management/index.md) · `필수`
-  - 메모리 회계 · 측정 · 절약 기법 · 큰 모델 다루기 · OOM 대응
+- **22.5** [GPU 메모리 관리](content/22-experiment-operations/05-memory-management/index.md) · `필수` · 퀴즈 6
+  - 메모리 회계 · 측정 · 절약 기법 · 큰 모델 다루기 · OOM 대응 · 참고 문헌
   - 선수: 22.4 Profiling과 학습 효율화
-- **22.6** [다중 GPU와 분산 학습](content/22-experiment-operations/06-distributed-training/index.md) · `심화`
-  - 병렬화 방식 · DDP · 분산 데이터 · 학습 설정의 변화 · metric과 checkpoint · 통신 병목
+- **22.6** [다중 GPU와 분산 학습](content/22-experiment-operations/06-distributed-training/index.md) · `심화` · 퀴즈 7
+  - 병렬화 방식 · DDP · 분산 데이터 · 학습 설정의 변화 · metric과 checkpoint · 통신 병목 · 참고 문헌
   - 선수: 22.5 GPU 메모리 관리, 2.5 공유 서버와 클러스터 사용
-- **22.7** [추론 최적화와 배포](content/22-experiment-operations/07-inference-and-deployment/index.md) · `참조`
-  - 내보내기 · 추론 최적화 · 서빙 · 추론 계약의 유지
+- **22.7** [추론 최적화와 배포](content/22-experiment-operations/07-inference-and-deployment/index.md) · `참조` · 퀴즈 6
+  - 내보내기 · 추론 최적화 · 서빙 · 추론 계약의 유지 · 참고 문헌
   - 선수: 17.6 평가·추론·체크포인트
 
 ## `RES` 연구 방법론 <sub>Research Methodology</sub>
