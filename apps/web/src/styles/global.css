@@ -419,6 +419,8 @@ kbd { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; b
 .ls-bg.on { opacity: 1; }
 .ls { width: min(880px, 100%); height: min(760px, 100%); display: flex; flex-direction: column; border-radius: 28px; background: var(--surface); box-shadow: 0 10px 0 var(--clay), 0 40px 80px -30px rgb(0 0 0 / 0.55); overflow: hidden; transform: translateY(26px) scale(0.97); transition: transform 460ms var(--spring); }
 .ls-bg.on .ls { transform: none; }
+/* 위젯이 있는 쪽은 시트를 창 높이까지 늘려 readouts가 한 화면에 들어오게 한다(위젯 폭은 그대로). */
+.ls:has(.ls-body .widget:not(.pg-off, .pg-off *)) { height: 100%; max-height: 1040px; transition: transform 460ms var(--spring), height 260ms var(--ease); }
 .ls-top { flex: none; display: flex; align-items: center; gap: 14px; padding: 18px 22px 10px; }
 .ls-x { width: 40px; height: 40px; flex: none; border-radius: 12px; border: 0; background: var(--soft); color: var(--mute); cursor: pointer; display: grid; place-items: center; }
 .ls-x svg { width: 18px; height: 18px; }
@@ -467,7 +469,14 @@ kbd { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; b
 .pg-off { display: none !important; }
 .ls-body .step > section > h2:first-child { display: none; }
 /* 시트 안의 위젯은 캔버스 높이가 시트에 들어가도록 폭을 줄인다(캔버스 비율 약 0.62) */
-.ls-body .widget { max-width: min(100%, calc((min(760px, 100vh - 32px) - 500px) / 0.62)); margin-inline: auto; }
+.ls-body .widget { max-width: min(100%, 440px); margin-inline: auto; }
+/* 넓은 시트에서는 조작·readouts 판을 그림 오른쪽에 둔다. 위젯 자체 폭(440px)은 그대로라 위젯 코드의 배치 판단이 바뀌지 않는다. */
+@media (min-width: 960px) {
+  .ls-body .widget { margin-left: 0; }
+  .ls-body .widget .wframe { position: relative; overflow: visible; }
+  .ls-body .widget .wframe-stage { border-radius: 0 0 21px 21px; overflow: hidden; }
+  .ls-body .widget .wframe-panel { position: absolute; top: 0; left: calc(100% + 16px); width: min(340px, calc(800px - 100% - 16px)); max-height: 100%; overflow-y: auto; border: 1px solid var(--line); border-radius: 22px; }
+}
 .ls-body .cell .cm-editor { max-height: 300px; }
 .box > h2 { font-size: 17px; margin: 0 0 14px; }
 .box-goals ul { list-style: none; padding: 0; display: grid; gap: 12px; counter-reset: g; }
