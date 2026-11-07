@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1106문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1136문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -768,20 +768,20 @@ _시뮬레이션 기반 추론, 방정식 발견, 능동 학습과 베이지안 
 
 _연속체 역학과 시뮬레이션의 기초, 시뮬레이션 대리모델, 난류와 closure 모델 학습, 설계 최적화, 벤치마크와 평가를 다룬다._
 
-- **26.1** [ML 연구자를 위한 연속체 역학과 시뮬레이션](content/26-physics-and-engineering/01-simulation-fundamentals/index.md) · `필수`
-  - 지배 방정식 · 무차원수와 영역 · 시뮬레이션 파이프라인 · 시뮬레이션 데이터
+- **26.1** [ML 연구자를 위한 연속체 역학과 시뮬레이션](content/26-physics-and-engineering/01-simulation-fundamentals/index.md) · `필수` · 퀴즈 6
+  - 지배 방정식 · 무차원수와 영역 · 시뮬레이션 파이프라인 · 시뮬레이션 데이터 · 참고 문헌
   - 선수: 9.7 PDE·DAE와 시뮬레이터 검증
-- **26.2** [시뮬레이션 대리모델](content/26-physics-and-engineering/02-surrogate-modeling/index.md) · `필수`
-  - 대리모델의 종류 · 구조 선택 · 다중 충실도 · 속도 이득의 측정
+- **26.2** [시뮬레이션 대리모델](content/26-physics-and-engineering/02-surrogate-modeling/index.md) · `필수` · 퀴즈 6
+  - 대리모델의 종류 · 구조 선택 · 다중 충실도 · 속도 이득의 측정 · 참고 문헌
   - 선수: 26.1 ML 연구자를 위한 연속체 역학과 시뮬레이션, 24.4 Neural Operator와 동역학 학습
-- **26.3** [난류와 closure 모델 학습](content/26-physics-and-engineering/03-turbulence-and-closure/index.md) · `심화`
-  - closure 문제 · 학습 기반 closure · solver와의 결합 · 일반화
+- **26.3** [난류와 closure 모델 학습](content/26-physics-and-engineering/03-turbulence-and-closure/index.md) · `심화` · 퀴즈 6
+  - closure 문제 · 학습 기반 closure · solver와의 결합 · 일반화 · 참고 문헌
   - 선수: 26.2 시뮬레이션 대리모델, 24.5 하이브리드 모델과 대리모델
-- **26.4** [형상·설계 최적화와 역설계](content/26-physics-and-engineering/04-design-optimization/index.md) · `심화`
-  - 설계 문제의 정의 · gradient 기반 설계 · 대리모델 기반 설계 · 생성모델 기반 역설계 · 검증
+- **26.4** [형상·설계 최적화와 역설계](content/26-physics-and-engineering/04-design-optimization/index.md) · `심화` · 퀴즈 6
+  - 설계 문제의 정의 · gradient 기반 설계 · 대리모델 기반 설계 · 생성모델 기반 역설계 · 검증 · 참고 문헌
   - 선수: 26.2 시뮬레이션 대리모델, 10.7 특수한 최적화 문제
-- **26.5** [시뮬레이션 학습의 벤치마크와 평가](content/26-physics-and-engineering/05-physics-benchmarks/index.md) · `필수`
-  - 정확도 지표 · 장기 rollout · 물리적 일관성 · 일반화 · 비용
+- **26.5** [시뮬레이션 학습의 벤치마크와 평가](content/26-physics-and-engineering/05-physics-benchmarks/index.md) · `필수` · 퀴즈 6
+  - 정확도 지표 · 장기 rollout · 물리적 일관성 · 일반화 · 비용 · 참고 문헌
   - 선수: 26.2 시뮬레이션 대리모델, 21.4 분포 이동과 OOD
 
 ### 제27부. 지구·기후 <sub>Earth and Climate</sub>
