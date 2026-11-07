@@ -1,0 +1,66 @@
+# 부록 C 공식 모음 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "quadratic-form-gradient"
+type = "single"
+objective = 3
+prompt = '''$\mathbf{A} = \begin{bmatrix} 1 & 2 \\ 0 & 1 \end{bmatrix}$, $\mathbf{x} = (1, 1)^\top$일 때 $f(\mathbf{x}) = \mathbf{x}^\top\mathbf{A}\mathbf{x}$의 gradient $\nabla_{\mathbf{x}} f$는?'''
+explanation = '''$\nabla_{\mathbf{x}}\,\mathbf{x}^\top\mathbf{A}\mathbf{x} = (\mathbf{A} + \mathbf{A}^\top)\mathbf{x}$다. $\mathbf{A} + \mathbf{A}^\top = \begin{bmatrix} 2 & 2 \\ 2 & 2 \end{bmatrix}$이므로 gradient는 $(4, 4)^\top$이다. 직접 확인해도 $f = x_1^2 + 2x_1x_2 + x_2^2$이고 편미분은 $(2x_1 + 2x_2,\ 2x_1 + 2x_2) = (4, 4)$다. 흔히 외우는 $2\mathbf{A}\mathbf{x}$는 $\mathbf{A}$가 대칭일 때만 맞다.'''
+
+[[questions.choices]]
+text = '''$(4, 4)^\top$'''
+correct = true
+
+[[questions.choices]]
+text = '''$(6, 2)^\top$'''
+feedback = "2Ax를 계산했다. 이 공식은 A가 대칭일 때만 성립한다. 이 A는 대칭이 아니다."
+
+[[questions.choices]]
+text = '''$(3, 1)^\top$'''
+feedback = "Ax만 계산했다. x가 이차형식의 양쪽에 있으므로 항이 두 개 나온다: Ax와 Aᵀx."
+
+[[questions.choices]]
+text = '''$(2, 6)^\top$'''
+feedback = "2Aᵀx를 계산했다. 전치를 한쪽에만 적용한 것이다. 정답은 (A + Aᵀ)x다."
+
+[[questions]]
+id = "gaussian-conditional-variance"
+type = "single"
+objective = 1
+prompt = '''결합 가우시안 $(\mathbf{x}_a, \mathbf{x}_b)$에서 $\mathbf{x}_b$를 관측해 $\mathbf{x}_a \mid \mathbf{x}_b$를 구한다. 관측값 $\mathbf{x}_b$가 평균 $\boldsymbol{\mu}_b$에서 멀리 떨어질수록 조건부 공분산은 어떻게 되는가?'''
+explanation = '''조건부 공분산은 $\boldsymbol{\Sigma}_{aa} - \boldsymbol{\Sigma}_{ab}\boldsymbol{\Sigma}_{bb}^{-1}\boldsymbol{\Sigma}_{ba}$로, 관측값 $\mathbf{x}_b$가 식에 들어 있지 않다. 관측값은 조건부 **평균**만 선형으로 옮긴다. 그래서 가우시안 모델(GP 회귀, Kalman filter)은 관측이 예상 밖이어도 불확실성을 키우지 않는다. 이상한 관측에 불확실성이 커지길 원하면 가우시안 밖의 모델이 필요하다.'''
+
+[[questions.choices]]
+text = "관측값과 무관하다. 공분산 블록만으로 정해진다."
+correct = true
+
+[[questions.choices]]
+text = "커진다. 예상 밖의 관측일수록 불확실성이 늘어난다."
+feedback = "직관적으로 그럴 듯하지만 가우시안의 조건부 공분산 식에는 x_b가 없다. 관측값은 평균만 바꾼다."
+
+[[questions.choices]]
+text = "작아진다. 관측이 극단적일수록 정보가 많다."
+feedback = "관측값의 크기는 공분산에 들어가지 않는다. 공분산은 어떤 변수를 관측했는지(블록 구조)에만 의존한다."
+
+[[questions.choices]]
+text = "관측값이 평균과 같을 때만 무조건부 공분산과 같아진다."
+feedback = "조건화하면 x_b의 값과 무관하게 Σ_ab Σ_bb⁻¹ Σ_ba만큼 공분산이 줄어든다. 관측값이 평균과 같아도 마찬가지다."
+
+[[questions]]
+id = "gamma-scale-argument"
+type = "numeric"
+objective = 2
+prompt = '''gamma 분포를 shape $\alpha = 3$, **rate** $\beta = 2$로 정의했다(평균 $\alpha/\beta = 1.5$). `scipy.stats.gamma(a=3, scale=?)`로 같은 분포를 만들려면 `scale`에 얼마를 넣어야 하는가?'''
+explanation = '''SciPy의 gamma는 rate가 아니라 scale을 받고, scale $= 1/\text{rate}$다. 따라서 `scale=0.5`이고, 이때 `.mean()`은 $a \times \text{scale} = 1.5$로 정의와 일치한다. `scale=2`를 넣으면 평균이 6이 되어 네 배 어긋난다. 지수분포 `expon`도 같은 규약이다.'''
+answer = 0.5
+tolerance = 0.001
+
+[[questions]]
+id = "gaussian-kl-value"
+type = "numeric"
+objective = 1
+prompt = '''$\mathrm{KL}\big(\mathcal{N}(0, 1) \,\Vert\, \mathcal{N}(0, 2^2)\big)$을 nat 단위로 소수 셋째 자리까지 구하라.'''
+explanation = '''일변수 가우시안 KL은 $\log\frac{\sigma_2}{\sigma_1} + \frac{\sigma_1^2 + (\mu_1 - \mu_2)^2}{2\sigma_2^2} - \frac{1}{2}$이다. $\sigma_1 = 1$, $\sigma_2 = 2$, 평균 차 0을 넣으면 $\log 2 + \frac{1}{8} - \frac{1}{2} \approx 0.6931 + 0.125 - 0.5 = 0.318$이다. 방향을 바꾼 $\mathrm{KL}(\mathcal{N}(0, 4) \,\Vert\, \mathcal{N}(0, 1)) = -\log 2 + 2 - 0.5 \approx 0.807$과 다르다는 점도 확인한다.'''
+answer = 0.318
+tolerance = 0.002
