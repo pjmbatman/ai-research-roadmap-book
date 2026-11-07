@@ -270,6 +270,8 @@ arctan, x0 = 1.5, damped:       1.5    -0.097  0.000608  -1.5e-10         0     
 
 순수 Newton은 다섯 번 만에 $-1580$까지 튀었다. damped Newton은 첫 step에서 전체 step($-1.69$로 가면 $|f|$가 커진다)을 버리고 절반 step으로 $-0.097$에 간 뒤, 근 근처에서는 전체 step으로 빠르게 수렴했다($\arctan$은 $f''(0) = 0$이라 이 근에서는 2차보다도 빠르다). 중근 $(x-1)^2$에서는 오차가 매번 정확히 절반이 되는 선형 수렴이다.
 
+::widget{name="newton-basins"}
+
 ::quiz{id="double-root-linear"}
 
 ::quiz{id="newton-arctan-damping"}
