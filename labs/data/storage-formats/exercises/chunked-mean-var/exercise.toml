@@ -1,0 +1,6 @@
+title = "덩어리로 평균과 분산 구하기"
+chapter = "data/storage-formats"
+objective = 2
+exec = "browser"
+entry = "chunked_mean_var"
+timeout_s = 10
