@@ -367,37 +367,37 @@ status = "prototype"
 name = "gmm-em"
 title = "GMM EM 단계"
 chapters = ["bayesian-inference/latent-variables-and-em"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "kl-direction"
 title = "forward vs reverse KL"
 chapters = ["information-and-learning-theory/entropy-and-kl"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "mi-histogram-bias"
 title = "MI 추정 편향"
 chapters = ["information-and-learning-theory/mutual-information"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "double-descent"
 title = "double descent"
 chapters = ["information-and-learning-theory/modern-generalization"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "doe-coverage"
 title = "표집 설계 커버리지"
 chapters = ["data/synthetic-data"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "window-overlap-leak"
 title = "window 겹침 누수"
 chapters = ["architectures/time-series-deep-learning"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "robust-outlier"
