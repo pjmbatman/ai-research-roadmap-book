@@ -1,0 +1,114 @@
+# 29.3 단백질 구조 예측과 설계 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "mirror-image"
+type = "single"
+objective = 3
+prompt = '''어떤 단백질 구조와 그 거울상(좌표의 $z$ 부호만 바꾼 것)을 비교한다. 옳은 것은?'''
+explanation = '''거울상은 모든 쌍의 거리가 같으므로 거리 행렬과 접촉 지도가 완전히 같다. 반사(행렬식 −1)를 허용하는 정렬도 두 구조를 RMSD 0으로 겹친다. 단백질은 거울상이 다른 분자이므로, Kabsch 정렬에서 $d = \operatorname{sign}\det(\mathbf{U}\mathbf{V}^\top)$로 반사를 막고 회전만 허용해야 차이가 드러난다.'''
+
+[[questions.choices]]
+text = "거리 행렬이 다르므로 접촉 지도로 구분할 수 있다."
+feedback = "반사는 거리를 보존한다. 거리 행렬과 접촉 지도는 거울상과 원래 구조에서 완전히 같다."
+
+[[questions.choices]]
+text = "거리 행렬은 같다. 회전만 허용한 Kabsch 정렬로는 차이가 드러난다."
+correct = true
+
+[[questions.choices]]
+text = "어떤 정렬을 쓰든 RMSD가 0이므로 같은 구조로 보아도 된다."
+feedback = "반사를 허용한 정렬에서만 0이다. 회전만 허용하면 RMSD가 0보다 크다. 단백질은 거울상이 다른 분자다."
+
+[[questions]]
+id = "invariant-quantities"
+type = "multiple"
+objective = 3
+prompt = '''구조 전체를 임의로 회전하고 평행이동해도 **바뀌지 않는** 것을 모두 고르시오.'''
+explanation = '''거리는 회전·평행이동에 보존되므로 거리 행렬과 접촉 지도, 그리고 거리만 비교하는 lDDT는 바뀌지 않는다. Kabsch 정렬 RMSD는 정렬 과정에서 회전·평행이동을 최적화하므로 결과가 같다. 원자 좌표 자체와 정렬하지 않은 RMSD는 바뀐다.'''
+
+[[questions.choices]]
+text = "거리 행렬"
+correct = true
+
+[[questions.choices]]
+text = "접촉 지도"
+correct = true
+
+[[questions.choices]]
+text = "Kabsch 정렬 후의 RMSD"
+correct = true
+
+[[questions.choices]]
+text = "정렬하지 않은 RMSD"
+feedback = "좌표를 그대로 빼므로 회전·평행이동의 차이가 그대로 들어간다."
+
+[[questions.choices]]
+text = "Cα 원자의 좌표"
+feedback = "좌표는 기준 틀에 따라 바뀐다. 그래서 구조 비교는 좌표가 아니라 불변량이나 정렬 후의 값으로 한다."
+
+[[questions]]
+id = "tm-score-d0"
+type = "numeric"
+objective = 1
+prompt = '''TM-score의 거리 척도는 $d_0(L) = 1.24 \sqrt[3]{L - 15} - 1.8$ (Å)이다. 길이 $L = 100$인 단백질의 $d_0$는 몇 Å인가? (소수 둘째 자리까지)'''
+answer = 3.65
+tolerance = 0.02
+explanation = '''$\sqrt[3]{85} \approx 4.397$이므로 $d_0 = 1.24 \times 4.397 - 1.8 \approx 3.65$ Å이다. 중첩 후 거리가 $d_0$인 잔기는 TM-score에 $1/2$만큼, $2d_0$이면 $1/5$만큼 기여한다. 척도가 길이에 따라 커지므로 길이가 다른 단백질 사이에서도 점수를 비교할 수 있다.'''
+
+[[questions]]
+id = "domain-hinge"
+type = "single"
+objective = 1
+prompt = '''두 도메인으로 된 단백질의 예측에서, 각 도메인의 모양은 실험 구조와 거의 같지만 두 도메인 사이의 각도가 틀려 전체 RMSD가 8 Å이다. 가장 적절한 평가는?'''
+explanation = '''RMSD는 하나의 중첩에서 계산한 제곱 평균이라 도메인 배치 오차 하나에 지배된다. lDDT처럼 중첩 없이 국소 거리 보존을 재는 지표나, 도메인별로 정렬한 RMSD는 각 도메인이 정확함을 드러낸다. 도메인 사이의 배치가 틀렸다는 사실도 함께 보고한다. 어느 쪽이 중요한지는 연구 질문(결합 부위가 한 도메인 안인가, 도메인 사이인가)이 정한다.'''
+
+[[questions.choices]]
+text = "RMSD가 크므로 전체적으로 쓸모없는 예측이다."
+feedback = "도메인 각각은 정확하다. RMSD는 배치 오차 하나 때문에 커졌다."
+
+[[questions.choices]]
+text = "도메인별 정렬 RMSD나 lDDT 같은 국소 지표로 각 도메인의 정확도를 보이고, 도메인 배치 오차를 따로 보고한다."
+correct = true
+
+[[questions.choices]]
+text = "RMSD가 클수록 TM-score도 반드시 낮으므로 TM-score를 따로 볼 필요는 없다."
+feedback = "TM-score는 먼 잔기의 기여를 0 근처로 누를 뿐 무한히 깎지 않는다. 이 장의 경첩 예에서 RMSD와 TM-score의 순위가 뒤집혔다."
+
+[[questions]]
+id = "low-confidence-region"
+type = "single"
+objective = 2
+prompt = '''예측 구조에서 어떤 고리 영역의 잔기별 신뢰도가 매우 낮다. 이 영역에 대한 해석으로 옳은 것은?'''
+explanation = '''신뢰도는 모델이 그 영역의 예측이 실험 구조와 얼마나 맞을지 스스로 추정한 값이다. 낮은 신뢰도는 모델이 모른다는 뜻일 수도, 실제로 일정한 구조가 없는 유연한 영역이라는 뜻일 수도 있고, 신뢰도만으로는 둘을 구분할 수 없다. 어느 경우든 그 영역의 좌표를 구조로 해석하지 않는다. 신뢰도 자체도 모델 출력이므로, 실험 구조가 있는 단백질에서 실제 오차와의 관계를 확인한 뒤 쓴다.'''
+
+[[questions.choices]]
+text = "그 영역은 실험에서도 반드시 무질서한 영역이다."
+feedback = "모델이 정보가 부족해 모르는 경우에도 신뢰도가 낮다. 신뢰도만으로는 두 경우를 구분할 수 없다."
+
+[[questions.choices]]
+text = "좌표 모양은 틀릴 수 있지만 전체 RMSD에는 영향을 주지 않는다."
+feedback = "신뢰도가 낮은 영역의 큰 오차는 RMSD를 크게 올린다. 이 장의 예에서 이런 잔기를 빼자 RMSD가 2.23 Å에서 0.52 Å이 되었다."
+
+[[questions.choices]]
+text = "그 영역의 좌표는 구조로 해석하지 않는다. 모델이 모르는 영역일 수도, 실제로 유연한 영역일 수도 있다."
+correct = true
+
+[[questions]]
+id = "predicted-vs-experimental"
+type = "single"
+objective = 2
+prompt = '''새 구조 예측 모델을 학습하려고, 예측 구조 데이터베이스의 구조를 실험 구조와 구분 없이 학습 데이터에 섞었다. 무엇이 문제인가?'''
+explanation = '''예측 구조는 측정값이 아니라 이전 모델의 출력이다. 실험 구조와 구분 없이 섞으면 새 모델은 이전 모델의 체계적 오차까지 정답으로 학습하고, 평가에서 그 오차를 공유하는 예측이 높은 점수를 받는다. 예측 구조를 쓰더라도 출처를 표시하고, 신뢰도로 거르고, 평가는 실험 구조로 한다.'''
+
+[[questions.choices]]
+text = "이전 모델의 오차가 정답처럼 학습되고, 같은 오차를 공유하는 예측이 평가에서 유리해진다."
+correct = true
+
+[[questions.choices]]
+text = "예측 구조는 실험 구조보다 해상도가 높아서 모델이 과적합한다."
+feedback = "예측 구조는 실험의 해상도 개념이 적용되는 측정값이 아니다. 문제는 해상도가 아니라 출처다."
+
+[[questions.choices]]
+text = "문제없다. 예측 정확도가 높으면 예측 구조와 실험 구조는 같은 데이터다."
+feedback = "정확도가 높은 영역이 많아도 예측은 모델 출력이다. 신뢰도가 낮은 영역과 체계적 오차가 함께 들어온다."

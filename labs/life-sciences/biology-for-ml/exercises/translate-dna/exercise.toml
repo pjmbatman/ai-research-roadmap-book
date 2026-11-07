@@ -1,0 +1,6 @@
+title = "두 가닥, 세 읽기 틀로 번역하기"
+chapter = "life-sciences/biology-for-ml"
+objective = 1
+exec = "browser"
+entry = "translate"
+timeout_s = 10
