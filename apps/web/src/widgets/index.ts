@@ -20,6 +20,7 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "float-precision": () => import("./float-precision/index"),
   "ode-stability": () => import("./ode-stability/index"),
   "optimizer-landscape": () => import("./optimizer-landscape/index"),
+  "coulomb-matrix-invariance": () => import("./coulomb-matrix-invariance/index"),
 };
 
 export function mountWidgets(page: PageData) {

@@ -121,7 +121,7 @@ status = "prototype"
 name = "coulomb-matrix-invariance"
 title = "Coulomb 행렬 고윳값의 불변성"
 chapters = ["chemistry-and-materials/molecular-representations"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "scaffold-split-explorer"
