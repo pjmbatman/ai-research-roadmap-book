@@ -10,6 +10,11 @@ const IMPL: Record<string, () => Promise<{ mount: (root: HTMLElement, attrs: Rec
   "bayesian-update": () => import("./bayesian-update/index"),
   "gp-regression": () => import("./gp-regression/index"),
   "calibration-diagram": () => import("./calibration-diagram/index"),
+  "split-leakage": () => import("./split-leakage/index"),
+  "training-loop-stepper": () => import("./training-loop-stepper/index"),
+  "attention-visualizer": () => import("./attention-visualizer/index"),
+  "diffusion-process": () => import("./diffusion-process/index"),
+  "battery-ecm": () => import("./battery-ecm/index"),
 };
 
 export function mountWidgets(page: PageData) {

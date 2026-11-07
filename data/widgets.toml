@@ -85,25 +85,25 @@ status = "prototype"
 name = "split-leakage"
 title = "데이터 분할과 누수"
 chapters = ["data/splitting-and-leakage"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "training-loop-stepper"
 title = "학습 루프 단계 재생기"
 chapters = ["deep-learning-pytorch/training-loop"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "attention-visualizer"
 title = "Attention 계산"
 chapters = ["architectures/transformers"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "diffusion-process"
 title = "확산 과정의 forward와 reverse"
 chapters = ["generative-and-foundation-models/diffusion-models"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "calibration-diagram"
@@ -115,4 +115,4 @@ status = "prototype"
 name = "battery-ecm"
 title = "등가회로 모델 시뮬레이터"
 chapters = ["battery-ai/battery-models", "battery-ai/battery-fundamentals"]
-status = "planned"
+status = "prototype"
