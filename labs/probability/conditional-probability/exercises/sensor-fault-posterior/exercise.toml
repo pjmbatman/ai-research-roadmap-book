@@ -1,0 +1,6 @@
+title = "여러 센서의 경보로 고장 확률 구하기"
+chapter = "probability/conditional-probability"
+objective = 2
+exec = "browser"
+entry = "posterior_fault"
+timeout_s = 10

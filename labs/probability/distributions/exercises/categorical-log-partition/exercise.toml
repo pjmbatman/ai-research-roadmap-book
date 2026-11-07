@@ -1,0 +1,6 @@
+title = "categorical 분포의 log-partition"
+chapter = "probability/distributions"
+objective = 2
+exec = "browser"
+entry = "log_partition"
+timeout_s = 10
