@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 935문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 958문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -666,19 +666,19 @@ _실험 추적, 재현성, 실험 자동화와 하이퍼파라미터 탐색, pro
 
 _문헌 탐색, 논문 읽기와 재현, 연구 질문과 가설, 실험 설계, 결과 해석, 연구 기록, 논문 작성, figure, 발표, 리뷰, 연구 윤리를 다룬다._
 
-- **23.1** [문헌 탐색과 지식 관리](content/23-research-practice/01-literature-search/index.md) · `필수`
-  - 탐색 전략 · 도구 · 참고문헌 관리 · 연구 노트 · 분류 방식
-- **23.2** [논문 읽는 법](content/23-research-practice/02-reading-papers/index.md) · `필수` · 퀴즈 4
-  - 읽기의 단계 · 읽는 순서 · 무엇을 추출하는가 · 비판적 읽기 · 수식과 코드
+- **23.1** [문헌 탐색과 지식 관리](content/23-research-practice/01-literature-search/index.md) · `필수` · 퀴즈 5
+  - 탐색 전략 · 도구 · 참고문헌 관리 · 연구 노트 · 분류 방식 · 참고 문헌
+- **23.2** [논문 읽는 법](content/23-research-practice/02-reading-papers/index.md) · `필수` · 퀴즈 6
+  - 읽기의 단계 · 읽는 순서 · 무엇을 추출하는가 · 비판적 읽기 · 수식과 코드 · 참고 문헌
   - 선수: 23.1 문헌 탐색과 지식 관리, 1.1 AI 연구의 생애주기
-- **23.3** [논문 재현](content/23-research-practice/03-reproducing-papers/index.md) · `필수`
-  - 재현의 종류 · 조건 맞추기 · 차이의 기록 · 불일치의 원인 분리 · 재현 보고서
+- **23.3** [논문 재현](content/23-research-practice/03-reproducing-papers/index.md) · `필수` · 퀴즈 5
+  - 재현의 종류 · 조건 맞추기 · 차이의 기록 · 불일치의 원인 분리 · 재현 보고서 · 참고 문헌
   - 선수: 23.2 논문 읽는 법, 22.2 재현성
-- **23.4** [연구 질문과 가설](content/23-research-practice/04-research-questions/index.md) · `필수`
-  - 좋은 연구 문제 · 관찰에서 가설로 · 기여의 종류 · 복잡성과 기여 · 사전에 정하는 것
+- **23.4** [연구 질문과 가설](content/23-research-practice/04-research-questions/index.md) · `필수` · 퀴즈 5
+  - 좋은 연구 문제 · 관찰에서 가설로 · 기여의 종류 · 복잡성과 기여 · 사전에 정하는 것 · 참고 문헌
   - 선수: 23.3 논문 재현
-- **23.5** [실험 설계](content/23-research-practice/05-experimental-design/index.md) · `필수`
-  - 반증 가능한 실험 · 실험의 종류 · 공정성 · 효과의 분리 · 편향 통제 · 실험 계획서
+- **23.5** [실험 설계](content/23-research-practice/05-experimental-design/index.md) · `필수` · 퀴즈 6
+  - 반증 가능한 실험 · 실험의 종류 · 공정성 · 효과의 분리 · 편향 통제 · 실험 계획서 · 참고 문헌
   - 선수: 23.4 연구 질문과 가설, 12.5 모델 비교의 통계, 15.4 데이터 분할과 누수 방지
 - **23.6** [결과 분석과 주장의 범위](content/23-research-practice/06-analyzing-results/index.md) · `필수`
   - 오차 분석 · 주장의 범위 · 대안 설명 · 부정적 결과
