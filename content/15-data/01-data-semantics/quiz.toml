@@ -1,0 +1,113 @@
+# 15.1 데이터의 의미와 구조 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "unit-of-independence"
+type = "numeric"
+objective = 1
+prompt = '''제조 lot 하나에서 나온 배터리 셀 8개를 각각 30사이클씩 측정해 240행의 표를 만들었다. 셀마다 제조 편차가 있다. "새로 만든 셀에서도 이 용량 예측 모델이 통한다"를 주장할 때, 데이터에 있는 서로 다른 독립 사례는 몇 개인가?'''
+answer = 8
+tolerance = 0
+slider = { min = 1, max = 240, step = 1, unit = "개" }
+explanation = '''일반화 대상이 "새 셀"이므로 독립성의 단위는 셀이다. 같은 셀의 30사이클은 같은 제조 편차를 공유하므로 서로 독립인 사례가 아니다. 240행은 sample 수이고, 이 주장에 대한 독립 사례는 셀 8개다. 반대로 "새 lot"에 대해 주장하려면 lot이 하나뿐이므로 독립 사례는 1개다.'''
+
+[[questions]]
+id = "pseudoreplication-se"
+type = "single"
+objective = 1
+prompt = '''셀 8개 × 사이클 30개 데이터에서 셀 사이 편차가 사이클 사이 잡음보다 훨씬 크다. 240행을 모두 독립으로 보고 평균 용량의 표준오차를 $s/\sqrt{240}$으로 계산하면 어떻게 되는가?'''
+explanation = '''같은 셀의 행은 셀 효과 $u_g$를 공유한다. 평균의 분산은 $\sigma_g^2/G + \sigma_\varepsilon^2/(Gm)$이고, 셀 효과가 크면 첫째 항이 지배하므로 실제 불확실성은 셀 수 $G = 8$로 정해진다. 행 수로 나누면 표준오차를 크게 과소평가한다. 본문의 예에서는 0.0019 Ah 대 0.0104 Ah로 다섯 배 넘게 차이 났다.'''
+
+[[questions.choices]]
+text = "실제보다 표준오차를 작게 계산해 결론을 과신하게 된다."
+correct = true
+
+[[questions.choices]]
+text = "행이 많을수록 정확하므로 올바른 계산이다."
+feedback = "행이 많아도 셀 효과는 셀 8개에서만 추정된다. 사이클을 늘려도 σ_g²/G 항은 줄지 않는다."
+
+[[questions.choices]]
+text = "실제보다 표준오차를 크게 계산해 보수적인 결론이 된다."
+feedback = "방향이 반대다. 반복 측정을 독립으로 세면 N이 부풀려져 표준오차가 작아진다."
+
+[[questions.choices]]
+text = "사이클 사이 잡음이 작으므로 두 계산은 거의 같다."
+feedback = "사이클 사이 잡음이 작을수록 행들이 셀 평균 주위에 몰려 있어, 행을 독립으로 센 계산이 셀 사이 편차를 더 심하게 무시한다."
+
+[[questions]]
+id = "computed-label-bias"
+type = "single"
+objective = 2
+prompt = '''방전 전류를 적분해 용량 label을 계산한다. 전류 센서에는 평균 0인 잡음과 +0.02 A의 고정 offset이 있다. 이 label로 학습하고 같은 방식으로 만든 test label로 평가할 때 옳은 것은?'''
+explanation = '''잡음은 측정을 많이 적분할수록 상쇄되지만, offset은 모든 측정에 같은 방향으로 들어가 적분 시간만큼 쌓인다. 2 A로 1시간 방전하면 약 0.02 Ah(1%)의 편향이 모든 label에 생긴다. test label도 같은 편향을 가지므로 평가 지표에는 드러나지 않는다. 다른 방법으로 만든 label(예: 보정된 장비)과 비교해야 보인다.'''
+
+[[questions.choices]]
+text = "모든 label이 같은 방향으로 약 1% 치우치고, test 지표로는 이 편향이 보이지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "측정 횟수를 늘리면 offset도 평균에서 상쇄되어 사라진다."
+feedback = "평균에서 상쇄되는 것은 평균 0인 잡음뿐이다. 고정 offset은 모든 측정에 같은 부호로 더해져 적분할수록 쌓인다."
+
+[[questions.choices]]
+text = "편향 때문에 test RMSE가 크게 나오므로 평가에서 바로 발견된다."
+feedback = "test label도 같은 장비와 절차로 만들었으므로 같은 편향을 가진다. 모델과 label이 함께 치우쳐 있으면 RMSE는 작게 나온다."
+
+[[questions.choices]]
+text = "label 잡음은 모델이 학습하지 못하므로 편향도 학습되지 않는다."
+feedback = "평균 0인 잡음은 모델이 평균을 학습하면서 걸러지지만, 편향은 label의 평균 자체를 옮기므로 모델이 그대로 학습한다."
+
+[[questions]]
+id = "label-noise-floor"
+type = "numeric"
+objective = 2
+prompt = '''측정 label이 $\tilde{y} = y + \eta$, $\eta \sim \mathcal{N}(0, 0.05^2)$이다(편향 없음). 참 함수 $y = f(x)$를 정확히 아는 모델이 측정 label에 대해 내는 RMSE의 기댓값은 대략 얼마인가?'''
+answer = 0.05
+tolerance = 0.005
+explanation = '''완벽한 모델의 예측은 $f(x) = y$이므로 오차는 $y - \tilde{y} = -\eta$이고, RMSE는 $\sqrt{\mathbb{E}[\eta^2]} = \sigma_\eta = 0.05$다. 이것이 측정 label로 평가할 때 넘을 수 없는 바닥이다. test RMSE가 이보다 훨씬 작게 나오면 모델이 잡음까지 예측하고 있다는 뜻이고, 대개 누수(같은 측정의 중복, 인접 시점)를 의심해야 한다.'''
+
+[[questions]]
+id = "data-dictionary-fields"
+type = "multiple"
+objective = 3
+prompt = '''`temp_c` 열에 대한 데이터 사전 항목에 반드시 들어가야 하는 것을 모두 고르시오.'''
+explanation = '''다른 연구자가 열을 올바르게 쓰려면 단위, 결측 코드와 그 원인, 측정 장비와 위치 같은 출처 정보가 필요하다. 열 이름의 접미사는 약속일 뿐 검사가 아니다. 출처가 다른 파일은 같은 이름에 다른 단위(예: 켈빈)를 담을 수 있으므로, 사전에 단위와 허용 범위를 명시하고 실제 값을 검사해야 한다.'''
+
+[[questions.choices]]
+text = "단위(°C)와 허용 범위"
+correct = true
+
+[[questions.choices]]
+text = "결측 코드(예: -999)와 결측이 생기는 원인"
+correct = true
+
+[[questions.choices]]
+text = "측정 장비와 측정 위치"
+correct = true
+
+[[questions.choices]]
+text = "열 이름이 _c로 끝나면 단위는 자명하므로 단위 항목은 생략한다."
+feedback = "이름은 검사가 아니다. 본문의 출처 B처럼 temp_c라는 이름에 켈빈 값이 들어 있을 수 있다."
+
+[[questions]]
+id = "raw-is-immutable"
+type = "single"
+objective = 2
+prompt = '''raw 데이터에서 열전대가 떨어진 구간의 온도가 비정상적으로 기록된 것을 발견했다. 어떻게 처리하는 것이 옳은가?'''
+explanation = '''raw는 읽기 전용으로 두고, 수정은 처리 코드의 규칙(어느 entity·어느 구간·어떤 처리·이유)으로 남긴다. 그래야 수정이 리뷰 가능하고, 되돌릴 수 있고, label과 입력이 어떤 처리를 거쳤는지 추적할 수 있다. raw를 직접 고치면 고치기 전의 상태와 수정의 근거가 함께 사라진다.'''
+
+[[questions.choices]]
+text = "raw 파일은 그대로 두고, 해당 구간을 결측 처리하는 규칙과 이유를 처리 코드에 추가해 interim·processed를 다시 만든다."
+correct = true
+
+[[questions.choices]]
+text = "raw 파일에서 해당 값을 지우고 저장한다. 잘못된 값은 남겨 둘 이유가 없다."
+feedback = "지운 값과 지운 이유가 기록되지 않는다. 나중에 판단이 틀렸거나 다른 기준이 필요해지면 되돌릴 방법이 없다."
+
+[[questions.choices]]
+text = "raw 파일의 값을 주변 값으로 보간해 덮어쓴다."
+feedback = "보간은 처리 단계의 선택이다. raw에 덮어쓰면 보간값이 측정값처럼 보이게 되어 label·입력의 출처를 추적할 수 없다."
+
+[[questions.choices]]
+text = "processed 파일만 손으로 고친다. raw는 건드리지 않았으므로 충분하다."
+feedback = "손으로 고친 processed는 코드로 다시 만들 수 없다. 데이터를 다시 처리하면 수정이 사라진다."

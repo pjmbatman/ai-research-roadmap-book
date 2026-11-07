@@ -1,0 +1,6 @@
+title = "train에서만 표준화 통계량 추정하기"
+chapter = "data/preprocessing-and-eda"
+objective = 2
+exec = "browser"
+entry = "standardize_split"
+timeout_s = 10

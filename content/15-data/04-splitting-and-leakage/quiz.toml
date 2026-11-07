@@ -1,0 +1,136 @@
+# 15.4 데이터 분할과 누수 방지 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "split-matches-claim"
+type = "single"
+objective = 1
+prompt = '''환자 50명에게서 각각 여러 번 측정한 생체신호로 모델을 만든다. 논문의 주장은 "처음 보는 환자에게도 이 모델이 통한다"이다. 어떤 분할이 이 주장과 맞는가?'''
+explanation = '''일반화 대상이 "처음 보는 환자"이므로 독립성의 단위는 환자다. 한 환자의 모든 측정을 같은 쪽(train 또는 test)에 두는 그룹 분할이 주장과 맞는다. 측정 단위 무작위 분할은 같은 환자의 다른 측정이 train에 있으므로 "이미 본 환자의 새 측정"에 대한 성능을 잰다. 이는 다른 질문이며, 대개 훨씬 낙관적이다.'''
+
+[[questions.choices]]
+text = "환자 단위로 나누는 그룹 분할(한 환자의 측정은 모두 한쪽에)"
+correct = true
+
+[[questions.choices]]
+text = "측정 단위로 섞은 무작위 분할. 데이터가 고르게 섞여 가장 공정하다."
+feedback = "같은 환자의 다른 측정이 train에 있으면 모델은 그 환자의 고유한 특성을 외워 test를 맞힌다. 이것은 '이미 본 환자'에 대한 성능이다."
+
+[[questions.choices]]
+text = "label 비율을 맞춘 stratified 무작위 분할"
+feedback = "stratification은 label 분포를 맞출 뿐, 같은 환자가 양쪽에 들어가는 문제는 그대로다. 필요하면 그룹 분할과 함께 쓴다."
+
+[[questions.choices]]
+text = "측정 시각 순으로 앞 80%를 train으로 하는 시간 분할"
+feedback = "시간 분할은 '미래 시점'에 대한 주장에 맞다. 모든 환자가 앞뒤 기간에 걸쳐 있으면 여전히 같은 환자가 양쪽에 들어간다."
+
+[[questions]]
+id = "window-gap"
+type = "numeric"
+objective = 2
+prompt = '''시계열에서 길이 $W = 30$의 입력 window로 마지막 입력 시점에서 $H = 10$ step 뒤의 값을 예측한다. window는 stride 1로 만들고, window 시작점 $s$의 샘플은 $x_s, \dots, x_{s+W+H-1}$을 쓴다. 시간 분할에서 train의 마지막 window 시작점과 test의 첫 window 시작점 사이의 차이가 최소 몇이어야 두 집합이 같은 시점의 값을 하나도 공유하지 않는가?'''
+answer = 40
+tolerance = 0
+slider = { min = 1, max = 80, step = 1 }
+explanation = '''train 샘플 $s$는 $x_{s+W+H-1}$까지 쓰고, test 샘플 $c$는 $x_c$부터 쓴다. 겹치지 않으려면 $s + W + H - 1 < c$, 즉 $c - s \ge W + H = 40$이다. 경계에서 이보다 가까운 window를 버리는 것을 gap(또는 purge)이라 한다. gap 없이 나누면 경계 근처 test window의 입력과 정답이 train window에 그대로 들어 있다.'''
+
+[[questions]]
+id = "feature-selection-leak"
+type = "single"
+objective = 2
+prompt = '''특징 5000개가 모두 순수한 잡음이고 label도 무작위인 데이터(샘플 100개)에서, 전체 데이터로 label과 상관이 큰 특징 20개를 고른 뒤 5-fold 교차검증을 했더니 정확도가 0.86이었다. 왜인가?'''
+explanation = '''특징 선택에 전체 데이터의 label을 썼으므로, 각 fold의 test 샘플의 label 정보가 "어떤 특징이 선택되었는가"에 이미 들어 있다. 5000개 중 우연히 label과 상관된 20개를 고른 것이고, 그 우연한 상관은 선택에 쓰인 샘플(test 포함)에서만 성립한다. 선택을 pipeline 안에 넣어 fold마다 train에서만 하면 정확도는 우연 수준으로 돌아간다.'''
+
+[[questions.choices]]
+text = "선택에 test fold의 label이 쓰여, 우연한 상관이 test에서도 성립하도록 골랐기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "5000개 중에는 진짜로 label을 예측하는 특징이 있기 마련이기 때문이다."
+feedback = "label이 무작위이므로 어떤 특징도 새 데이터의 label을 예측하지 못한다. pipeline 안에서 선택하면 성능이 사라지는 것이 그 증거다."
+
+[[questions.choices]]
+text = "샘플 수가 적어 교차검증의 분산이 크기 때문이다."
+feedback = "분산은 결과를 위아래로 흔들 뿐, 잡음에서 일관되게 높은 정확도를 만들지 않는다. 이 낙관적 편향은 선택 과정의 누수 때문이다."
+
+[[questions.choices]]
+text = "로지스틱 회귀가 과적합했기 때문이다. 정규화를 강하게 하면 해결된다."
+feedback = "과적합은 train과 test의 성능 차이로 드러난다. 여기서는 test 정보가 선택에 들어갔으므로 test 성능 자체가 오염되었다. 모델을 바꿔도 해결되지 않는다."
+
+[[questions]]
+id = "leakage-types"
+type = "multiple"
+objective = 2
+prompt = '''"새 셀의 다음 주 용량을 예측한다"는 과제에서 누수에 해당하는 것을 모두 고르시오.'''
+explanation = '''전체 데이터로 추정한 정규화 통계는 test 정보를 입력에 넣는다. 같은 셀의 사이클이 양쪽에 있으면 "새 셀"이라는 주장과 분할이 어긋난다. 중심 이동 평균은 예측 시점 이후의 값을 써서 계산되므로 미래 정보다. 예측 시점 이전에 측정된 내부저항은 label과 강하게 상관되어도 정당한 입력이다. 강한 상관 자체는 누수가 아니고, 정보가 예측 시점에 이용 가능했는지가 기준이다.'''
+
+[[questions.choices]]
+text = "train과 test를 합친 전체에서 추정한 평균·표준편차로 표준화한다."
+correct = true
+
+[[questions.choices]]
+text = "같은 셀의 앞 사이클은 train, 뒤 사이클은 test에 둔다."
+correct = true
+
+[[questions.choices]]
+text = "예측 시점을 가운데에 둔 이동 평균(앞뒤 3일)을 입력 특징으로 쓴다."
+correct = true
+
+[[questions.choices]]
+text = "예측 시점 이전에 측정한 내부저항이 label과 상관이 강해 입력으로 쓴다."
+feedback = "예측 시점에 이미 측정된 값은 정당한 입력이다. 누수의 기준은 상관의 크기가 아니라 그 정보를 예측 시점에 쓸 수 있었는가다(1.3장 정보의 시점)."
+
+[[questions]]
+id = "best-of-many"
+type = "numeric"
+objective = 3
+prompt = '''label이 무작위(0과 1이 반반)인 이진 분류에서, 무작위로 만든 모델 500개를 같은 평가 집합 200개로 채점해 가장 정확도가 높은 모델(0.57)을 골랐다. 이 모델을 한 번도 쓰지 않은 새 데이터에 적용하면 기대 정확도는 얼마인가?'''
+answer = 0.5
+tolerance = 0.05
+explanation = '''label이 무작위이므로 어떤 모델도 새 데이터에서 0.5를 넘지 못한다. 0.57은 500번 시도 중 가장 운이 좋았던 결과이고, 선택에 쓴 집합에서만 성립한다. 평가 집합으로 모델·하이퍼파라미터를 고르면 그 집합은 더 이상 test가 아니라 validation이다. 최종 보고에는 선택에 한 번도 쓰지 않은 test를 한 번만 쓴다.'''
+
+[[questions]]
+id = "test-reuse"
+type = "single"
+objective = 3
+prompt = '''하이퍼파라미터 조합 40개를 시도하며 매번 test 점수를 확인했고, 가장 좋은 조합의 test 점수를 논문에 보고하려 한다. 옳은 판단은?'''
+explanation = '''test 점수로 조합을 골랐으므로 그 test는 선택 과정의 일부(validation)가 되었고, 보고된 점수는 낙관적으로 치우친다. 선택은 validation(또는 train 안의 교차검증)으로 하고, test는 최종 모델에 한 번만 쓴다. 이미 test를 여러 번 보았다면 그 사실과 횟수를 기록하고, 가능하면 새 test 집합을 확보한다.'''
+
+[[questions.choices]]
+text = "test로 고른 점수는 낙관적이다. 선택은 validation으로 하고 test는 최종 모델에 한 번만 쓴다."
+correct = true
+
+[[questions.choices]]
+text = "모델을 학습할 때 test를 쓰지 않았으므로 누수가 아니다."
+feedback = "가중치 학습뿐 아니라 모델·하이퍼파라미터 선택도 학습의 일부다. 선택에 쓴 데이터의 점수는 선택된 모델에 유리하게 치우친다."
+
+[[questions.choices]]
+text = "40개 조합의 test 점수 평균을 보고하면 공정하다."
+feedback = "평균은 '조합을 무작위로 골랐을 때'의 성능이라 실제로 고른 모델의 성능과 다르다. 선택과 평가에 다른 데이터를 써야 한다."
+
+[[questions.choices]]
+text = "시도한 조합이 40개뿐이라 영향은 무시할 수 있다."
+feedback = "시도 횟수가 적어도 편향은 생긴다. 특히 test가 작으면 몇십 번의 선택으로도 점수가 크게 부풀 수 있다."
+
+[[questions]]
+id = "pretraining-overlap"
+type = "single"
+objective = 2
+prompt = '''사전학습된 단백질 언어 모델을 새 benchmark에서 평가한다. 평가 서열 200개와 사전학습 서열을 문자열 그대로 비교했더니 15개가 겹쳤다. 다음 조치로 가장 적절한 것은?'''
+explanation = '''문자열 그대로의 비교는 대소문자·공백 같은 표기 차이를 놓친다(본문의 예에서 정규화 후 5개가 더 나왔다). 또한 한두 자리만 다른 거의 같은 서열도 사실상 같은 정보다. 정규화 후 해시로 정확한 중복을 찾고, 서열 유사도 기준(예: 동일성 일정 비율 이상)으로 가까운 서열까지 찾아, 겹치는 평가 샘플을 제외한 결과를 함께 보고한다.'''
+
+[[questions.choices]]
+text = "표기를 정규화해 다시 비교하고, 유사도 기준으로 가까운 서열도 찾아 제외한 결과를 함께 보고한다."
+correct = true
+
+[[questions.choices]]
+text = "15개만 제외하면 충분하다."
+feedback = "표기만 다른 중복과 거의 같은 서열은 문자열 비교로 찾을 수 없다. 정규화와 유사도 기준이 필요하다."
+
+[[questions.choices]]
+text = "사전학습은 label 없이 했으므로 겹쳐도 문제없다."
+feedback = "label이 없어도 모델은 그 서열의 구조를 이미 보았다. 평가 서열을 외웠는지, 일반화했는지 구분할 수 없게 된다."
+
+[[questions.choices]]
+text = "15/200은 8%이므로 결과에 미치는 영향은 무시할 수 있다."
+feedback = "겹친 샘플에서 성능이 크게 높으면 평균 점수를 눈에 띄게 끌어올린다. 겹친 샘플과 나머지의 성능을 나누어 보고한다."
