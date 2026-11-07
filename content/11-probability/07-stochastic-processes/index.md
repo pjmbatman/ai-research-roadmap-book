@@ -103,14 +103,13 @@ $x$에서 $x'$로 가는 확률 흐름과 반대 방향 흐름이 같다는 뜻�
 이중 우물 퍼텐셜 $U(x) = (x^2 - 1)^2$의 Boltzmann 분포($k_BT = 0.15$)를 세 가지 step 크기로 표집한다. 두 우물 $x = \pm 1$ 사이에는 높이 1의 장벽이 있다. 분포가 대칭이므로 오른쪽 우물에 있는 시간의 비율은 0.5가 되어야 한다.
 
 ```python {exec="browser" session="proc"}
-from scipy import integrate
-
 kT = 0.15
 def log_target(x):                         # log p(x) + 상수, U(x) = (x^2 - 1)^2
     return -((x**2 - 1) ** 2) / kT
 
-Z, _ = integrate.quad(lambda x: np.exp(log_target(x)), -4, 4)
-ex2, _ = integrate.quad(lambda x: x**2 * np.exp(log_target(x)) / Z, -4, 4)
+grid = np.linspace(-4, 4, 200_001)         # 수치적분용 격자 (간격이 같아 Z가 약분된다)
+dens = np.exp(log_target(grid))
+ex2 = np.sum(grid**2 * dens) / np.sum(dens)
 print(f"수치적분 E[x^2] = {ex2:.4f}")
 for step in (0.05, 0.5, 2.0):
     x, chain, acc = 1.0, np.empty(20_000), 0
@@ -298,11 +297,11 @@ $$
 비정상 시계열의 가장 위험한 결과는 **허위 상관**이다. 서로 아무 관계가 없는 두 시계열을 길이 500으로 1000쌍 만들어 표본 상관계수를 잰다.
 
 ```python {exec="browser" session="proc"}
-from scipy.signal import lfilter
-
 for phi in (0.5, 1.0):
     e = rng.normal(size=(2, 1_000, 500))                 # (시계열 쌍, 반복, 시간)
-    y = lfilter([1.0], [1.0, -phi], e, axis=-1)          # y_t = phi y_{t-1} + e_t
+    y = e.copy()
+    for t in range(1, 500):
+        y[..., t] = phi * y[..., t - 1] + e[..., t]      # y_t = phi y_{t-1} + e_t
     a = y[0] - y[0].mean(axis=1, keepdims=True)          # (1000, 500)
     b = y[1] - y[1].mean(axis=1, keepdims=True)
     r = np.abs((a * b).sum(axis=1) / np.sqrt((a**2).sum(axis=1) * (b**2).sum(axis=1)))   # (1000,)

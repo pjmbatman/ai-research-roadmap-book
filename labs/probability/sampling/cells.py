@@ -29,16 +29,16 @@ samples = x[keep]
 print(f"기각 표집 Beta(2,5): 수용률 {keep.mean():.4f} (이론 1/M = {1 / M}),  평균 {samples.mean():.4f} (이론 {2 / 7:.4f})")
 
 # %% cell 3 — 희귀 사건 확률: naive MC와 importance sampling
-from scipy import stats
+from math import erfc, sqrt
 
-p_true = stats.norm.sf(4.0)                # P(X > 4), X ~ N(0, 1)
+p_true = 0.5 * erfc(4.0 / sqrt(2))         # P(X > 4), X ~ N(0, 1)
 N = 100_000
 x = rng.normal(size=N)
 print(f"참값          {p_true:.3e}")
 print(f"naive MC      {np.mean(x > 4):.3e}   (4 초과 표본 {np.sum(x > 4)}개)")
 
 z = rng.normal(loc=4.0, size=N)            # 제안분포 q = N(4, 1)
-w = stats.norm.pdf(z) / stats.norm.pdf(z, loc=4.0)          # p(z) / q(z)
+w = np.exp(-z**2 / 2 + (z - 4.0) ** 2 / 2)                  # p(z) / q(z), 정규화 상수는 약분
 h = w * (z > 4)                            # (N,) 가중치를 곱한 지시함수
 est, se = h.mean(), h.std(ddof=1) / np.sqrt(N)
 n_naive = p_true * (1 - p_true) / se**2    # 같은 표준오차에 필요한 naive 표본 수
@@ -51,7 +51,7 @@ for name, loc, scale in [("N(0, 2^2)", 0, 2.0), ("N(2, 1)", 2, 1.0), ("N(0, 0.5^
     ests, ess = [], []
     for r in range(R):
         z = rng.normal(loc, scale, size=N)
-        logw = stats.norm.logpdf(z) - stats.norm.logpdf(z, loc, scale)
+        logw = -z**2 / 2 + ((z - loc) / scale) ** 2 / 2 + np.log(scale)   # log p - log q
         w = np.exp(logw - logw.max())
         w /= w.sum()                       # 자기 정규화 가중치, 합 1
         ests.append(np.sum(w * z**2))

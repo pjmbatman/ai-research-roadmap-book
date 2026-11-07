@@ -28,13 +28,11 @@ print(f"배치 안 + 배치 간  {within:.4f} + {between:.4f} = {within + betwee
 print(f"이론값            0.4^2 + 0.3^2 = {0.4**2 + 0.3**2:.4f}")
 
 # %% cell 3 — Markov·Chebyshev 경계와 실제 꼬리확률
-from scipy import stats
-
-dist = stats.expon()                       # 평균 1, 분산 1인 지수분포
+# 평균 1, 분산 1인 지수분포: P(X >= a) = exp(-a)
 print(" a    P(X >= a)  Markov 1/a   |   k    P(|X-1| >= k)  Chebyshev 1/k^2")
 for a, k in [(2, 1.5), (4, 2.0), (8, 3.0)]:
-    tail = dist.sf(a)
-    two_sided = dist.sf(1 + k) + dist.cdf(1 - k)
+    tail = np.exp(-a)
+    two_sided = np.exp(-(1 + k))           # k >= 1이면 X <= 1 - k인 쪽은 확률 0
     print(f"{a:2d}    {tail:.4f}     {1 / a:.4f}      |  {k:.1f}   {two_sided:.4f}         {1 / k**2:.4f}")
 
 # %% cell 4 — Jensen 부등식: 로그의 평균과 평균의 로그
@@ -51,5 +49,6 @@ for n in (5, 30, 300):
     z = (m_exp - 1.0) * np.sqrt(n)                               # 표준화한 표본 평균
     lo, hi = np.mean(z < -1.96), np.mean(z > 1.96)               # 정규분포면 각각 0.025
     iqr = np.subtract(*np.quantile(m_cau, [0.75, 0.25]))
-    print(f"n = {n:3d}  왜도 {stats.skew(m_exp):.3f}  P(Z<-1.96) {lo:.4f}  P(Z>1.96) {hi:.4f}"
+    skew = np.mean((m_exp - m_exp.mean()) ** 3) / m_exp.std() ** 3
+    print(f"n = {n:3d}  왜도 {skew:.3f}  P(Z<-1.96) {lo:.4f}  P(Z>1.96) {hi:.4f}"
           f"   평균의 IQR {iqr:.3f}")

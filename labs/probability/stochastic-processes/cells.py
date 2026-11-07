@@ -29,14 +29,13 @@ for u in rng.uniform(size=100_000):        # 한 경로를 길게 시뮬레이�
 print("시간 평균 점유율    ", np.round(counts / counts.sum(), 4))
 
 # %% cell 2 — Metropolis: 정규화 상수 없이 이중 우물 분포 표집
-from scipy import integrate
-
 kT = 0.15
 def log_target(x):                         # log p(x) + 상수, U(x) = (x^2 - 1)^2
     return -((x**2 - 1) ** 2) / kT
 
-Z, _ = integrate.quad(lambda x: np.exp(log_target(x)), -4, 4)
-ex2, _ = integrate.quad(lambda x: x**2 * np.exp(log_target(x)) / Z, -4, 4)
+grid = np.linspace(-4, 4, 200_001)         # 수치적분용 격자 (간격이 같아 Z가 약분된다)
+dens = np.exp(log_target(grid))
+ex2 = np.sum(grid**2 * dens) / np.sum(dens)
 print(f"수치적분 E[x^2] = {ex2:.4f}")
 for step in (0.05, 0.5, 2.0):
     x, chain, acc = 1.0, np.empty(20_000), 0
@@ -76,11 +75,11 @@ for k in range(1, n_steps + 1):
               f"  분산 {x.var():.4f} (이론 {sigma**2 / (2 * theta) * (1 - np.exp(-2 * theta * t)):.4f})")
 
 # %% cell 5 — 정상 AR(1)과 random walk: 서로 무관한 두 시계열의 상관
-from scipy.signal import lfilter
-
 for phi in (0.5, 1.0):
     e = rng.normal(size=(2, 1_000, 500))                 # (시계열 쌍, 반복, 시간)
-    y = lfilter([1.0], [1.0, -phi], e, axis=-1)          # y_t = phi y_{t-1} + e_t
+    y = e.copy()
+    for t in range(1, 500):
+        y[..., t] = phi * y[..., t - 1] + e[..., t]      # y_t = phi y_{t-1} + e_t
     a = y[0] - y[0].mean(axis=1, keepdims=True)          # (1000, 500)
     b = y[1] - y[1].mean(axis=1, keepdims=True)
     r = np.abs((a * b).sum(axis=1) / np.sqrt((a**2).sum(axis=1) * (b**2).sum(axis=1)))   # (1000,)
