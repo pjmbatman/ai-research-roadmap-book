@@ -1,0 +1,135 @@
+# 13.4 잠재변수 모델과 EM — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "responsibility-value"
+type = "numeric"
+objective = 1
+prompt = '''두 성분의 가우시안 혼합 $0.2\,\mathcal{N}(0, 1) + 0.8\,\mathcal{N}(2, 1)$에서 $x = 1$이 관측되었다. 이 점에 대한 성분 1의 책임도 $p(z = 1 \mid x = 1)$은?'''
+answer = 0.2
+tolerance = 0.001
+explanation = '''$x = 1$은 두 평균에서 같은 거리에 있고 분산도 같으므로 두 성분의 우도 $\mathcal{N}(1 \mid 0, 1)$과 $\mathcal{N}(1 \mid 2, 1)$이 같다. 그러면 책임도는 혼합 가중치(사전확률)로 정해진다. $p(z = 1 \mid x) = 0.2\,\phi / (0.2\,\phi + 0.8\,\phi) = 0.2$. 책임도는 우도만이 아니라 사전확률 $\pi_k$까지 곱한 사후확률이다.'''
+
+[[questions]]
+id = "marginal-likelihood-form"
+type = "single"
+objective = 1
+prompt = '''혼합 가중치 $\pi_k$, 성분 밀도 $\mathcal{N}(x \mid \mu_k, \sigma_k^2)$인 GMM에서 데이터 $x_1, \ldots, x_N$의 (주변) 로그우도는?'''
+explanation = '''잠재변수 $z_n$은 관측되지 않으므로 가능한 모든 값에 대해 더해(주변화) 없앤다. 관측마다 $p(x_n) = \sum_k \pi_k \mathcal{N}(x_n \mid \mu_k, \sigma_k^2)$이고, 관측이 독립이므로 로그우도는 그 로그의 합이다. 로그가 합 바깥에 있어 MLE의 닫힌 해가 없다. 이것이 EM이 필요한 이유다.'''
+
+[[questions.choices]]
+text = '''$\sum_n \log \sum_k \pi_k\, \mathcal{N}(x_n \mid \mu_k, \sigma_k^2)$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\sum_n \sum_k \log\big(\pi_k\, \mathcal{N}(x_n \mid \mu_k, \sigma_k^2)\big)$'''
+feedback = "로그와 합의 순서가 바뀌었다. 각 점이 모든 성분에서 동시에 나온 것처럼 세는 식이다."
+
+[[questions.choices]]
+text = '''$\sum_n \max_k \log\big(\pi_k\, \mathcal{N}(x_n \mid \mu_k, \sigma_k^2)\big)$'''
+feedback = "각 점을 가장 그럴듯한 성분 하나에 배정한 것(hard assignment)이다. k-means에 가까운 근사이고, 주변화가 아니다."
+
+[[questions.choices]]
+text = '''$\sum_n \log \mathcal{N}\big(x_n \mid \textstyle\sum_k \pi_k\mu_k,\ \sum_k \pi_k\sigma_k^2\big)$'''
+feedback = "혼합분포는 평균과 분산을 섞은 가우시안 하나가 아니다. 봉우리가 여럿인 분포를 하나로 뭉갠다."
+
+[[questions]]
+id = "m-step-mean"
+type = "numeric"
+objective = 2
+prompt = '''데이터가 $x = (0, 2, 4)$이고, E-step에서 성분 $k$의 책임도가 $r_{\cdot k} = (1, 0.5, 0)$으로 계산되었다. M-step에서 갱신되는 성분 $k$의 평균 $\mu_k$는? (소수 셋째 자리까지)'''
+answer = 0.667
+tolerance = 0.001
+explanation = '''M-step의 평균은 책임도로 가중한 평균이다. $\mu_k = \sum_n r_{nk}x_n / \sum_n r_{nk} = (0 + 1 + 0)/1.5 \approx 0.667$. 책임도를 관측 가중치로 쓴 MLE이고, 분모 $N_k = 1.5$는 성분 $k$에 속한 "유효 개수"다.'''
+
+[[questions]]
+id = "em-monotone"
+type = "single"
+objective = 3
+prompt = '''EM의 반복마다 로그우도 $\log p(\mathbf{x} \mid \theta)$가 감소하지 않는 이유로 옳은 것은?'''
+explanation = '''모든 $q$에 대해 $\log p(\mathbf{x} \mid \theta) = \mathrm{ELBO}(q, \theta) + \mathrm{KL}(q \,\|\, p(\mathbf{z} \mid \mathbf{x}, \theta))$이고 KL ≥ 0이다. E-step은 $q$를 현재 사후분포로 두어 KL을 0으로 만들므로 ELBO가 로그우도와 같아진다. M-step은 ELBO를 $\theta$에 대해 키운다. 새 $\theta$에서 로그우도는 ELBO 이상이므로, 이전 로그우도 이상이다. 이 논리는 전역 최댓값에 도달한다는 보장은 주지 않는다.'''
+
+[[questions.choices]]
+text = "E-step이 KL을 0으로 만들어 ELBO를 로그우도에 맞닿게 하고, M-step이 ELBO를 키우며, 로그우도는 언제나 ELBO 이상이기 때문이다."
+correct = true
+
+[[questions.choices]]
+text = "EM은 로그우도의 gradient 방향으로 적절한 학습률만큼 움직이는 경사상승법이기 때문이다."
+feedback = "EM에는 학습률이 없다. 단조성은 하한(ELBO)을 번갈아 맞닿게 하고 키우는 구조에서 나온다. 학습률이 큰 경사상승은 로그우도를 줄일 수 있다."
+
+[[questions.choices]]
+text = "GMM의 로그우도가 오목 함수라 어디서 출발해도 꼭대기로 올라가기 때문이다."
+feedback = "GMM의 로그우도는 오목하지 않고 국소 최댓값이 여럿이다(성분의 이름을 바꾸기만 해도 같은 값의 해가 K!개 생긴다)."
+
+[[questions.choices]]
+text = "M-step이 로그우도 자체를 정확히 최대화하기 때문이다."
+feedback = "M-step이 최대화하는 것은 로그우도가 아니라 현재 q로 만든 ELBO다. 로그우도를 직접 최대화할 수 있다면 EM이 필요 없다."
+
+[[questions]]
+id = "em-local-optimum"
+type = "multiple"
+objective = 3
+prompt = '''GMM을 EM으로 학습할 때의 성질로 옳은 것을 모두 고르시오.'''
+explanation = '''EM은 로그우도를 단조 증가시키지만 국소 최댓값(또는 안장점)에서 멈출 수 있어, 초기값마다 최종 로그우도가 다르다. 그래서 여러 초기값으로 돌리고 최종 로그우도가 가장 큰 해를 고른다. 한 성분이 점 하나(또는 같은 값의 점들)에 무너지면 분산이 0으로 가며 로그우도가 무한대로 발산하므로, 분산에 하한을 두거나 사전분포를 둔다. 단조 증가는 수렴 속도나 전역 최적을 보장하지 않는다.'''
+
+[[questions.choices]]
+text = "초기값이 다르면 최종 로그우도가 다른 해에 수렴할 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "여러 초기값으로 돌렸다면 최종 로그우도가 가장 큰 해를 고르는 것이 합리적이다."
+correct = true
+
+[[questions.choices]]
+text = "한 성분의 분산이 0으로 줄어 로그우도가 무한대로 발산하는 퇴화 해가 있다."
+correct = true
+
+[[questions.choices]]
+text = "로그우도가 반복마다 증가하므로 EM은 전역 최댓값을 찾는다."
+feedback = "단조 증가는 '내려가지 않는다'는 뜻일 뿐이다. 본문 실험에서 초기값 10개가 로그우도 -735.49부터 -733.43까지 서로 다른 해에 멈췄다."
+
+[[questions]]
+id = "missing-mechanism"
+type = "single"
+objective = 1
+prompt = '''측정 범위를 넘는 큰 값이 나오면 센서가 값을 기록하지 못한다(포화). 늘 관측되는 공변량으로 결측값을 회귀 모델로 채워 평균을 추정했다. 이 상황에 대한 설명으로 옳은 것은?'''
+explanation = '''결측 여부가 측정값 자체에 달려 있으므로 MNAR(missing not at random)이다. 관측된 공변량에 결측이 달린 MAR이라면 관측된 데이터로 만든 조건부 모델(회귀, EM 등 우도 기반 방법)이 bias를 없애지만, MNAR에서는 관측된 데이터만으로 결측 과정을 알 수 없어 회귀로 채워도 bias가 남는다(본문에서 참값 2.000에 대해 1.861). 포화 한계를 알면 중도절단(censoring) 모델로 우도를 직접 쓰는 것이 대안이다.'''
+
+[[questions.choices]]
+text = "MNAR이다. 결측이 값 자체에 달려 있어 관측된 공변량으로 채워도 bias가 남는다."
+correct = true
+
+[[questions.choices]]
+text = "MAR이다. 공변량이 늘 관측되므로 회귀로 채우면 bias가 사라진다."
+feedback = "MAR은 결측 여부가 관측된 변수에만 달려 있을 때다. 여기서는 기록되지 않은 값 자체가 결측을 일으킨다."
+
+[[questions.choices]]
+text = "MCAR이다. 센서 고장은 무작위로 일어나므로 관측된 값만 평균해도 된다."
+feedback = "고장이 큰 값에서만 일어나므로 무작위가 아니다. 관측된 값만 평균하면 아래로 치우친다(본문에서 1.556)."
+
+[[questions.choices]]
+text = "결측 비율이 24%로 작으므로 메커니즘과 상관없이 결과에 큰 영향이 없다."
+feedback = "bias는 결측 비율이 아니라 메커니즘에 달려 있다. 본문의 MNAR 예에서 결측 24%로 평균이 0.44 아래로 치우쳤다."
+
+[[questions]]
+id = "vae-elbo"
+type = "single"
+objective = 3
+prompt = '''VAE(19.3장)도 ELBO를 최대화한다. EM과 비교한 설명으로 옳은 것은?'''
+explanation = '''두 방법 모두 $\log p(\mathbf{x}) \ge \mathrm{ELBO}(q, \theta)$를 최대화한다. GMM의 EM은 E-step에서 사후분포 $p(z \mid x, \theta)$를 정확히 계산해 $q$로 쓰므로 KL이 0이 된다. VAE의 디코더는 신경망이라 사후분포를 계산할 수 없어, 인코더 신경망이 출력하는 근사분포 $q_\phi(\mathbf{z} \mid \mathbf{x})$를 쓰고 $\theta$와 $\phi$를 함께 경사하강으로 학습한다. KL이 0이 되지 않으므로 ELBO는 로그우도의 하한으로 남고, 로그우도의 단조 증가도 보장되지 않는다.'''
+
+[[questions.choices]]
+text = "같은 하한(ELBO)을 최대화하지만, VAE는 사후분포를 정확히 계산할 수 없어 인코더가 내는 근사분포 q를 쓰므로 KL이 0이 되지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "VAE는 E-step에서 사후분포를 정확히 계산하는 EM의 특수한 경우다."
+feedback = "신경망 디코더의 사후분포는 닫힌 형태로 계산할 수 없다. 그래서 근사분포를 학습한다(변분추론, 13.6장)."
+
+[[questions.choices]]
+text = "VAE의 ELBO는 로그우도와 항상 같다."
+feedback = "ELBO = 로그우도 − KL(q || 사후)이다. q가 사후분포와 정확히 같을 때만 같아진다."
+
+[[questions.choices]]
+text = "EM은 잠재변수가 연속일 때만, VAE는 이산일 때만 쓴다."
+feedback = "GMM의 잠재변수는 이산이고 VAE의 잠재변수는 보통 연속이지만, EM도 연속 잠재변수(예: 결측값, 선형-가우시안 모델)에 쓴다. 차이는 사후분포를 정확히 계산할 수 있는지다."
