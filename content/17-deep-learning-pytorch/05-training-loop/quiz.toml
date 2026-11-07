@@ -1,0 +1,141 @@
+# 17.5 학습 루프 해부 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "zero-grad-position"
+type = "single"
+objective = 1
+prompt = '''누적(gradient accumulation) 없는 학습 루프에서 `optimizer.zero_grad()`를 둘 수 있는 위치로 옳은 것은?'''
+explanation = '''`.grad` 버퍼는 `backward()`가 더하고 `step()`이 읽는다. 그래서 zero_grad는 이전 step이 버퍼를 읽은 뒤부터 이번 backward 전까지 어디에 있어도 된다. 반복의 맨 앞이나 `step()` 직후가 흔한 위치다. backward와 step 사이에 두면 step이 빈 버퍼를 읽어 파라미터가 바뀌지 않는다.'''
+
+[[questions.choices]]
+text = "이전 반복의 step() 뒤부터 이번 반복의 backward() 전까지 어디든"
+correct = true
+
+[[questions.choices]]
+text = "loss.backward()와 optimizer.step() 사이"
+feedback = "step이 읽을 gradient를 지워 버린다. 집필 시점 PyTorch에서는 .grad가 None이 되어 step이 그 파라미터를 건너뛴다. 오류 없이 학습이 멈춘다."
+
+[[questions.choices]]
+text = "epoch이 시작할 때 한 번"
+feedback = "그러면 epoch 안의 모든 step의 gradient가 쌓인다. 과거 gradient를 감쇠 없이 더하는 것과 같아 학습이 불안정해진다."
+
+[[questions.choices]]
+text = "zero_grad는 optimizer.step()이 자동으로 하므로 필요 없다."
+feedback = "step은 .grad를 읽기만 하고 비우지 않는다. 비우는 것은 사용자의 몫이다."
+
+[[questions]]
+id = "steps-per-epoch"
+type = "numeric"
+objective = 1
+prompt = '''학습 표본 2000개, micro-batch 크기 16, gradient accumulation 8회로 학습한다. 마지막에 남은 micro-batch로도 한 번 갱신한다면, epoch당 optimizer step은 몇 번인가?'''
+explanation = '''micro-batch는 $\lceil 2000/16 \rceil = 125$개다. 8개마다 한 번 갱신하므로 $\lceil 125/8 \rceil = 16$번이다(15번은 micro-batch 8개, 마지막 1번은 5개). step 단위로 정의한 스케줄(warm-up 길이, cosine 총 길이)은 이 수로 계산해야 한다.'''
+answer = 16
+tolerance = 0
+
+[[questions]]
+id = "scheduler-per-micro-batch"
+type = "single"
+objective = 1
+prompt = '''총 길이를 "epoch 수 × epoch당 optimizer step 수"로 정한 cosine 스케줄을 쓰면서, gradient accumulation 4회인 루프의 **micro-batch마다** `scheduler.step()`을 호출했다. 어떤 일이 생기는가?'''
+explanation = '''scheduler는 호출 횟수로 진행한다. micro-batch마다 호출하면 optimizer step 1회에 스케줄이 4칸 진행해, 전체 학습의 1/4 지점에서 학습률이 이미 최솟값에 닿는다. 나머지 3/4은 학습률 0 근처에서 거의 학습하지 않는다. scheduler는 optimizer.step()과 같은 주기로 호출한다.'''
+
+[[questions.choices]]
+text = "스케줄이 4배 빨리 진행해, 학습의 1/4 지점에서 학습률이 이미 최솟값에 닿는다."
+correct = true
+
+[[questions.choices]]
+text = "학습률이 4배 커진다."
+feedback = "scheduler는 학습률의 크기가 아니라 스케줄 위의 위치를 바꾼다. 위치가 빨리 진행하는 것이다."
+
+[[questions.choices]]
+text = "아무 차이가 없다. scheduler는 optimizer.step()이 호출될 때만 학습률을 바꾼다."
+feedback = "scheduler.step()은 호출될 때마다 내부 카운터를 올리고 학습률을 바꾼다. optimizer 호출 여부를 세지 않는다."
+
+[[questions]]
+id = "update-line"
+type = "single"
+objective = 2
+prompt = '''수식 $\theta \leftarrow \mathrm{Update}(\theta, g)$에 해당하는 PyTorch 코드는?'''
+explanation = '''`optimizer.step()`이 `.grad`에 담긴 $g$와 optimizer 상태(momentum, Adam의 모멘트)를 써서 파라미터를 바꾼다. `loss.backward()`는 $g = \nabla_\theta L$을 계산해 `.grad`에 더할 뿐 파라미터를 바꾸지 않는다(8.4장). 이 구분이 "gradient는 맞는데 학습이 안 된다"와 "gradient 자체가 틀렸다"를 나눠 진단하는 출발점이다.'''
+
+[[questions.choices]]
+text = "loss.backward()"
+feedback = "backward는 g를 계산할 뿐 θ를 바꾸지 않는다."
+
+[[questions.choices]]
+text = "optimizer.step()"
+correct = true
+
+[[questions.choices]]
+text = "optimizer.zero_grad()"
+feedback = "zero_grad는 .grad 버퍼를 비운다. θ는 그대로다."
+
+[[questions.choices]]
+text = "model(x)"
+feedback = "forward는 ŷ = f_θ(x)를 계산한다. θ를 바꾸지 않는다."
+
+[[questions]]
+id = "train-loss-vs-eval-loss"
+type = "multiple"
+objective = 2
+prompt = '''한 epoch 동안 출력한 batch 손실의 평균과, epoch이 끝난 뒤 같은 학습 데이터 전체를 eval 모드로 다시 계산한 손실이 다르다. 그 이유가 될 수 있는 것을 모두 고르시오.'''
+explanation = '''epoch 평균 batch 손실은 epoch 동안 계속 바뀐 서로 다른 파라미터들에서 잰 값의 평균이다. 학습이 진행 중이면 대개 epoch 끝의 손실보다 크다. 또 train 모드에서는 dropout이 활성값을 끄고 BatchNorm이 batch 통계를 쓰므로, eval 모드와 같은 파라미터라도 출력이 다르다. autograd는 값을 바꾸지 않으며, 학습 손실과 보고용 metric이 다른 것은 별개의 문제다.'''
+
+[[questions.choices]]
+text = "epoch 평균은 epoch 동안 바뀐 여러 파라미터에서 잰 손실의 평균이다."
+correct = true
+
+[[questions.choices]]
+text = "train 모드의 dropout·BatchNorm이 eval 모드와 다르게 동작한다."
+correct = true
+
+[[questions.choices]]
+text = "requires_grad가 켜져 있으면 autograd가 손실 값을 조금 바꾼다."
+feedback = "autograd는 그래프를 기록할 뿐 forward의 값을 바꾸지 않는다. no_grad 여부와 무관하게 같은 연산은 같은 값을 낸다."
+
+[[questions.choices]]
+text = "eval 모드에서는 PyTorch가 손실 함수를 MAE로 바꾼다."
+feedback = "손실 함수는 코드가 정한다. eval()은 dropout·BatchNorm 같은 모듈의 동작만 바꾼다."
+
+[[questions]]
+id = "clip-position"
+type = "single"
+objective = 1
+prompt = '''gradient clipping(`clip_grad_norm_`)을 넣을 위치로 옳은 것은? (GradScaler는 쓰지 않는다.)'''
+explanation = '''clipping은 계산된 gradient를 갱신에 쓰기 전에 줄이는 것이므로 `backward()` 뒤, `step()` 앞이어야 한다. backward 앞에서는 줄일 gradient가 없고, step 뒤에서는 이미 갱신이 끝났다. float16 mixed precision에서 GradScaler를 쓰면 gradient가 scale되어 있으므로 `scaler.unscale_(optimizer)`로 되돌린 뒤 clipping한다.'''
+
+[[questions.choices]]
+text = "loss.backward()와 optimizer.step() 사이"
+correct = true
+
+[[questions.choices]]
+text = "loss.backward() 앞"
+feedback = "이 시점의 .grad는 비어 있거나 이전 step의 값이다. 이번 gradient는 아직 계산되지 않았다."
+
+[[questions.choices]]
+text = "optimizer.step() 뒤"
+feedback = "갱신이 이미 끝났다. 다음 step의 gradient를 줄이는 것도 아니므로 효과가 없다."
+
+[[questions]]
+id = "end-to-end-meaning"
+type = "single"
+objective = 1
+prompt = '''다음 중 "입력에서 출력까지 end-to-end로 학습한다"는 말이 정확한 경우는?'''
+explanation = '''end-to-end는 입력을 받는 첫 구성 요소부터 손실까지의 모든 학습 가능한 파라미터가 **같은 손실의 gradient로 함께** 갱신된다는 뜻이다. 고정한(freeze) 사전학습 인코더, 손으로 설계한 특성, 단계별로 따로 학습한 구성 요소는 최종 손실이 그 부분을 바꾸지 못한다. 어느 쪽이 더 좋은지는 문제에 따라 다르지만, 논문과 보고서에서는 무엇이 실제로 공동 최적화되었는지 밝혀야 한다.'''
+
+[[questions.choices]]
+text = "원시 신호를 받는 인코더와 예측 head가 하나의 손실로 함께 학습된다."
+correct = true
+
+[[questions.choices]]
+text = "사전학습 인코더를 고정하고 그 위의 head만 학습한다."
+feedback = "인코더는 최종 손실의 gradient를 받지 않는다. head만 학습하는 linear probing이나 고정 특성 학습이다."
+
+[[questions.choices]]
+text = "전문가가 설계한 특성을 계산한 뒤 신경망으로 예측한다."
+feedback = "특성 추출 단계에는 학습되는 파라미터가 없다. 그 단계의 오류는 손실로 고쳐지지 않는다."
+
+[[questions.choices]]
+text = "인코더를 재구성 손실로 먼저 학습한 뒤, 고정하고 head를 예측 손실로 학습한다."
+feedback = "두 단계가 서로 다른 손실로 따로 최적화된다. 인코더는 예측 손실에 맞춰지지 않는다."
