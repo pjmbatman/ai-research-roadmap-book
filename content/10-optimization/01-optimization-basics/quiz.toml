@@ -1,0 +1,146 @@
+# 10.1 최적화 문제의 구조 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "unconstrained-min-infeasible"
+type = "single"
+objective = 1
+prompt = '''$f(x_1, x_2) = (x_1 - 2)^2 + (x_2 - 1)^2$를 제약 $x_1 + x_2 \le 1$, $x_1 \ge 0$, $x_2 \ge 0$ 아래에서 최소화한다. 최적해는?'''
+explanation = '''제약이 없으면 최솟점은 $(2, 1)$이지만, $2 + 1 = 3 > 1$이므로 feasible set 밖에 있다. 등고선은 $(2, 1)$을 중심으로 한 원이므로, feasible set(삼각형) 안에서 $(2, 1)$에 가장 가까운 점이 최적해다. $(2, 1)$을 직선 $x_1 + x_2 = 1$에 수직으로 투영하면 $(1, 0)$이고, 이 점은 $x_2 \ge 0$도 만족한다. 최적값은 $f(1, 0) = 2$다. 최적해가 feasible set의 경계에 있고, 그 점에서 $\nabla f \neq \mathbf{0}$이다.'''
+
+[[questions.choices]]
+text = '''$(2, 1)$. gradient가 0인 점이기 때문이다.'''
+feedback = "(2, 1)은 x1 + x2 ≤ 1을 어기므로 해가 될 수 없다. 해는 반드시 feasible set 안에서 찾는다."
+
+[[questions.choices]]
+text = '''$(1, 0)$. feasible set 경계 위의 점이고, 그 점에서 gradient는 0이 아니다.'''
+correct = true
+
+[[questions.choices]]
+text = '''$(0.5, 0.5)$. 대칭인 제약 직선의 가운데 점이기 때문이다.'''
+feedback = "f(0.5, 0.5) = 2.5로 f(1, 0) = 2보다 크다. 제약의 모양만이 아니라 목적함수의 등고선이 어디서 경계에 닿는지를 봐야 한다."
+
+[[questions.choices]]
+text = '''$(0, 0)$. 제약 $x \ge 0$의 꼭짓점이기 때문이다.'''
+feedback = "f(0, 0) = 5다. 꼭짓점이라고 최적해인 것은 아니다. 선형계획과 달리 목적함수가 이차이면 해가 변의 중간에 있을 수 있다."
+
+[[questions]]
+id = "hessian-diagonal-not-enough"
+type = "single"
+objective = 2
+prompt = '''$f(x, y) = x^2 + 4xy + y^2$는 볼록 함수인가?'''
+explanation = '''Hessian은 모든 점에서 $\begin{bmatrix} 2 & 4 \\ 4 & 2 \end{bmatrix}$이고 고윳값은 $6$과 $-2$다. 음의 고윳값이 있으므로 볼록이 아니다. 실제로 $y = -x$ 방향으로 가면 $f(x, -x) = -2x^2$로 아래로 볼록하지 않다. 대각 성분의 부호만으로는 PSD 여부를 판단할 수 없다.'''
+
+[[questions.choices]]
+text = "볼록이다. Hessian의 대각 성분이 모두 양수이기 때문이다."
+feedback = "대각 성분이 양수인 것은 좌표축 방향으로만 볼록하다는 뜻이다. 대각선 방향 y = -x에서는 f = -2x²로 오목하다."
+
+[[questions.choices]]
+text = "볼록이다. x²과 y²이 볼록하므로 그 합도 볼록하다."
+feedback = "4xy 항이 빠졌다. xy는 볼록 함수가 아니므로 합의 규칙을 쓸 수 없다."
+
+[[questions.choices]]
+text = "볼록이 아니다. Hessian의 고윳값이 6과 -2로, 음의 고윳값이 있다."
+correct = true
+
+[[questions.choices]]
+text = "판단할 수 없다. Hessian이 점마다 달라지기 때문이다."
+feedback = "이차함수의 Hessian은 상수 행렬이다. 한 번 계산하면 모든 점에서 같다."
+
+[[questions]]
+id = "convexity-rules"
+type = "multiple"
+objective = 2
+prompt = '''$f, g$가 $\mathbb{R}^n$ 위의 볼록 함수일 때, 항상 볼록인 것을 모두 고르시오.'''
+explanation = '''볼록 함수의 합(음이 아닌 계수의 가중합), 점별 최댓값, 아핀 사상과의 합성 $f(\mathbf{A}\mathbf{x} + \mathbf{b})$는 볼록성을 보존한다. 곱과 차는 보존하지 않는다. 예를 들어 $x^2$과 $(x - 1)^2$은 모두 볼록이지만 곱 $x^2(x-1)^2$은 $x = 0, 1$에 두 최솟점을 갖는 이중 우물이고, $0 - x^2 = -x^2$은 오목하다.'''
+
+[[questions.choices]]
+text = '''$f + g$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\max(f, g)$'''
+correct = true
+
+[[questions.choices]]
+text = '''$f(\mathbf{A}\mathbf{x} + \mathbf{b})$'''
+correct = true
+
+[[questions.choices]]
+text = '''$f \cdot g$'''
+feedback = "x²과 (x-1)²은 볼록이지만 곱 x²(x-1)²은 최솟점이 두 개인 이중 우물이다."
+
+[[questions.choices]]
+text = '''$f - g$'''
+feedback = "f = 0, g = x²이면 f - g = -x²으로 오목하다."
+
+[[questions]]
+id = "convex-without-minimizer"
+type = "single"
+objective = 2
+prompt = '''$f(x) = \log(1 + e^{x})$는 $\mathbb{R}$ 위의 볼록 함수다($f''(x) = \sigma(x)(1 - \sigma(x)) > 0$, $\sigma$는 sigmoid). 이 함수의 최솟점에 대해 옳은 것은?'''
+explanation = '''$f'(x) = \sigma(x) > 0$이므로 $f$는 모든 곳에서 증가하고, gradient가 0인 점이 없다. $x \to -\infty$에서 $f \to 0$이지만 0에 도달하는 점은 없다. 볼록성은 "국소 최소가 있다면 전역 최소"라는 것을 보장할 뿐, 최솟점의 **존재**를 보장하지 않는다. 강볼록 함수는 최솟점이 존재하고 유일하다. 선형 분리 가능한 데이터에서 로지스틱 회귀의 가중치가 끝없이 커지는 현상이 이 경우다.'''
+
+[[questions.choices]]
+text = "볼록 함수이므로 유일한 전역 최솟점이 존재한다."
+feedback = "볼록성은 최솟점의 존재를 보장하지 않는다. 존재와 유일성을 함께 보장하는 것은 강볼록성이다."
+
+[[questions.choices]]
+text = "최솟값의 하한 0에 다가가지만 도달하는 점은 없다. 최솟점이 존재하지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "x = 0에서 최소다. f''(0)이 가장 크기 때문이다."
+feedback = "곡률이 가장 큰 점과 최솟점은 관계가 없다. f'(0) = 0.5 ≠ 0이다."
+
+[[questions]]
+id = "tilted-double-well-minima"
+type = "numeric"
+objective = 3
+prompt = '''$f(x) = \frac{x^4}{4} - \frac{x^2}{2} + 0.2x$의 stationary point 중 **국소 최소**는 몇 개인가? (전역 최소도 국소 최소에 포함한다.)'''
+answer = 2
+tolerance = 0
+slider = { min = 0, max = 4, step = 1, unit = "개" }
+explanation = '''$f'(x) = x^3 - x + 0.2 = 0$의 실근은 약 $-1.088$, $0.209$, $0.879$의 세 개다. $f''(x) = 3x^2 - 1$이 각각 $2.55$, $-0.87$, $1.32$이므로 양 끝 두 점은 국소 최소, 가운데는 국소 최대다. 두 국소 최소 중 $x \approx -1.088$($f \approx -0.459$)이 전역 최소이고, $x \approx 0.879$($f \approx -0.061$)는 전역이 아닌 국소 최소다.'''
+
+[[questions]]
+id = "second-order-inconclusive"
+type = "single"
+objective = 3
+prompt = '''1차원 함수 $f$가 $x = 0$에서 $f'(0) = 0$, $f''(0) = 0$을 만족한다. 이것만으로 말할 수 있는 것은?'''
+explanation = '''$x^3$, $x^4$, $-x^4$는 모두 $x = 0$에서 $f' = f'' = 0$이지만 각각 최소도 최대도 아닌 점, 최소, 최대다. 2계 필요조건($f'' \ge 0$)은 만족하지만 2계 충분조건($f'' > 0$)은 만족하지 않으므로, 판정하려면 고계 도함수나 주변 값을 직접 봐야 한다.'''
+
+[[questions.choices]]
+text = "국소 최소다. 1계 조건과 2계 필요조건을 모두 만족하기 때문이다."
+feedback = "필요조건은 충분조건이 아니다. x³은 두 조건을 모두 만족하지만 x = 0에서 최소가 아니다."
+
+[[questions.choices]]
+text = "변곡점이다. 2계 도함수가 0이기 때문이다."
+feedback = "x⁴도 f''(0) = 0이지만 x = 0이 최솟점이다. f'' = 0은 변곡점의 증거가 아니다."
+
+[[questions.choices]]
+text = "이것만으로는 최소·최대·어느 쪽도 아닌 점 중 무엇인지 판정할 수 없다."
+correct = true
+
+[[questions]]
+id = "convex-stationary-is-global"
+type = "single"
+objective = 3
+prompt = '''미분 가능한 볼록 함수 $f: \mathbb{R}^n \to \mathbb{R}$에서 $\nabla f(\mathbf{x}^\star) = \mathbf{0}$이면?'''
+explanation = '''볼록 함수는 모든 점에서 접평면 위에 있다: $f(\mathbf{y}) \ge f(\mathbf{x}^\star) + \nabla f(\mathbf{x}^\star)^\top(\mathbf{y} - \mathbf{x}^\star) = f(\mathbf{x}^\star)$. 그래서 stationary point는 곧 전역 최소다. 다만 유일하다는 보장은 없다. $f(x, y) = x^2$은 볼록이고, $y$축 위의 모든 점이 전역 최솟점이다.'''
+
+[[questions.choices]]
+text = '''$\mathbf{x}^\star$는 전역 최솟점이다.'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathbf{x}^\star$는 국소 최솟점이지만 전역 최솟점인지는 알 수 없다.'''
+feedback = "볼록 함수에서는 접평면 부등식 때문에 stationary point가 바로 전역 최소다."
+
+[[questions.choices]]
+text = '''$\mathbf{x}^\star$는 유일한 최솟점이다.'''
+feedback = "f(x, y) = x²은 볼록이지만 y축 전체가 최솟점이다. 유일성에는 강볼록성(또는 strict convexity)이 필요하다."
+
+[[questions.choices]]
+text = '''Hessian이 양의 정부호인지 확인해야 최솟점인지 알 수 있다.'''
+feedback = "볼록 함수에서는 1계 조건만으로 충분하다. Hessian 확인은 볼록성을 모를 때 쓰는 국소 판정법이다."
