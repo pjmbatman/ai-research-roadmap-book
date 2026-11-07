@@ -619,37 +619,37 @@ status = "prototype"
 name = "kalman-1d"
 title = "1D 칼만 필터"
 chapters = ["scientific-ml/system-identification-and-estimation"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "l-curve"
 title = "Tikhonov L-curve"
 chapters = ["scientific-ml/inverse-problems-and-uq"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "abc-tolerance"
 title = "ABC 허용 오차"
 chapters = ["scientific-discovery/simulation-based-inference"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "eig-design"
 title = "측정 설계와 기대 정보 이득"
 chapters = ["scientific-discovery/experimental-design"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "pareto-front"
 title = "다목적 Pareto front"
 chapters = ["scientific-discovery/autonomous-experimentation"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "grid-resolution-re"
-title = "격자 해상도와 레이놀즈 수"
+title = "격자 해상도와 셀 Péclet 수"
 chapters = ["physics-and-engineering/simulation-fundamentals"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "pod-energy"

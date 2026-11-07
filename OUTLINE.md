@@ -768,7 +768,7 @@ _시뮬레이션 기반 추론, 방정식 발견, 능동 학습과 베이지안 
 
 _연속체 역학과 시뮬레이션의 기초, 시뮬레이션 대리모델, 난류와 closure 모델 학습, 설계 최적화, 벤치마크와 평가를 다룬다._
 
-- **26.1** [ML 연구자를 위한 연속체 역학과 시뮬레이션](content/26-physics-and-engineering/01-simulation-fundamentals/index.md) · `필수` · 퀴즈 6 · 위젯: 격자 해상도와 레이놀즈 수
+- **26.1** [ML 연구자를 위한 연속체 역학과 시뮬레이션](content/26-physics-and-engineering/01-simulation-fundamentals/index.md) · `필수` · 퀴즈 6 · 위젯: 격자 해상도와 셀 Péclet 수
   - 지배 방정식 · 무차원수와 영역 · 시뮬레이션 파이프라인 · 시뮬레이션 데이터 · 참고 문헌
   - 선수: 9.7 PDE·DAE와 시뮬레이터 검증
 - **26.2** [시뮬레이션 대리모델](content/26-physics-and-engineering/02-surrogate-modeling/index.md) · `필수` · 퀴즈 6 · 위젯: POD 에너지와 외삽
