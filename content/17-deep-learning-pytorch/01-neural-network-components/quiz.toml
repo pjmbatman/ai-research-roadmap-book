@@ -1,0 +1,135 @@
+# 17.1 신경망의 구성 요소 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "param-count"
+type = "numeric"
+objective = 1
+prompt = '''입력 20차원, 은닉층 두 개(폭 64, 64), 출력 3차원인 MLP(층마다 bias 있음)의 파라미터 수는?'''
+explanation = '''Linear 층마다 $n_{\text{out}}(n_{\text{in}} + 1)$개다. $64 \times 21 = 1344$, $64 \times 65 = 4160$, $3 \times 65 = 195$를 더하면 5699개다. 은닉층끼리의 $64 \times 64$ 항이 가장 크다. 폭을 두 배로 하면 이 항은 네 배가 된다.'''
+answer = 5699
+tolerance = 0
+
+[[questions]]
+id = "he-init-std"
+type = "single"
+objective = 2
+prompt = '''입력 차원 $n_{\text{in}} = 512$인 Linear 층 뒤에 ReLU가 온다. 활성값의 분산을 층마다 유지하려면 가중치의 표준편차를 얼마로 초기화해야 하는가? (He 초기화, 평균 0인 정규분포)'''
+explanation = '''$\operatorname{Var}(a) = n_{\text{in}} s^2 \mathbb{E}[h^2]$이고 ReLU는 $\mathbb{E}[h^2]$를 $\operatorname{Var}(a)$의 절반으로 만든다. 분산을 유지하려면 $n_{\text{in}}s^2/2 = 1$, 즉 $s = \sqrt{2/512} = 0.0625$다. $\sqrt{1/512} \approx 0.044$는 ReLU의 절반 효과를 보정하지 않은 값이라, 층마다 분산이 절반으로 줄어든다.'''
+
+[[questions.choices]]
+text = '''$1/512 \approx 0.002$'''
+feedback = "분산이 아니라 표준편차를 1/n으로 두면 신호가 층마다 약 1/sqrt(n)배씩 줄어 빠르게 사라진다."
+
+[[questions.choices]]
+text = '''$\sqrt{1/512} \approx 0.044$'''
+feedback = "선형(또는 tanh 근처) 활성화의 분산 보존 조건이다. ReLU가 음수 절반을 0으로 만들어 분산이 절반으로 줄어드는 것을 보정하지 않았다."
+
+[[questions.choices]]
+text = '''$\sqrt{2/512} = 0.0625$'''
+correct = true
+
+[[questions.choices]]
+text = "0.01 (층의 크기와 무관한 작은 값)"
+feedback = "작은 고정값은 층마다 신호를 0.01·sqrt(512) ≈ 0.23배로 줄인다. 깊은 모델에서는 활성값과 gradient가 사라진다."
+
+[[questions]]
+id = "norm-batch-dependence"
+type = "multiple"
+objective = 2
+prompt = '''다음 중 **한 표본의 출력이 같은 batch에 함께 들어 있는 다른 표본에 따라 달라지는** 경우를 모두 고르시오.'''
+explanation = '''train 모드의 BatchNorm만 batch 축으로 통계를 내므로 다른 표본의 영향을 받는다. eval 모드의 BatchNorm은 저장된 running 통계를 쓰고, LayerNorm과 RMSNorm은 표본 하나 안의 특성 축으로 통계를 내므로 모드와 무관하게 표본별로 독립이다.'''
+
+[[questions.choices]]
+text = "train 모드의 BatchNorm"
+correct = true
+
+[[questions.choices]]
+text = "eval 모드의 BatchNorm"
+feedback = "eval 모드는 학습 중 누적한 running mean·var로 정규화한다. batch 구성과 무관하다."
+
+[[questions.choices]]
+text = "train 모드의 LayerNorm"
+feedback = "LayerNorm은 표본마다 특성 축으로 평균과 분산을 낸다. 다른 표본은 쓰지 않는다."
+
+[[questions.choices]]
+text = "RMSNorm"
+feedback = "RMSNorm도 표본 하나의 특성 축 제곱평균으로 나눈다. batch와 무관하다."
+
+[[questions]]
+id = "eval-mode-forgotten"
+type = "single"
+objective = 2
+prompt = '''BatchNorm과 dropout이 있는 모델을 학습한 뒤, 같은 검증 세트를 batch 크기 256과 8로 평가했더니 점수가 달랐고, 같은 batch 크기로 두 번 평가해도 점수가 조금씩 달랐다. 가장 먼저 의심할 원인은?'''
+explanation = '''`model.eval()`을 호출하지 않으면 BatchNorm은 평가 batch의 통계로 정규화하고(batch 크기에 따라 결과가 바뀐다), dropout은 계속 무작위로 활성값을 끈다(같은 설정에서도 결과가 바뀐다). 두 증상이 모두 설명된다.'''
+
+[[questions.choices]]
+text = "평가 전에 model.eval()을 호출하지 않았다."
+correct = true
+
+[[questions.choices]]
+text = "검증 세트가 너무 작아 점수의 분산이 크다."
+feedback = "같은 데이터를 같은 모델로 평가하면 결정적이어야 한다. 데이터 크기는 같은 입력에서 결과가 바뀌는 이유가 되지 못한다."
+
+[[questions.choices]]
+text = "학습률이 너무 커서 모델이 수렴하지 않았다."
+feedback = "학습이 끝난 모델의 파라미터는 고정되어 있다. 평가 결과가 batch 구성에 따라 바뀌는 것은 학습률과 무관하다."
+
+[[questions.choices]]
+text = "초기화가 잘못되어 활성값이 폭발했다."
+feedback = "초기화 문제는 학습 결과를 나쁘게 만들 수 있지만, 학습된 모델의 평가가 batch 크기와 반복에 따라 달라지는 이유는 되지 못한다."
+
+[[questions]]
+id = "residual-jacobian"
+type = "single"
+objective = 1
+prompt = '''residual 블록 $\mathbf{h}_\ell = \mathbf{h}_{\ell-1} + F(\mathbf{h}_{\ell-1})$가 깊은 모델의 학습을 돕는 이유로 가장 정확한 것은?'''
+explanation = '''블록의 Jacobian이 $\mathbf{I} + \partial F/\partial\mathbf{h}$가 되므로 역전파의 곱을 전개하면 항등 행렬만 곱해지는 항이 남는다. $F$의 Jacobian이 작아도 gradient가 0으로 무너지지 않고 입력 쪽까지 전달된다.'''
+
+[[questions.choices]]
+text = '''블록의 Jacobian이 $\mathbf{I} + \partial F/\partial\mathbf{h}$가 되어 gradient가 항등 경로로 직접 전달된다.'''
+correct = true
+
+[[questions.choices]]
+text = "파라미터 수가 늘어나 표현력이 커진다."
+feedback = "덧셈 연결에는 파라미터가 없다. 같은 블록 수에서 파라미터 수는 그대로다."
+
+[[questions.choices]]
+text = "활성값을 평균 0, 분산 1로 정규화한다."
+feedback = "그것은 정규화 층의 역할이다. residual은 오히려 블록을 지날 때마다 분산을 더해 키울 수 있어 정규화와 함께 쓰인다."
+
+[[questions.choices]]
+text = "입력을 그대로 출력으로 보내므로 모델 전체가 선형이 된다."
+feedback = "F는 여전히 비선형이다. residual은 함수를 선형으로 만드는 것이 아니라 gradient의 지름길을 추가한다."
+
+[[questions]]
+id = "dropout-scale"
+type = "numeric"
+objective = 1
+prompt = '''inverted dropout에서 $p = 0.2$(값을 0으로 만들 확률)이면, 학습 중 살아남은 활성값에 곱하는 배율은?'''
+explanation = '''살아남을 확률이 $1 - p = 0.8$이므로 기댓값을 유지하려면 $1/0.8 = 1.25$배 한다. 그러면 평가 때는 아무 배율도 곱하지 않고 그대로 통과시킬 수 있다.'''
+answer = 1.25
+tolerance = 0.001
+
+[[questions]]
+id = "classification-head"
+type = "single"
+objective = 1
+prompt = '''$K$개 클래스 분류 모델을 PyTorch의 `nn.CrossEntropyLoss`로 학습한다. 모델의 마지막 출력은 무엇이어야 하는가?'''
+explanation = '''`nn.CrossEntropyLoss`는 logit을 받아 내부에서 log-softmax를 수치적으로 안정하게 계산한다. 모델이 softmax 확률을 내면 softmax가 두 번 적용되어 손실과 gradient가 왜곡된다. 오류 없이 학습이 느려지기만 하므로 발견하기 어렵다.'''
+
+[[questions.choices]]
+text = "softmax를 거치기 전의 logit K개"
+correct = true
+
+[[questions.choices]]
+text = "softmax를 적용한 확률 K개"
+feedback = "손실 함수 안에서 log-softmax가 한 번 더 적용된다. 확률은 손실 계산 밖, 예측을 보고할 때만 softmax로 만든다."
+
+[[questions.choices]]
+text = "argmax로 고른 클래스 번호 하나"
+feedback = "argmax는 미분할 수 없어 gradient가 흐르지 않는다. 클래스 번호는 정답(target)으로 넘기는 것이다."
+
+[[questions.choices]]
+text = "sigmoid를 적용한 K개의 값"
+feedback = "sigmoid는 클래스마다 독립인 다중 레이블 문제의 출력이다. 한 클래스만 정답인 문제에는 softmax 기반 cross-entropy가 맞다."
