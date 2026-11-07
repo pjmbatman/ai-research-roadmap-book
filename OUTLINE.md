@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 825문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 852문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -634,17 +634,17 @@ _불확실성의 종류와 모델링, 예측분포의 평가, conformal predicti
 
 _실험 추적, 재현성, 실험 자동화와 하이퍼파라미터 탐색, profiling과 효율화, 메모리 관리, 다중 GPU·분산 학습, 추론 최적화를 다룬다._
 
-- **22.1** [실험 추적과 결과 관리](content/22-experiment-operations/01-experiment-tracking/index.md) · `필수`
-  - 무엇을 기록하는가 · 저장 구조 · 추적 도구 · 결과 표 만들기 · 실패와 중단
+- **22.1** [실험 추적과 결과 관리](content/22-experiment-operations/01-experiment-tracking/index.md) · `필수` · 퀴즈 7
+  - 무엇을 기록하는가 · 저장 구조 · 추적 도구 · 결과 표 만들기 · 실패와 중단 · 참고 문헌
   - 선수: 6.3 설정 관리, 17.8 학습 모니터링과 대시보드
-- **22.2** [재현성](content/22-experiment-operations/02-reproducibility/index.md) · `필수`
-  - 재현성의 수준 · 무작위성의 출처 · 결정적 실행 · 변동성의 보고 · 환경 고정
+- **22.2** [재현성](content/22-experiment-operations/02-reproducibility/index.md) · `필수` · 퀴즈 7
+  - 재현성의 수준 · 무작위성의 출처 · 결정적 실행 · 변동성의 보고 · 환경 고정 · 참고 문헌
   - 선수: 22.1 실험 추적과 결과 관리, 3.5 Docker와 컨테이너
-- **22.3** [실험 자동화와 하이퍼파라미터 탐색](content/22-experiment-operations/03-experiment-automation/index.md) · `필수`
-  - sweep · 탐색 알고리즘 · 탐색 예산 · 견고한 실행
+- **22.3** [실험 자동화와 하이퍼파라미터 탐색](content/22-experiment-operations/03-experiment-automation/index.md) · `필수` · 퀴즈 7
+  - sweep · 탐색 알고리즘 · 탐색 예산 · 견고한 실행 · 참고 문헌
   - 선수: 22.2 재현성, 2.5 공유 서버와 클러스터 사용
-- **22.4** [Profiling과 학습 효율화](content/22-experiment-operations/04-profiling-and-efficiency/index.md) · `필수`
-  - 측정 · profiler · 데이터 공급 · 연산 효율 · 변화의 검증
+- **22.4** [Profiling과 학습 효율화](content/22-experiment-operations/04-profiling-and-efficiency/index.md) · `필수` · 퀴즈 6
+  - 측정 · profiler · 데이터 공급 · 연산 효율 · 변화의 검증 · 참고 문헌
   - 선수: 17.5 학습 루프 해부: forward → loss → backward → update, 5.5 컴퓨터 구조와 병렬 계산
 - **22.5** [GPU 메모리 관리](content/22-experiment-operations/05-memory-management/index.md) · `필수`
   - 메모리 회계 · 측정 · 절약 기법 · 큰 모델 다루기 · OOM 대응
