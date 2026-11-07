@@ -104,31 +104,34 @@ for n in [5, 8, 11]:
     A = hilbert(n)
     x = np.ones(n)
     b = A @ x
-    print(f"n = {n:2d}  cond*eps = {np.linalg.cond(A) * eps:.1e}")
+    kappa = np.linalg.cond(A)
+    print(f"n = {n:2d}  cond*eps = {kappa * eps:.1e}")
     for name, x_hat in [("solve", np.linalg.solve(A, b)),    # LU + 부분 피벗팅
                         ("inv @ b", np.linalg.inv(A) @ b)]:   # 역행렬을 만든 뒤 곱
         fwd = np.linalg.norm(x_hat - x) / np.linalg.norm(x)
         bwd = np.linalg.norm(b - A @ x_hat) / (np.linalg.norm(A, 2) * np.linalg.norm(x_hat))
-        print(f"   {name:8s} backward = {bwd:.1e}  forward = {fwd:.1e}")
+        # 오차의 정확한 값은 LAPACK 구현마다 다르므로, 크기 관계만 판정한다
+        print(f"   {name:8s} backward <= 10 eps: {bwd <= 10 * eps!s:5}  "
+              f"forward <= cond*backward: {fwd <= kappa * bwd!s:5}  forward < 1e-5: {fwd < 1e-5}")
 ```
 
 ```output
 n =  5  cond*eps = 1.1e-10
-   solve    backward = 7.1e-17  forward = 1.3e-12
-   inv @ b  backward = 2.1e-13  forward = 2.7e-11
+   solve    backward <= 10 eps: True   forward <= cond*backward: True   forward < 1e-5: True
+   inv @ b  backward <= 10 eps: False  forward <= cond*backward: True   forward < 1e-5: True
 n =  8  cond*eps = 3.4e-06
-   solve    backward = 1.4e-16  forward = 6.7e-08
-   inv @ b  backward = 2.3e-08  forward = 4.8e-07
+   solve    backward <= 10 eps: True   forward <= cond*backward: True   forward < 1e-5: True
+   inv @ b  backward <= 10 eps: False  forward <= cond*backward: True   forward < 1e-5: True
 n = 11  cond*eps = 1.2e-01
-   solve    backward = 5.7e-17  forward = 1.1e-03
-   inv @ b  backward = 3.9e-04  forward = 1.0e-01
+   solve    backward <= 10 eps: True   forward <= cond*backward: True   forward < 1e-5: False
+   inv @ b  backward <= 10 eps: False  forward <= cond*backward: True   forward < 1e-5: False
 ```
 
 세 가지를 읽는다.
 
-- **`solve`의 backward error는 조건수와 무관하게 $10^{-16}$ 수준이다.** backward stable하게 동작했다. forward error는 $\kappa\varepsilon$ 아래에 있다. $n = 11$에서 해가 세 자리밖에 맞지 않는 것은 알고리즘이 아니라 문제 탓이다.
-- **역행렬을 거치면 backward error가 조건수와 함께 커진다.** 역행렬을 곱하는 방법은 backward stable하지 않다. forward error도 `solve`보다 10–100배 크다. 역행렬을 명시적으로 만들지 말라는 조언(9.3장)의 근거다.
-- **작은 잔차가 정확한 해를 뜻하지는 않는다.** $n = 11$에서 `solve`의 잔차는 $10^{-17}$인데 해의 오차는 $10^{-3}$이다. 잔차는 알고리즘을 평가하고, 해의 정확도는 잔차에 조건수를 곱해야 알 수 있다.
+- **`solve`의 backward error는 조건수와 무관하게 $10\varepsilon$ 이하다.** backward stable하게 동작했다. forward error는 $\kappa \times$ backward error 아래에 있고, 따라서 $\kappa\varepsilon$ 수준을 넘지 않는다. $n = 11$에서 해가 다섯 자리도 맞지 않는 것(집필 환경에서 상대오차 $10^{-3}$ 안팎)은 알고리즘이 아니라 문제 탓이다.
+- **역행렬을 거치면 backward error가 조건수와 함께 커진다.** 역행렬을 곱하는 방법은 backward stable하지 않다. 집필 환경에서 그 backward error는 $n = 5$에서 $10^{-13}$–$10^{-12}$, $n = 11$에서 $4 \times 10^{-4}$ 안팎이었고, forward error도 `solve`보다 수 배에서 100배 가까이 컸다. 이런 반올림 오차의 정확한 값은 LAPACK 구현과 플랫폼마다 달라서 셀은 크기 관계만 판정해 찍는다. 역행렬을 명시적으로 만들지 말라는 조언(9.3장)의 근거다.
+- **작은 잔차가 정확한 해를 뜻하지는 않는다.** $n = 11$에서 `solve`의 잔차는 $10\varepsilon$ 이하인데 해의 상대오차는 $10^{-5}$를 넘는다. 잔차는 알고리즘을 평가하고, 해의 정확도는 잔차에 조건수를 곱해야 알 수 있다.
 
 ::quiz{id="cond-or-algorithm"}
 

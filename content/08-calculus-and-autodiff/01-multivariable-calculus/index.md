@@ -245,15 +245,15 @@ eps = 1e-6
 J_fd = np.stack([(net(x + eps * e) - net(x - eps * e)) / (2 * eps)
                  for e in np.eye(3)], axis=1)           # (2, 3)
 print("J shape:", J.shape)
-print("chain rule와 유한차분의 최대 차이:", f"{np.abs(J - J_fd).max():.1e}")
+print("chain rule와 유한차분의 최대 차이 < 1e-8:", np.abs(J - J_fd).max() < 1e-8)
 ```
 
 ```output
 J shape: (2, 3)
-chain rule와 유한차분의 최대 차이: 6.6e-11
+chain rule와 유한차분의 최대 차이 < 1e-8: True
 ```
 
-손으로 유도한 Jacobian과 중앙차분으로 근사한 Jacobian이 $10^{-10}$ 수준까지 일치한다. 이렇게 유한차분으로 해석적 미분을 확인하는 절차를 gradient check라 하고, 8.4장에서 정밀도 문제까지 포함해 자세히 다룬다.
+손으로 유도한 Jacobian과 중앙차분으로 근사한 Jacobian의 차이가 $10^{-8}$보다 작다. 남은 차이($10^{-10}$ 안팎)는 유한차분의 반올림 오차라서 정확한 값은 실행 환경마다 조금씩 다르므로, 셀은 판정만 찍는다. 이렇게 유한차분으로 해석적 미분을 확인하는 절차를 gradient check라 하고, 8.4장에서 정밀도 문제까지 포함해 자세히 다룬다.
 
 **곱의 순서와 비용.** 층이 $L$개인 신경망의 Jacobian은 $\mathbf{J}_L \cdots \mathbf{J}_2 \mathbf{J}_1$이다. 행렬 곱은 결합법칙을 만족하므로 오른쪽부터 곱해도(입력 쪽부터) 왼쪽부터 곱해도(출력 쪽부터) 결과는 같지만, 계산량은 다르다. 손실처럼 출력이 스칼라 하나이면 맨 왼쪽 행렬이 $1 \times k$ 행이므로, 왼쪽부터 곱하면 매 단계가 "행벡터 × 행렬"이 되어 큰 행렬끼리의 곱을 피할 수 있다. 이것이 reverse mode 자동미분, 즉 역전파의 핵심 아이디어이고 8.4장의 주제다.
 

@@ -166,13 +166,13 @@ b = np.array([6.0, 0.0, 0.0])
 p = P @ b
 print("P b       =", np.round(p, 4))
 print("P^2 = P ? ", np.allclose(P @ P, P), "  P^T = P ?", np.allclose(P.T, P))
-print("A^T (b-p) =", np.round(A.T @ (b - p), 12))
+print("A^T (b-p) = 0 ?", np.allclose(A.T @ (b - p), 0))
 ```
 
 ```output
 P b       = [ 5.  2. -1.]
 P^2 = P ?  True   P^T = P ? True
-A^T (b-p) = [0. 0.]
+A^T (b-p) = 0 ? True
 ```
 
 $\mathbf{b} = (6, 0, 0)$의 사영은 $(5, 2, -1)$이고, 오차 $(1, -2, 1)$은 두 열 $(1, 1, 1)$, $(0, 1, 2)$와 모두 직교한다.
@@ -208,12 +208,12 @@ w_qr = np.linalg.solve(R, Qx.T @ force_n)                    # R w = Q^T y
 w_ls = np.linalg.lstsq(X, force_n)[0]
 print("k [N/m], c [N]  정규방정식:", np.round(w_ne, 3), " QR:", np.round(w_qr, 3), " lstsq:", np.round(w_ls, 3))
 r = force_n - X @ w_ls
-print(f"max |X^T r| = {np.abs(X.T @ r).max():.1e}")
+print("max |X^T r| < 1e-10:", np.abs(X.T @ r).max() < 1e-10)
 ```
 
 ```output
 k [N/m], c [N]  정규방정식: [250.205   0.383]  QR: [250.205   0.383]  lstsq: [250.205   0.383]
-max |X^T r| = 1.1e-14
+max |X^T r| < 1e-10: True
 ```
 
 데이터를 만들 때 쓴 참값은 $k = 250$ N/m, $c = 0.3$ N이다. 세 방법이 같은 답을 주고, 잔차는 두 열과 반올림 오차 수준까지 직교한다. QR 방법은 $\mathbf{A} = \mathbf{Q}\mathbf{R}$을 정규방정식에 넣어 얻는다. $\mathbf{R}^\top\mathbf{Q}^\top\mathbf{Q}\mathbf{R}\hat{\mathbf{x}} = \mathbf{R}^\top\mathbf{Q}^\top\mathbf{b}$에서 $\mathbf{Q}^\top\mathbf{Q} = \mathbf{I}$이고 $\mathbf{R}^\top$이 가역이므로 $\mathbf{R}\hat{\mathbf{x}} = \mathbf{Q}^\top\mathbf{b}$이다. $\mathbf{A}^\top\mathbf{A}$를 만들지 않는다는 점이 중요하다(실습).

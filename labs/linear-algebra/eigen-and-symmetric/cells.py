@@ -35,6 +35,8 @@ R = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
 print("30도 회전의 고윳값:", np.round(np.linalg.eigvals(R), 4))
 
 # %% cell 3 — 양의 정부호성과 Rayleigh quotient
+import scipy.linalg as sla
+
 S2 = np.array([[2.0, 1.0], [1.0, 2.0]])
 T2 = np.array([[1.0, 2.0], [2.0, 1.0]])
 print("S2 고윳값:", np.linalg.eigvalsh(S2), "  T2 고윳값:", np.linalg.eigvalsh(T2))
@@ -46,7 +48,7 @@ rq = np.einsum("ni,ij,nj->n", X, S2, X) / np.einsum("ni,ni->n", X, X)
 print(f"Rayleigh quotient 범위: [{rq.min():.4f}, {rq.max():.4f}]")
 for M, name in [(S2, "S2"), (T2, "T2")]:
     try:
-        np.linalg.cholesky(M)
+        sla.cholesky(M)                  # PD가 아니면 LinAlgError
         print(name, "Cholesky 성공 → 양의 정부호")
     except np.linalg.LinAlgError:
         print(name, "Cholesky 실패 → 양의 정부호 아님")

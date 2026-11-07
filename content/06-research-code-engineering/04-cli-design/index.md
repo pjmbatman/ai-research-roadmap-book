@@ -48,13 +48,13 @@ for argv in [["configs/base.toml", "--lr", "fast"], ["configs/base.toml", "--dev
     try:
         p.parse_args(argv)
     except ValueError as e:
-        print("오류:", e)
+        print("오류:", str(e).split(" (choose from")[0])   # 허용 목록의 표기는 Python 패치 버전마다 달라 앞부분만 찍는다
 ```
 
 ```output
 Namespace(config='configs/base.toml', lr=0.0003, epochs=50, device='cpu', dry_run=True)
 오류: argument --lr: invalid float value: 'fast'
-오류: argument --device: invalid choice: 'tpu' (choose from 'cpu', 'cuda')
+오류: argument --device: invalid choice: 'tpu'
 오류: the following arguments are required: config
 ```
 
@@ -122,16 +122,16 @@ for argv in [["train", "configs/base.toml", "--seed", "1"], ["eval", "outputs/ru
         args = cli.parse_args(argv)
         print(args.func(args))
     except ValueError as err:
-        print("오류:", err)
+        print("오류:", str(err).split(" (choose from")[0])
 ```
 
 ```output
 train: config=configs/base.toml seed=1
 eval: ckpt=outputs/run1/model.npz split=test seed=0
-오류: argument command: invalid choice: 'predict' (choose from 'train', 'eval')
+오류: argument command: invalid choice: 'predict'
 ```
 
-`--seed`는 두 subcommand에서 같은 이름, 같은 타입, 같은 기본값을 가진다. 등록되지 않은 subcommand는 사용 가능한 목록과 함께 거부된다. `required=True`를 빠뜨리면 subcommand 없이 실행했을 때 `args.func`가 없어 엉뚱한 곳에서 `AttributeError`가 난다.
+`--seed`는 두 subcommand에서 같은 이름, 같은 타입, 같은 기본값을 가진다. 등록되지 않은 subcommand는 거부된다. 실제 메시지에는 사용 가능한 목록 `(choose from ...)`이 이어지는데, 그 따옴표 표기가 Python 패치 버전마다 달라 셀에서는 앞부분만 찍었다. `required=True`를 빠뜨리면 subcommand 없이 실행했을 때 `args.func`가 없어 엉뚱한 곳에서 `AttributeError`가 난다.
 
 공유 옵션을 최상위 parser에 정의하는 방법도 있지만, 그러면 그 옵션은 subcommand 이름 **앞**에 와야 한다(`soh --seed 1 train ...`). 사용자는 대개 `soh train ... --seed 1`처럼 쓰므로, `parents`로 각 subcommand에 넣는 편이 덜 놀랍다.
 

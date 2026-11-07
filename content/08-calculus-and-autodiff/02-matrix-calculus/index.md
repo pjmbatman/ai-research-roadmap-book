@@ -122,13 +122,13 @@ checks = {
     "log det X -> X^{-T}    ": (num_grad(lambda M: np.log(np.linalg.det(M)), X), np.linalg.inv(X).T),
 }
 for name, (num, formula) in checks.items():
-    print(f"{name}  최대 차이 {np.abs(num - formula).max():.1e}")
+    print(f"{name}  최대 차이 < 1e-8: {np.abs(num - formula).max() < 1e-8}")
 ```
 
 ```output
-x^T A x  -> (A + A^T) x  최대 차이 5.0e-11
-tr(A X)  -> A^T          최대 차이 4.2e-10
-log det X -> X^{-T}      최대 차이 1.0e-10
+x^T A x  -> (A + A^T) x  최대 차이 < 1e-8: True
+tr(A X)  -> A^T          최대 차이 < 1e-8: True
+log det X -> X^{-T}      최대 차이 < 1e-8: True
 ```
 
 :::note[분야 예시]
@@ -246,17 +246,17 @@ for k, g in grads.items():
     f = lambda v, k=k: forward({**P0, k: v})[3]
     g_num = num_grad(f, P0[k])
     rel = np.linalg.norm(g - g_num) / (np.linalg.norm(g) + np.linalg.norm(g_num))
-    print(f"{k}: shape {str(g.shape):7}  상대오차 {rel:.1e}")
+    print(f"{k}: shape {str(g.shape):7}  상대오차 < 1e-7: {rel < 1e-7}")
 ```
 
 ```output
-W2: shape (4, 5)   상대오차 2.7e-10
-b2: shape (4,)     상대오차 3.2e-10
-W1: shape (5, 3)   상대오차 3.6e-10
-b1: shape (5,)     상대오차 1.5e-10
+W2: shape (4, 5)   상대오차 < 1e-7: True
+b2: shape (4,)     상대오차 < 1e-7: True
+W1: shape (5, 3)   상대오차 < 1e-7: True
+b1: shape (5,)     상대오차 < 1e-7: True
 ```
 
-모든 gradient의 shape이 해당 파라미터와 같고, 상대오차가 $10^{-10}$ 수준이다. 행 벡터 batch에서는 `Gz @ W2`처럼 전치 없이 곱하는 것이 단일 샘플 식의 $\mathbf{W}_2^\top\mathbf{g}_z$와 같다는 점에 주의한다. $(\mathbf{W}_2^\top\mathbf{g}_z)^\top = \mathbf{g}_z^\top\mathbf{W}_2$이기 때문이다. 단일 샘플 식과 batch 식 사이를 오갈 때 전치가 한 번씩 뒤집힌다.
+모든 gradient의 shape이 해당 파라미터와 같고, 상대오차가 8.4장의 통과 기준인 $10^{-7}$보다 작다(실제 값은 $10^{-10}$ 안팎이며, 반올림 오차라서 실행 환경마다 조금씩 다르다). 행 벡터 batch에서는 `Gz @ W2`처럼 전치 없이 곱하는 것이 단일 샘플 식의 $\mathbf{W}_2^\top\mathbf{g}_z$와 같다는 점에 주의한다. $(\mathbf{W}_2^\top\mathbf{g}_z)^\top = \mathbf{g}_z^\top\mathbf{W}_2$이기 때문이다. 단일 샘플 식과 batch 식 사이를 오갈 때 전치가 한 번씩 뒤집힌다.
 
 :::note[분야 예시]
 천문학과 분광학에서 관측 스펙트럼 $\mathbf{y}$를 알려진 성분 스펙트럼들(설계행렬 $\mathbf{X}$의 열)의 선형 결합으로 분해하는 문제는 위의 선형회귀와 같은 구조다. 성분 비율이 음수가 될 수 없다는 제약을 더하면 비음수 최소제곱(non-negative least squares)이 되고, 이 경우에도 gradient $\mathbf{X}^\top(\mathbf{X}\mathbf{w} - \mathbf{y})$는 그대로 쓰이며 사영 경사하강(projected gradient descent) 같은 방법이 제약을 처리한다(10장).
