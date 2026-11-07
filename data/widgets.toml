@@ -295,37 +295,37 @@ status = "prototype"
 name = "runge-interpolation"
 title = "Runge 현상"
 chapters = ["numerical-methods/interpolation-and-quadrature"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "cfl-advection"
 title = "CFL 조건"
 chapters = ["numerical-methods/pde-and-dae"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "loss-slice"
 title = "손실 단면과 보간 경로"
 chapters = ["optimization/nonconvex-landscape"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "bayes-opt-1d"
 title = "1D 베이지안 최적화"
 chapters = ["optimization/special-optimization"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "base-rate"
 title = "기저율과 자연 빈도"
 chapters = ["probability/conditional-probability"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "clt-sampler"
 title = "중심극한정리와 꼬리"
 chapters = ["probability/expectation-and-limits"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "importance-weights"
