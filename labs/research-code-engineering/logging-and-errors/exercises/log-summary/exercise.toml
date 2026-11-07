@@ -1,0 +1,6 @@
+title = "JSON 줄 로그 요약하기"
+chapter = "research-code-engineering/logging-and-errors"
+objective = 1
+exec = "browser"
+entry = "summarize"
+timeout_s = 10

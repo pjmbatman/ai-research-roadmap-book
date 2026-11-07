@@ -1,0 +1,6 @@
+title = "버그를 잡는 테스트 쓰기"
+chapter = "research-code-engineering/testing-and-debugging"
+objective = 1
+exec = "browser"
+entry = "check_standardize"
+timeout_s = 10
