@@ -1,0 +1,113 @@
+# 20.1 MDP와 동적계획법 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "markov-state"
+type = "single"
+objective = 1
+prompt = '''진자를 세워 두는 제어 문제를 MDP로 정의하려 한다. 센서로 진자의 각도 $\theta$와 각속도 $\dot\theta$를 모두 읽을 수 있다. 상태로 가장 알맞은 것은?'''
+explanation = '''다음 상태를 예측하려면 현재 각도뿐 아니라 각속도도 필요하다. 같은 각도에서도 올라가는 중인지 내려가는 중인지에 따라 다음 각도가 다르기 때문이다. $(\theta, \dot\theta)$를 상태로 두면 운동 방정식이 다음 상태를 정하므로 Markov 성질이 성립한다. 각도의 긴 이력을 쌓는 것도 정보는 담지만, 필요한 정보를 직접 관측할 수 있다면 그것을 쓰는 것이 간결하다.'''
+
+[[questions.choices]]
+text = '''각도 $\theta$만. 제어의 목표가 각도이기 때문이다.'''
+feedback = "목표가 각도라도 상태는 '다음을 예측하는 데 필요한 정보'여야 한다. 각도만으로는 진자가 어느 방향으로 움직이는 중인지 알 수 없어 Markov 성질이 깨진다."
+
+[[questions.choices]]
+text = '''각도와 각속도 $(\theta, \dot\theta)$.'''
+correct = true
+
+[[questions.choices]]
+text = "지금까지 받은 보상의 합."
+feedback = "지난 보상의 합은 앞으로 무슨 일이 일어날지 알려 주지 않는다. 상태는 미래의 전이와 보상을 정하는 정보다."
+
+[[questions.choices]]
+text = "각도와 지금 고른 행동(토크)."
+feedback = "행동은 상태가 아니라 상태를 보고 고르는 선택이다. 전이 P(s'|s,a)에 행동이 따로 들어간다."
+
+[[questions]]
+id = "discount-return"
+type = "numeric"
+objective = 1
+prompt = '''한 상태에 머물며 매 step 보상 1을 영원히 받는다. 할인율 $\gamma = 0.9$일 때 이득 $G_0 = \sum_{k \ge 0} \gamma^k r_{k+1}$의 값은?'''
+answer = 10
+tolerance = 0.01
+slider = { min = 0, max = 20, step = 0.5 }
+explanation = '''등비급수 $\sum_{k \ge 0} 0.9^k = 1/(1 - 0.9) = 10$이다. 보상이 무한히 이어져도 $\gamma < 1$이면 이득이 유한하고, $1/(1-\gamma)$는 대략 몇 step 앞까지를 보는지(유효 지평)를 나타낸다. "무한대"라고 답했다면 할인을 빠뜨린 것이고, 0.9라고 답했다면 첫 보상에도 할인을 곱한 것이다(첫 보상의 지수는 0이다).'''
+
+[[questions]]
+id = "bellman-linear-vs-max"
+type = "single"
+objective = 2
+prompt = '''상태가 500개인 MDP에서 전이확률과 보상을 모두 안다. 다음 중 선형 연립방정식 한 번으로 정확히 풀 수 있는 것은?'''
+explanation = '''정책을 고정하면 Bellman 기대 방정식 $\mathbf{v}^\pi = \mathbf{r}^\pi + \gamma\mathbf{P}^\pi\mathbf{v}^\pi$는 $\mathbf{v}^\pi$에 대해 선형이므로 $(\mathbf{I} - \gamma\mathbf{P}^\pi)\mathbf{v}^\pi = \mathbf{r}^\pi$를 한 번 풀면 된다. Bellman 최적 방정식에는 $\max_a$가 들어 있어 비선형이므로 가치 반복이나 정책 반복(선형계를 여러 번 푸는 방법)이 필요하다.'''
+
+[[questions.choices]]
+text = '''주어진 정책 $\pi$의 가치함수 $V^\pi$'''
+correct = true
+
+[[questions.choices]]
+text = '''최적 가치함수 $V^*$'''
+feedback = "Bellman 최적 방정식에는 max가 있어 V*에 대해 선형이 아니다. 정책 반복은 선형계를 정책마다 한 번씩, 여러 번 푼다."
+
+[[questions.choices]]
+text = "둘 다. 상태 수가 유한하면 Bellman 방정식은 항상 선형이다."
+feedback = "상태 수가 유한해도 최적 방정식의 max는 비선형이다. 선형인 것은 정책을 고정한 기대 방정식뿐이다."
+
+[[questions.choices]]
+text = "둘 다 아니다. 가치함수는 시뮬레이션으로만 추정할 수 있다."
+feedback = "모형(P, R)을 알면 시뮬레이션 없이 계산할 수 있다. 시뮬레이션이나 경험이 필요한 것은 모형을 모를 때(20.2장)다."
+
+[[questions]]
+id = "vi-iterations"
+type = "numeric"
+objective = 2
+prompt = '''가치 반복의 오차는 $\lVert V_k - V^* \rVert_\infty \le \gamma^k \lVert V_0 - V^* \rVert_\infty$를 만족한다. $\gamma = 0.9$일 때 이 상한을 처음 오차의 $10^{-3}$배 이하로 만드는 최소 반복 수 $k$는?'''
+answer = 66
+tolerance = 0
+explanation = '''$0.9^k \le 10^{-3}$이려면 $k \ge \ln 10^{-3} / \ln 0.9 \approx 65.6$이므로 $k = 66$이다($0.9^{65} \approx 1.03 \times 10^{-3}$, $0.9^{66} \approx 9.3 \times 10^{-4}$). $\gamma = 0.99$이면 같은 계산으로 약 688번이 필요하다. 할인율이 1에 가까울수록 미래를 멀리 보는 대신 가치 반복이 느려진다. 상태 수와는 무관한 상한이라는 점도 기억한다.'''
+
+[[questions]]
+id = "policy-iteration-finite"
+type = "multiple"
+objective = 2
+prompt = '''유한 MDP($\gamma < 1$)에서 정책 반복과 가치 반복에 대해 옳은 것을 모두 고르시오.'''
+explanation = '''정책 개선 정리에 따라 개선된 정책의 가치는 모든 상태에서 줄지 않고, 결정적 정책은 유한 개이므로 정책 반복은 유한 번 만에 최적 정책에서 멈춘다. 가치 반복은 수축 사상의 고정점 반복이라 어떤 초기값에서도 $V^*$로 수렴하지만, 일반적으로 유한 번에 정확히 도달하지는 않는다. 두 방법 모두 전이확률과 보상을 알아야 한다.'''
+
+[[questions.choices]]
+text = "정책 반복은 유한 번의 개선 뒤에 최적 정책에서 멈춘다."
+correct = true
+
+[[questions.choices]]
+text = '''가치 반복은 초기값 $V_0$를 어떻게 잡아도 $V^*$로 수렴한다.'''
+correct = true
+
+[[questions.choices]]
+text = "정책 개선 단계에서 어떤 상태의 가치는 나빠질 수 있지만 평균은 좋아진다."
+feedback = "정책 개선 정리는 모든 상태에서 V^{π'}(s) ≥ V^π(s)를 보장한다. 평균만이 아니라 상태마다 나빠지지 않는다."
+
+[[questions.choices]]
+text = "두 방법 모두 전이확률을 몰라도 쓸 수 있다."
+feedback = "둘 다 R + γ Σ P V를 계산하므로 모형이 필요하다. 모형 없이 배우는 방법은 20.2장의 TD·Q-learning이다."
+
+[[questions]]
+id = "pomdp-belief"
+type = "single"
+objective = 1
+prompt = '''잡음이 있는 센서로 위치를 일부만 관측하는 로봇이 있다(POMDP). 행동을 고를 때 가장 알맞은 입력은?'''
+explanation = '''POMDP에서 마지막 관측 하나는 Markov 상태가 아니다. 지금까지의 관측·행동 이력이 담은 정보는 상태에 대한 사후분포인 belief로 요약되고, belief를 상태로 보면 문제는 다시 MDP(belief MDP)가 된다. belief의 최댓값 위치만 쓰는 것은 흔한 근사이지만, 불확실성이 클 때(두 위치가 비슷하게 그럴듯할 때) 정보를 버린다.'''
+
+[[questions.choices]]
+text = "마지막 센서 관측값"
+feedback = "관측 하나는 여러 상태와 맞을 수 있다. 본문의 복도 예에서 첫 관측 '문'은 두 위치에 똑같이 맞았다."
+
+[[questions.choices]]
+text = "관측·행동 이력으로 갱신한 상태의 사후분포(belief)"
+correct = true
+
+[[questions.choices]]
+text = "belief에서 확률이 가장 큰 상태 하나"
+feedback = "흔히 쓰는 근사지만 불확실성 정보를 버린다. 두 위치가 0.43씩으로 비슷하면, 위치를 더 확인하는 행동이 나을 수 있다는 판단을 할 수 없다."
+
+[[questions.choices]]
+text = "관측이 불완전하므로 상태와 상관없이 고정된 행동 순서"
+feedback = "관측에는 정보가 있다. 관측을 무시하는 개루프 행동 순서는 belief를 쓰는 정책보다 나을 수 없다."

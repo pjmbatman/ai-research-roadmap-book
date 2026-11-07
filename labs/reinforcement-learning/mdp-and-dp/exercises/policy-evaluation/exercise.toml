@@ -1,0 +1,6 @@
+title = "정책 평가: Bellman 기대 방정식을 선형계로 풀기"
+chapter = "reinforcement-learning/mdp-and-dp"
+objective = 2
+exec = "browser"
+entry = "evaluate_policy"
+timeout_s = 10

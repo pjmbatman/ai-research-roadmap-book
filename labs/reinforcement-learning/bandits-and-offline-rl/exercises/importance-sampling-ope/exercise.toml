@@ -1,0 +1,6 @@
+title = "importance sampling으로 오프 정책 평가"
+chapter = "reinforcement-learning/bandits-and-offline-rl"
+objective = 2
+exec = "browser"
+entry = "is_estimate"
+timeout_s = 10

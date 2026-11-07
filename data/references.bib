@@ -868,3 +868,207 @@
   doi       = {10.1007/978-3-319-24574-4_28},
   note      = {확인: 저자 연구실 서지 페이지와 Springer 서지(LNCS 9351, 234–241). encoder–decoder와 skip connection}
 }
+
+@book{sutton2018reinforcement,
+  author    = {Sutton, Richard S. and Barto, Andrew G.},
+  title     = {Reinforcement Learning: An Introduction},
+  edition   = {2},
+  publisher = {MIT Press},
+  year      = {2018},
+  isbn      = {9780262039246},
+  note      = {확인: 출판사·도서관 서지 기록(2018년 11월, 2판). MDP, Bellman 방정식, 동적계획법, TD·Q-learning·SARSA, 정책 기울기, 밴딧의 표준 교재}
+}
+
+@article{kaelbling1998planning,
+  author  = {Kaelbling, Leslie Pack and Littman, Michael L. and Cassandra, Anthony R.},
+  title   = {Planning and Acting in Partially Observable Stochastic Domains},
+  journal = {Artificial Intelligence},
+  volume  = {101},
+  number  = {1--2},
+  pages   = {99--134},
+  year    = {1998},
+  doi     = {10.1016/S0004-3702(98)00023-X},
+  note    = {확인: DBLP 서지 기록과 초록. MDP와 POMDP, belief 상태 위의 계획}
+}
+
+@article{watkins1992qlearning,
+  author  = {Watkins, Christopher J. C. H. and Dayan, Peter},
+  title   = {Q-learning},
+  journal = {Machine Learning},
+  volume  = {8},
+  number  = {3--4},
+  pages   = {279--292},
+  year    = {1992},
+  doi     = {10.1007/BF00992698},
+  note    = {확인: 서지 기록(mlanthology)과 초록. 모든 상태에서 모든 행동을 반복해 시도하면 표 형태 Q-learning이 최적 행동 가치로 확률 1로 수렴}
+}
+
+@article{mnih2015human,
+  author  = {Mnih, Volodymyr and Kavukcuoglu, Koray and Silver, David and Rusu, Andrei A. and Veness, Joel and Bellemare, Marc G. and Graves, Alex and Riedmiller, Martin and Fidjeland, Andreas K. and Ostrovski, Georg and Petersen, Stig and Beattie, Charles and Sadik, Amir and Antonoglou, Ioannis and King, Helen and Kumaran, Dharshan and Wierstra, Daan and Legg, Shane and Hassabis, Demis},
+  title   = {Human-level control through deep reinforcement learning},
+  journal = {Nature},
+  volume  = {518},
+  number  = {7540},
+  pages   = {529--533},
+  year    = {2015},
+  doi     = {10.1038/nature14236},
+  note    = {확인: DBLP 서지 기록과 초록. 화면 픽셀과 점수만 입력받는 deep Q-network(DQN), Atari 2600 게임}
+}
+
+@misc{schulman2017proximal,
+  author        = {Schulman, John and Wolski, Filip and Dhariwal, Prafulla and Radford, Alec and Klimov, Oleg},
+  title         = {Proximal Policy Optimization Algorithms},
+  year          = {2017},
+  eprint        = {1707.06347},
+  archiveprefix = {arXiv},
+  note          = {확인: arXiv 초록. 데이터 수집과 대리 목적 최적화를 번갈아 하는 policy gradient, 확률비 clipping}
+}
+
+@inproceedings{haarnoja2018soft,
+  author    = {Haarnoja, Tuomas and Zhou, Aurick and Abbeel, Pieter and Levine, Sergey},
+  title     = {Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor},
+  booktitle = {Proceedings of the 35th International Conference on Machine Learning},
+  series    = {PMLR},
+  volume    = {80},
+  pages     = {1861--1870},
+  year      = {2018},
+  note      = {확인: PMLR 서지 기록과 초록. 최대 엔트로피 틀의 off-policy actor-critic}
+}
+
+@inproceedings{henderson2018deep,
+  author    = {Henderson, Peter and Islam, Riashat and Bachman, Philip and Pineau, Joelle and Precup, Doina and Meger, David},
+  title     = {Deep Reinforcement Learning That Matters},
+  booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume    = {32},
+  number    = {1},
+  pages     = {3207--3214},
+  year      = {2018},
+  doi       = {10.1609/aaai.v32i1.11694},
+  note      = {확인: AAAI 서지 기록과 초록. 심층 RL 결과의 재현성, 비결정성과 방법 자체의 분산, 보고 지침}
+}
+
+@inproceedings{agarwal2021deep,
+  author    = {Agarwal, Rishabh and Schwarzer, Max and Castro, Pablo Samuel and Courville, Aaron and Bellemare, Marc G.},
+  title     = {Deep Reinforcement Learning at the Edge of the Statistical Precipice},
+  booktitle = {Advances in Neural Information Processing Systems 34},
+  year      = {2021},
+  eprint    = {2108.13264},
+  note      = {확인: arXiv 초록과 NeurIPS 2021 발표 기록. 적은 실행 수에서 점추정 대신 구간 추정, 사분위 평균 같은 견고한 요약}
+}
+
+@article{degrave2022magnetic,
+  author  = {Degrave, Jonas and Felici, Federico and Buchli, Jonas and others},
+  title   = {Magnetic control of tokamak plasmas through deep reinforcement learning},
+  journal = {Nature},
+  volume  = {602},
+  pages   = {414--419},
+  year    = {2022},
+  doi     = {10.1038/s41586-021-04301-9},
+  note    = {확인: ADS 서지 기록과 초록. TCV 토카막의 자기장 코일을 강화학습 제어기로 제어, 시뮬레이터에서 학습해 실제 장치로 이전}
+}
+
+@inproceedings{chua2018deep,
+  author    = {Chua, Kurtland and Calandra, Roberto and McAllister, Rowan and Levine, Sergey},
+  title     = {Deep Reinforcement Learning in a Handful of Trials using Probabilistic Dynamics Models},
+  booktitle = {Advances in Neural Information Processing Systems 31},
+  pages     = {4754--4765},
+  year      = {2018},
+  note      = {확인: NeurIPS 서지 기록과 초록. 확률적 신경망 동역학 모형의 ensemble과 표집 기반 불확실성 전파로 계획하는 PETS}
+}
+
+@article{lai1985asymptotically,
+  author  = {Lai, T. L. and Robbins, Herbert},
+  title   = {Asymptotically Efficient Adaptive Allocation Rules},
+  journal = {Advances in Applied Mathematics},
+  volume  = {6},
+  number  = {1},
+  pages   = {4--22},
+  year    = {1985},
+  doi     = {10.1016/0196-8858(85)90002-8},
+  note    = {확인: MaRDI·도서관 서지 기록. 밴딧 후회의 점근적 로그 하한과 이를 달성하는 배정 규칙}
+}
+
+@article{auer2002finite,
+  author  = {Auer, Peter and Cesa-Bianchi, Nicol{\`o} and Fischer, Paul},
+  title   = {Finite-time Analysis of the Multiarmed Bandit Problem},
+  journal = {Machine Learning},
+  volume  = {47},
+  number  = {2--3},
+  pages   = {235--256},
+  year    = {2002},
+  doi     = {10.1023/A:1013689704352},
+  note    = {확인: 저자 웹페이지 PDF와 서지 기록. UCB1, 유계 보상에서 시간에 균일한 로그 후회 상한}
+}
+
+@article{thompson1933likelihood,
+  author  = {Thompson, William R.},
+  title   = {On the Likelihood that One Unknown Probability Exceeds Another in View of the Evidence of Two Samples},
+  journal = {Biometrika},
+  volume  = {25},
+  number  = {3--4},
+  pages   = {285--294},
+  year    = {1933},
+  doi     = {10.2307/2332286},
+  note    = {확인: JSTOR 색인 서지 기록과 원문 스캔. 두 처치 중 어느 쪽이 나은지의 확률, Thompson sampling의 기원}
+}
+
+@article{russo2018tutorial,
+  author  = {Russo, Daniel J. and Van Roy, Benjamin and Kazerouni, Abbas and Osband, Ian and Wen, Zheng},
+  title   = {A Tutorial on Thompson Sampling},
+  journal = {Foundations and Trends in Machine Learning},
+  volume  = {11},
+  number  = {1},
+  pages   = {1--96},
+  year    = {2018},
+  doi     = {10.1561/2200000070},
+  note    = {확인: 출판사 서지 기록과 arXiv(1707.02038) 초록. Thompson sampling의 해설, Bernoulli 밴딧 예제}
+}
+
+@misc{levine2020offline,
+  author        = {Levine, Sergey and Kumar, Aviral and Tucker, George and Fu, Justin},
+  title         = {Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems},
+  year          = {2020},
+  eprint        = {2005.01643},
+  archiveprefix = {arXiv},
+  note          = {확인: arXiv 초록. 새 데이터 수집 없이 기존 데이터로 학습하는 오프라인 RL의 문제와 방법 정리}
+}
+
+@inproceedings{kumar2020conservative,
+  author    = {Kumar, Aviral and Zhou, Aurick and Tucker, George and Levine, Sergey},
+  title     = {Conservative Q-Learning for Offline Reinforcement Learning},
+  booktitle = {Advances in Neural Information Processing Systems 33},
+  year      = {2020},
+  eprint    = {2006.04779},
+  note      = {확인: NeurIPS 서지 기록과 초록. 정책의 실제 가치를 아래에서 근사하는 Q 함수 학습}
+}
+
+@inproceedings{precup2000eligibility,
+  author    = {Precup, Doina and Sutton, Richard S. and Singh, Satinder},
+  title     = {Eligibility Traces for Off-Policy Policy Evaluation},
+  booktitle = {Proceedings of the Seventeenth International Conference on Machine Learning (ICML 2000)},
+  pages     = {759--766},
+  publisher = {Morgan Kaufmann},
+  year      = {2000},
+  note      = {확인: DBLP 서지 기록과 초록. importance sampling 기반 오프 정책 평가와 eligibility trace}
+}
+
+@book{altman1999constrained,
+  author    = {Altman, Eitan},
+  title     = {Constrained Markov Decision Processes},
+  series    = {Stochastic Modeling},
+  publisher = {Chapman \& Hall/CRC},
+  year      = {1999},
+  isbn      = {9780849303821},
+  note      = {확인: 도서관·출판사 서지 기록. 비용 제약이 있는 MDP의 이론}
+}
+
+@inproceedings{achiam2017constrained,
+  author    = {Achiam, Joshua and Held, David and Tamar, Aviv and Abbeel, Pieter},
+  title     = {Constrained Policy Optimization},
+  booktitle = {Proceedings of the 34th International Conference on Machine Learning},
+  series    = {PMLR},
+  volume    = {70},
+  pages     = {22--31},
+  year      = {2017},
+  note      = {확인: PMLR 서지 기록. 정책 갱신마다 제약 만족을 보장하는 trust region 계열 방법}
+}
