@@ -1,0 +1,114 @@
+# 27.4 기상·기후 예측의 평가 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "acc-ignores-amplitude"
+type = "single"
+objective = 1
+prompt = '''어떤 예보의 기후값 편차를 모든 격자점에서 정확히 절반으로 줄인 예보를 새로 만들었다. 원래 예보와 비교해 ACC와 RMSE는 어떻게 되는가?'''
+explanation = '''ACC는 예보 편차와 정답 편차의 상관이라, 예보 편차에 양의 상수를 곱해도 변하지 않는다. RMSE는 크기에 민감하다. 편차를 줄이면 예보가 기후값 쪽으로 다가가므로, 원래 예보가 정답 편차를 과장하고 있었거나 예측력이 약했다면 RMSE가 줄 수도 있고, 원래 예보가 정확했다면 커진다. 그래서 ACC는 패턴, RMSE는 크기와 패턴을 함께 본다. 두 지표를 함께 보고하는 이유다.'''
+
+[[questions.choices]]
+text = "ACC는 그대로이고, RMSE는 원래 예보의 성질에 따라 커질 수도 작아질 수도 있다."
+correct = true
+
+[[questions.choices]]
+text = "ACC도 절반으로 줄어든다."
+feedback = "상관은 척도에 불변이다. 편차에 양의 상수를 곱하면 분자와 분모가 같은 비율로 바뀐다."
+
+[[questions.choices]]
+text = "ACC와 RMSE가 모두 반드시 좋아진다."
+feedback = "ACC는 변하지 않는다. RMSE는 원래 예보가 정확했다면 오히려 나빠진다."
+
+[[questions.choices]]
+text = "편차를 바꿨으므로 기후값도 다시 계산해야 하고, 두 지표 모두 비교할 수 없다."
+feedback = "기후값은 학습 기간의 정답에서 계산한 고정된 기준이다. 예보를 바꾼다고 기후값이 바뀌지 않는다."
+
+[[questions]]
+id = "underdispersed-ensemble"
+type = "single"
+objective = 1
+prompt = '''어떤 앙상블의 spread/RMSE 비가 0.5이고, rank histogram이 양 끝 칸에 몰린 U자 모양이다. 가장 그럴듯한 진단은?'''
+explanation = '''보정된 앙상블에서는 정답이 멤버들과 같은 분포에서 나온 것처럼 보여야 하므로, 정답의 순위가 고르게 분포하고(평평한 rank histogram) 앙상블 평균의 RMSE가 spread와 비슷하다. spread가 RMSE보다 훨씬 작고 정답이 자주 모든 멤버보다 크거나 작으면(U자) 앙상블의 퍼짐이 부족한 것이다. 본문의 퍼짐 부족 앙상블은 spread/RMSE 0.52, 양 끝 비율 0.46(평평하면 0.18)이었다. 다만 U자는 조건부 편향으로도 생길 수 있으므로(Hamill, 2001), 편향을 함께 확인한다.'''
+
+[[questions.choices]]
+text = "앙상블의 퍼짐이 부족하다(과신). 정답이 멤버 범위 밖에 너무 자주 떨어진다."
+correct = true
+
+[[questions.choices]]
+text = "앙상블의 퍼짐이 지나치다. 멤버가 너무 넓게 흩어져 정답이 양 끝에 몰린다."
+feedback = "퍼짐이 지나치면 정답이 대부분 멤버들의 가운데에 떨어져 rank histogram이 가운데가 솟은 모양이 되고, spread/RMSE는 1보다 크다."
+
+[[questions.choices]]
+text = "CRPS가 좋다면 문제없다. CRPS는 보정까지 반영하는 적정 점수이기 때문이다."
+feedback = "CRPS는 적정 점수지만 보정 오류에 둔감할 수 있다. 본문에서 퍼짐 부족 앙상블의 CRPS(0.574)는 보정된 앙상블(0.558)과 거의 같았다. 보정은 따로 진단한다."
+
+[[questions.choices]]
+text = "멤버 수가 적어서 생기는 표본 잡음이다. 멤버 수를 늘리면 저절로 사라진다."
+feedback = "멤버 수가 적으면 spread를 약간 과소평가하지만, 그 효과는 (M+1)/M 정도의 보정으로 작다. 0.5라는 비는 멤버 수로 설명되지 않는다."
+
+[[questions]]
+id = "blurry-wins-rmse"
+type = "single"
+objective = 2
+prompt = '''같은 사례들에 대해 두 예보가 있다. 예보 A는 실현 가능한 대기 상태처럼 작은 규모까지 날카롭고, 예보 B는 작은 규모가 지워진 매끄러운 장이다. B의 RMSE가 A보다 작았다. 옳은 해석은?'''
+explanation = '''작은 규모가 예측 불가능하다면, 제곱 오차를 최소화하는 예보는 그 규모를 0(조건부 평균)으로 둔다. 날카로운 예보는 작은 규모를 "그럴듯하게" 그리지만 위치가 틀리므로 오차가 두 번 생긴다(예측한 곳에 있고 실제 있는 곳에 없음). 그래서 독립적인 날카로운 실현의 MSE는 흐릿한 예보의 약 두 배가 된다. 본문에서 RMSE 1.283 대 0.900(비 약 $\sqrt{2}$)이었다. B가 "더 좋은 대기 상태"인 것은 아니다. B의 에너지 스펙트럼은 작은 규모에서 0에 가깝고, 극한이나 공간 구조를 쓰는 응용에는 A나 앙상블이 맞다.'''
+
+[[questions.choices]]
+text = "B는 예측할 수 없는 작은 규모를 평균으로 지워 RMSE에서 유리하다. 실현 가능한 장인지는 스펙트럼 같은 다른 지표로 따로 봐야 한다."
+correct = true
+
+[[questions.choices]]
+text = "B가 더 정확한 예보이므로 모든 응용에서 B를 쓴다."
+feedback = "RMSE가 작다는 것은 평균 제곱 오차의 의미에서만 낫다는 것이다. 극한 강수나 폭풍의 강도처럼 작은 규모의 세기가 중요한 응용에서는 B가 체계적으로 과소평가한다."
+
+[[questions.choices]]
+text = "A는 작은 규모에서 잡음을 만들어 내는 결함 있는 모델이다."
+feedback = "A의 스펙트럼은 정답과 같다. 작은 규모의 변동은 실제로 존재하며, 그 위치를 모를 뿐이다."
+
+[[questions.choices]]
+text = "두 예보의 ACC를 보면 결정된다. ACC는 흐릿함에 영향을 받지 않는다."
+feedback = "ACC도 흐릿한 예보를 선호한다(본문: 0.725 대 0.548). 흐릿함은 RMSE와 ACC 모두에 보이지 않는다."
+
+[[questions]]
+id = "effective-sample-size"
+type = "numeric"
+objective = 3
+prompt = '''100년 길이의 연평균 기온 편차에서 추세를 뺀 잔차의 lag-1 자기상관이 0.6이다. AR(1) 근사 $n_\text{eff} = n(1 - r_1)/(1 + r_1)$에 따른 유효 표본 수는?'''
+answer = 25
+tolerance = 0.5
+slider = { min = 0, max = 100, step = 1 }
+explanation = '''$n_\text{eff} = 100 \times (1 - 0.6)/(1 + 0.6) = 100 \times 0.4 / 1.6 = 25$다. 서로 독립인 관측 25개만큼의 정보라는 뜻이다. 표준오차는 대략 $\sqrt{(n-2)/(n_\text{eff}-2)} = \sqrt{98/23} \approx 2.1$배 커진다. 이 보정을 하지 않으면 추세가 없는 자료에서도 "유의한 추세"를 훨씬 자주 보고한다. 본문에서 $\phi = 0.6$, 50년 자료의 순진한 검정은 5% 대신 32%의 비율로 유의하다고 판정했다.'''
+
+[[questions]]
+id = "return-period-in-30-years"
+type = "numeric"
+objective = 3
+prompt = '''기후가 변하지 않는다고 할 때, 어느 해에 넘을 확률이 1/100인 "100년 재현 수준"을 앞으로 30년 동안 적어도 한 번 넘을 확률은? 소수로 답하시오.'''
+answer = 0.26
+tolerance = 0.01
+slider = { min = 0, max = 1, step = 0.01 }
+explanation = '''해마다 독립이라면 30년 동안 한 번도 넘지 않을 확률은 $0.99^{30} \approx 0.740$이므로, 적어도 한 번 넘을 확률은 $1 - 0.740 = 0.260$이다. "100년에 한 번"은 100년마다 한 번 일어난다는 뜻이 아니라 해마다의 확률이 1%라는 뜻이다. 30/100 = 0.30으로 계산하면 여러 번 넘는 경우를 중복해 센 것이다. 기후가 따뜻해지면 해마다의 확률 자체가 바뀐다. 본문에서 평균이 1 °C 오르면 과거 100년 수준의 재현 기간은 31년이 되었다.'''
+
+[[questions]]
+id = "gev-short-record"
+type = "multiple"
+objective = 3
+prompt = '''30년치 연 최댓값에 GEV 분포를 맞춰 100년 재현 수준을 추정했다. 옳은 것을 모두 고르시오.'''
+explanation = '''30개 표본으로 100년 재현 수준을 내는 것은 자료 범위 밖으로의 외삽이다. 모양 모수 $\xi$의 추정이 특히 불안정하고, 꼬리의 모양이 재현 수준을 크게 바꾼다. 본문에서 같은 기후의 30년 표본 세 개가 $\xi$ = -0.15, -0.10, +0.11과 100년 재현 수준 40.45, 40.60, 44.97 °C를 냈다(참값 40.98 °C). 그래서 재현 수준에는 신뢰구간을 붙이고(부트스트랩이나 프로파일 우도), 추세가 있는 자료라면 정상성 가정부터 점검한다. scipy의 `genextreme`은 모양 모수를 $c = -\xi$로 정의하므로 부호에 주의한다.'''
+
+[[questions.choices]]
+text = "모양 모수의 추정 불확실성이 커서, 같은 기후의 다른 30년 표본은 크게 다른 재현 수준을 줄 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "기온에 뚜렷한 상승 추세가 있으면 정상(stationary) GEV의 재현 수준은 미래의 위험을 과소평가할 수 있다."
+correct = true
+
+[[questions.choices]]
+text = "연 최댓값은 GEV를 정확히 따르므로, 표본이 30개여도 재현 수준의 오차는 무시할 수 있다."
+feedback = "GEV는 블록 최댓값의 극한 분포라는 근사이고, 맞는 분포라도 30개로 추정한 모수에는 큰 표본 오차가 있다. 100년 수준은 자료에 없는 범위다."
+
+[[questions.choices]]
+text = "scipy의 `genextreme.fit`이 돌려준 모양 모수 c가 양수이면 꼬리가 두꺼운(Fréchet형) 분포다."
+feedback = "scipy는 c = -ξ로 정의한다. c > 0이면 ξ < 0, 즉 상한이 있는 Weibull형이다."

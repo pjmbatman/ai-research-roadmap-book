@@ -1,0 +1,6 @@
+title = "리드 타임별 위도 가중 RMSE와 ACC"
+chapter = "earth-and-climate/weather-forecasting"
+objective = 3
+exec = "browser"
+entry = "scores"
+timeout_s = 10
