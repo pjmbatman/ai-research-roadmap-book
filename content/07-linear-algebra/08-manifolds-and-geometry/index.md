@@ -245,6 +245,8 @@ t = 0.75  |lerp| = 0.791  |slerp| = 1.000
 
 **잠재 공간 거리의 함정.** 잠재 공간이 평평한 $\mathbb{R}^d$라고 해서 그 위의 유클리드 거리가 데이터 사이의 의미 있는 거리라는 보장은 없다. decoder $g: \mathbb{R}^d \to \mathbb{R}^n$이 비선형이면, 잠재 공간의 같은 길이 $\lVert\Delta\mathbf{z}\rVert$가 데이터 공간에서는 $\lVert\mathbf{J}_g(\mathbf{z})\Delta\mathbf{z}\rVert$만큼의 변화를 만들고, 이 값은 위치와 방향에 따라 크게 다르다. 데이터 공간에서 측정한 길이로 잠재 공간의 경로를 재려면 $\mathbf{J}_g^\top\mathbf{J}_g$를 국소 내적으로 쓰는 방법(잠재 공간에 decoder가 유도하는 Riemann 계량을 주는 것)이 있다. 이 장에서는 "잠재 거리는 decoder의 Jacobian을 거쳐야 데이터 거리가 된다"는 점만 기억한다.
 
+::widget{name="slerp-vs-lerp"}
+
 ## 차원 개념의 구분
 
 연구 논문과 대화에서 "차원"은 적어도 네 가지 뜻으로 쓰인다. 서로 같을 때도 있지만, 다를 때가 더 흥미롭다.

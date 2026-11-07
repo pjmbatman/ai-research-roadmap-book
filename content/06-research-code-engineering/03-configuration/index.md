@@ -203,6 +203,8 @@ print("깊은 병합:", merged)
 
 얕은 병합은 `model.depth`를 잃었다. 이후 코드가 `.get("depth", 2)`처럼 기본값을 두고 읽는다면, 오류 없이 의도와 다른 깊이로 실행된다. 깊은 병합은 실험 파일이 바꾼 `width`만 바꾸고 나머지를 유지한다. 명령행 override는 점 경로(dotted key)로 위치를 가리키고, 값은 TOML 문법으로 해석해 `3e-4`는 실수, `1`은 정수가 되게 했다.
 
+::widget{name="config-merge"}
+
 ::quiz{id="shallow-merge"}
 
 위의 `deep_merge`에는 아직 구멍이 있다. 기본 설정에 없는 키(`train.learning_rate`)를 덮어쓰면 새 키로 조용히 추가된다. 코드는 계속 `train.lr`을 읽으므로 그 override는 아무 효과가 없다. 설정 객체로 바꿀 때 알 수 없는 키를 거부하거나, 병합 단계에서부터 거부해야 한다. 실습의 연습문제가 후자를 구현한다.
