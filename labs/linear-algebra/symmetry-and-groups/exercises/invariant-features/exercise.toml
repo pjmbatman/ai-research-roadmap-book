@@ -1,0 +1,6 @@
+title = "점구름의 불변 특징 설계하기"
+chapter = "linear-algebra/symmetry-and-groups"
+objective = 3
+exec = "browser"
+entry = "invariant_features"
+timeout_s = 10

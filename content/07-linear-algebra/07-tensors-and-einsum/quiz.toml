@@ -1,0 +1,118 @@
+# 7.7 텐서와 einsum — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "einsum-frobenius"
+type = "single"
+objective = 1
+prompt = '''같은 shape $(I, J)$의 두 행렬 $\mathbf{A}, \mathbf{C}$에 대해 `np.einsum("ij,ij->", A, C)`가 계산하는 것은?'''
+explanation = '''두 입력에 같은 글자 $i, j$가 붙어 있으므로 같은 위치의 원소끼리 곱하고, 출력에 아무 글자도 없으므로 두 축을 모두 합한다: $\sum_{i,j} A_{ij} C_{ij}$. 이 값은 Frobenius 내적이고 $\operatorname{tr}(\mathbf{A}^\top \mathbf{C})$와 같다. 출력에 `ij`를 남기면(`"ij,ij->ij"`) 합하지 않은 원소별 곱이 된다.'''
+
+[[questions.choices]]
+text = '''$\sum_{i,j} A_{ij} C_{ij} = \operatorname{tr}(\mathbf{A}^\top \mathbf{C})$'''
+correct = true
+
+[[questions.choices]]
+text = '''원소별 곱 $\mathbf{A} \odot \mathbf{C}$ (shape $(I, J)$)'''
+feedback = "출력 쪽(-> 오른쪽)이 비어 있으면 모든 축을 합해 스칼라가 된다. 원소별 곱은 \"ij,ij->ij\"다."
+
+[[questions.choices]]
+text = '''행렬 곱 $\mathbf{A}\mathbf{C}$'''
+feedback = "행렬 곱은 첫 행렬의 열 축과 둘째 행렬의 행 축을 짝짓는 \"ij,jk->ik\"다. 게다가 (I, J) @ (I, J)는 I ≠ J이면 shape이 맞지 않는다."
+
+[[questions.choices]]
+text = '''$\operatorname{tr}(\mathbf{A}\mathbf{C})$'''
+feedback = "tr(AC) = Σ A_ij C_ji로 C의 인덱스가 뒤집혀 있다(\"ij,ji->\"). \"ij,ij->\"는 같은 위치끼리 곱하므로 tr(AᵀC)다."
+
+[[questions]]
+id = "reshape-vs-transpose"
+type = "single"
+objective = 3
+prompt = '''shape `(B, T, D)`인 시계열 batch `X`를 RNN 입력 규약 `(T, B, D)`로 바꾸려 한다. 올바른 코드는?'''
+explanation = '''축의 순서를 바꾸는 것은 `transpose`(또는 `np.moveaxis`)다. `reshape`는 원소를 메모리 순서(C 순서)대로 읽어 새 shape에 다시 채울 뿐 축을 바꾸지 않는다. 그래서 `X.reshape(T, B, D)`는 shape은 맞지만 서로 다른 시계열의 시점들을 섞어 놓는다. B = T인 경우조차 결과가 다르다.'''
+
+[[questions.choices]]
+text = "`X.transpose(1, 0, 2)`"
+correct = true
+
+[[questions.choices]]
+text = "`X.reshape(T, B, D)`"
+feedback = "shape은 맞지만 원소를 메모리 순서대로 다시 채울 뿐이라 시계열끼리 섞인다. 오류 없이 실행되므로 더 위험하다."
+
+[[questions.choices]]
+text = "둘 다 같은 결과를 낸다. 원소 수가 같기 때문이다."
+feedback = "원소 수가 같다는 것은 reshape가 가능하다는 뜻일 뿐이다. 각 원소가 어느 축의 어느 위치로 가는지는 두 연산이 다르다."
+
+[[questions]]
+id = "broadcast-result-shape"
+type = "single"
+objective = 3
+prompt = '''`a`의 shape이 `(5, 1, 3)`, `b`의 shape이 `(4, 3)`일 때 `a - b`의 shape은?'''
+explanation = '''broadcasting은 shape을 **오른쪽 끝부터** 맞춘다. `b`는 앞에 1을 붙여 `(1, 4, 3)`으로 본다. 축마다 크기가 같거나 한쪽이 1이면 큰 쪽으로 늘어난다: `(5, 1, 3)`과 `(1, 4, 3)` → `(5, 4, 3)`. 쌍별 거리 계산 `x[:, None, :] - y[None, :, :]`이 바로 이 규칙을 쓴다.'''
+
+[[questions.choices]]
+text = "`(5, 4, 3)`"
+correct = true
+
+[[questions.choices]]
+text = "오류. 두 배열의 차원 수가 다르다."
+feedback = "차원 수가 달라도 된다. 짧은 쪽의 왼쪽에 크기 1인 축을 붙여 맞춘다."
+
+[[questions.choices]]
+text = "`(5, 1, 3)`"
+feedback = "크기 1인 축은 상대 쪽 크기(4)로 늘어난다. 결과가 큰 쪽 shape을 따르는 것이 아니라 축마다 최댓값을 따른다."
+
+[[questions.choices]]
+text = "오류. 첫 축의 크기 5와 4가 맞지 않는다."
+feedback = "broadcasting은 왼쪽이 아니라 오른쪽 끝부터 축을 맞춘다. b의 4는 a의 가운데 축(크기 1)과 짝지어진다."
+
+[[questions]]
+id = "einsum-bilinear-spec"
+type = "single"
+objective = 2
+prompt = '''`x` `(B, I)`, `W` `(K, I, J)`, `z` `(B, J)`에서 $y_{bk} = \sum_{i,j} x_{bi} W_{kij} z_{bj}$를 계산하는 einsum 문자열은?'''
+explanation = '''출력에 남을 축은 $b, k$이고, 합해서 사라질 축은 $i, j$다. 입력마다 축 순서대로 글자를 붙이면 `"bi,kij,bj->bk"`다. 출력에 `bkij`를 남기면 합하지 않은 4차원 배열이 나오고, `b`를 출력에서 빼면 batch 항목끼리 더해진다.'''
+
+[[questions.choices]]
+text = '''`"bi,kij,bj->bk"`'''
+correct = true
+
+[[questions.choices]]
+text = '''`"bi,kij,bj->bkij"`'''
+feedback = "i, j가 출력에 남으면 합하지 않는다. shape (B, K, I, J)인 원소별 곱이 나온다."
+
+[[questions.choices]]
+text = '''`"bi,kij,bj->k"`'''
+feedback = "b가 출력에 없으면 batch 축도 합해진다. 서로 다른 샘플의 출력이 더해져 버린다."
+
+[[questions.choices]]
+text = '''`"bi,kji,bj->bk"`'''
+feedback = "W의 축 순서는 (K, I, J)다. kji라고 쓰면 W의 둘째 축을 j, 셋째 축을 i로 읽어 x와 z가 W의 엉뚱한 축과 짝지어진다. I ≠ J이면 오류, I = J이면 조용히 틀린 값이 나온다."
+
+[[questions]]
+id = "contraction-order"
+type = "single"
+objective = 2
+prompt = '''$\mathbf{A}, \mathbf{B}$가 $1000 \times 1000$ 행렬, $\mathbf{x}$가 길이 1000인 벡터다. $\mathbf{A}\mathbf{B}\mathbf{x}$를 계산하는 두 순서의 곱셈 횟수에 대해 옳은 것은?'''
+explanation = '''$(\mathbf{A}\mathbf{B})\mathbf{x}$는 행렬–행렬 곱에 $1000^3 = 10^9$번, 이어서 행렬–벡터 곱에 $10^6$번 곱한다. $\mathbf{A}(\mathbf{B}\mathbf{x})$는 행렬–벡터 곱 두 번으로 $2 \times 10^6$번이다. 결과는 같지만 비용은 약 500배 차이다. 피연산자가 셋 이상인 einsum도 축약 순서에 따라 비용이 크게 달라지고, `np.einsum(..., optimize=True)`나 `np.einsum_path`가 순서를 고른다.'''
+
+[[questions.choices]]
+text = '''$\mathbf{A}(\mathbf{B}\mathbf{x})$가 약 $2 \times 10^6$번으로, $(\mathbf{A}\mathbf{B})\mathbf{x}$보다 약 500배 적다.'''
+correct = true
+
+[[questions.choices]]
+text = "행렬 곱은 결합법칙을 만족하므로 두 순서의 비용도 같다."
+feedback = "결합법칙은 결과가 같다는 뜻이지 비용이 같다는 뜻이 아니다. 중간 결과의 크기가 비용을 정한다."
+
+[[questions.choices]]
+text = '''$(\mathbf{A}\mathbf{B})\mathbf{x}$가 더 싸다. $\mathbf{A}\mathbf{B}$를 한 번 만들어 두면 되기 때문이다.'''
+feedback = "AB를 여러 벡터에 반복해서 쓴다면 미리 만들 가치가 있을 수 있지만, 한 번만 계산한다면 10^9번의 곱셈이 그대로 비용이다."
+
+[[questions]]
+id = "cp-parameter-count"
+type = "numeric"
+objective = 1
+prompt = '''shape $10 \times 20 \times 30$인 3차 텐서를 랭크 $R = 5$인 CP 분해 $\mathcal{T}_{ijk} = \sum_{r=1}^{R} a_{ir} b_{jr} c_{kr}$로 나타낸다. 인자 행렬 $\mathbf{a}, \mathbf{b}, \mathbf{c}$의 원소는 모두 몇 개인가?'''
+answer = 300
+tolerance = 0
+explanation = '''인자 행렬의 shape은 $(10, 5)$, $(20, 5)$, $(30, 5)$이므로 원소 수는 $5 \times (10 + 20 + 30) = 300$이다. 원래 텐서의 원소 수 $10 \times 20 \times 30 = 6000$의 5%다. CP 분해의 파라미터 수는 축 길이의 **합**에 비례하고, 텐서 자체의 원소 수는 축 길이의 **곱**에 비례한다.'''
