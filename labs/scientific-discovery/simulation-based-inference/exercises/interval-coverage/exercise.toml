@@ -1,0 +1,6 @@
+title = "사후 구간의 coverage 재기"
+chapter = "scientific-discovery/simulation-based-inference"
+objective = 3
+exec = "browser"
+entry = "coverage"
+timeout_s = 10
