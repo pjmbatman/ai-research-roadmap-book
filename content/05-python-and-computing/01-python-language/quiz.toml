@@ -1,0 +1,144 @@
+# 5.1 Python 언어의 핵심 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "is-vs-equal"
+type = "single"
+objective = 1
+prompt = '''`x = [1, 2]`, `y = [1, 2]`일 때 `x == y`와 `x is y`의 값은?'''
+explanation = '''`==`는 값이 같은지(`__eq__`)를, `is`는 두 이름이 **같은 객체**를 가리키는지를 묻는다. 리스트 리터럴은 실행될 때마다 새 객체를 만들므로 `x`와 `y`는 내용이 같은 서로 다른 객체다. 그래서 `x == y`는 `True`, `x is y`는 `False`다. `is`는 `None` 비교(`x is None`)처럼 객체의 정체를 물을 때만 쓴다.'''
+
+[[questions.choices]]
+text = "`True`, `False`"
+correct = true
+
+[[questions.choices]]
+text = "`True`, `True`"
+feedback = "내용이 같다고 같은 객체가 되지는 않는다. 리스트 리터럴은 매번 새 객체를 만든다."
+
+[[questions.choices]]
+text = "`False`, `False`"
+feedback = "`==`는 원소를 차례로 비교한다. 두 리스트의 원소가 모두 같으므로 `True`다."
+
+[[questions.choices]]
+text = "`is`가 `==`보다 빠른 같은 연산이므로 둘 다 `True`다."
+feedback = "`is`는 값 비교의 빠른 버전이 아니라 전혀 다른 질문(같은 객체인가)이다. 작은 정수나 짧은 문자열에서 우연히 `True`가 나오는 것은 구현의 캐시 때문이고, 의존하면 안 된다."
+
+[[questions]]
+id = "shallow-copy-nested"
+type = "single"
+objective = 1
+prompt = '''`grid = [[0, 0], [0, 0]]`에서 `snapshot = grid.copy()`로 복사한 뒤 `grid[0][0] = 99`를 실행했다. `snapshot`은?'''
+explanation = '''`list.copy()`는 **얕은 복사**다. 바깥 리스트는 새로 만들지만, 그 안에 담긴 내부 리스트는 같은 객체를 그대로 가리킨다. `grid[0][0] = 99`는 공유된 내부 리스트를 바꾸므로 `snapshot`에서도 보인다. 내부까지 독립된 복사가 필요하면 `copy.deepcopy`를 쓴다.'''
+
+[[questions.choices]]
+text = "`[[0, 0], [0, 0]]` — 복사했으므로 원본의 변경과 무관하다."
+feedback = "바깥 리스트만 새로 만들어졌다. `snapshot[0] is grid[0]`이 `True`다."
+
+[[questions.choices]]
+text = "`[[99, 0], [0, 0]]`"
+correct = true
+
+[[questions.choices]]
+text = "`[[99, 0], [99, 0]]`"
+feedback = "두 내부 리스트는 서로 다른 객체다(`[[0] * 2] * 2`로 만들었다면 이렇게 된다)."
+
+[[questions]]
+id = "mutable-default-count"
+type = "numeric"
+objective = 2
+prompt = '''다음 코드에서 마지막 줄이 출력하는 값은?
+
+```python
+def collect(x, acc=[]):
+    acc.append(x)
+    return len(acc)
+
+collect(1)
+collect(2)
+print(collect(3))
+```'''
+answer = 3
+tolerance = 0
+slider = { min = 1, max = 5, step = 1 }
+explanation = '''기본값 `[]`는 함수가 **정의될 때 한 번** 만들어지고, 인자를 생략한 모든 호출이 그 같은 리스트를 공유한다. 세 번의 호출이 같은 리스트에 원소를 하나씩 더하므로 세 번째 호출의 길이는 3이다. 기본값을 `None`으로 두고 함수 안에서 새 리스트를 만들면 매 호출이 길이 1을 반환한다.'''
+
+[[questions]]
+id = "late-binding-closure"
+type = "single"
+objective = 2
+prompt = '''`fs = [lambda x: x * k for k in range(3)]` 다음 `[f(10) for f in fs]`의 결과는?'''
+explanation = '''lambda 본문의 `k`는 함수가 **호출될 때** 찾는 이름이다(늦은 바인딩). 호출 시점에는 comprehension이 끝나 `k`가 마지막 값 2이므로 세 함수 모두 `10 * 2 = 20`을 반환한다. 정의 시점의 값을 고정하려면 `lambda x, k=k: x * k`나 `functools.partial`을 쓴다.'''
+
+[[questions.choices]]
+text = "`[0, 10, 20]`"
+feedback = "각 lambda가 만들어질 때의 k를 기억한다고 생각한 것이다. closure는 값이 아니라 변수를 붙잡는다."
+
+[[questions.choices]]
+text = "`[20, 20, 20]`"
+correct = true
+
+[[questions.choices]]
+text = "`NameError`가 난다. comprehension이 끝나면 `k`가 사라지기 때문이다."
+feedback = "comprehension 밖에서는 `k`가 보이지 않지만, lambda는 comprehension 내부 scope의 변수를 closure로 붙잡고 있어 호출할 때 찾을 수 있다."
+
+[[questions]]
+id = "generator-exhausted"
+type = "single"
+objective = 2
+prompt = '''`g = (x * x for x in range(4))` 다음 `print(sum(g), sum(g))`의 출력은?'''
+explanation = '''generator는 값을 한 번 내보내면 다시 내보내지 않는 iterator다. 첫 `sum`이 0, 1, 4, 9를 모두 소모해 14를 얻고, 두 번째 `sum`은 남은 원소가 없어 0을 반환한다. 여러 번 순회해야 하면 리스트로 만들어 두거나, generator를 만드는 함수를 매번 다시 호출한다.'''
+
+[[questions.choices]]
+text = "`14 14`"
+feedback = "리스트처럼 다시 처음부터 순회된다고 생각한 것이다. generator는 한 번 소모되면 끝난다."
+
+[[questions.choices]]
+text = "`14 0`"
+correct = true
+
+[[questions.choices]]
+text = "두 번째 `sum`에서 `StopIteration` 예외가 난다."
+feedback = "`sum`은 iterator가 끝나는 신호(`StopIteration`)를 정상 종료로 처리한다. 빈 iterator의 합은 0이다."
+
+[[questions]]
+id = "type-hints-not-enforced"
+type = "single"
+objective = 3
+prompt = '''`def scale(x: float) -> float: return 2 * x`를 정의하고 `scale("ab")`를 호출하면?'''
+explanation = '''Python은 실행 중에 type hint를 검사하지 않는다. `2 * "ab"`는 문자열 반복이므로 `"abab"`가 반환된다. type hint의 이득은 mypy·pyright 같은 **정적 분석기**와 편집기가 실행 전에 이런 호출을 찾아 주는 데서 나온다. 실행 중 검사가 필요하면 함수 안에서 직접 검사하거나 검증 라이브러리를 쓴다.'''
+
+[[questions.choices]]
+text = "호출하는 순간 `TypeError`가 난다."
+feedback = "type hint는 주석(annotation)으로 저장될 뿐 실행 중에 강제되지 않는다."
+
+[[questions.choices]]
+text = "`\"abab\"`를 반환한다."
+correct = true
+
+[[questions.choices]]
+text = "`\"ab\"`를 float로 바꾸려다 `ValueError`가 난다."
+feedback = "type hint는 자동 형 변환을 하지 않는다."
+
+[[questions]]
+id = "dataclass-default-factory"
+type = "multiple"
+objective = 2
+prompt = '''실험 설정을 `@dataclass`로 정의할 때, 인스턴스마다 **독립된** 빈 리스트를 갖게 하는 필드 정의를 모두 고르시오.'''
+explanation = '''`field(default_factory=list)`는 인스턴스를 만들 때마다 `list()`를 호출해 새 리스트를 만든다. `None`을 기본값으로 두고 `__post_init__`에서 새 리스트를 만드는 방법도 같은 효과를 낸다. `tags: list = []`는 dataclass가 정의 시점에 `ValueError`로 막는다. 막지 않았다면 모든 인스턴스가 한 리스트를 공유했을 것이다.'''
+
+[[questions.choices]]
+text = "`tags: list[str] = field(default_factory=list)`"
+correct = true
+
+[[questions.choices]]
+text = "`tags: list[str] | None = None`으로 두고 `__post_init__`에서 `None`이면 `[]`로 바꾼다."
+correct = true
+
+[[questions.choices]]
+text = "`tags: list[str] = []`"
+feedback = "dataclass는 가변 기본값을 거부한다(`ValueError: mutable default ... use default_factory`). 일반 함수의 가변 기본 인자 버그를 막기 위한 장치다."
+
+[[questions.choices]]
+text = "`tags: list[str] = list()`"
+feedback = "`list()`도 클래스 정의 시점에 한 번만 실행되어 리스트 하나를 만든다. `[]`와 같은 문제이고 dataclass가 같은 이유로 거부한다."

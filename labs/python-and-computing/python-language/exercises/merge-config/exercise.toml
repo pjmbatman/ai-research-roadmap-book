@@ -1,0 +1,6 @@
+title = "원본을 건드리지 않는 설정 병합"
+chapter = "python-and-computing/python-language"
+objective = 1
+exec = "browser"
+entry = "merge_config"
+timeout_s = 10
