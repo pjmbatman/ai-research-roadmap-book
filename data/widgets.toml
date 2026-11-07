@@ -331,37 +331,37 @@ status = "planned"
 name = "importance-weights"
 title = "중요도 가중과 ESS"
 chapters = ["probability/sampling"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "metropolis-chain"
 title = "Metropolis 혼합"
 chapters = ["probability/stochastic-processes"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "ci-coverage"
 title = "신뢰구간 포함률"
 chapters = ["statistical-inference/intervals-and-testing"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "bootstrap-resampler"
 title = "부트스트랩 단위"
 chapters = ["statistical-inference/comparing-models"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "residual-diagnostics"
 title = "잔차 진단"
 chapters = ["statistical-inference/regression-models"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "partial-pooling"
 title = "부분 풀링과 수축"
 chapters = ["bayesian-inference/hierarchical-models"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "gmm-em"
