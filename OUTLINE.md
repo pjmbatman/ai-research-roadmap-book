@@ -4,7 +4,7 @@
 
 > 과학 문제를 AI로 정의하고, 검증하고, 재현 가능하게 전달하는 연구자를 위한 오픈소스 로드맵
 
-13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1213문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
+13개 트랙 · 33개 부 · 215개 장 · 퀴즈 1225문항 · 위젯 18개. 각 장의 세부 bullet과 실습·실패 사례·통과 기준은 장 파일에 있다. 트랙·레이어 설계 근거는 [editorial/roadmap-design.md](editorial/roadmap-design.md).
 
 등급: **필수**(core) · **심화**(advanced) · **참조**(reference)
 
@@ -905,9 +905,9 @@ _표기법, 용어집, 공식 모음, 치트시트, 실패 사례 갤러리, 템
   - Linux와 셸 · 원격과 세션 · GPU · 환경 · Git · PyTorch
 - **E** [실패 사례 갤러리](content/appendices/e-failure-gallery/index.md) · `참조`
   - 데이터 · 학습 · 평가 · 환경 · 연구
-- **F** [템플릿 모음](content/appendices/f-templates/index.md) · `참조`
-  - 연구 문서 · 프로젝트 · 기록
-- **G** [체크리스트 모음](content/appendices/g-checklists/index.md) · `참조`
-  - 실험 전 · 누수 감사 · 결과 보고 전 · 제출 전
-- **H** [추천 자료](content/appendices/h-further-reading/index.md) · `참조`
-  - 부별 추천 자료
+- **F** [템플릿 모음](content/appendices/f-templates/index.md) · `참조` · 퀴즈 4
+  - 사용법 · 문제와 질문 · 프로젝트 · 기록 · 데이터와 모델 문서 · 논문과 심사
+- **G** [체크리스트 모음](content/appendices/g-checklists/index.md) · `참조` · 퀴즈 4
+  - 사용법 · 실험 시작 전 · 데이터 분할과 누수 감사 · 학습 실패 진단 · 평가와 결과 보고 · 재현성 · 논문 제출 전 · 공개 전
+- **H** [추천 자료](content/appendices/h-further-reading/index.md) · `참조` · 퀴즈 4
+  - 읽는 법 · 오리엔테이션과 연구 생태계 · 연구 인프라와 연구 소프트웨어 공학 · 수리 기초 · 확률·통계적 추론 · 머신러닝 핵심 · 머신러닝 심화 · 머신러닝 시스템과 실험 운영 · 연구 방법론 · 과학 머신러닝 · 과학 분야별 응용 · 종합 프로젝트와 기여
