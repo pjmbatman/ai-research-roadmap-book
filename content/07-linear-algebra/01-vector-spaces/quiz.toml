@@ -1,0 +1,118 @@
+# 7.1 벡터공간과 선형사상 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "subspace-test"
+type = "multiple"
+objective = 1
+prompt = '''다음 중 부분공간인 것을 모두 고르시오.'''
+explanation = '''부분공간은 영벡터를 포함하고 덧셈·스칼라배에 닫혀 있어야 한다. $x_1 + x_2 + x_3 = 0$인 평면과 동차 선형 ODE $\ddot{x} + x = 0$의 해 전체는 세 조건을 모두 만족한다. $x_1 + x_2 + x_3 = 1$인 평면은 원점을 지나지 않는 아핀 집합이다. 차수가 **정확히** 2인 다항식 전체는 $x^2 + (-x^2) = 0$처럼 더하면 차수가 떨어지고 영벡터(0 다항식)도 없다. $x_1 \ge 0$인 반공간은 $-1$을 곱하면 밖으로 나간다.'''
+
+[[questions.choices]]
+text = '''$\mathbb{R}^3$에서 $x_1 + x_2 + x_3 = 0$을 만족하는 점 전체'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathbb{R}^3$에서 $x_1 + x_2 + x_3 = 1$을 만족하는 점 전체'''
+feedback = "원점을 지나지 않는다. 0을 대입하면 0 ≠ 1이다. 이런 집합은 부분공간을 평행이동한 아핀 집합이다(7.2장)."
+
+[[questions.choices]]
+text = '''미분방정식 $\ddot{x}(t) + x(t) = 0$의 해 전체'''
+correct = true
+
+[[questions.choices]]
+text = "차수가 정확히 2인 실계수 다항식 전체"
+feedback = "x²과 −x²을 더하면 0이 되어 차수가 2가 아니다. 덧셈에 닫혀 있지 않고 영벡터도 없다. 차수 2 '이하'로 바꾸면 부분공간이 된다."
+
+[[questions.choices]]
+text = '''$\mathbb{R}^2$에서 $x_1 \ge 0$인 점 전체'''
+feedback = "덧셈에는 닫혀 있지만 음수를 곱하면 집합 밖으로 나간다. 스칼라배에 닫혀 있지 않다."
+
+[[questions]]
+id = "independence-check"
+type = "single"
+objective = 2
+prompt = '''$\mathbb{R}^3$의 세 벡터 $(1, 0, 1)$, $(0, 1, 1)$, $(1, 1, 2)$에 대해 옳은 것은?'''
+explanation = '''세 번째 벡터는 앞의 두 벡터의 합이다: $(1,0,1) + (0,1,1) = (1,1,2)$. 따라서 $1\cdot\mathbf{v}_1 + 1\cdot\mathbf{v}_2 - 1\cdot\mathbf{v}_3 = \mathbf{0}$이고 선형종속이다. 세 벡터의 span은 2차원 평면이므로 $\mathbb{R}^3$의 basis가 될 수 없다. 어느 두 벡터도 평행하지 않다는 것은 독립의 충분조건이 아니다.'''
+
+[[questions.choices]]
+text = "어느 두 벡터도 서로 평행하지 않으므로 선형독립이다."
+feedback = "두 개씩 보면 평행하지 않아도, 셋째가 나머지 둘의 선형결합일 수 있다. v1 + v2를 계산해 본다."
+
+[[questions.choices]]
+text = "세 번째 벡터가 앞의 두 벡터의 합이므로 선형종속이다."
+correct = true
+
+[[questions.choices]]
+text = '''벡터가 3개이고 $\dim\mathbb{R}^3 = 3$이므로 $\mathbb{R}^3$의 basis다.'''
+feedback = "개수가 차원과 같아도 선형독립이어야 basis가 된다. 이 세 벡터는 평면 하나만 span한다."
+
+[[questions.choices]]
+text = "영벡터가 포함되어 있지 않으므로 선형독립이다."
+feedback = "영벡터가 있으면 반드시 종속이지만, 없다고 독립이 되는 것은 아니다."
+
+[[questions]]
+id = "polynomial-dimension"
+type = "numeric"
+objective = 2
+prompt = '''차수가 3 이하인 실계수 다항식 전체 $\mathcal{P}_3$의 차원은?'''
+answer = 4
+tolerance = 0
+slider = { min = 1, max = 8, step = 1 }
+explanation = '''$1, x, x^2, x^3$이 선형독립이고 $\mathcal{P}_3$ 전체를 span하므로 basis다. basis의 원소가 4개이므로 $\dim \mathcal{P}_3 = 4$이다. 최고차수 3을 차원으로 착각하기 쉽지만, 상수항이 하나의 독립적인 방향을 더한다. 일반적으로 $\dim \mathcal{P}_n = n + 1$이다.'''
+
+[[questions]]
+id = "which-maps-linear"
+type = "multiple"
+objective = 3
+prompt = '''다음 중 선형사상인 것을 모두 고르시오.'''
+explanation = '''미분, 정적분, 한 점에서의 함숫값은 모두 $T(\alpha f + \beta g) = \alpha T(f) + \beta T(g)$를 만족한다. 함수공간 위의 사상도 선형일 수 있다. $\mathbf{x} \mapsto \mathbf{x} + \mathbf{b}$는 $\mathbf{0}$을 $\mathbf{b}$로 보내므로 선형이 아니다. 노름은 $\lVert -\mathbf{x} \rVert = \lVert \mathbf{x} \rVert \neq -\lVert \mathbf{x} \rVert$이므로 스칼라배를 보존하지 않는다.'''
+
+[[questions.choices]]
+text = '''다항식 $p$를 도함수 $p'$로 보내는 사상'''
+correct = true
+
+[[questions.choices]]
+text = '''연속함수 $f$를 $\int_0^1 f(t)\,dt$로 보내는 사상'''
+correct = true
+
+[[questions.choices]]
+text = '''함수 $f$를 $f(0.5)$로 보내는 사상'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathbf{x} \mapsto \mathbf{x} + \mathbf{b}$ ($\mathbf{b} \neq \mathbf{0}$)'''
+feedback = "원점이 b로 간다. 선형사상은 반드시 0을 0으로 보낸다. 이것은 아핀 사상이다."
+
+[[questions.choices]]
+text = '''$\mathbf{x} \mapsto \lVert \mathbf{x} \rVert$'''
+feedback = "−1을 곱한 입력의 노름은 같은 값이지 −1배가 아니다. 노름은 스칼라배를 보존하지 않는다."
+
+[[questions]]
+id = "matrix-columns"
+type = "single"
+objective = 3
+prompt = '''선형사상 $T: \mathbb{R}^2 \to \mathbb{R}^2$가 $T(\mathbf{e}_1) = (2, 1)$, $T(\mathbf{e}_2) = (-1, 3)$을 만족한다. 표준 basis에서 $T$의 행렬은?'''
+explanation = '''행렬의 $j$번째 열은 $j$번째 basis 벡터의 상이다. 그래서 $(2, 1)$이 첫째 열, $(-1, 3)$이 둘째 열이다. 확인: $\begin{bmatrix} 2 & -1 \\ 1 & 3 \end{bmatrix}\begin{bmatrix} 1 \\ 0 \end{bmatrix} = \begin{bmatrix} 2 \\ 1 \end{bmatrix}$.'''
+
+[[questions.choices]]
+text = '''$\begin{bmatrix} 2 & -1 \\ 1 & 3 \end{bmatrix}$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\begin{bmatrix} 2 & 1 \\ -1 & 3 \end{bmatrix}$'''
+feedback = "basis 벡터의 상을 행으로 썼다. 이 행렬에 e1을 곱하면 (2, −1)이 나온다. 상은 열에 들어간다."
+
+[[questions.choices]]
+text = '''$\begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}$'''
+feedback = "각 상의 한 성분만 남겼다. 상 벡터 전체가 열이 되어야 한다."
+
+[[questions]]
+id = "derivative-kernel-dim"
+type = "numeric"
+objective = 3
+prompt = '''미분 연산자 $D: \mathcal{P}_3 \to \mathcal{P}_3$의 핵 $\ker D$의 차원은?'''
+answer = 1
+tolerance = 0
+slider = { min = 0, max = 4, step = 1 }
+explanation = '''$p' = 0$인 다항식은 상수 함수뿐이므로 $\ker D = \operatorname{span}\{1\}$, 차원은 1이다. 행렬로 보면 $4 \times 4$ 행렬 $\mathbf{D}$의 첫 열이 영벡터이고 나머지 세 열은 독립이므로 rank가 3이다. rank–nullity로 $\dim\ker D = 4 - 3 = 1$이다. 미분이 상수항 정보를 지우기 때문에 적분에 적분상수가 붙는다.'''

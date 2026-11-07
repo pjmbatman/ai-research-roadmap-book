@@ -1,0 +1,123 @@
+# 7.4 내적·노름·직교성·사영 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "unit-ball-shape"
+type = "single"
+objective = 1
+prompt = '''2차원에서 $\lVert\mathbf{x}\rVert \le 1$인 영역(단위 공)이 꼭짓점이 축 위에 있는 마름모가 되는 노름은?'''
+explanation = '''L1 노름 $|x_1| + |x_2| \le 1$은 네 직선 $\pm x_1 \pm x_2 = 1$로 둘러싸인 마름모다. 꼭짓점 $(\pm 1, 0), (0, \pm 1)$이 축 위에 있어, L1 정규화는 해를 축 위(일부 성분이 0인 점)로 끌어당긴다. L2는 원, L∞는 축에 나란한 정사각형이다.'''
+
+[[questions.choices]]
+text = "L1 노름"
+correct = true
+
+[[questions.choices]]
+text = "L2 노름"
+feedback = "L2 단위 공은 원이다. 모든 방향이 동등하므로 특정 성분을 0으로 만드는 경향이 없다."
+
+[[questions.choices]]
+text = "L∞ 노름"
+feedback = "max(|x1|, |x2|) ≤ 1은 변이 축에 나란한 정사각형이다. 꼭짓점은 (±1, ±1)로 대각선 위에 있다."
+
+[[questions]]
+id = "cosine-vs-euclid"
+type = "single"
+objective = 1
+prompt = '''같은 물질의 흡광 스펙트럼 $\mathbf{s}$를 농도만 두 배로 측정해 $2\mathbf{s}$를 얻었다. 두 벡터에 대해 옳은 것은?'''
+explanation = '''cosine similarity는 $\frac{\mathbf{s}^\top(2\mathbf{s})}{\lVert\mathbf{s}\rVert\,\lVert 2\mathbf{s}\rVert} = 1$로 방향만 본다. 유클리드 거리는 $\lVert 2\mathbf{s} - \mathbf{s}\rVert = \lVert\mathbf{s}\rVert > 0$이다. 모양(물질 식별)을 비교하려면 cosine, 크기(농도)까지 비교하려면 유클리드 거리가 맞다.'''
+
+[[questions.choices]]
+text = "cosine similarity는 1이고, 유클리드 거리는 0이 아니다."
+correct = true
+
+[[questions.choices]]
+text = "둘 다 같은 물질이므로 유클리드 거리도 0이다."
+feedback = "유클리드 거리는 크기 차이도 잰다. |2s − s| = |s|로 0이 아니다."
+
+[[questions.choices]]
+text = "cosine similarity는 0.5다. 크기가 두 배 차이 나기 때문이다."
+feedback = "cosine은 두 벡터를 단위 길이로 정규화한 뒤의 내적이라 크기에 무관하다. 방향이 같으면 1이다."
+
+[[questions.choices]]
+text = "두 척도는 같은 정보를 주므로 어느 것을 써도 결론이 같다."
+feedback = "정규화된 벡터 사이에서만 두 척도가 같은 순서를 준다. 크기가 다른 벡터에서는 결론이 달라질 수 있다."
+
+[[questions]]
+id = "projection-properties"
+type = "multiple"
+objective = 2
+prompt = '''열이 독립인 $m \times n$ 행렬 $\mathbf{A}$ ($n < m$)의 column space로의 사영행렬 $\mathbf{P} = \mathbf{A}(\mathbf{A}^\top\mathbf{A})^{-1}\mathbf{A}^\top$에 대해 옳은 것을 모두 고르시오.'''
+explanation = '''이미 사영된 점은 다시 사영해도 그대로이므로 $\mathbf{P}^2 = \mathbf{P}$이고, 직교사영이므로 $\mathbf{P}^\top = \mathbf{P}$이다. $\mathbf{I} - \mathbf{P}$는 직교여공간 $N(\mathbf{A}^\top)$으로의 사영이다. $\mathbf{P}$의 rank는 $n < m$이므로 가역이 아니다. column space 밖 성분을 지우기 때문에, 지워진 정보는 되돌릴 수 없다.'''
+
+[[questions.choices]]
+text = '''$\mathbf{P}^2 = \mathbf{P}$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathbf{P}^\top = \mathbf{P}$'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathbf{I} - \mathbf{P}$는 left null space $N(\mathbf{A}^\top)$으로의 사영이다.'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathbf{P}$는 가역이다.'''
+feedback = "P의 rank는 n < m이다. column space에 직교하는 방향을 0으로 보내므로 가역이 아니다."
+
+[[questions]]
+id = "residual-orthogonal"
+type = "single"
+objective = 2
+prompt = '''최소제곱 해 $\hat{\mathbf{w}}$의 잔차 $\mathbf{r} = \mathbf{y} - \mathbf{X}\hat{\mathbf{w}}$에 대해 항상 성립하는 것은?'''
+explanation = '''정규방정식 $\mathbf{X}^\top(\mathbf{y} - \mathbf{X}\hat{\mathbf{w}}) = \mathbf{0}$이 곧 $\mathbf{X}^\top\mathbf{r} = \mathbf{0}$, 즉 잔차가 모든 특징 열과 직교한다는 뜻이다. 예측 $\mathbf{X}\hat{\mathbf{w}}$는 $\mathbf{y}$의 column space로의 사영이고, 잔차는 그에 직교하는 나머지다. 잡음이 있으면 잔차는 보통 0이 아니다.'''
+
+[[questions.choices]]
+text = '''$\mathbf{X}^\top\mathbf{r} = \mathbf{0}$, 즉 잔차는 모든 특징 열과 직교한다.'''
+correct = true
+
+[[questions.choices]]
+text = '''$\mathbf{r} = \mathbf{0}$이다.'''
+feedback = "y가 column space 안에 있을 때만 그렇다. 잡음이 섞인 과결정 문제에서는 보통 잔차가 남는다."
+
+[[questions.choices]]
+text = '''$\mathbf{y}^\top\mathbf{r} = 0$, 즉 잔차는 관측 $\mathbf{y}$와 직교한다.'''
+feedback = "잔차는 예측 Xw와 직교한다. y = Xw + r이므로 y^T r = |r|^2이고, 잔차가 0이 아니면 양수다."
+
+[[questions.choices]]
+text = "잔차의 각 성분 절댓값이 가능한 한 작다."
+feedback = "최소제곱은 제곱합을 최소화한다. 성분별 최대 오차를 줄이는 것은 L∞ 기준이고, 결과가 다르다."
+
+[[questions]]
+id = "normal-equation-condition"
+type = "numeric"
+objective = 2
+prompt = '''열이 독립인 행렬 $\mathbf{A}$의 조건수가 $\kappa(\mathbf{A}) = 10^5$이다. 정규방정식의 행렬 $\mathbf{A}^\top\mathbf{A}$의 조건수는 $10^k$이다. $k$는?'''
+answer = 10
+tolerance = 0
+slider = { min = 1, max = 16, step = 1 }
+explanation = '''$\mathbf{A}^\top\mathbf{A}$의 고윳값은 $\mathbf{A}$의 특이값의 제곱이므로 $\kappa(\mathbf{A}^\top\mathbf{A}) = (\sigma_{\max}/\sigma_{\min})^2 = \kappa(\mathbf{A})^2 = 10^{10}$이다. float64의 상대 정밀도가 약 $10^{-16}$이므로, 정규방정식으로 구한 해는 최악의 경우 유효숫자가 6자리 정도만 남는다. QR이나 SVD는 $\mathbf{A}$를 직접 다뤄 이 제곱을 피한다.'''
+
+[[questions]]
+id = "pinv-min-norm"
+type = "single"
+objective = 3
+prompt = '''방정식 하나 $x_1 + x_2 = 2$의 pseudoinverse 해 $\mathbf{A}^+\mathbf{b}$는?'''
+explanation = '''해는 직선 $x_1 + x_2 = 2$ 위의 모든 점이다. pseudoinverse는 그중 노름이 가장 작은 점, 즉 원점에서 직선에 내린 수선의 발 $(1, 1)$을 준다. $(1, 1)$은 행 $(1, 1)$의 배수로 row space 안에 있고, null space 방향 $(1, -1)$ 성분이 0이다.'''
+
+[[questions.choices]]
+text = "(1, 1)"
+correct = true
+
+[[questions.choices]]
+text = "(2, 0)"
+feedback = "방정식을 만족하는 해이지만 노름이 2로, (1, 1)의 노름 √2보다 크다. pseudoinverse는 최소 노름 해를 고른다."
+
+[[questions.choices]]
+text = "해가 무수히 많으므로 pseudoinverse는 정의되지 않는다."
+feedback = "pseudoinverse는 해가 무수히 많을 때 그중 하나(최소 노름 해)를 일관되게 고르기 위한 도구다."
+
+[[questions.choices]]
+text = "(0, 0)"
+feedback = "노름은 가장 작지만 방정식을 만족하지 않는다. 최소 노름 해는 해들 가운데에서 고른다."

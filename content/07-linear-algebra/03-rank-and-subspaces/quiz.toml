@@ -1,0 +1,105 @@
+# 7.3 행렬의 네 부분공간과 rank — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "four-subspace-dims"
+type = "numeric"
+objective = 1
+prompt = '''$5 \times 8$ 행렬 $\mathbf{A}$의 rank가 3이다. null space $N(\mathbf{A})$의 차원은?'''
+answer = 5
+tolerance = 0
+slider = { min = 0, max = 8, step = 1 }
+explanation = '''null space는 입력 공간 $\mathbb{R}^8$의 부분공간이고, rank–nullity에 의해 $\dim N(\mathbf{A}) = n - r = 8 - 3 = 5$이다. 행의 수 5를 써서 $5 - 3 = 2$로 계산하면 left null space $N(\mathbf{A}^\top)$의 차원이 나온다. 네 부분공간의 차원은 $r, r, n - r, m - r$이다.'''
+
+[[questions]]
+id = "left-null-solvability"
+type = "single"
+objective = 1
+prompt = '''$\mathbf{y}^\top\mathbf{A} = \mathbf{0}^\top$을 만족하는 $\mathbf{y}$에 대해 $\mathbf{y}^\top\mathbf{b} = 2$이다. $\mathbf{A}\mathbf{x} = \mathbf{b}$에 대해 옳은 것은?'''
+explanation = '''해 $\mathbf{x}$가 있다면 $\mathbf{y}^\top\mathbf{b} = \mathbf{y}^\top\mathbf{A}\mathbf{x} = \mathbf{0}^\top\mathbf{x} = 0$이어야 한다. $\mathbf{y}^\top\mathbf{b} = 2 \neq 0$이므로 해가 없다. left null space의 벡터는 $\mathbf{b}$에 대한 양립 조건이다. 최소제곱 근사해는 여전히 구할 수 있지만 정확한 해는 아니다.'''
+
+[[questions.choices]]
+text = "해가 없다."
+correct = true
+
+[[questions.choices]]
+text = "해가 정확히 하나 있다."
+feedback = "해가 있다면 양변에 y^T를 곱해 y^T b = 0이 되어야 한다. 이 조건이 깨졌다."
+
+[[questions.choices]]
+text = "해가 무수히 많다. y가 0이 아닌 left null space가 있으므로 rank가 부족하기 때문이다."
+feedback = "rank가 부족하면 해가 '있을 때' 여러 개일 수 있다. 하지만 b가 양립 조건을 어기면 해는 아예 없다."
+
+[[questions.choices]]
+text = "최소제곱으로 구한 해가 정확한 해다."
+feedback = "최소제곱 해는 b를 column space에 사영한 점의 해다. 잔차가 left null space 방향으로 남으므로 정확한 해가 아니다."
+
+[[questions]]
+id = "rank-nullity-solutions"
+type = "single"
+objective = 2
+prompt = '''$3 \times 5$ 행렬 $\mathbf{A}$의 rank가 3이다. $\mathbf{A}\mathbf{x} = \mathbf{b}$에 대해 옳은 것은?'''
+explanation = '''rank가 행의 수 3과 같으므로 column space가 $\mathbb{R}^3$ 전체다. 따라서 모든 $\mathbf{b}$에 대해 해가 있다. null space의 차원은 $5 - 3 = 2$이므로, 한 해에 null space의 벡터를 더해도 해이고 해는 무수히 많다.'''
+
+[[questions.choices]]
+text = '''모든 $\mathbf{b}$에 대해 해가 있고, 해는 무수히 많다.'''
+correct = true
+
+[[questions.choices]]
+text = '''full rank이므로 모든 $\mathbf{b}$에 대해 해가 정확히 하나다.'''
+feedback = "full row rank는 해의 존재를 보장하지만 유일성은 아니다. 유일성은 null space가 {0}일 때, 즉 rank = 열의 수(5)일 때다."
+
+[[questions.choices]]
+text = '''미지수가 방정식보다 많으므로 $\mathbf{b}$에 따라 해가 없을 수 있다.'''
+feedback = "해가 없으려면 b가 column space 밖에 있어야 한다. rank 3인 3행 행렬의 column space는 R^3 전체다."
+
+[[questions.choices]]
+text = '''rank 3인 행렬의 null space는 3차원이므로 해 집합은 3차원이다.'''
+feedback = "null space의 차원은 열의 수 − rank = 5 − 3 = 2다."
+
+[[questions]]
+id = "overdetermined-system"
+type = "single"
+objective = 2
+prompt = '''측정 100개로 미지수 3개를 맞추는 $100 \times 3$ 행렬 $\mathbf{A}$의 rank가 3이다. 측정 $\mathbf{b}$에 잡음이 섞여 있을 때 옳은 것은?'''
+explanation = '''column space는 $\mathbb{R}^{100}$ 안의 3차원 부분공간이다. 잡음이 섞인 $\mathbf{b}$가 정확히 이 부분공간 안에 떨어질 일은 거의 없으므로 보통 정확한 해가 없다. 만약 해가 있다면 null space가 $\{\mathbf{0}\}$이므로 유일하다. 그래서 정확한 해 대신 잔차를 최소화하는 최소제곱 해(7.4장)를 구한다.'''
+
+[[questions.choices]]
+text = "보통 정확한 해는 없고, 해가 있다면 유일하다."
+correct = true
+
+[[questions.choices]]
+text = "rank가 full이므로 정확한 해가 항상 하나 있다."
+feedback = "full column rank는 유일성만 보장한다. 존재하려면 b가 3차원 column space 안에 있어야 하는데, 잡음이 섞인 b는 거의 항상 그 밖에 있다."
+
+[[questions.choices]]
+text = "방정식이 많을수록 해가 많아지므로 해가 무수히 많다."
+feedback = "방정식은 해에 대한 제약이다. 제약이 많을수록 해는 줄어든다. 해의 개수를 늘리는 것은 null space다."
+
+[[questions]]
+id = "numerical-rank"
+type = "single"
+objective = 1
+prompt = '''$100 \times 3$ 행렬의 특이값이 $17.1,\ 9.4,\ 6.5 \times 10^{-9}$이고, `np.linalg.matrix_rank`가 3을 반환했다. 측정 잡음은 $10^{-3}$ 수준이다. 가장 적절한 해석은?'''
+explanation = '''셋째 특이값은 0이 아니지만 측정 잡음보다 여섯 자릿수나 작다. 그 방향의 독립성은 측정으로 구분할 수 없으므로, 이 데이터에서 실질적인 rank는 2로 보는 것이 맞다. `matrix_rank`의 기본 허용오차는 반올림 오차만 거르는 매우 작은 값이라 잡음 수준의 독립성을 걸러 내지 못한다. 허용오차는 데이터의 잡음 수준에 맞춰 정한다.'''
+
+[[questions.choices]]
+text = "셋째 열은 잡음 수준에서만 독립이므로, 실질적인 rank는 2로 본다."
+correct = true
+
+[[questions.choices]]
+text = "matrix_rank가 3이므로 세 열은 독립이고, 세 계수를 모두 안정적으로 추정할 수 있다."
+feedback = "수학적 독립과 수치적으로 의미 있는 독립은 다르다. 6.5e-9 크기의 방향은 1e-3 잡음에 묻혀 계수가 매우 불안정해진다."
+
+[[questions.choices]]
+text = "특이값이 하나라도 0이 아니면 rank에 세므로, 허용오차와 무관하게 rank는 3이다."
+feedback = "부동소수점에서는 정확히 종속인 열도 특이값이 1e-15 정도로 남는다. rank는 허용오차를 정해야 정의된다."
+
+[[questions]]
+id = "low-rank-update-rank"
+type = "numeric"
+objective = 3
+prompt = '''$\mathbf{B} \in \mathbb{R}^{4096 \times 16}$, $\mathbf{A} \in \mathbb{R}^{16 \times 4096}$일 때 $\Delta\mathbf{W} = \mathbf{B}\mathbf{A}$의 rank가 가질 수 있는 최댓값은?'''
+answer = 16
+tolerance = 0
+explanation = '''$\operatorname{rank}(\mathbf{B}\mathbf{A}) \le \min(\operatorname{rank}\mathbf{B}, \operatorname{rank}\mathbf{A}) \le 16$이다. $\Delta\mathbf{W}$의 크기는 $4096 \times 4096$이지만, 모든 열이 $\mathbf{B}$의 16개 열의 선형결합이므로 column space는 16차원을 넘지 못한다. 행렬의 크기와 rank는 다르다. 무작위로 고른 $\mathbf{B}, \mathbf{A}$라면 거의 확실히 rank가 정확히 16이다.'''

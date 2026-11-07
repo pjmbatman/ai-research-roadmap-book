@@ -1,0 +1,6 @@
+title = "SVD로 PCA 구현하기"
+chapter = "linear-algebra/svd-and-pca"
+objective = 3
+exec = "browser"
+entry = "pca"
+timeout_s = 10
