@@ -1,0 +1,101 @@
+# 19.4 GAN과 Normalizing Flow — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "optimal-discriminator"
+type = "numeric"
+objective = 1
+prompt = '''어떤 점 $\mathbf{x}$에서 데이터 밀도가 $p_{\text{data}}(\mathbf{x}) = 0.3$, 생성자 밀도가 $p_g(\mathbf{x}) = 0.1$이다. 이 생성자에 대한 최적 판별자의 출력 $D^\star(\mathbf{x})$는?'''
+answer = 0.75
+tolerance = 0.001
+slider = { min = 0, max = 1, step = 0.05 }
+explanation = '''$D^\star(\mathbf{x}) = p_{\text{data}}/(p_{\text{data}} + p_g) = 0.3/0.4 = 0.75$이다. 최적 판별자는 "이 점이 데이터에서 왔을 사후확률"(두 분포에서 같은 비율로 뽑았을 때)이다. 두 밀도가 같으면 0.5가 되어 구별이 불가능하다.'''
+
+[[questions]]
+id = "gan-vanishing-gradient"
+type = "single"
+objective = 1
+prompt = '''학습 초기에 생성 표본의 분포와 데이터 분포가 거의 겹치지 않고, 판별자가 둘을 완벽하게 구별한다. 원래의 minimax 목적함수로 생성자를 학습할 때 생기는 문제는?'''
+explanation = '''최적 판별자에서 생성자의 목적함수는 $2\,\mathrm{JS} - \log 4$인데, 지지집합이 떨어지면 JS는 거리와 무관하게 $\log 2$로 포화된다. 생성자를 조금 움직여도 값이 변하지 않으므로 기울기가 0에 가깝다(본문 셀 1의 $\mu = 8$). non-saturating 손실이나 Wasserstein 계열 목적함수가 이 문제를 완화한다.'''
+
+[[questions.choices]]
+text = "JS divergence가 log 2로 포화되어 생성자가 받는 기울기가 거의 0이 된다."
+correct = true
+
+[[questions.choices]]
+text = "판별자가 완벽하므로 생성자는 가장 강한 학습 신호를 받는다."
+feedback = "판별자가 완벽하다는 것은 D(G(z)) ≈ 0이 모든 생성 표본에서 성립한다는 뜻이고, 그 근처에서 log(1 − D)는 평평하다. 강한 판별자가 강한 기울기를 주지는 않는다."
+
+[[questions.choices]]
+text = "JS divergence가 무한대로 커져 손실이 발산한다."
+feedback = "KL과 달리 JS는 log 2를 넘지 않는다. 문제는 발산이 아니라 포화다."
+
+[[questions]]
+id = "mode-collapse-cause"
+type = "single"
+objective = 1
+prompt = '''평균과 표준편차를 모두 학습하는 가우시안 생성자로 쌍봉 분포를 GAN 학습했더니, 생성자가 한 모드에만 맞는 좁은 가우시안에 머물렀다. 본문의 계산을 근거로 가장 정확한 설명은?'''
+explanation = '''JS를 최소화하는 가우시안은 두 모드를 덮는 넓은 가우시안이다(셀 2). 그런데 한 모드에 맞는 해와의 JS 차이가 0.015로 작고, 생성자는 판별자의 국소적인 기울기만 받으므로 가까운 모드에 머문다(셀 3). 판별자는 다른 모드가 진짜 데이터라는 것을 알지만($D \approx 1$), 그 정보가 생성자 표본이 있는 곳의 기울기로 전달되지 않는다. mode collapse는 목적함수의 전역 최적해보다 학습 동역학의 문제다.'''
+
+[[questions.choices]]
+text = "생성자가 판별자의 국소적인 기울기만 받아 가까운 모드에 머물렀다. JS의 전역 최적해는 두 모드를 덮는 해다."
+correct = true
+
+[[questions.choices]]
+text = "JS divergence의 전역 최적해가 원래 모드 하나만 덮는 해이기 때문이다."
+feedback = "셀 2에서 JS를 최소화하는 가우시안은 N(0, 2^2)로 두 모드를 덮었다. 모드 하나만 고르는 것은 순서를 뒤집은 KL(g||data)의 최적해다."
+
+[[questions.choices]]
+text = "판별자가 다른 모드가 진짜 데이터라는 것을 알아내지 못했기 때문이다."
+feedback = "셀 3의 판별자는 오른쪽 모드에서 D = 1.000으로, 그곳이 진짜 데이터뿐이라는 것을 확실히 알았다. 문제는 그 정보가 생성자에게 전달되는 경로다."
+
+[[questions]]
+id = "gan-loss-not-progress"
+type = "single"
+objective = 1
+prompt = '''GAN 학습 로그에서 판별자 손실이 약 1.3, 생성자 손실이 약 0.8로 수천 step 동안 거의 일정하다. 이 관찰로부터 말할 수 있는 것은?'''
+explanation = '''GAN의 두 손실은 서로 상대에 대해 정의되므로, 두 신경망이 함께 좋아지면 손실은 그대로일 수 있다. 본문 셀 4에서 손실이 거의 일정한 동안 모드 근처 표본 비율은 0.12에서 0.76까지 변했다. 손실만으로는 생성자의 품질에 대해 말할 수 있는 것이 거의 없고, 표본 기반 지표를 따로 기록해야 한다.'''
+
+[[questions.choices]]
+text = "손실만으로는 생성자가 좋아지는지 나빠지는지 알 수 없다. 표본 지표를 따로 봐야 한다."
+correct = true
+
+[[questions.choices]]
+text = "손실이 수렴했으므로 학습이 끝났고 생성자는 데이터 분포에 도달했다."
+feedback = "GAN은 하나의 손실을 최소화하는 문제가 아니다. 손실이 일정해도 표본 품질은 크게 변할 수 있다(셀 4)."
+
+[[questions.choices]]
+text = "판별자 손실이 이상값 2 log 2 ≈ 1.386보다 작으므로 판별자가 이기고 있고, 생성자는 실패했다."
+feedback = "균형점 근처의 손실 값 차이는 작고 잡음이 크다. 이 값으로 어느 쪽이 '이기는지' 판정할 수 없다."
+
+[[questions]]
+id = "flow-log-density"
+type = "numeric"
+objective = 2
+prompt = '''1차원 flow $x = f(z) = 3z + 1$, $z \sim \mathcal{N}(0, 1)$에서 $x = 1$의 로그밀도 $\log p_X(1)$은? (자연로그, 소수 셋째 자리까지)'''
+answer = -2.018
+tolerance = 0.005
+explanation = '''역변환은 $z = (x - 1)/3 = 0$이고 $\lvert df/dz\rvert = 3$이다. 따라서 $\log p_X(1) = \log \mathcal{N}(0; 0, 1) - \log 3 = -0.919 - 1.099 = -2.018$이다. 정변환이 공간을 3배로 늘리므로 밀도는 3분의 1로 줄어야 한다. $\log 3$을 더해 $0.180$을 얻었다면 log-det의 부호를 뒤집은 것이다. 실제로 $X \sim \mathcal{N}(1, 9)$이고 그 밀도로 계산해도 같은 값이 나온다.'''
+
+[[questions]]
+id = "coupling-cheap-logdet"
+type = "single"
+objective = 2
+prompt = '''affine coupling 층 $\mathbf{y}_a = \mathbf{x}_a$, $\mathbf{y}_b = \mathbf{x}_b \odot \exp(\mathbf{s}(\mathbf{x}_a)) + \mathbf{t}(\mathbf{x}_a)$의 log-det이 $\sum_j s_j(\mathbf{x}_a)$로 싸게 계산되는 이유는?'''
+explanation = '''$\mathbf{y}_a$는 $\mathbf{x}_b$에 의존하지 않으므로 Jacobian은 블록 삼각행렬이고, 대각 블록은 $\mathbf{I}$와 $\mathrm{diag}(\exp\mathbf{s})$다. 삼각행렬의 행렬식은 대각 성분의 곱이므로 log-det은 $\sum_j s_j$다. $\mathbf{s}, \mathbf{t}$가 아무리 복잡한 신경망이어도 그 Jacobian(비대각 블록 $\ast$)은 행렬식에 들어가지 않는다.'''
+
+[[questions.choices]]
+text = "Jacobian이 블록 삼각행렬이라 행렬식이 대각 성분의 곱이기 때문이다. s, t의 Jacobian은 비대각 블록에만 들어간다."
+correct = true
+
+[[questions.choices]]
+text = "s와 t가 선형 함수여야 하기 때문이다."
+feedback = "s와 t는 임의의 신경망이어도 된다. 행렬식이 싼 이유는 어느 좌표가 어느 좌표에 의존하는지의 구조(삼각성)에 있다."
+
+[[questions.choices]]
+text = "log-det을 Monte Carlo로 근사하기 때문이다."
+feedback = "coupling 층의 log-det은 근사가 아니라 정확한 값이다. 그래서 flow의 likelihood가 정확하다."
+
+[[questions.choices]]
+text = "변환이 부피를 보존해 행렬식이 항상 1이기 때문이다."
+feedback = "s ≠ 0이면 부피가 exp(Σs)배로 바뀐다. 부피 보존은 s = 0인 특수한 경우(additive coupling)뿐이다."
