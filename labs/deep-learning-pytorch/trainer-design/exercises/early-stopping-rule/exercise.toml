@@ -1,0 +1,6 @@
+title = "early stopping 규칙을 callback으로 구현하기"
+chapter = "deep-learning-pytorch/trainer-design"
+objective = 1
+exec = "browser"
+entry = "EarlyStopping"
+timeout_s = 10
