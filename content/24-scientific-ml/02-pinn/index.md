@@ -223,6 +223,7 @@ residual 손실   20000 step  남은 오차 비율: 저주파 sin(πx) 0.013  �
 PyTorch로 1차원 열방정식 $u_t = 0.1\,u_{xx}$, $u(x, 0) = \sin\pi x$, $u(0, t) = u(1, t) = 0$을 푼다. 정확해는 $e^{-0.1\pi^2 t}\sin\pi x$다. collocation 점 2000개를 고정하고 Adam 3000 step 뒤 L-BFGS 500 iteration을 돌린다. 마지막 줄은 비교 기준으로, 같은 문제를 중심차분 50칸 격자로 이산화하고 시간은 정확히 적분했을 때의 오차다(9.7장의 method of lines). 이 셀은 PyTorch가 필요해 로컬 런타임에서 실행된다(집필 환경 CPU 1스레드에서 약 30초).
 
 ```python {exec="python"}
+import numpy as np
 import torch
 
 torch.manual_seed(0); torch.set_num_threads(1); torch.set_default_dtype(torch.float64)

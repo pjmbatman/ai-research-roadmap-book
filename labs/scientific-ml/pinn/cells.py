@@ -83,6 +83,7 @@ for name, (A, rhs) in systems.items():
         print(f"{name} {steps:5d} step  남은 오차 비율: 저주파 sin(πx) {a1:.3f}  고주파 sin(4πx) {a4:.3f}")
 
 # %% cell 5 — PyTorch PINN: 1차원 열방정식, Adam 다음 L-BFGS
+import numpy as np
 import torch
 
 torch.manual_seed(0); torch.set_num_threads(1); torch.set_default_dtype(torch.float64)
