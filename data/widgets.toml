@@ -583,37 +583,37 @@ status = "prototype"
 name = "factorial-effects"
 title = "2^k 요인 효과"
 chapters = ["research-practice/reproducing-papers"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "error-bars"
 title = "SD·SE·CI 오차막대"
 chapters = ["research-practice/analyzing-results"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "axis-lie-factor"
 title = "축 범위와 lie factor"
 chapters = ["research-practice/figures-and-tables"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "colormap-lightness"
 title = "컬러맵 밝기"
 chapters = ["research-practice/figures-and-tables"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "pinn-loss-balance"
 title = "PINN 손실 균형"
 chapters = ["scientific-ml/pinn"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "spectral-conv"
 title = "스펙트럼 합성곱과 해상도"
 chapters = ["scientific-ml/neural-operators"]
-status = "planned"
+status = "prototype"
 
 [[widgets]]
 name = "kalman-1d"
