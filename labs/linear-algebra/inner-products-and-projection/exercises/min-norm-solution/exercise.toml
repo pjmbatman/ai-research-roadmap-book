@@ -1,0 +1,6 @@
+title = "미결정 시스템의 최소 노름 해"
+chapter = "linear-algebra/inner-products-and-projection"
+objective = 3
+exec = "browser"
+entry = "min_norm_solution"
+timeout_s = 10

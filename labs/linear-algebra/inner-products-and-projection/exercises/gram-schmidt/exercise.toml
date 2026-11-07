@@ -1,0 +1,6 @@
+title = "Gram–Schmidt 직교화"
+chapter = "linear-algebra/inner-products-and-projection"
+objective = 2
+exec = "browser"
+entry = "gram_schmidt"
+timeout_s = 10
