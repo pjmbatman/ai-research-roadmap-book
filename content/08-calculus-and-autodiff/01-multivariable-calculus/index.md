@@ -199,6 +199,8 @@ print("최소점의 조건수 λmax/λmin =", round(lam[1] / lam[0], 1))
 계산화학에서 분자의 퍼텐셜 에너지 곡면(potential energy surface) 위의 안정 구조는 에너지의 국소 최소점이고, 그 점의 Hessian(질량으로 가중한 것)의 고윳값에서 분자의 진동 진동수를 얻는다. 반응의 전이 상태(transition state)는 고윳값 하나만 음수인 안장점이다. "최소점인가 안장점인가"를 Hessian의 부호로 판정하는 일이 화학 반응 경로 탐색의 기본 단계다.
 :::
 
+::widget{name="gradient-hessian-contour"}
+
 ## chain rule
 
 신경망은 층을 합성한 함수이고, 손실은 그 끝에 붙은 또 하나의 함수다. 합성 함수의 미분을 각 부분의 미분으로 나누어 계산하는 규칙이 chain rule이고, 역전파(8.4장)는 이 규칙을 효율적인 순서로 적용하는 알고리즘이다.
