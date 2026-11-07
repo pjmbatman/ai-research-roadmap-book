@@ -1,0 +1,150 @@
+# 4.1 Git의 모델과 기본 작업 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "staged-version-committed"
+type = "single"
+objective = 1
+prompt = '''`train.py`에서 학습률을 `1e-3`으로 고치고 `git add train.py`를 실행했다. 그다음 같은 줄을 `3e-4`로 다시 고친 뒤, `git add` 없이 `git commit -m "lr 변경"`을 실행했다. 새 commit의 `train.py`에는 학습률이 무엇으로 들어 있는가?'''
+explanation = '''`git commit`은 working tree가 아니라 index(staging area)로 스냅숏을 만든다. `git add`를 실행한 순간의 내용(`1e-3`)이 index에 올라가 있고, 그 뒤의 수정(`3e-4`)은 working tree에만 있다. commit 뒤 `git status`를 보면 `train.py`가 여전히 "Changes not staged for commit"으로 나온다. 두 번째 수정까지 넣으려면 다시 `git add`해야 한다.'''
+
+[[questions.choices]]
+text = "`1e-3` — add할 때 index에 올라간 내용"
+correct = true
+
+[[questions.choices]]
+text = "`3e-4` — commit하는 순간 디스크에 있는 파일 내용"
+feedback = "commit은 디스크의 파일을 읽지 않고 index를 읽는다. working tree와 index는 다른 영역이다."
+
+[[questions.choices]]
+text = "add 이후에 파일이 바뀌었으므로 Git이 commit을 거부한다."
+feedback = "Git은 거부하지 않는다. index의 내용으로 조용히 commit하고, 남은 수정은 working tree에 그대로 둔다. 그래서 commit 전에 git diff --staged를 확인하는 습관이 필요하다."
+
+[[questions.choices]]
+text = "두 수정이 모두 기록되어 commit 안에 두 버전이 들어 있다."
+feedback = "commit은 변경 이력이 아니라 한 시점의 스냅숏 하나다. 파일 하나는 commit 안에서 blob 하나로만 존재한다."
+
+[[questions]]
+id = "history-is-content-addressed"
+type = "multiple"
+objective = 1
+prompt = '''main에 commit `A ← B ← C ← D`가 있다. B에서 추가한 `config.yaml`의 오타를 B 안에서 고치도록 이력을 다시 쓰면(예: interactive rebase), id가 **바뀌는** 것을 모두 고르시오.'''
+explanation = '''commit id는 commit 내용(tree id, parent id, 작성자, 메시지)의 해시다. B의 `config.yaml`이 바뀌면 그 blob, 그것을 담은 tree, 그리고 B의 id가 바뀐다. C는 parent 줄에 B의 id를 담고 있으므로 C의 내용도 바뀌어 id가 바뀌고, D도 같은 이유로 바뀐다. 반면 A는 B를 가리키지 않으므로(화살표는 과거를 향한다) 그대로이고, 손대지 않은 다른 파일의 blob도 내용이 같으므로 id가 같다.'''
+
+[[questions.choices]]
+text = "B의 id"
+correct = true
+
+[[questions.choices]]
+text = "C와 D의 id"
+correct = true
+
+[[questions.choices]]
+text = "A의 id"
+feedback = "A는 B의 parent다. parent는 자식을 가리키지 않으므로 B가 바뀌어도 A의 내용은 그대로다."
+
+[[questions.choices]]
+text = "B에서 손대지 않은 다른 파일(`train.py`)의 blob id"
+feedback = "blob id는 파일 내용만의 해시다. 내용이 같으면 어느 commit에 있든 같은 blob이다."
+
+[[questions]]
+id = "fast-forward-merge"
+type = "single"
+objective = 2
+prompt = '''main의 끝 commit이 feature의 조상이다(main에서 갈라진 뒤 main에는 새 commit이 없다). main에서 옵션 없이 `git merge feature`를 실행하면 무슨 일이 일어나는가?'''
+explanation = '''main에는 feature에 없는 commit이 없으므로 합칠 것이 없다. Git은 main 이름표를 feature의 끝 commit으로 옮기기만 한다(fast-forward). 새 commit도, conflict도 생기지 않고, feature의 commit id도 그대로다. 갈라진 흔적을 남기고 싶으면 `--no-ff`로 merge commit을 강제할 수 있다.'''
+
+[[questions.choices]]
+text = "main 이름표가 feature의 끝 commit으로 옮겨 가고, 새 commit은 생기지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "parent가 둘인 merge commit이 하나 생긴다."
+feedback = "merge commit은 두 branch가 각자 commit을 가지고 갈라져 있을 때 생긴다. 한쪽이 다른 쪽의 조상이면 fast-forward로 끝난다(--no-ff를 주지 않는 한)."
+
+[[questions.choices]]
+text = "feature의 commit들이 main 위에 복사되어 새 id를 받는다."
+feedback = "그것은 rebase가 하는 일이다. merge는 기존 commit을 바꿔 쓰지 않는다."
+
+[[questions.choices]]
+text = "3-way merge를 수행하므로 같은 줄을 고쳤으면 conflict가 날 수 있다."
+feedback = "fast-forward에서는 main 쪽 변경이 없으므로 3-way merge 자체가 필요 없고 conflict도 생길 수 없다."
+
+[[questions]]
+id = "rebase-new-commits"
+type = "numeric"
+objective = 2
+prompt = '''feature에는 main에 없는 commit이 3개 있고, 그사이 main에는 다른 사람의 commit이 2개 더해졌다. feature에서 `git rebase main`을 실행해 conflict 없이 끝났다. rebase가 **새로 만든 commit**은 몇 개인가?'''
+answer = 3
+tolerance = 0
+slider = { min = 0, max = 6, step = 1, unit = "개" }
+explanation = '''rebase는 feature에만 있는 commit 3개를 main의 끝 위에 하나씩 다시 적용해 새 commit 3개를 만든다. 각 새 commit은 원래 commit과 같은 변경을 담지만 parent(그리고 대개 tree)가 달라 id가 다르다. main의 commit 2개는 그대로 쓰이고 복사되지 않는다. 원래 commit 3개는 지워지지 않고 이름표 없이 남아 있다가 reflog로 찾을 수 있다. 흔한 오개념은 "rebase는 commit을 옮길 뿐이라 0개"라는 생각과 "main의 commit까지 포함해 5개"라는 생각이다.'''
+
+[[questions]]
+id = "rebase-vs-merge"
+type = "single"
+objective = 2
+prompt = "rebase와 merge에 대한 설명으로 옳은 것은?"
+explanation = '''rebase는 commit을 새로 만들어 이력을 바꿔 쓴다. 이미 push해 다른 사람이 받은 commit을 rebase하면 원격과 동료의 이력이 갈라지고, 같은 변경이 두 번 들어간 이력이 생기기 쉽다. 그래서 rebase는 아직 공유하지 않은 자기 commit에만 쓴다. rebase도 3-way merge로 각 commit을 다시 적용하므로 conflict가 생길 수 있고(오히려 commit마다 생길 수 있다), 어느 쪽이 "항상" 낫다는 규칙은 없다.'''
+
+[[questions.choices]]
+text = "rebase는 commit을 새로 만들어 이력을 바꿔 쓰므로, 다른 사람이 이미 받은 commit에는 쓰지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "rebase는 commit을 다른 위치로 옮길 뿐이라 commit id는 그대로 유지된다."
+feedback = "commit id는 parent id를 포함한 내용의 해시다. parent가 바뀌면 id도 바뀐다."
+
+[[questions.choices]]
+text = "rebase는 이력을 한 줄로 만들기 때문에 conflict가 생기지 않는다."
+feedback = "rebase도 각 commit을 3-way merge로 다시 적용한다. 같은 곳을 바꿨으면 conflict가 나고, commit마다 따로 해결해야 할 수도 있다."
+
+[[questions.choices]]
+text = "merge commit은 이력을 지저분하게 만들므로 공유 branch에서도 항상 rebase 후 force push하는 것이 좋다."
+feedback = "공유 branch의 force push는 다른 사람의 commit을 원격에서 지울 수 있다. 공유 branch는 merge로 합친다."
+
+[[questions]]
+id = "recover-after-reset-hard"
+type = "single"
+objective = 3
+prompt = '''아직 push하지 않은 로컬 main에서 실수로 `git reset --hard HEAD~2`를 실행해 최근 commit 두 개가 `git log`에서 사라졌다. 작업 디렉터리에는 commit하지 않은 수정이 없었다. 가장 적절한 대응은?'''
+explanation = '''reset은 branch 이름표를 옮겼을 뿐 commit 객체는 지우지 않는다. `git reflog`(또는 `git reflog main`)에 reset 직전에 main이 가리키던 commit id가 남아 있으므로, 그 id(또는 `main@{1}`)로 다시 reset하면 된다. 안전하게 하려면 먼저 `git branch rescue <id>`로 이름표를 붙인다. revert는 공유된 commit의 효과를 취소하는 명령이지 잃은 commit을 되찾는 명령이 아니다. push하지 않았으므로 원격에는 그 commit이 없다.'''
+
+[[questions.choices]]
+text = "`git reflog`에서 reset 직전의 commit id를 찾아 `git reset --hard <id>`로 돌아간다."
+correct = true
+
+[[questions.choices]]
+text = "`--hard`로 지운 commit은 복구할 수 없으므로 다시 작성한다."
+feedback = "--hard가 지우는 것은 commit하지 않은 working tree·index의 수정이다. commit은 객체로 남아 있고, reflog에 id가 기록되어 있다."
+
+[[questions.choices]]
+text = "`git revert HEAD~2`로 reset을 취소한다."
+feedback = "revert는 지정한 commit의 변경을 반대로 적용하는 새 commit을 만든다. reset이라는 동작을 되돌리는 명령이 아니다."
+
+[[questions.choices]]
+text = "`git pull`로 원격에서 사라진 commit을 다시 받아 온다."
+feedback = "push하지 않았으므로 원격에는 그 commit이 없다. 기록은 로컬 reflog에만 있다."
+
+[[questions]]
+id = "undo-on-shared-branch"
+type = "single"
+objective = 3
+prompt = '''평가 지표 계산을 망가뜨린 commit이 공유 main에 push되었고, 동료 몇 명이 이미 pull했다. 이 commit의 효과를 없애는 방법으로 가장 적절한 것은?'''
+explanation = '''이미 공유된 이력은 바꿔 쓰지 않는다. `git revert <commit>`은 문제 commit을 이력에 남긴 채 그 반대 변경을 담은 새 commit을 더하므로, 동료들은 평소처럼 pull하면 된다. reset 후 force push는 동료의 로컬 이력과 원격을 갈라놓고, 그 사이 push된 다른 사람의 commit을 지울 수도 있다.'''
+
+[[questions.choices]]
+text = "`git revert <commit>`으로 반대 변경을 담은 새 commit을 만들어 push한다."
+correct = true
+
+[[questions.choices]]
+text = "`git reset --hard <commit>~1` 후 `git push --force`로 원격을 맞춘다."
+feedback = "이미 pull한 동료의 이력과 원격이 갈라진다. 그사이 다른 사람이 push한 commit이 있으면 원격에서 사라진다."
+
+[[questions.choices]]
+text = "`git commit --amend`로 문제 commit을 고친 뒤 push한다."
+feedback = "amend는 마지막 commit을 새 commit으로 바꿔 쓰는 것이라, 공유된 commit에 쓰면 reset과 같은 문제가 생긴다. 또 문제 commit이 마지막 commit이 아닐 수도 있다."
+
+[[questions.choices]]
+text = "`git reflog`로 commit 전 상태를 찾아 그곳으로 이동한다."
+feedback = "reflog는 자기 로컬의 기록이고, 거기로 이동하는 것은 결국 reset이다. 공유된 이력을 바꾸는 문제는 그대로 남는다."
