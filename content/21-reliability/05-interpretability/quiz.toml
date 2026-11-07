@@ -1,0 +1,100 @@
+# 21.5 해석가능성 — 개념 퀴즈
+# 형식: editorial/conventions.md §9. objective = 이 장 '학습 목표'의 번호(1부터).
+
+[[questions]]
+id = "permutation-correlated"
+type = "single"
+objective = 1
+prompt = '''목표에 실제로 영향을 주는 특징 $x_1$과, 그 거의 복사본인 $x_3$(상관 0.995)이 함께 들어간 모델의 순열 중요도를 계산했다. $x_1$은 4.50, $x_3$은 0.50이 나왔다. 옳은 해석은?'''
+explanation = '''순열 중요도는 "학습된 이 모델이 각 열에 얼마나 기대는가"를 잰다. 상관된 두 특징 사이에서 무게를 어떻게 나눌지는 학습 알고리즘(여기서는 ridge)이 거의 임의로 정하므로, 개별 중요도는 그 분할을 반영할 뿐이다. 둘을 함께 섞으면(본문 7.93) 묶음 전체의 중요도가 보이고, $x_1$을 빼고 다시 학습하면 $x_3$이 대신해 손실이 거의 늘지 않는다(0.04). 개별 중요도가 작다고 그 특징이 중요하지 않다거나, 크다고 원인이라고 결론 내릴 수 없다.'''
+
+[[questions.choices]]
+text = "모델이 두 특징 사이에 무게를 임의로 나눈 결과다. 상관된 특징은 묶어서 중요도를 본다."
+correct = true
+
+[[questions.choices]]
+text = "x1이 x3보다 목표에 아홉 배 더 큰 영향을 준다."
+feedback = "두 특징은 거의 같은 정보를 담고 있다. 중요도의 비율은 데이터의 성질이 아니라 모델이 가중치를 나눈 방식이다."
+
+[[questions.choices]]
+text = "x3은 중요하지 않으므로 빼도 성능이 거의 그대로이고, x1을 빼면 성능이 크게 떨어진다."
+feedback = "x1을 빼고 다시 학습하면 x3이 그 역할을 대신해 성능이 거의 그대로다. 순열 중요도는 재학습 없이 잰 값이라 이런 대체를 보지 못한다."
+
+[[questions]]
+id = "pdp-flat-interaction"
+type = "single"
+objective = 1
+prompt = '''모델 $g(z_1, z_2) \approx z_1 z_2$($z_1, z_2$ 독립, 평균 0)의 $z_1$에 대한 부분 의존 그림(PDP)이 거의 평평하다. 옳은 해석은?'''
+explanation = '''PDP는 $z_2$에 대해 평균 낸 $\mathbb{E}_{z_2}[g(z_1, z_2)] = z_1 \mathbb{E}[z_2] \approx 0$이다. 그러나 사례마다의 곡선(ICE)은 기울기가 $z_2$로, 양수와 음수가 섞여 평균에서 상쇄된다. 평평한 PDP는 "효과가 없다"가 아니라 "평균 효과가 없다"이고, 상호작용이 있으면 ICE나 2차원 PDP로 확인해야 한다.'''
+
+[[questions.choices]]
+text = "z1의 효과가 z2에 따라 부호가 바뀌어 평균에서 상쇄된 것일 수 있다. ICE 곡선을 확인한다."
+correct = true
+
+[[questions.choices]]
+text = "모델은 z1을 쓰지 않는다."
+feedback = "z1을 바꾸면 각 사례의 예측은 z2만큼의 기울기로 크게 바뀐다. 평균에서만 상쇄될 뿐이다."
+
+[[questions.choices]]
+text = "z1과 z2가 상관되어 PDP가 잘못 계산되었다."
+feedback = "두 입력은 독립이라고 했다. 상관된 특징에서의 PDP 문제(분포 밖 점의 평가)는 다른 함정이다."
+
+[[questions]]
+id = "gradxinput-linear"
+type = "numeric"
+objective = 1
+prompt = '''선형 모델 $f(\mathbf{x}) = 3x_1 - 2x_2$의 입력 $\mathbf{x} = (2, 1)$에서, 기준값 $\mathbf{0}$에 대한 $x_1$의 gradient×input 기여는?'''
+answer = 6
+tolerance = 0
+explanation = '''$\partial f / \partial x_1 = 3$이므로 기여는 $3 \times 2 = 6$이다. $x_2$의 기여는 $-2 \times 1 = -2$이고, 합 4는 $f(\mathbf{x}) - f(\mathbf{0}) = 4$와 같다. 선형 모델에서는 gradient×input(기준 0)과 integrated gradients가 정확히 같고 완전성(기여의 합 = 출력 차이)을 만족한다. 비선형 모델에서는 두 방법이 갈린다.'''
+
+[[questions]]
+id = "ig-completeness"
+type = "numeric"
+objective = 1
+prompt = '''$f(x) = x^2$의 $x = 3$에서, 기준값 0에 대한 integrated gradients 기여 $\text{IG} = (x - 0)\int_0^1 f'(\alpha x)\,d\alpha$는?'''
+answer = 9
+tolerance = 0.01
+explanation = '''$\int_0^1 2\alpha x\,d\alpha = x$이므로 IG $= x \cdot x = 9 = f(3) - f(0)$이다. integrated gradients는 경로를 따라 gradient를 적분하므로 기여의 합이 출력 차이와 같다(완전성). gradient×input은 $3 \times f'(3) = 18$로, 출력 차이의 두 배를 기여로 준다. 국소 기울기 하나로 전체 변화를 설명하려 했기 때문이다.'''
+
+[[questions]]
+id = "attribution-not-causal"
+type = "single"
+objective = 2
+prompt = '''수율 예측 모델에서 "생성물 농도 센서" 특징의 기여도가 가장 컸다. 이 센서 값은 수율이 정해진 **뒤에** 측정된다. 이 결과에서 말할 수 있는 것은?'''
+explanation = '''기여도는 모델이 예측에 어떤 입력을 썼는지를 말한다. 수율의 하류 측정은 수율과 강하게 상관되므로 모델이 크게 기대는 것이 당연하다. 그러나 센서 값을 바꾸는 개입(예: 센서 재보정)은 수율을 바꾸지 않는다. 본문 개입 실험에서 센서에 +1을 개입하자 실제 수율 변화는 0, 모델 예측은 약 1만큼 바뀌었다. 기여도를 인과로 읽으려면 별도의 개입 실험이나 인과 가정(16.8장)이 필요하다. 또 운영 시점에 이 센서가 없다면 모델은 누수(15.4장)를 쓴 것이다.'''
+
+[[questions.choices]]
+text = "모델이 예측에 이 센서에 크게 기댄다는 것뿐이고, 센서를 바꿔도 수율은 바뀌지 않는다."
+correct = true
+
+[[questions.choices]]
+text = "센서 값을 높이면 수율이 높아진다."
+feedback = "센서는 수율의 결과다. 결과를 바꿔도 원인은 바뀌지 않는다. 기여도는 상관을 쓰는 모델의 사용 방식이지 인과 효과가 아니다."
+
+[[questions.choices]]
+text = "센서가 가장 중요한 공정 변수이므로 공정 최적화의 대상이다."
+feedback = "공정에서 조작할 수 있는 원인(온도, 촉매)과 측정되는 결과(센서)를 구분해야 한다. 최적화 대상은 원인이다."
+
+[[questions]]
+id = "validation-methods"
+type = "multiple"
+objective = 2
+prompt = '''해석 결과(attribution map, 중요도 순위)를 **검증하는** 방법으로 타당한 것을 모두 고르시오.'''
+explanation = '''모델 가중치를 무작위로 바꾸거나 레이블을 섞어 다시 학습한 모델에서도 설명이 거의 같다면, 그 설명은 모델이 배운 것을 반영하지 않는다(sanity check; Adebayo 외, 2018). 중요하다고 나온 입력에 실제로 개입해 결과가 바뀌는지 보는 실험, 그리고 참 기여를 아는 합성 데이터에서 방법이 그것을 찾는지 보는 것도 검증이다. 전문가가 보기에 그럴듯하다는 것은 확증 편향에 취약하고, 무작위 모델의 설명도 그럴듯해 보일 수 있으므로 검증이 아니다.'''
+
+[[questions.choices]]
+text = "모델 가중치를 무작위화했을 때 설명이 크게 바뀌는지 확인한다."
+correct = true
+
+[[questions.choices]]
+text = "중요하다고 나온 입력을 실제로 바꾸는 개입 실험을 한다."
+correct = true
+
+[[questions.choices]]
+text = "참 기여를 아는 합성 데이터에서 같은 방법이 그것을 찾는지 확인한다."
+correct = true
+
+[[questions.choices]]
+text = "분야 전문가가 설명 그림을 보고 그럴듯하다고 판단한다."
+feedback = "그럴듯함은 검증이 아니다. 엣지 검출기처럼 모델과 무관한 처리도 그럴듯한 그림을 만든다. 기대와 맞는 설명만 받아들이는 확증 편향에도 취약하다."
