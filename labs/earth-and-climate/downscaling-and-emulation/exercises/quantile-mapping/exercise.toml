@@ -1,0 +1,6 @@
+title = "경험적 quantile mapping"
+chapter = "earth-and-climate/downscaling-and-emulation"
+objective = 2
+exec = "browser"
+entry = "quantile_map"
+timeout_s = 10
