@@ -181,7 +181,7 @@ for shifted in (False, True):
 ::quiz{id="marginal-tests-miss"}
 
 :::note[분야 예시]
-천문학에서는 한 망원경·관측 조건에서 학습한 은하 분류 모델을 다른 관측 조사(survey)에 적용할 때, 두 조사의 영상을 구분하는 분류기가 얼마나 잘 구분하는지로 이동의 크기를 먼저 본다. 의료 영상에서는 병원마다 다른 촬영 장비가 영상의 질감을 바꿔, 사람 눈에는 같아 보여도 분류기가 병원을 거의 완벽하게 맞히는 경우가 흔하다. 이런 경우 모델이 질병 대신 병원(즉 장비)을 학습했는지 따로 확인해야 한다(21.5장).
+천문 관측 조사(survey)마다 망원경과 관측 조건이 다르므로, 한 조사에서 학습한 은하 분류 모델을 다른 조사에 적용하면 입력 분포가 바뀐다. 두 조사의 영상을 구분하는 분류기 검정은 레이블 없이 이동이 있는지와 그 크기를 알려 준다. 의료 영상에서는 흉부 X선 CNN이 영상이 어느 병원 시스템에서 왔는지를 매우 높은 정확도로 구분했다는 보고가 있다(Zech 외, 2018). 이런 경우 모델이 질병 대신 병원을 학습했는지 따로 확인해야 한다(21.5장).
 :::
 
 ## 일반화 전략
@@ -262,7 +262,7 @@ $\alpha = 0.05$로 배치마다 검정하면 drift가 시작되기 전 60개 배
 - **재학습한 모델은 어떻게 검증하나**: 15.4장의 시간 순 분할로, 재학습 시점 이후의 데이터에서 이전 모델과 비교한다. 재학습이 오히려 나빠지는 경우도 있다.
 
 :::note[분야 예시]
-기후 모델 에뮬레이터는 과거 기후로 학습하지만 쓰임새는 미래 시나리오, 즉 학습 범위 밖의 온실가스 농도다. 그래서 에뮬레이터 평가는 학습에 쓰지 않은 시나리오 전체를 빼는 분할로 한다. 반도체·화학 공정의 가상 계측(virtual metrology) 모델은 장비 정비 주기마다 입출력 관계가 바뀌어, 정비 이벤트를 drift 경보와 재보정의 기준점으로 쓴다.
+기후 모델 에뮬레이터는 기존 시뮬레이션 결과로 학습하지만, 쓰임새는 흔히 학습에 없던 배출 시나리오다. 그래서 학습에 쓰지 않은 시나리오를 통째로 빼는 분할로 평가해야 그 쓰임새에 맞는 일반화를 검증한다. 반도체·화학 공정의 가상 계측(virtual metrology)처럼 장비 정비 뒤 입출력 관계가 바뀔 수 있는 문제에서는, 정비 이벤트를 drift 점검과 재보정의 기준점으로 삼을 수 있다.
 :::
 
 ## 실습
@@ -314,4 +314,5 @@ $\alpha = 0.05$로 배치마다 검정하면 drift가 시작되기 전 60개 배
 - Shimodaira (2000). Improving predictive inference under covariate shift by weighting the log-likelihood function. *Journal of Statistical Planning and Inference*, 90(2), 227–244. — 공변량 이동과 중요도 가중, 오지정 모델에서의 최적성
 - Lopez-Paz, Oquab (2017). Revisiting classifier two-sample tests. *International Conference on Learning Representations (ICLR 2017)*. — 분류기 기반 2-표본 검정
 - Rabanser, Günnemann, Lipton (2019). Failing loudly: An empirical study of methods for detecting dataset shift. *Advances in Neural Information Processing Systems 32 (NeurIPS 2019)*. — 데이터셋 이동 탐지 방법의 실험적 비교
+- Zech, Badgeley, Liu, Costa, Titano, Oermann (2018). Variable generalization performance of a deep learning model to detect pneumonia in chest radiographs: A cross-sectional study. *PLOS Medicine*, 15(11), e1002683. — 영상으로 병원 시스템을 구분하는 모델과 외부 성능 저하
 - Koh 외 (2021). WILDS: A benchmark of in-the-wild distribution shifts. *Proceedings of the 38th International Conference on Machine Learning*, PMLR 139, 5637–5664. — 실제 분포 이동 벤치마크
